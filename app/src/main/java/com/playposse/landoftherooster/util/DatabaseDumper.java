@@ -16,6 +16,8 @@ public final class DatabaseDumper {
 
     private static final String LOG_TAG = DatabaseDumper.class.getSimpleName();
 
+    private static final String INDEX_PREFIX = "sqlite_autoindex_";
+
     public static void dumpTables(RoosterDatabaseHelper mainDatabaseHelper) {
         SQLiteDatabase readableDatabase = mainDatabaseHelper.getReadableDatabase();
 
@@ -35,7 +37,14 @@ public final class DatabaseDumper {
 
         try {
             while (cursor.moveToNext()) {
-                tableNames.add(cursor.getString(0));
+                String tableName = cursor.getString(0);
+
+                if (tableName.startsWith(INDEX_PREFIX)) {
+                    // Skip indexes
+                    continue;
+                }
+
+                tableNames.add(tableName);
             }
         } finally {
             cursor.close();

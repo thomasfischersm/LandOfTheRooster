@@ -88,12 +88,16 @@ public class RoosterContentContract {
         public static final String NAME_COLUMN = "name";
         public static final String ICON_COLUMN = "icon";
         public static final String PRODUCED_RESOURCE_TYPE_ID_COLUMN = "produced_resource_type_id";
+        public static final String MIN_DISTANCE_METERS_COLUMN = "min_distance_meters";
+        public static final String MAX_DISTANCE_METERS_COLUMN = "max_distance_meters";
 
         public static final String[] COLUMN_NAMES = new String[]{
                 ID_COLUMN,
                 NAME_COLUMN,
                 ICON_COLUMN,
-                PRODUCED_RESOURCE_TYPE_ID_COLUMN};
+                PRODUCED_RESOURCE_TYPE_ID_COLUMN,
+                MIN_DISTANCE_METERS_COLUMN,
+                MAX_DISTANCE_METERS_COLUMN};
 
         static final String SQL_CREATE_TABLE =
                 "CREATE TABLE building_type "
@@ -101,6 +105,8 @@ public class RoosterContentContract {
                         + "name TEXT NOT NULL UNIQUE, "
                         + "icon TEXT NOT NULL UNIQUE, "
                         + "produced_resource_type_id INTEGER, "
+                        + "min_distance_meters INTEGER, "
+                        + "max_distance_meters INTEGER, "
                         + "FOREIGN KEY(produced_resource_type_id) REFERENCES resource_type(_id))";
     }
 
@@ -125,7 +131,7 @@ public class RoosterContentContract {
                 LONGITUDE_COLUMN};
 
         static final String SQL_CREATE_TABLE =
-                "CREATE TABLE building_type "
+                "CREATE TABLE building "
                         + "(_id INTEGER PRIMARY KEY, "
                         + "building_type_id INTEGER NOT NULL, "
                         + "latitude REAL NOT NULL, "

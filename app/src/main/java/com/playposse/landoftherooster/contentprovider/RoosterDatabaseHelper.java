@@ -3,23 +3,33 @@ package com.playposse.landoftherooster.contentprovider;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.playposse.landoftherooster.contentprovider.RoosterContentContract.BuildingTable;
 import com.playposse.landoftherooster.contentprovider.RoosterContentContract.BuildingTypeTable;
-import com.playposse.landoftherooster.contentprovider.RoosterContentContract.ResourceTypeTable;
 import com.playposse.landoftherooster.contentprovider.RoosterContentContract.ResourceTable;
+import com.playposse.landoftherooster.contentprovider.RoosterContentContract.ResourceTypeTable;
+import com.playposse.landoftherooster.contentprovider.parser.ConfigurationImport;
+
+import java.io.IOException;
 
 /**
  * A helper class that manages the SQLLite database.
  */
 public class RoosterDatabaseHelper extends SQLiteOpenHelper {
 
-    public  static final String DB_NAME = "rooster";
+    private static final String LOG_TAG = RoosterDatabaseHelper.class.getSimpleName();
+
+    public static final String DB_NAME = "rooster";
 
     private static final int DB_VERSION = 1;
 
+    private final Context context;
+
     public RoosterDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+
+        this.context = context.getApplicationContext();
     }
 
     @Override
