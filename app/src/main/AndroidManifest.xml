@@ -24,6 +24,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key"/>
 
+        <provider
+            android:name=".contentprovider.RoosterContentProvider"
+            android:authorities="com.playposse.landoftherooster.provider"
+            android:exported="false"/>
+
         <activity
             android:name=".KingdomActivity"
             android:label="@string/title_activity_kingdom">
