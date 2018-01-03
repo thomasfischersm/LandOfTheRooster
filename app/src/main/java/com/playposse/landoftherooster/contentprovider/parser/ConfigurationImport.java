@@ -1,20 +1,17 @@
 package com.playposse.landoftherooster.contentprovider.parser;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.playposse.landoftherooster.BuildConfig;
-import com.playposse.landoftherooster.contentprovider.RoosterContentContract.BuildingTypeTable;
-import com.playposse.landoftherooster.contentprovider.RoosterContentContract.ResourceTypeTable;
-import com.playposse.landoftherooster.contentprovider.RoosterDatabaseHelper;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.services.BuildingDiscoveryService;
 import com.playposse.landoftherooster.util.DatabaseDumper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +24,7 @@ public final class ConfigurationImport {
     }
 
     public static void startImport(Context context) {
-//        new ImportAsyncTask(context).execute();
+        new ImportAsyncTask(context).execute();
     }
 
     private static void importAll(Context context) throws IOException {
@@ -35,12 +32,12 @@ public final class ConfigurationImport {
             Log.d(LOG_TAG, "importAll: Import has already run previously.");
             return;
         }
-        
+
         importResourceTypes(context);
         importBuildingTypes(context);
 
         if (BuildConfig.DEBUG) {
-            DatabaseDumper.dumpTables(new RoosterDatabaseHelper(context));
+            DatabaseDumper.dumpTables(RoosterDatabase.getInstance(context).getOpenHelper());
         }
 
         BuildingDiscoveryService.getNextBuildingTypeadsf(context);
@@ -54,19 +51,20 @@ public final class ConfigurationImport {
             return;
         }
 
-        ContentValues[] rows = new ContentValues[resourceTypes.size()];
-        for (int i = 0; i < resourceTypes.size(); i++) {
-            ResourceType resourceType = resourceTypes.get(i);
+        List<com.playposse.landoftherooster.contentprovider.room.ResourceType> rows =
+                new ArrayList<>(resourceTypes.size());
+        for (ResourceType resourceType : resourceTypes) {
+            com.playposse.landoftherooster.contentprovider.room.ResourceType roomResourceType =
+                    new com.playposse.landoftherooster.contentprovider.room.ResourceType();
 
-            ContentValues values = new ContentValues();
-            values.put(ResourceTypeTable.ID_COLUMN, resourceType.getId());
-            values.put(ResourceTypeTable.NAME_COLUMN, resourceType.getName());
-            values.put(ResourceTypeTable.PRECURSOR_ID_COLUMN, resourceType.getPrecursorId());
+            roomResourceType.setId(resourceType.getId());
+            roomResourceType.setName(resourceType.getName());
+            roomResourceType.setPrecursorId(resourceType.getPrecursorId());
 
-            rows[i] = values;
+            rows.add(roomResourceType);
         }
 
-        context.getContentResolver().bulkInsert(ResourceTypeTable.CONTENT_URI, rows);
+        RoosterDatabase.getInstance(context).getDao().insertResourceTypes(rows);
     }
 
     private static void importBuildingTypes(Context context) throws IOException {
@@ -77,42 +75,27 @@ public final class ConfigurationImport {
             return;
         }
 
-        ContentValues[] rows = new ContentValues[buildingTypes.size()];
-        for (int i = 0; i < buildingTypes.size(); i++) {
-            BuildingType buildingType = buildingTypes.get(i);
+        List<com.playposse.landoftherooster.contentprovider.room.BuildingType> rows =
+                new ArrayList<>(buildingTypes.size());
+        for (BuildingType buildingType : buildingTypes) {
+            com.playposse.landoftherooster.contentprovider.room.BuildingType roomBuildingType =
+                    new com.playposse.landoftherooster.contentprovider.room.BuildingType();
+            roomBuildingType.setId(buildingType.getId());
+            roomBuildingType.setName(buildingType.getName());
+            roomBuildingType.setIcon(buildingType.getIcon());
+            roomBuildingType.setProducedResourceTypeId(buildingType.getProducedResourceTypeId());
+            roomBuildingType.setMinDistanceMeters(buildingType.getMinDistanceMeters());
+            roomBuildingType.setMaxDistanceMeters(buildingType.getMaxDistanceMeters());
 
-            ContentValues values = new ContentValues();
-            values.put(BuildingTypeTable.ID_COLUMN, buildingType.getId());
-            values.put(BuildingTypeTable.NAME_COLUMN, buildingType.getName());
-            values.put(BuildingTypeTable.ICON_COLUMN, buildingType.getIcon());
-            values.put(
-                    BuildingTypeTable.PRODUCED_RESOURCE_TYPE_ID_COLUMN,
-                    buildingType.getProducedResourceTypeId());
-            values.put(BuildingTypeTable.MIN_DISTANCE_METERS_COLUMN, buildingType.getMinDistanceMeters());
-            values.put(BuildingTypeTable.MAX_DISTANCE_METERS_COLUMN, buildingType.getMaxDistanceMeters());
-
-            rows[i] = values;
+            rows.add(roomBuildingType);
         }
 
-        context.getContentResolver().bulkInsert(BuildingTypeTable.CONTENT_URI, rows);
+        RoosterDatabase.getInstance(context).getDao().insertBuildingTypes(rows);
     }
 
     private static boolean hasAlreadyImported(Context context) {
-        ContentResolver contentResolver = context.getContentResolver();
-        if (contentResolver == null) {
-            throw new IllegalStateException("ContentResolver is null!");
-        }
-
-        Cursor cursor = contentResolver.query(
-                ResourceTypeTable.CONTENT_URI,
-                ResourceTypeTable.COLUMN_NAMES,
-                null,
-                null,
-                null);
-
-        if (cursor == null) {
-            throw new IllegalStateException("Got a null cursor");
-        }
+        Cursor cursor =
+                RoosterDatabase.getInstance(context).getDao().getCursorForBuildingTypeCount();
 
         try {
             return cursor.getCount() > 0;

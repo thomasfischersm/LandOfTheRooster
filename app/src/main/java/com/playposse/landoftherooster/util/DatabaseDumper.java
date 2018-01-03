@@ -1,10 +1,10 @@
 package com.playposse.landoftherooster.util;
 
+import android.arch.persistence.db.SimpleSQLiteQuery;
+import android.arch.persistence.db.SupportSQLiteDatabase;
+import android.arch.persistence.db.SupportSQLiteOpenHelper;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
-import com.playposse.landoftherooster.contentprovider.RoosterDatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +18,8 @@ public final class DatabaseDumper {
 
     private static final String INDEX_PREFIX = "sqlite_autoindex_";
 
-    public static void dumpTables(RoosterDatabaseHelper mainDatabaseHelper) {
-        SQLiteDatabase readableDatabase = mainDatabaseHelper.getReadableDatabase();
+    public static void dumpTables(SupportSQLiteOpenHelper openHelper) {
+        SupportSQLiteDatabase readableDatabase = openHelper.getReadableDatabase();
 
         try {
             List<String> tableNames = queryTableNames(readableDatabase);
@@ -31,8 +31,8 @@ public final class DatabaseDumper {
         }
     }
 
-    private static List<String> queryTableNames(SQLiteDatabase readableDatabase) {
-        Cursor cursor = readableDatabase.rawQuery("select name from sqlite_master", null);
+    private static List<String> queryTableNames(SupportSQLiteDatabase readableDatabase) {
+        Cursor cursor = readableDatabase.query("select name from sqlite_master", null);
         List<String> tableNames = new ArrayList<>();
 
         try {
@@ -53,9 +53,9 @@ public final class DatabaseDumper {
         return tableNames;
     }
 
-    private static void dumpTable(String tableName, SQLiteDatabase readableDatabase) {
+    private static void dumpTable(String tableName, SupportSQLiteDatabase readableDatabase) {
         // Query db.
-        Cursor cursor = readableDatabase.query(tableName, null, null, null, null, null, null);
+        Cursor cursor = readableDatabase.query(new SimpleSQLiteQuery("select * from " + tableName));
         String[] columnNames = cursor.getColumnNames();
 
         // Read data.

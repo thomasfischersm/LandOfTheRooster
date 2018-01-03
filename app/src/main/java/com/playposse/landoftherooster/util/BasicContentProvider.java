@@ -91,7 +91,7 @@ public abstract class BasicContentProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
         if (getContext() == null) {
-            Log.e(LOG_TAG, "insert: getContext was null!");
+            Log.e(LOG_TAG, "insertBuildingTypes: getContext was null!");
             return null;
         }
 
