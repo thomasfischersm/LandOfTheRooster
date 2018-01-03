@@ -11,6 +11,7 @@ import com.playposse.landoftherooster.BuildConfig;
 import com.playposse.landoftherooster.contentprovider.RoosterContentContract.BuildingTypeTable;
 import com.playposse.landoftherooster.contentprovider.RoosterContentContract.ResourceTypeTable;
 import com.playposse.landoftherooster.contentprovider.RoosterDatabaseHelper;
+import com.playposse.landoftherooster.services.BuildingDiscoveryService;
 import com.playposse.landoftherooster.util.DatabaseDumper;
 
 import java.io.IOException;
@@ -26,7 +27,7 @@ public final class ConfigurationImport {
     }
 
     public static void startImport(Context context) {
-        new ImportAsyncTask(context).execute();
+//        new ImportAsyncTask(context).execute();
     }
 
     private static void importAll(Context context) throws IOException {
@@ -41,6 +42,8 @@ public final class ConfigurationImport {
         if (BuildConfig.DEBUG) {
             DatabaseDumper.dumpTables(new RoosterDatabaseHelper(context));
         }
+
+        BuildingDiscoveryService.getNextBuildingTypeadsf(context);
     }
 
     private static void importResourceTypes(Context context) throws IOException {

@@ -3,15 +3,6 @@ package com.playposse.landoftherooster.contentprovider;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import com.playposse.landoftherooster.contentprovider.RoosterContentContract.BuildingTable;
-import com.playposse.landoftherooster.contentprovider.RoosterContentContract.BuildingTypeTable;
-import com.playposse.landoftherooster.contentprovider.RoosterContentContract.ResourceTable;
-import com.playposse.landoftherooster.contentprovider.RoosterContentContract.ResourceTypeTable;
-import com.playposse.landoftherooster.contentprovider.parser.ConfigurationImport;
-
-import java.io.IOException;
 
 /**
  * A helper class that manages the SQLLite database.
@@ -34,10 +25,10 @@ public class RoosterDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(ResourceTypeTable.SQL_CREATE_TABLE);
-        db.execSQL(ResourceTable.SQL_CREATE_TABLE);
-        db.execSQL(BuildingTypeTable.SQL_CREATE_TABLE);
-        db.execSQL(BuildingTable.SQL_CREATE_TABLE);
+//        db.execSQL(ResourceTypeTable.SQL_CREATE_TABLE);
+//        db.execSQL(ResourceTable.SQL_CREATE_TABLE);
+//        db.execSQL(BuildingTypeTable.SQL_CREATE_TABLE);
+//        db.execSQL(BuildingTable.SQL_CREATE_TABLE);
     }
 
     @Override
