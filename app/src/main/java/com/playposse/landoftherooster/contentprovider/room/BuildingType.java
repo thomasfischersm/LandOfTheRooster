@@ -3,6 +3,7 @@ package com.playposse.landoftherooster.contentprovider.room;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -12,6 +13,7 @@ import static android.arch.persistence.room.ForeignKey.NO_ACTION;
  * The Room entity for the building type.
  */
 @Entity(tableName = "building_type",
+        indices = @Index("produced_resource_type_id"),
         foreignKeys = @ForeignKey(
                 entity = BuildingType.class,
                 parentColumns = "id",

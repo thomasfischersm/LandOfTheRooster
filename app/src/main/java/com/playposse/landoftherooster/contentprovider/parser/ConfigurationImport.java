@@ -40,7 +40,7 @@ public final class ConfigurationImport {
             DatabaseDumper.dumpTables(RoosterDatabase.getInstance(context).getOpenHelper());
         }
 
-        BuildingDiscoveryService.getNextBuildingTypeadsf(context);
+        new BuildingDiscoveryService(context);
     }
 
     private static void importResourceTypes(Context context) throws IOException {

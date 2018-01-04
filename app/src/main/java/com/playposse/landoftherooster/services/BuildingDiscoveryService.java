@@ -1,12 +1,13 @@
 package com.playposse.landoftherooster.services;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.playposse.landoftherooster.contentprovider.room.Building;
 import com.playposse.landoftherooster.contentprovider.room.BuildingType;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
-
-import java.util.List;
 
 /**
  * A background service that discovers buildings.
@@ -19,17 +20,45 @@ public class BuildingDiscoveryService {
 
     private static final String LOG_TAG = BuildingDiscoveryService.class.getSimpleName();
 
+    private static final int INITIAL_BUILDING_TYPE = 0;
+
+    private final Context context;
+
     private BuildingType nextBuildingType;
     private Integer nextDistance;
 
-    private void initNextBuilding() {
+    public BuildingDiscoveryService(Context context) {
+        this.context = context;
 
+        initNextBuilding();
     }
 
-    public static BuildingType getNextBuildingTypeadsf(Context context) {
-        List<BuildingType> buildingTypes =
-                RoosterDatabase.getInstance(context).getDao().getAllBuildingTypes();
-        Log.d(LOG_TAG, "getNextBuildingType: Got building types " + buildingTypes.size());
-        return null;
+    private void initNextBuilding() {
+        Building lastBuilding = getLastBuilding(context);
+
+        if (lastBuilding == null) {
+            nextBuildingType = getNextBuildingType(context, INITIAL_BUILDING_TYPE);
+        } else {
+            nextBuildingType = getNextBuildingType(context, lastBuilding.getBuildingTypeId());
+        }
+
+        if (nextBuildingType != null) {
+            Log.d(LOG_TAG, "initNextBuilding: The next building type is: "
+                    + nextBuildingType.getName());
+        } else {
+            Log.d(LOG_TAG, "initNextBuilding: There are no more buildings to be discovered.");
+        }
+    }
+
+    @Nullable
+    public static BuildingType getNextBuildingType(Context context, int lastBuildingTypeId) {
+        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+        return dao.getNextBuildingType(lastBuildingTypeId);
+    }
+
+    @Nullable
+    public static Building getLastBuilding(Context context) {
+        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+        return dao.getLastBuilding();
     }
 }

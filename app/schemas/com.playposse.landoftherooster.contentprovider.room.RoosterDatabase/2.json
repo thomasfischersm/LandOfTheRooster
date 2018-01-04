@@ -2,11 +2,70 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "3e20a9dd92c0e53a62737cfde0b0c2a8",
+    "identityHash": "d36c2d134bc17f521a15b4a0692d0c2d",
     "entities": [
       {
+        "tableName": "building",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `building_type_id` INTEGER NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, FOREIGN KEY(`building_type_id`) REFERENCES `building_type`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "buildingTypeId",
+            "columnName": "building_type_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_building_building_type_id",
+            "unique": false,
+            "columnNames": [
+              "building_type_id"
+            ],
+            "createSql": "CREATE  INDEX `index_building_building_type_id` ON `${TABLE_NAME}` (`building_type_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "building_type",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "building_type_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
         "tableName": "building_type",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `icon` TEXT, `produced_resource_type_id` INTEGER NOT NULL, `min_distance_meters` INTEGER NOT NULL, `max_distance_meters` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `icon` TEXT NOT NULL, `produced_resource_type_id` INTEGER NOT NULL, `min_distance_meters` INTEGER NOT NULL, `max_distance_meters` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`produced_resource_type_id`) REFERENCES `building_type`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -18,13 +77,13 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "icon",
             "columnName": "icon",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "producedResourceTypeId",
@@ -51,13 +110,87 @@
           ],
           "autoGenerate": false
         },
-        "indices": [],
-        "foreignKeys": []
+        "indices": [
+          {
+            "name": "index_building_type_produced_resource_type_id",
+            "unique": false,
+            "columnNames": [
+              "produced_resource_type_id"
+            ],
+            "createSql": "CREATE  INDEX `index_building_type_produced_resource_type_id` ON `${TABLE_NAME}` (`produced_resource_type_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "building_type",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "produced_resource_type_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "resource_type",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `precursor_id` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`precursor_id`) REFERENCES `resource_type`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "precursorId",
+            "columnName": "precursor_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_resource_type_precursor_id",
+            "unique": false,
+            "columnNames": [
+              "precursor_id"
+            ],
+            "createSql": "CREATE  INDEX `index_resource_type_precursor_id` ON `${TABLE_NAME}` (`precursor_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "resource_type",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "precursor_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"3e20a9dd92c0e53a62737cfde0b0c2a8\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d36c2d134bc17f521a15b4a0692d0c2d\")"
     ]
   }
 }

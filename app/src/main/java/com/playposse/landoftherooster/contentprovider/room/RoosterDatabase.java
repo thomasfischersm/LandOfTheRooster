@@ -10,8 +10,8 @@ import com.playposse.landoftherooster.contentprovider.RoosterDatabaseHelper;
 /**
  * A Room database that goes to our Sqlite instance.
  */
-@Database(entities = {BuildingType.class, ResourceType.class},
-        version = 1,
+@Database(entities = {Building.class, BuildingType.class, ResourceType.class},
+        version = 2,
         exportSchema = true)
 public abstract class RoosterDatabase extends RoomDatabase {
 
@@ -25,7 +25,7 @@ public abstract class RoosterDatabase extends RoomDatabase {
                     context,
                     RoosterDatabase.class,
                     RoosterDatabaseHelper.DB_NAME)
-//                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         return instance;

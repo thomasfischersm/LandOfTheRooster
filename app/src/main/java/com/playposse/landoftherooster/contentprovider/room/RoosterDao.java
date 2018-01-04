@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.database.Cursor;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 
@@ -22,6 +23,13 @@ public interface RoosterDao {
     @Query("select * from building_type")
     List<BuildingType> getAllBuildingTypes();
 
+    @Query("select * from building_type where id > :lastBuildingTypeId order by id asc limit 1")
+    BuildingType getNextBuildingType(int lastBuildingTypeId);
+
     @Query("select id from building_type")
     Cursor getCursorForBuildingTypeCount();
+
+    @Query("select * from building order by id desc limit 1")
+    @Nullable
+    Building getLastBuilding();
 }
