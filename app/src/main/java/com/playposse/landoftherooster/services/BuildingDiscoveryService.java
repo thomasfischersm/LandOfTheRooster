@@ -1,6 +1,8 @@
 package com.playposse.landoftherooster.services;
 
 import android.content.Context;
+import android.location.Location;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -11,9 +13,12 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.util.ConvenientLocationProvider;
 
+import java.util.List;
+import java.util.Random;
+
 /**
  * A background service that discovers buildings.
- *
+ * <p>
  * <p>All buildings are discovered in sequence. A building is discovered when the user is at a
  * specific distance from the last discovered building. The specific distance is a randomly chosen
  * distance within the min/max range for that building type.
@@ -27,6 +32,7 @@ public class BuildingDiscoveryService {
 
     private final Context context;
     private final ConvenientLocationProvider convenientLocationProvider;
+    private final Random random = new Random();
 
     private BuildingType nextBuildingType;
     private Integer nextDistance;
@@ -54,8 +60,14 @@ public class BuildingDiscoveryService {
         if (nextBuildingType != null) {
             Log.d(LOG_TAG, "initNextBuildingType: The next building type is: "
                     + nextBuildingType.getName());
+            int min = nextBuildingType.getMinDistanceMeters();
+            int delta = nextBuildingType.getMaxDistanceMeters()
+                    - nextBuildingType.getMinDistanceMeters();
+            nextDistance = min + random.nextInt(delta);
         } else {
-            Log.d(LOG_TAG, "initNextBuildingType: There are no more buildings to be discovered.");
+            Log.d(LOG_TAG, "initNextBuildingType: There are no more buildings to be " +
+                    "discovered.");
+            nextDistance = null;
         }
     }
 
@@ -79,21 +91,75 @@ public class BuildingDiscoveryService {
         placeNextBuilding(latLng);
     }
 
-    private void placeNextBuilding(LatLng latLng) {
+    private void placeNextBuilding(LatLng currentLatLng) {
         // Check if we have a good GPS location.
 
         // Create the building.
         Building building =
-                new Building(nextBuildingType.getId(), latLng.latitude, latLng.longitude);
+                new Building(nextBuildingType.getId(), currentLatLng.latitude, currentLatLng.longitude);
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
         dao.insertBuilding(building);
 
         // Prepare to place the next building.
         initNextBuildingType();
+
+        // TODO: This will have to notify the activity to do something.
+        // Maybe, the activity can simply observe the building table?
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(500);
     }
 
-    private void checkIfBuildingDiscovered(LatLng latLng) {
-        // TODO
+    private void checkIfBuildingDiscovered(LatLng currentLatLng) {
+        if (nextBuildingType == null) {
+            Log.d(LOG_TAG, "checkIfBuildingDiscovered: No more next building types to " +
+                    "discover.");
+        }
+
+        Float distance = getMinDistanceFromCurrentBuildings(currentLatLng);
+
+        if (distance == null) {
+            Log.e(LOG_TAG, "checkIfBuildingDiscovered: Can't check because the distance is " +
+                    "null!");
+        }
+
+        if ((distance > nextDistance) && (distance < nextBuildingType.getMaxDistanceMeters())) {
+            Log.d(LOG_TAG, "checkIfBuildingDiscovered: Discovered the next building: "
+                    + nextBuildingType.getName());
+            placeNextBuilding(currentLatLng);
+        }
+    }
+
+    @Nullable
+    private Float getMinDistanceFromCurrentBuildings(LatLng currentLatLng) {
+        Location currentLocation = new Location("");
+        currentLocation.setLatitude(currentLatLng.latitude);
+        currentLocation.setLongitude(currentLatLng.longitude);
+
+        Float min = null;
+        Float max = null; // Gather for future use.
+
+        // Query db.
+        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+        List<Building> buildings = dao.getAllBuildings();
+
+        // Iterate over buildings and collect min/max
+        for (Building building : buildings) {
+            Location buildingLocation = new Location("");
+            buildingLocation.setLatitude(building.getLatitude());
+            buildingLocation.setLongitude(building.getLongitude());
+
+            float distance = currentLocation.distanceTo(buildingLocation);
+
+            if ((min == null) || (max == null)) {
+                min = distance;
+                max = distance;
+            } else {
+                min = Math.min(min, distance);
+                max = Math.max(max, distance);
+            }
+        }
+
+        return min;
     }
 
     /**

@@ -41,4 +41,7 @@ public interface RoosterDao {
 
     @Insert
     void insertBuilding(Building building);
+
+    @Query("select *from building order by id asc")
+    List<Building> getAllBuildings();
 }
