@@ -38,4 +38,7 @@ public interface RoosterDao {
 
     @Query("delete from building_type")
     void deleteBuildingTypes();
+
+    @Insert
+    void insertBuilding(Building building);
 }

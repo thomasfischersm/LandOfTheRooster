@@ -28,8 +28,17 @@ public class Building {
     @NonNull
     private int buildingTypeId;
 
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
+
+    public Building() {
+    }
+
+    public Building(@NonNull int buildingTypeId, double latitude, double longitude) {
+        this.buildingTypeId = buildingTypeId;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
     public int getId() {
         return id;
@@ -48,19 +57,19 @@ public class Building {
         this.buildingTypeId = buildingTypeId;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 }

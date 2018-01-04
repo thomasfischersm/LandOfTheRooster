@@ -38,6 +38,7 @@ public final class ConfigurationImport {
         // Skip if already imported.
         if (jsonBuildingTypeCount == dbBuildingTypeCount) {
             Log.d(LOG_TAG, "importAll: Import has already run previously.");
+            new BuildingDiscoveryService(context);
             return;
         }
 
@@ -54,8 +55,6 @@ public final class ConfigurationImport {
         if (BuildConfig.DEBUG) {
             DatabaseDumper.dumpTables(db.getOpenHelper());
         }
-
-        new BuildingDiscoveryService(context);
     }
 
     private static void importResourceTypes(Context context) throws IOException {
