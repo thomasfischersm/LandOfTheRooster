@@ -2,6 +2,14 @@
   "buildingTypes": [
     {
       "id": 1,
+      "name": "castle",
+      "icon": "castle",
+      "producedResourceTypeId": null,
+      "minDistanceMeters": null,
+      "maxDistanceMeters": null
+    },
+    {
+      "id": 2,
       "name": "wheat field",
       "icon": "wheat_field",
       "producedResourceTypeId": 1,
@@ -9,7 +17,7 @@
       "maxDistanceMeters": 700
     },
     {
-      "id": 2,
+      "id": 3,
       "name": "mill",
       "icon": "mill",
       "producedResourceTypeId": 2,
@@ -17,7 +25,7 @@
       "maxDistanceMeters": 700
     },
     {
-      "id": 3,
+      "id": 4,
       "name": "bakery",
       "icon": "bakery",
       "producedResourceTypeId": 3,
@@ -25,7 +33,7 @@
       "maxDistanceMeters": 700
     },
     {
-      "id": 4,
+      "id": 5,
       "name": "village",
       "icon": "village",
       "producedResourceTypeId": 4,

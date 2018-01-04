@@ -16,8 +16,8 @@ public final class DatabaseDumper {
 
     private static final String LOG_TAG = DatabaseDumper.class.getSimpleName();
 
-    private static final String AUTO_INDEX_PREFIX = "sqlite_autoindex_";
-    private static final String INDEX_PREFIX = "index_";
+    private static final String LIST_TABLES_SQL =
+            "select name from sqlite_master where type='table'";
 
     public static void dumpTables(SupportSQLiteOpenHelper openHelper) {
         SupportSQLiteDatabase readableDatabase = openHelper.getReadableDatabase();
@@ -33,17 +33,12 @@ public final class DatabaseDumper {
     }
 
     private static List<String> queryTableNames(SupportSQLiteDatabase readableDatabase) {
-        Cursor cursor = readableDatabase.query("select name from sqlite_master", null);
+        Cursor cursor = readableDatabase.query(LIST_TABLES_SQL, null);
         List<String> tableNames = new ArrayList<>();
 
         try {
             while (cursor.moveToNext()) {
                 String tableName = cursor.getString(0);
-
-                if (tableName.startsWith(INDEX_PREFIX) || tableName.startsWith(AUTO_INDEX_PREFIX)) {
-                    // Skip indexes
-                    continue;
-                }
 
                 tableNames.add(tableName);
             }
