@@ -8,7 +8,7 @@ public class BuildingType {
     private int id;
     private String name;
     private String icon;
-    private int producedResourceTypeId;
+    private Integer producedResourceTypeId;
     private int minDistanceMeters;
     private int maxDistanceMeters;
 
@@ -24,7 +24,7 @@ public class BuildingType {
         return icon;
     }
 
-    public int getProducedResourceTypeId() {
+    public Integer getProducedResourceTypeId() {
         return producedResourceTypeId;
     }
 

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.playposse.landoftherooster.BuildConfig;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.services.BuildingDiscoveryService;
 import com.playposse.landoftherooster.util.DatabaseDumper;
@@ -28,16 +29,30 @@ public final class ConfigurationImport {
     }
 
     private static void importAll(Context context) throws IOException {
-        if (hasAlreadyImported(context)) {
+        // Gather information.
+        List<BuildingType> buildingTypes = ConfigurationParser.readBuildingTypes(context);
+        int jsonBuildingTypeCount = buildingTypes.size();
+        int dbBuildingTypeCount = readDbBuildingTypeCount(context);
+        RoosterDatabase db = RoosterDatabase.getInstance(context);
+
+        // Skip if already imported.
+        if (jsonBuildingTypeCount == dbBuildingTypeCount) {
             Log.d(LOG_TAG, "importAll: Import has already run previously.");
             return;
         }
 
+        // Reset the types in the database if the configuration files have changed.
+        if (dbBuildingTypeCount > 0) {
+            Log.d(LOG_TAG, "importAll: Deleting old configuration data from the db.");
+            RoosterDao dao = db.getDao();
+            dao.deleteBuildingTypes();
+        }
+
         importResourceTypes(context);
-        importBuildingTypes(context);
+        importBuildingTypes(context, buildingTypes);
 
         if (BuildConfig.DEBUG) {
-            DatabaseDumper.dumpTables(RoosterDatabase.getInstance(context).getOpenHelper());
+            DatabaseDumper.dumpTables(db.getOpenHelper());
         }
 
         new BuildingDiscoveryService(context);
@@ -67,8 +82,8 @@ public final class ConfigurationImport {
         RoosterDatabase.getInstance(context).getDao().insertResourceTypes(rows);
     }
 
-    private static void importBuildingTypes(Context context) throws IOException {
-        List<BuildingType> buildingTypes = ConfigurationParser.readBuildingTypes(context);
+    private static void importBuildingTypes(Context context, List<BuildingType> buildingTypes)
+            throws IOException {
 
         if (buildingTypes == null) {
             Log.w(LOG_TAG, "importResourceTypes: No resource types found!");
@@ -93,12 +108,12 @@ public final class ConfigurationImport {
         RoosterDatabase.getInstance(context).getDao().insertBuildingTypes(rows);
     }
 
-    private static boolean hasAlreadyImported(Context context) {
+    private static int readDbBuildingTypeCount(Context context) throws IOException {
         Cursor cursor =
                 RoosterDatabase.getInstance(context).getDao().getCursorForBuildingTypeCount();
 
         try {
-            return cursor.getCount() > 0;
+            return cursor.getCount();
         } finally {
             cursor.close();
         }

@@ -31,7 +31,7 @@ public class BuildingType {
     private String icon;
 
     @ColumnInfo(name = "produced_resource_type_id")
-    private int producedResourceTypeId;
+    private Integer producedResourceTypeId;
 
     @ColumnInfo(name = "min_distance_meters")
     private int minDistanceMeters;
@@ -63,11 +63,11 @@ public class BuildingType {
         this.icon = icon;
     }
 
-    public int getProducedResourceTypeId() {
+    public Integer getProducedResourceTypeId() {
         return producedResourceTypeId;
     }
 
-    public void setProducedResourceTypeId(int producedResourceTypeId) {
+    public void setProducedResourceTypeId(Integer producedResourceTypeId) {
         this.producedResourceTypeId = producedResourceTypeId;
     }
 

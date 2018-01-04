@@ -32,4 +32,10 @@ public interface RoosterDao {
     @Query("select * from building order by id desc limit 1")
     @Nullable
     Building getLastBuilding();
+
+    @Query("delete from resource_type")
+    void deleteResourceTypes();
+
+    @Query("delete from building_type")
+    void deleteBuildingTypes();
 }

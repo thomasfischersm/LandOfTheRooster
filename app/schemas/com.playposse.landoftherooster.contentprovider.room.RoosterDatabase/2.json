@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "d36c2d134bc17f521a15b4a0692d0c2d",
+    "identityHash": "d864d3784d5b0962dafc6c7351cb16c3",
     "entities": [
       {
         "tableName": "building",
@@ -65,7 +65,7 @@
       },
       {
         "tableName": "building_type",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `icon` TEXT NOT NULL, `produced_resource_type_id` INTEGER NOT NULL, `min_distance_meters` INTEGER NOT NULL, `max_distance_meters` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`produced_resource_type_id`) REFERENCES `building_type`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `icon` TEXT NOT NULL, `produced_resource_type_id` INTEGER, `min_distance_meters` INTEGER NOT NULL, `max_distance_meters` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`produced_resource_type_id`) REFERENCES `building_type`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -89,7 +89,7 @@
             "fieldPath": "producedResourceTypeId",
             "columnName": "produced_resource_type_id",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "minDistanceMeters",
@@ -190,7 +190,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d36c2d134bc17f521a15b4a0692d0c2d\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d864d3784d5b0962dafc6c7351cb16c3\")"
     ]
   }
 }
