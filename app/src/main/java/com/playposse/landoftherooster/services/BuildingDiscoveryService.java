@@ -120,6 +120,7 @@ public class BuildingDiscoveryService {
                 new Building(nextBuildingType.getId(), currentLatLng.latitude, currentLatLng.longitude);
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
         dao.insertBuilding(building);
+        Log.d(LOG_TAG, "placeNextBuilding: Placed building: " + nextBuildingType.getName());
 
         // Prepare to place the next building.
         initNextBuildingType();
