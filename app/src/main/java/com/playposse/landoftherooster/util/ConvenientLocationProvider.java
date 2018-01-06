@@ -3,6 +3,7 @@ package com.playposse.landoftherooster.util;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
+import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -47,8 +48,10 @@ public class ConvenientLocationProvider {
         locationRequest.setFastestInterval(FASTEST_INTERVAL_MS);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-
+        fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper());
     }
 
     public void close() {
@@ -57,7 +60,7 @@ public class ConvenientLocationProvider {
 
     private boolean hasLocationPermission(Context context) {
         return ContextCompat
-                .checkSelfPermission(context, ACCESS_FINE_LOCATION) != PERMISSION_GRANTED;
+                .checkSelfPermission(context, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
     }
 
     /**
@@ -66,10 +69,15 @@ public class ConvenientLocationProvider {
     private class ConvenientLocationCallback extends LocationCallback {
 
         @Override
-        public void onLocationResult(LocationResult locationResult) {
-            Location location = locationResult.getLastLocation();
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            callback.onNewLocation(latLng);
+        public void onLocationResult(final LocationResult locationResult) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Location location = locationResult.getLastLocation();
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    callback.onNewLocation(latLng);
+                }
+            }).start();
         }
     }
 

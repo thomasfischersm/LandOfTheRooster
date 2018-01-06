@@ -9,8 +9,8 @@ public class BuildingType {
     private String name;
     private String icon;
     private Integer producedResourceTypeId;
-    private int minDistanceMeters;
-    private int maxDistanceMeters;
+    private Integer minDistanceMeters;
+    private Integer maxDistanceMeters;
 
     public int getId() {
         return id;
@@ -28,11 +28,11 @@ public class BuildingType {
         return producedResourceTypeId;
     }
 
-    public int getMinDistanceMeters() {
+    public Integer getMinDistanceMeters() {
         return minDistanceMeters;
     }
 
-    public int getMaxDistanceMeters() {
+    public Integer getMaxDistanceMeters() {
         return maxDistanceMeters;
     }
 }

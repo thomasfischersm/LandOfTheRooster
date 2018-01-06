@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.contentprovider.room;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -42,6 +43,9 @@ public interface RoosterDao {
     @Insert
     void insertBuilding(Building building);
 
-    @Query("select *from building order by id asc")
+    @Query("select * from building")
     List<Building> getAllBuildings();
+
+    @Query("select building.id as id, building.building_type_id, building.latitude, building.longitude, building_type.id as type_id, building_type.name as type_name, building_type.icon as type_icon, building_type.produced_resource_type_id as type_produced_resource_type_id, building_type.min_distance_meters as type_min_distance_meters, building_type.max_distance_meters as type_max_distance_meters from building join building_type on (building.building_type_id = building_type.id) order by building.id asc")
+    LiveData<List<BuildingWithType>> getAllBuildingsWithType();
 }

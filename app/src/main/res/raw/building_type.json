@@ -13,32 +13,32 @@
       "name": "wheat field",
       "icon": "wheat_field",
       "producedResourceTypeId": 1,
-      "minDistanceMeters": 300,
-      "maxDistanceMeters": 700
+      "minDistanceMeters": 150,
+      "maxDistanceMeters": 300
     },
     {
       "id": 3,
       "name": "mill",
       "icon": "mill",
       "producedResourceTypeId": 2,
-      "minDistanceMeters": 300,
-      "maxDistanceMeters": 700
+      "minDistanceMeters": 150,
+      "maxDistanceMeters": 300
     },
     {
       "id": 4,
       "name": "bakery",
       "icon": "bakery",
       "producedResourceTypeId": 3,
-      "minDistanceMeters": 300,
-      "maxDistanceMeters": 700
+      "minDistanceMeters": 150,
+      "maxDistanceMeters": 300
     },
     {
       "id": 5,
       "name": "village",
       "icon": "village",
       "producedResourceTypeId": 4,
-      "minDistanceMeters": 300,
-      "maxDistanceMeters": 700
+      "minDistanceMeters": 150,
+      "maxDistanceMeters": 300
     }
   ]
 }

@@ -30,6 +30,20 @@ public class BuildingDiscoveryService {
     private static final int INITIAL_BUILDING_TYPE = 0;
     private static final int LOCATION_CHECK_INTERVAL = 1_000;
 
+    /**
+     * An additional distance that the user can go while still being able to discover a building.
+     *
+     * <p>Each building type has a min and a max. The discovery service decides on an actual
+     * distance somewhere between those maximum. As long as the user has walked the distance, a
+     * discovery happens. However, to prevent a really far building from all other buildings, a
+     * safeguard prevents the discovery when the user exceeds the max distance.
+     *
+     * <p>While that is good, if the actual distance and the max distance is very close, GPS
+     * inaccuracy could make it hard to for the user to trigger. So a fudge factor is added to max
+     * to ensure that a reasonable discovery is made.
+     */
+    private static final int MAX_GRACE_DISTANCE = 100;
+
     private final Context context;
     private final ConvenientLocationProvider convenientLocationProvider;
     private final Random random = new Random();
@@ -57,13 +71,15 @@ public class BuildingDiscoveryService {
             nextBuildingType = getNextBuildingType(context, lastBuilding.getBuildingTypeId());
         }
 
-        if (nextBuildingType != null) {
+        if ((nextBuildingType != null) && (nextBuildingType.getMinDistanceMeters() != null)) {
             Log.d(LOG_TAG, "initNextBuildingType: The next building type is: "
                     + nextBuildingType.getName());
             int min = nextBuildingType.getMinDistanceMeters();
             int delta = nextBuildingType.getMaxDistanceMeters()
                     - nextBuildingType.getMinDistanceMeters();
             nextDistance = min + random.nextInt(delta);
+            Log.d(LOG_TAG, "initNextBuildingType: Distance to the next building is "
+                    + nextDistance);
         } else {
             Log.d(LOG_TAG, "initNextBuildingType: There are no more buildings to be " +
                     "discovered.");
@@ -84,7 +100,7 @@ public class BuildingDiscoveryService {
     }
 
     private void handleFirstBuilding(LatLng latLng) {
-        if (nextBuildingType.getMinDistanceMeters() != 0) {
+        if (nextBuildingType.getMinDistanceMeters() != null) {
             return;
         }
 
@@ -120,9 +136,11 @@ public class BuildingDiscoveryService {
         if (distance == null) {
             Log.e(LOG_TAG, "checkIfBuildingDiscovered: Can't check because the distance is " +
                     "null!");
+            return;
         }
 
-        if ((distance > nextDistance) && (distance < nextBuildingType.getMaxDistanceMeters())) {
+        Integer limit = nextBuildingType.getMaxDistanceMeters() + MAX_GRACE_DISTANCE;
+        if ((distance > nextDistance) && (distance < limit)) {
             Log.d(LOG_TAG, "checkIfBuildingDiscovered: Discovered the next building: "
                     + nextBuildingType.getName());
             placeNextBuilding(currentLatLng);
@@ -159,6 +177,8 @@ public class BuildingDiscoveryService {
             }
         }
 
+        Log.d(LOG_TAG, "getMinDistanceFromCurrentBuildings: Min distance from buildings: "
+                + min);
         return min;
     }
 

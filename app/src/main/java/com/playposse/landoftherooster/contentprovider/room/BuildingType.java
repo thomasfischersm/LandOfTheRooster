@@ -34,10 +34,10 @@ public class BuildingType {
     private Integer producedResourceTypeId;
 
     @ColumnInfo(name = "min_distance_meters")
-    private int minDistanceMeters;
+    private Integer minDistanceMeters;
 
     @ColumnInfo(name = "max_distance_meters")
-    private int maxDistanceMeters;
+    private Integer maxDistanceMeters;
 
     public int getId() {
         return id;
@@ -71,19 +71,19 @@ public class BuildingType {
         this.producedResourceTypeId = producedResourceTypeId;
     }
 
-    public int getMinDistanceMeters() {
+    public Integer getMinDistanceMeters() {
         return minDistanceMeters;
     }
 
-    public void setMinDistanceMeters(int minDistanceMeters) {
+    public void setMinDistanceMeters(Integer minDistanceMeters) {
         this.minDistanceMeters = minDistanceMeters;
     }
 
-    public int getMaxDistanceMeters() {
+    public Integer getMaxDistanceMeters() {
         return maxDistanceMeters;
     }
 
-    public void setMaxDistanceMeters(int maxDistanceMeters) {
+    public void setMaxDistanceMeters(Integer maxDistanceMeters) {
         this.maxDistanceMeters = maxDistanceMeters;
     }
 }

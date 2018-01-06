@@ -2,6 +2,8 @@ package com.playposse.landoftherooster;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,6 +12,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -33,7 +36,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.playposse.landoftherooster.contentprovider.room.Building;
+import com.playposse.landoftherooster.contentprovider.room.BuildingType;
+import com.playposse.landoftherooster.contentprovider.room.BuildingWithType;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 
+import java.util.List;
 import java.util.Random;
 
 public class KingdomActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -136,6 +144,36 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                 });
 
         startLocationUpdates();
+
+        // Update buildings on the map.
+        Observer<List<BuildingWithType>> observer = new Observer<List<BuildingWithType>>() {
+            @Override
+            public void onChanged(@Nullable List<BuildingWithType> buildingsWithType) {
+                // Clear old markers.
+                map.clear();
+
+                // Re-draw all markers.
+                if (buildingsWithType != null) {
+                    for (BuildingWithType buildingWithType : buildingsWithType) {
+                        Building building = buildingWithType.getBuilding();
+                        BuildingType buildingType = buildingWithType.getBuildingType();
+
+                        int drawableId = getResources().getIdentifier(
+                                buildingType.getIcon(),
+                                "drawable",
+                                getPackageName());
+
+                        Location location = new Location("");
+                        location.setLatitude(building.getLatitude());
+                        location.setLongitude(building.getLongitude());
+                        addMarker(location, drawableId, buildingType.getName());
+                    }
+                }
+            }
+        };
+        LiveData<List<BuildingWithType>> liveData =
+                RoosterDatabase.getInstance(this).getDao().getAllBuildingsWithType();
+        liveData.observe(this, observer);
     }
 
     private void getLocationPermission() {
