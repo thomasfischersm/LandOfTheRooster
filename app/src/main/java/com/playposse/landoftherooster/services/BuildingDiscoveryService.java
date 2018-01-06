@@ -15,6 +15,7 @@ import com.playposse.landoftherooster.util.ConvenientLocationProvider;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A background service that discovers buildings.
@@ -45,9 +46,9 @@ public class BuildingDiscoveryService {
     private static final int MAX_GRACE_DISTANCE = 100;
 
     private final Context context;
-    private final ConvenientLocationProvider convenientLocationProvider;
     private final Random random = new Random();
 
+    private ConvenientLocationProvider convenientLocationProvider;
     private BuildingType nextBuildingType;
     private Integer nextDistance;
 
@@ -56,10 +57,14 @@ public class BuildingDiscoveryService {
 
         initNextBuildingType();
 
-        convenientLocationProvider = new ConvenientLocationProvider(
-                context,
-                LOCATION_CHECK_INTERVAL,
-                new LocationCallback());
+        try {
+            convenientLocationProvider = new ConvenientLocationProvider(
+                    context,
+                    LOCATION_CHECK_INTERVAL,
+                    new LocationCallback());
+        } catch (ExecutionException | InterruptedException ex) {
+            Log.e(LOG_TAG, "BuildingDiscoveryService: Failed to wait for permissions.", ex);
+        }
     }
 
     private void initNextBuildingType() {
@@ -192,12 +197,6 @@ public class BuildingDiscoveryService {
         public void onNewLocation(LatLng latLng) {
             handleFirstBuilding(latLng);
             checkIfBuildingDiscovered(latLng);
-        }
-
-        @Override
-        public void onMissingPermission() {
-            Log.e(LOG_TAG, "onMissingPermission: Cannot run BuildingDiscoveryService due to " +
-                    "a lack of permission.");
         }
     }
 }

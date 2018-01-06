@@ -4,13 +4,11 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -23,9 +21,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,14 +30,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.playposse.landoftherooster.contentprovider.room.Building;
 import com.playposse.landoftherooster.contentprovider.room.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
+import com.playposse.landoftherooster.services.BuildingDiscoveryService;
 
 import java.util.List;
-import java.util.Random;
 
 public class KingdomActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -56,11 +50,6 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
     private LocationCallback locationCallback = new ThisLocationCallback();
 
-    private Location castleLocation;
-    private Location princesLocation;
-
-    private int distance = new Random().nextInt(200);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +62,13 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new BuildingDiscoveryService(getApplicationContext());
+            }
+        }).start();
     }
 
     @Override
@@ -99,6 +95,10 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     locationPermissionGranted = true;
+
+                    if (map != null) {
+                        onMapReady(map);
+                    }
                 }
             }
         }
@@ -116,11 +116,6 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         getLocationPermission();
         if (ActivityCompat.checkSelfPermission(
@@ -210,23 +205,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         locationRequest.setFastestInterval(500);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
-        Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(builder.build());
-
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-    }
-
-    private static Bitmap getImageByName(Context context, String name) {
-        int resID = context.getResources().getIdentifier(
-                name,
-                "drawable",
-                context.getPackageName());
-        if (resID > 1) {
-            return BitmapFactory.decodeResource(context.getResources(), resID);
-        } else {
-            return null;
-        }
     }
 
     private class ThisLocationCallback extends LocationCallback {
@@ -239,21 +218,6 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             map.moveCamera(CameraUpdateFactory.zoomTo(17));
-
-            if (castleLocation == null) {
-                castleLocation = location;
-
-                addMarker(castleLocation, R.drawable.noun_1401109_cc, "Castle");
-            }
-
-            if ((princesLocation == null) && (location.distanceTo(castleLocation) >= distance)) {
-                princesLocation = location;
-
-                addMarker(princesLocation, R.drawable.noun_760976_cc, "Princess");
-
-                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                vibrator.vibrate(500);
-            }
         }
     }
 

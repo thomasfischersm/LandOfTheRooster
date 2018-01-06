@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.os.Looper;
-import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -13,8 +12,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Neat packaging of accessing the user's current location.
@@ -28,17 +26,20 @@ public class ConvenientLocationProvider {
     private final FusedLocationProviderClient fusedLocationClient;
     private final LocationCallback locationCallback = new ConvenientLocationCallback();
 
-    public ConvenientLocationProvider(Context context, int intervalMs, Callback callback) {
+    public ConvenientLocationProvider(Context context, int intervalMs, Callback callback)
+            throws ExecutionException, InterruptedException {
+
         this.intervalMs = intervalMs;
         this.callback = callback;
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
 
-        if (hasLocationPermission(context)) {
-            requestLocationUpdates();
-        } else {
-            callback.onMissingPermission();
-        }
+        // Wait until location permissions have been gratned.
+        LocationPermissionFutureTask permissionTask = new LocationPermissionFutureTask(context);
+        permissionTask.run();
+        permissionTask.get();
+
+        requestLocationUpdates();
     }
 
     @SuppressLint("MissingPermission")
@@ -58,10 +59,6 @@ public class ConvenientLocationProvider {
         fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
-    private boolean hasLocationPermission(Context context) {
-        return ContextCompat
-                .checkSelfPermission(context, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
-    }
 
     /**
      * Receiver of location updates.
@@ -90,10 +87,5 @@ public class ConvenientLocationProvider {
          * Called when a new location has been identified.
          */
         void onNewLocation(LatLng latLng);
-
-        /**
-         * Called when the user hasn't given the app permission to access the location.
-         */
-        void onMissingPermission();
     }
 }

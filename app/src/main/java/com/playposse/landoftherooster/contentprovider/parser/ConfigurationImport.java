@@ -8,7 +8,6 @@ import android.util.Log;
 import com.playposse.landoftherooster.BuildConfig;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
-import com.playposse.landoftherooster.services.BuildingDiscoveryService;
 import com.playposse.landoftherooster.util.DatabaseDumper;
 
 import java.io.IOException;
@@ -38,7 +37,6 @@ public final class ConfigurationImport {
         // Skip if already imported.
         if (jsonBuildingTypeCount == dbBuildingTypeCount) {
             Log.d(LOG_TAG, "importAll: Import has already run previously.");
-            new BuildingDiscoveryService(context);
             return;
         }
 
