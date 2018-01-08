@@ -138,6 +138,7 @@ public class BuildingDiscoveryService extends Service {
         if (nextBuildingType == null) {
             Log.d(LOG_TAG, "checkIfBuildingDiscovered: No more next building types to " +
                     "discover.");
+            return;
         }
 
         Float distance = getMinDistanceFromCurrentBuildings(currentLatLng);

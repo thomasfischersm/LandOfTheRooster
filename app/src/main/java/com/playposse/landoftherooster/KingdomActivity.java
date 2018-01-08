@@ -47,6 +47,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
     private boolean locationPermissionGranted = false;
+    private boolean isMapLocationInitialized = false;
 
     private LocationCallback locationCallback = new ThisLocationCallback();
 
@@ -214,10 +215,13 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
             super.onLocationResult(locationResult);
 
             Log.d(LOG_TAG, "onLocationResult: Got new location");
-            Location location = locationResult.getLastLocation();
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            map.moveCamera(CameraUpdateFactory.zoomTo(17));
+            if (!isMapLocationInitialized) {
+                Location location = locationResult.getLastLocation();
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                map.moveCamera(CameraUpdateFactory.zoomTo(17));
+                isMapLocationInitialized = true;
+            }
         }
     }
 
