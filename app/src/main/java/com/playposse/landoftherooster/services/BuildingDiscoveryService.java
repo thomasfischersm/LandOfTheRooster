@@ -16,8 +16,9 @@ import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.playposse.landoftherooster.KingdomActivity;
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.activity.KingdomActivity;
+import com.playposse.landoftherooster.activity.StopActivity;
 import com.playposse.landoftherooster.contentprovider.room.Building;
 import com.playposse.landoftherooster.contentprovider.room.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
@@ -121,6 +122,16 @@ public class BuildingDiscoveryService extends Service {
         PendingIntent pendingIntent =
                 PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
+        // Create pending action to stop the service.
+        Intent stopIntent = new Intent(context, StopActivity.class);
+        PendingIntent pendingStopIntent =
+                PendingIntent.getActivity(context, 0, stopIntent, 0);
+        Notification.Action stopAction = new Notification.Action.Builder(
+                R.drawable.ic_stop_black_24dp,
+                getString(R.string.service_notification_stop_action),
+                pendingStopIntent)
+                .build();
+
         // Create notification for foreground service.
         Notification notification =
                 new Notification.Builder(context, NOTIFICATION_CHANNEL_ID)
@@ -129,6 +140,7 @@ public class BuildingDiscoveryService extends Service {
                         .setSmallIcon(R.drawable.rooster)
                         .setContentIntent(pendingIntent)
                         .setTicker(getText(R.string.service_notification_msg))
+                        .addAction(stopAction)
                         .build();
 
         // Move the service into the foreground.
@@ -143,6 +155,11 @@ public class BuildingDiscoveryService extends Service {
         PendingIntent pendingIntent =
                 PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
+        // Create pending action to stop the service.
+        Intent stopIntent = new Intent(context, StopActivity.class);
+        PendingIntent pendingStopIntent =
+                PendingIntent.getActivity(context, 0, stopIntent, 0);
+
         // Create notification for foreground service.
         Notification notification =
                 new Notification.Builder(context)
@@ -151,6 +168,9 @@ public class BuildingDiscoveryService extends Service {
                         .setSmallIcon(R.drawable.rooster)
                         .setContentIntent(pendingIntent)
                         .setTicker(getText(R.string.service_notification_msg))
+                        .addAction(R.drawable.ic_stop_black_24dp,
+                                getString(R.string.service_notification_stop_action),
+                                pendingStopIntent)
                         .build();
 
         // Move the service into the foreground.

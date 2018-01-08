@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster;
+package com.playposse.landoftherooster.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.room.Building;
 import com.playposse.landoftherooster.contentprovider.room.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.BuildingWithType;

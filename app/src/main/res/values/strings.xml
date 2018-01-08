@@ -5,4 +5,5 @@
     <!-- Service notification -->
     <string name="service_notification_title">Land Of The Rooster</string>
     <string name="service_notification_msg">Rule your kingdom</string>
+    <string name="service_notification_stop_action">Stop</string>
 </resources>
