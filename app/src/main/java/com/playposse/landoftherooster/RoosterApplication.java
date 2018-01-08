@@ -3,7 +3,7 @@ package com.playposse.landoftherooster;
 import android.app.Application;
 import android.content.Intent;
 
-import com.playposse.landoftherooster.services.BuildingDiscoveryService;
+import com.playposse.landoftherooster.services.LocationScanningService;
 
 /**
  * Implementation of {@link Application}.
@@ -24,6 +24,6 @@ public class RoosterApplication extends Application {
         // Import configuration on the first run.
 //        ConfigurationImport.startImport(this);
 
-        startService(new Intent(this, BuildingDiscoveryService.class));
+        startService(new Intent(this, LocationScanningService.class));
     }
 }

@@ -1,33 +1,19 @@
 package com.playposse.landoftherooster.services;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
-import android.os.Build;
-import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.playposse.landoftherooster.R;
-import com.playposse.landoftherooster.activity.KingdomActivity;
-import com.playposse.landoftherooster.activity.StopActivity;
 import com.playposse.landoftherooster.contentprovider.room.Building;
 import com.playposse.landoftherooster.contentprovider.room.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
-import com.playposse.landoftherooster.util.ConvenientLocationProvider;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 /**
  * A background service that discovers buildings.
@@ -36,15 +22,11 @@ import java.util.concurrent.ExecutionException;
  * specific distance from the last discovered building. The specific distance is a randomly chosen
  * distance within the min/max range for that building type.
  */
-public class BuildingDiscoveryService extends Service {
+public class BuildingDiscoveryService implements ILocationAwareService {
 
     private static final String LOG_TAG = BuildingDiscoveryService.class.getSimpleName();
 
     private static final int INITIAL_BUILDING_TYPE = 0;
-    private static final int LOCATION_CHECK_INTERVAL = 1_000;
-    private static final int SERVICE_NOTIFICATION_ID = 1;
-    private static final String NOTIFICATION_CHANNEL_ID = "com.playposse.landoftherooster.notificationchannel";
-    private static final String NOTIFICATION_CHANNEL_NAME = "Land Of The Rooster";
 
     /**
      * An additional distance that the user can go while still being able to discover a building.
@@ -60,125 +42,19 @@ public class BuildingDiscoveryService extends Service {
      */
     private static final int MAX_GRACE_DISTANCE = 100;
 
+    private final Context context;
     private final Random random = new Random();
 
-    private ConvenientLocationProvider convenientLocationProvider;
     private BuildingType nextBuildingType;
     private Integer nextDistance;
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundForOreo();
-        } else {
-            startForegroundPriorOreo();
-        }
+    public BuildingDiscoveryService(Context context) {
+        this.context = context;
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                init();
-            }
-        }).start();
-
-        return START_NOT_STICKY;
-    }
-
-    private void init() {
         initNextBuildingType();
-
-        try {
-            convenientLocationProvider = new ConvenientLocationProvider(
-                    getApplicationContext(),
-                    LOCATION_CHECK_INTERVAL,
-                    new LocationCallback());
-        } catch (ExecutionException | InterruptedException ex) {
-            Log.e(LOG_TAG, "BuildingDiscoveryService: Failed to wait for permissions.", ex);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        convenientLocationProvider.close();
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private void startForegroundForOreo() {
-        Context context = getApplicationContext();
-
-        // Create notification channel.
-        NotificationChannel notificationChannel = new NotificationChannel(
-                NOTIFICATION_CHANNEL_ID,
-                NOTIFICATION_CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT);
-        NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager != null) {
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-        // Create pending intent to open Kingdom activity.
-        Intent notificationIntent = new Intent(context, KingdomActivity.class);
-        PendingIntent pendingIntent =
-                PendingIntent.getActivity(context, 0, notificationIntent, 0);
-
-        // Create pending action to stop the service.
-        Intent stopIntent = new Intent(context, StopActivity.class);
-        PendingIntent pendingStopIntent =
-                PendingIntent.getActivity(context, 0, stopIntent, 0);
-        Notification.Action stopAction = new Notification.Action.Builder(
-                R.drawable.ic_stop_black_24dp,
-                getString(R.string.service_notification_stop_action),
-                pendingStopIntent)
-                .build();
-
-        // Create notification for foreground service.
-        Notification notification =
-                new Notification.Builder(context, NOTIFICATION_CHANNEL_ID)
-                        .setContentTitle(getText(R.string.service_notification_title))
-                        .setContentText(getText(R.string.service_notification_msg))
-                        .setSmallIcon(R.drawable.rooster)
-                        .setContentIntent(pendingIntent)
-                        .setTicker(getText(R.string.service_notification_msg))
-                        .addAction(stopAction)
-                        .build();
-
-        // Move the service into the foreground.
-        startForeground(SERVICE_NOTIFICATION_ID, notification);
-    }
-
-    private void startForegroundPriorOreo() {
-        Context context = getApplicationContext();
-
-        // Create pending intent to open Kingdom activity.
-        Intent notificationIntent = new Intent(context, KingdomActivity.class);
-        PendingIntent pendingIntent =
-                PendingIntent.getActivity(context, 0, notificationIntent, 0);
-
-        // Create pending action to stop the service.
-        Intent stopIntent = new Intent(context, StopActivity.class);
-        PendingIntent pendingStopIntent =
-                PendingIntent.getActivity(context, 0, stopIntent, 0);
-
-        // Create notification for foreground service.
-        Notification notification =
-                new Notification.Builder(context)
-                        .setContentTitle(getText(R.string.service_notification_title))
-                        .setContentText(getText(R.string.service_notification_msg))
-                        .setSmallIcon(R.drawable.rooster)
-                        .setContentIntent(pendingIntent)
-                        .setTicker(getText(R.string.service_notification_msg))
-                        .addAction(R.drawable.ic_stop_black_24dp,
-                                getString(R.string.service_notification_stop_action),
-                                pendingStopIntent)
-                        .build();
-
-        // Move the service into the foreground.
-        startForeground(SERVICE_NOTIFICATION_ID, notification);
     }
 
     private void initNextBuildingType() {
-        Context context = getApplicationContext();
         Building lastBuilding = getLastBuilding(context);
 
         if (lastBuilding == null) {
@@ -229,7 +105,6 @@ public class BuildingDiscoveryService extends Service {
         // Create the building.
         Building building =
                 new Building(nextBuildingType.getId(), currentLatLng.latitude, currentLatLng.longitude);
-        Context context = getApplicationContext();
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
         dao.insertBuilding(building);
         Log.d(LOG_TAG, "placeNextBuilding: Placed building: " + nextBuildingType.getName());
@@ -276,7 +151,7 @@ public class BuildingDiscoveryService extends Service {
         Float max = null; // Gather for future use.
 
         // Query db.
-        RoosterDao dao = RoosterDatabase.getInstance(getApplicationContext()).getDao();
+        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
         List<Building> buildings = dao.getAllBuildings();
 
         // Iterate over buildings and collect min/max
@@ -301,22 +176,9 @@ public class BuildingDiscoveryService extends Service {
         return min;
     }
 
-    @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    /**
-     * Callback that gets called when a new GPS location becomes available. At that time, new
-     * buildings are created if the user is ready.
-     */
-    private class LocationCallback implements ConvenientLocationProvider.Callback {
-
-        @Override
-        public void onNewLocation(LatLng latLng) {
-            handleFirstBuilding(latLng);
-            checkIfBuildingDiscovered(latLng);
-        }
+    public void onLocationUpdate(LatLng latLng) {
+        handleFirstBuilding(latLng);
+        checkIfBuildingDiscovered(latLng);
     }
 }

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.playposse.landoftherooster.services.BuildingDiscoveryService;
+import com.playposse.landoftherooster.services.LocationScanningService;
 
 /**
  * An {@link Activity} that has no visual part and simply serves as a target from the notification
@@ -18,7 +18,7 @@ public class StopActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        stopService(new Intent(this, BuildingDiscoveryService.class));
+        stopService(new Intent(this, LocationScanningService.class));
         finishAffinity();
     }
 }

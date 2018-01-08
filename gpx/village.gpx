@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="MapSource 6.16.1" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-
+
+instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+
+    <trk>
+        <name>emulate</name>
+        <trkseg>
+            <trkpt lat="34.009656" lon="-118.487160"><ele>0.000000</ele><time>2014-03-05T20:00:01Z</time></trkpt>
+        </trkseg>
+    </trk>
+</gpx>
