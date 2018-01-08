@@ -1,7 +1,10 @@
 package com.playposse.landoftherooster.services;
 
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
+import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -24,7 +27,7 @@ import java.util.concurrent.ExecutionException;
  * specific distance from the last discovered building. The specific distance is a randomly chosen
  * distance within the min/max range for that building type.
  */
-public class BuildingDiscoveryService {
+public class BuildingDiscoveryService extends Service {
 
     private static final String LOG_TAG = BuildingDiscoveryService.class.getSimpleName();
 
@@ -105,7 +108,7 @@ public class BuildingDiscoveryService {
     }
 
     private void handleFirstBuilding(LatLng latLng) {
-        if (nextBuildingType.getMinDistanceMeters() != null) {
+        if ((nextBuildingType == null) || (nextBuildingType.getMinDistanceMeters() != null)) {
             return;
         }
 
@@ -186,6 +189,12 @@ public class BuildingDiscoveryService {
         Log.d(LOG_TAG, "getMinDistanceFromCurrentBuildings: Min distance from buildings: "
                 + min);
         return min;
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     /**
