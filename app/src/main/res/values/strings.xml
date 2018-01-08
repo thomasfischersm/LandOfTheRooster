@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Land Of The Rooster</string>
     <string name="title_activity_kingdom">Map</string>
+
+    <!-- Service notification -->
+    <string name="service_notification_title">Land Of The Rooster</string>
+    <string name="service_notification_msg">Rule your kingdom</string>
 </resources>

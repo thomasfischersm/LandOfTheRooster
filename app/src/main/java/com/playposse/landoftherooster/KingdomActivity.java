@@ -34,7 +34,6 @@ import com.playposse.landoftherooster.contentprovider.room.Building;
 import com.playposse.landoftherooster.contentprovider.room.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
-import com.playposse.landoftherooster.services.BuildingDiscoveryService;
 
 import java.util.List;
 
@@ -63,13 +62,6 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new BuildingDiscoveryService(getApplicationContext());
-            }
-        }).start();
     }
 
     @Override

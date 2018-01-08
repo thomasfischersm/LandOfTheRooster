@@ -1,8 +1,9 @@
 package com.playposse.landoftherooster;
 
 import android.app.Application;
+import android.content.Intent;
 
-import com.playposse.landoftherooster.contentprovider.parser.ConfigurationImport;
+import com.playposse.landoftherooster.services.BuildingDiscoveryService;
 
 /**
  * Implementation of {@link Application}.
@@ -21,6 +22,8 @@ public class RoosterApplication extends Application {
         }
 
         // Import configuration on the first run.
-        ConfigurationImport.startImport(this);
+//        ConfigurationImport.startImport(this);
+
+        startService(new Intent(this, BuildingDiscoveryService.class));
     }
 }

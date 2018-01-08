@@ -30,6 +30,10 @@
             android:authorities="com.playposse.landoftherooster.provider"
             android:exported="false"/>
 
+        <service
+            android:name=".services.BuildingDiscoveryService"
+            android:exported="false"/>
+
         <activity
             android:name=".KingdomActivity"
             android:label="@string/title_activity_kingdom">
