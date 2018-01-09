@@ -48,7 +48,7 @@ public class BuildingDiscoveryService implements ILocationAwareService {
     private BuildingType nextBuildingType;
     private Integer nextDistance;
 
-    public BuildingDiscoveryService(Context context) {
+    BuildingDiscoveryService(Context context) {
         this.context = context;
 
         initNextBuildingType();

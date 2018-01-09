@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 import android.database.Cursor;
 import android.support.annotation.Nullable;
 
@@ -47,5 +48,26 @@ public interface RoosterDao {
     List<Building> getAllBuildings();
 
     @Query("select building.id as id, building.building_type_id, building.latitude, building.longitude, building_type.id as type_id, building_type.name as type_name, building_type.icon as type_icon, building_type.produced_resource_type_id as type_produced_resource_type_id, building_type.min_distance_meters as type_min_distance_meters, building_type.max_distance_meters as type_max_distance_meters from building join building_type on (building.building_type_id = building_type.id) order by building.id asc")
-    LiveData<List<BuildingWithType>> getAllBuildingsWithType();
+    LiveData<List<BuildingWithType>> getAllBuildingsWithTypeAsLiveData();
+
+    @Query("select building.id as id, building.building_type_id, building.latitude, building.longitude, building_type.id as type_id, building_type.name as type_name, building_type.icon as type_icon, building_type.produced_resource_type_id as type_produced_resource_type_id, building_type.min_distance_meters as type_min_distance_meters, building_type.max_distance_meters as type_max_distance_meters from building join building_type on (building.building_type_id = building_type.id) order by building.id asc")
+    List<BuildingWithType> getAllBuildingsWithType();
+
+    @Query("select * from resource_type where id=:resourceTypeId")
+    ResourceType getResourceTypeById(int resourceTypeId);
+
+    @Query("select * from resource where resource_type_id=:resourceTypeId")
+    Resource getResourceByTypeId(int resourceTypeId);
+
+    @Insert
+    void insert(Resource resource);
+
+    @Update
+    void update(Resource resource);
+
+    @Query("select sum(amount) from resource")
+    int getResourceCount();
+
+    @Query("select resource.id as id, resource.resource_type_id, resource.amount, resource_type.id as type_id, resource_type.name as type_name, resource_type.precursor_id as type_precursor_id from resource join resource_type on (resource.resource_type_id=resource_type.id) where amount > 0 order by resource_type.id asc")
+    LiveData<List<ResourceWithType>> getAllResourcesWithType();
 }

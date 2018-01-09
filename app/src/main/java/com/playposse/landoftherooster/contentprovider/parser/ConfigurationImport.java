@@ -27,7 +27,7 @@ public final class ConfigurationImport {
         new ImportAsyncTask(context).execute();
     }
 
-    private static void importAll(Context context) throws IOException {
+    public static void importAll(Context context) throws IOException {
         // Gather information.
         List<BuildingType> buildingTypes = ConfigurationParser.readBuildingTypes(context);
         int jsonBuildingTypeCount = buildingTypes.size();

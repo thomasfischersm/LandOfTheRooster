@@ -6,6 +6,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.playposse.landoftherooster.contentprovider.RoosterDatabaseHelper;
 import com.playposse.landoftherooster.contentprovider.parser.ConfigurationImport;
@@ -13,10 +14,12 @@ import com.playposse.landoftherooster.contentprovider.parser.ConfigurationImport
 /**
  * A Room database that goes to our Sqlite instance.
  */
-@Database(entities = {Building.class, BuildingType.class, ResourceType.class},
-        version = 4,
+@Database(entities = {Building.class, BuildingType.class, Resource.class, ResourceType.class},
+        version = 5,
         exportSchema = true)
 public abstract class RoosterDatabase extends RoomDatabase {
+
+    private static final String LOG_TAG = RoosterDatabase.class.getSimpleName();
 
     private static RoosterDatabase instance;
 
@@ -48,6 +51,7 @@ public abstract class RoosterDatabase extends RoomDatabase {
 
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            Log.e(LOG_TAG, "onCreate: Importing configuration into new db.");
             ConfigurationImport.startImport(context);
         }
     }

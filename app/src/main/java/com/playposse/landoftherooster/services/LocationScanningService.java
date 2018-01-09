@@ -151,6 +151,7 @@ public class LocationScanningService extends Service {
         }
 
         dependentServices.add(new BuildingDiscoveryService(getApplicationContext()));
+        dependentServices.add(new BuildingInteractionService(getApplicationContext()));
     }
 
     @Override

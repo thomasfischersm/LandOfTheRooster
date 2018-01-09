@@ -13,8 +13,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.SupportActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -34,9 +41,15 @@ import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.room.Building;
 import com.playposse.landoftherooster.contentprovider.room.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.BuildingWithType;
+import com.playposse.landoftherooster.contentprovider.room.ResourceWithType;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
+import com.playposse.landoftherooster.util.RecyclerViewLiveDataAdapter;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class KingdomActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -44,10 +57,13 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
+    @BindView(R.id.resource_recycler_view) RecyclerView resourceRecyclerView;
+
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
     private boolean locationPermissionGranted = false;
     private boolean isMapLocationInitialized = false;
+    private ResourceAdapter resourceAdapter;
 
     private LocationCallback locationCallback = new ThisLocationCallback();
 
@@ -57,12 +73,26 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
         setContentView(R.layout.activity_kingdom);
 
+        ButterKnife.bind(this);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // TODO: This could possibly be removed or reduced.
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        RoosterDao dao = RoosterDatabase.getInstance(this).getDao();
+        LiveData<List<ResourceWithType>> resourcesWithType = dao.getAllResourcesWithType();
+
+        resourceRecyclerView.setHasFixedSize(true); // Small performance improvement.
+        resourceRecyclerView.setLayoutManager(new LinearLayoutManager(
+                this,
+                LinearLayoutManager.VERTICAL,
+                false));
+        resourceAdapter = new ResourceAdapter(this, resourcesWithType);
+        resourceRecyclerView.setAdapter(resourceAdapter);
     }
 
     @Override
@@ -161,7 +191,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
             }
         };
         LiveData<List<BuildingWithType>> liveData =
-                RoosterDatabase.getInstance(this).getDao().getAllBuildingsWithType();
+                RoosterDatabase.getInstance(this).getDao().getAllBuildingsWithTypeAsLiveData();
         liveData.observe(this, observer);
     }
 
@@ -233,5 +263,48 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         map.addMarker(new MarkerOptions().position(latLng)
                 .title(label)
                 .icon(castleIcon));
+    }
+
+    /**
+     * A {@link RecyclerView.Adapter} that holds resources that the user is currently carrying.
+     */
+    private class ResourceAdapter
+            extends RecyclerViewLiveDataAdapter<ResourceViewHolder, ResourceWithType> {
+
+        private ResourceAdapter(SupportActivity activity, LiveData<List<ResourceWithType>> liveData) {
+            super(activity, liveData);
+        }
+
+        @Override
+        public ResourceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(KingdomActivity.this).inflate(
+                    R.layout.list_item_resource,
+                    parent,
+                    false);
+            return new ResourceViewHolder(view);
+        }
+
+        @Override
+        protected void onBindViewHolder(ResourceViewHolder holder, ResourceWithType data) {
+            String str = getString(
+                    R.string.resource_listing,
+                    data.getType().getName(),
+                    data.getResource().getAmount());
+            holder.resourceTextView.setText(str);
+        }
+    }
+
+    /**
+     * A {@link RecyclerView.ViewHolder} that holds the view for a resource item.
+     */
+    class ResourceViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.resource_text_view) TextView resourceTextView;
+
+        private ResourceViewHolder(View itemView) {
+            super(itemView);
+
+            ButterKnife.bind(this, itemView);
+        }
     }
 }
