@@ -3,6 +3,7 @@ package com.playposse.landoftherooster.contentprovider.room;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -14,7 +15,8 @@ import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 @Entity(foreignKeys = @ForeignKey(entity = ResourceType.class,
         parentColumns = "id",
         childColumns = "resource_type_id",
-        onDelete = NO_ACTION))
+        onDelete = NO_ACTION),
+        indices = @Index("resource_type_id"))
 public class Resource {
 
     @PrimaryKey(autoGenerate = true)

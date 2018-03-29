@@ -48,6 +48,7 @@ public final class ConfigurationImport {
         }
 
         importResourceTypes(context);
+        importUnitTypes(context);
         importBuildingTypes(context, buildingTypes);
 
         if (BuildConfig.DEBUG) {
@@ -77,6 +78,34 @@ public final class ConfigurationImport {
         }
 
         RoosterDatabase.getInstance(context).getDao().insertResourceTypes(rows);
+    }
+
+    private static void importUnitTypes(Context context) throws IOException {
+        List<UnitType> unitTypes = ConfigurationParser.readUnitTypes(context);
+
+        if (unitTypes == null) {
+            Log.w(LOG_TAG, "importUnitTypes: No unit types found!");
+            return;
+        }
+
+        List<com.playposse.landoftherooster.contentprovider.room.UnitType> rows =
+                new ArrayList<>(unitTypes.size());
+        for (UnitType unitType : unitTypes) {
+            com.playposse.landoftherooster.contentprovider.room.UnitType roomUnitType =
+                    new com.playposse.landoftherooster.contentprovider.room.UnitType();
+
+            roomUnitType.setId(unitType.getId());
+            roomUnitType.setName(unitType.getName());
+            roomUnitType.setCarryingCapacity(unitType.getCarryingCapacity());
+            roomUnitType.setAttack(unitType.getAttack());
+            roomUnitType.setDefense(unitType.getDefense());
+            roomUnitType.setArmor(unitType.getArmor());
+            roomUnitType.setHealth(unitType.getHealth());
+
+            rows.add(roomUnitType);
+        }
+
+        RoosterDatabase.getInstance(context).getDao().insertUnitTypes(rows);
     }
 
     private static void importBuildingTypes(Context context, List<BuildingType> buildingTypes)

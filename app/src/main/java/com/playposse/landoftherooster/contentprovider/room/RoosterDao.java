@@ -22,6 +22,9 @@ public interface RoosterDao {
     @Insert
     void insertResourceTypes(List<ResourceType> resourceTypes);
 
+    @Insert
+    void insertUnitTypes(List<UnitType> rows);
+
     @Query("select * from building_type")
     List<BuildingType> getAllBuildingTypes();
 

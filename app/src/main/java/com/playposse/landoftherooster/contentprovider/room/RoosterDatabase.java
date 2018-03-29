@@ -14,8 +14,14 @@ import com.playposse.landoftherooster.contentprovider.parser.ConfigurationImport
 /**
  * A Room database that goes to our Sqlite instance.
  */
-@Database(entities = {Building.class, BuildingType.class, Resource.class, ResourceType.class},
-        version = 5,
+@Database(entities = {
+        Building.class,
+        BuildingType.class,
+        Resource.class,
+        ResourceType.class,
+        Unit.class,
+        UnitType.class},
+        version = 6,
         exportSchema = true)
 public abstract class RoosterDatabase extends RoomDatabase {
 

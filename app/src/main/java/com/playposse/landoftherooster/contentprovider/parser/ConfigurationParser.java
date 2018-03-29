@@ -42,4 +42,16 @@ final class ConfigurationParser {
             Closeables.close(reader, false);
         }
     }
+
+    static List<UnitType> readUnitTypes(Context context) throws IOException {
+        InputStream inputStream = context.getResources().openRawResource(R.raw.unit_type);
+        InputStreamReader reader = new InputStreamReader(inputStream);
+        try {
+            Gson gson = new GsonBuilder().create();
+            UnitTypeRoot root = gson.fromJson(reader, UnitTypeRoot.class);
+            return root.getUnitTypes();
+        } finally {
+            Closeables.close(reader, false);
+        }
+    }
 }
