@@ -44,6 +44,9 @@ import com.playposse.landoftherooster.contentprovider.room.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.ResourceWithType;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
+import com.playposse.landoftherooster.contentprovider.room.Unit;
+import com.playposse.landoftherooster.contentprovider.room.UnitType;
+import com.playposse.landoftherooster.contentprovider.room.UnitWithType;
 import com.playposse.landoftherooster.util.RecyclerViewLiveDataAdapter;
 
 import java.util.List;
@@ -58,12 +61,14 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     @BindView(R.id.resource_recycler_view) RecyclerView resourceRecyclerView;
+    @BindView(R.id.unit_recycler_view) RecyclerView unitRecyclerView;
 
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
     private boolean locationPermissionGranted = false;
     private boolean isMapLocationInitialized = false;
     private ResourceAdapter resourceAdapter;
+    private UnitAdapter unitAdapter;
 
     private LocationCallback locationCallback = new ThisLocationCallback();
 
@@ -85,7 +90,9 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
         RoosterDao dao = RoosterDatabase.getInstance(this).getDao();
         LiveData<List<ResourceWithType>> resourcesWithType = dao.getAllResourcesWithType();
+        LiveData<List<UnitWithType>> unitsWithType = dao.getUnitsWithTypeJoiningUserAsLiveData();
 
+        // Set up resources view.
         resourceRecyclerView.setHasFixedSize(true); // Small performance improvement.
         resourceRecyclerView.setLayoutManager(new LinearLayoutManager(
                 this,
@@ -93,6 +100,15 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                 false));
         resourceAdapter = new ResourceAdapter(this, resourcesWithType);
         resourceRecyclerView.setAdapter(resourceAdapter);
+
+        // Set up unit view.
+        unitRecyclerView.setHasFixedSize(true); // Small performance improvement.
+        unitRecyclerView.setLayoutManager(new LinearLayoutManager(
+                this,
+                LinearLayoutManager.VERTICAL,
+                false));
+        unitAdapter = new UnitAdapter(this, unitsWithType);
+        unitRecyclerView.setAdapter(unitAdapter);
     }
 
     @Override
@@ -224,7 +240,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
     @SuppressLint("MissingPermission")
     private void startLocationUpdates() {
-        LocationRequest locationRequest = new LocationRequest();
+        LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setInterval(10_000);
         locationRequest.setFastestInterval(500);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -275,6 +291,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
             super(activity, liveData);
         }
 
+        @NonNull
         @Override
         public ResourceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(KingdomActivity.this).inflate(
@@ -302,6 +319,55 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         @BindView(R.id.resource_text_view) TextView resourceTextView;
 
         private ResourceViewHolder(View itemView) {
+            super(itemView);
+
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    /**
+     * A {@link RecyclerView.Adapter} that holds units that the user are currently accompanying the
+     * user.
+     */
+    private class UnitAdapter
+            extends RecyclerViewLiveDataAdapter<UnitViewHolder, UnitWithType> {
+
+        private UnitAdapter(SupportActivity activity, LiveData<List<UnitWithType>> liveData) {
+            super(activity, liveData);
+        }
+
+        @NonNull
+        @Override
+        public UnitViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(KingdomActivity.this).inflate(
+                    R.layout.list_item_unit,
+                    parent,
+                    false);
+            return new UnitViewHolder(view);
+        }
+
+        @Override
+        protected void onBindViewHolder(UnitViewHolder holder, UnitWithType data) {
+            Unit unit = data.getUnit();
+            UnitType type = data.getType();
+
+            String str = getString(
+                    R.string.unit_listing,
+                    type.getName(),
+                    unit.getHealth(),
+                    type.getHealth());
+            holder.unitTextView.setText(str);
+        }
+    }
+
+    /**
+     * A {@link RecyclerView.ViewHolder} that holds the view for a unit.
+     */
+    class UnitViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.unit_text_view) TextView unitTextView;
+
+        private UnitViewHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
