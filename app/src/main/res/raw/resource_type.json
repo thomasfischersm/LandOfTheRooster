@@ -3,22 +3,17 @@
     {
       "id": 1,
       "name": "wheat",
-      "precursorId" : null
+      "precursorResourceTypeId" : null
     },
     {
       "id": 2,
       "name": "flour",
-      "precursorId" : 1
+      "precursorResourceTypeId" : 1
     },
     {
       "id": 3,
       "name": "bread",
-      "precursorId" : 2
-    },
-    {
-      "id": 4,
-      "name": "peasant",
-      "precursorId" : 3
+      "precursorResourceTypeId" : 2
     }
   ]
 }

@@ -12,60 +12,42 @@ public class UnitType {
     private int defense;
     private int armor;
     private int health;
+    private Integer precursorResourceTypeId;
+    private Integer precursorUnitTypeId;
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getCarryingCapacity() {
         return carryingCapacity;
-    }
-
-    public void setCarryingCapacity(int carryingCapacity) {
-        this.carryingCapacity = carryingCapacity;
     }
 
     public int getAttack() {
         return attack;
     }
 
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
     public int getDefense() {
         return defense;
-    }
-
-    public void setDefense(int defense) {
-        this.defense = defense;
     }
 
     public int getArmor() {
         return armor;
     }
 
-    public void setArmor(int armor) {
-        this.armor = armor;
-    }
-
     public int getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    public Integer getPrecursorResourceTypeId() {
+        return precursorResourceTypeId;
+    }
+
+    public Integer getPrecursorUnitTypeId() {
+        return precursorUnitTypeId;
     }
 }

@@ -134,6 +134,8 @@ public class BuildingDiscoveryService implements ILocationAwareService {
         }
 
         Integer limit = nextBuildingType.getMaxDistanceMeters() + MAX_GRACE_DISTANCE;
+        Log.d(LOG_TAG, "checkIfBuildingDiscovered: Next building type requires "
+                + nextDistance + " and no more than " + limit);
         if ((distance > nextDistance) && (distance < limit)) {
             Log.d(LOG_TAG, "checkIfBuildingDiscovered: Discovered the next building: "
                     + nextBuildingType.getName());

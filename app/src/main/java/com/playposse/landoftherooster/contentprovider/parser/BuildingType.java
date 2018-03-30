@@ -9,6 +9,7 @@ public class BuildingType {
     private String name;
     private String icon;
     private Integer producedResourceTypeId;
+    private Integer producedUnitTypeId;
     private Integer minDistanceMeters;
     private Integer maxDistanceMeters;
 
@@ -26,6 +27,10 @@ public class BuildingType {
 
     public Integer getProducedResourceTypeId() {
         return producedResourceTypeId;
+    }
+
+    public Integer getProducedUnitTypeId() {
+        return producedUnitTypeId;
     }
 
     public Integer getMinDistanceMeters() {

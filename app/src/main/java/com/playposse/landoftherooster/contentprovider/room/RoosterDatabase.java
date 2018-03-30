@@ -21,7 +21,7 @@ import com.playposse.landoftherooster.contentprovider.parser.ConfigurationImport
         ResourceType.class,
         Unit.class,
         UnitType.class},
-        version = 6,
+        version = 8,
         exportSchema = true)
 public abstract class RoosterDatabase extends RoomDatabase {
 

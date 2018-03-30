@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "3a913382d6ab8893eb7a3bb6d7c238fa",
+    "identityHash": "1d83d74224421e6ae7c6fbb1b761fa9e",
     "entities": [
       {
         "tableName": "building",
@@ -189,7 +189,7 @@
       },
       {
         "tableName": "resource_type",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `precursor_id` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`precursor_id`) REFERENCES `resource_type`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `precursor_resource_type_id` INTEGER, `precursor_unit_type_id` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -204,8 +204,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "precursorId",
-            "columnName": "precursor_id",
+            "fieldPath": "precursorResourceTypeId",
+            "columnName": "precursor_resource_type_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "precursorUnitTypeId",
+            "columnName": "precursor_unit_type_id",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -216,29 +222,8 @@
           ],
           "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_resource_type_precursor_id",
-            "unique": false,
-            "columnNames": [
-              "precursor_id"
-            ],
-            "createSql": "CREATE  INDEX `index_resource_type_precursor_id` ON `${TABLE_NAME}` (`precursor_id`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "resource_type",
-            "onDelete": "NO ACTION",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "precursor_id"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
+        "indices": [],
+        "foreignKeys": []
       },
       {
         "tableName": "Unit",
@@ -301,7 +286,7 @@
       },
       {
         "tableName": "UnitType",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `carrying_capacity` INTEGER NOT NULL, `attack` INTEGER NOT NULL, `defense` INTEGER NOT NULL, `armor` INTEGER NOT NULL, `health` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `carrying_capacity` INTEGER NOT NULL, `attack` INTEGER NOT NULL, `defense` INTEGER NOT NULL, `armor` INTEGER NOT NULL, `health` INTEGER NOT NULL, `precursorResourceTypeId` INTEGER, `precursorUnitTypeId` INTEGER, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -344,6 +329,18 @@
             "columnName": "health",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "precursorResourceTypeId",
+            "columnName": "precursorResourceTypeId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "precursorUnitTypeId",
+            "columnName": "precursorUnitTypeId",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -358,7 +355,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"3a913382d6ab8893eb7a3bb6d7c238fa\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"1d83d74224421e6ae7c6fbb1b761fa9e\")"
     ]
   }
 }

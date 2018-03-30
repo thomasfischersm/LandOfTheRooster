@@ -7,7 +7,8 @@ public class ResourceType {
 
     private int id;
     private String name;
-    private Integer precursorId;
+    private Integer precursorResourceTypeId;
+    private Integer precursorUnitTypeId;
 
     public int getId() {
         return id;
@@ -17,7 +18,11 @@ public class ResourceType {
         return name;
     }
 
-    public Integer getPrecursorId() {
-        return precursorId;
+    public Integer getPrecursorResourceTypeId() {
+        return precursorResourceTypeId;
+    }
+
+    public Integer getPrecursorUnitTypeId() {
+        return precursorUnitTypeId;
     }
 }

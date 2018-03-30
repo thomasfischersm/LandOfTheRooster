@@ -72,7 +72,8 @@ public final class ConfigurationImport {
 
             roomResourceType.setId(resourceType.getId());
             roomResourceType.setName(resourceType.getName());
-            roomResourceType.setPrecursorId(resourceType.getPrecursorId());
+            roomResourceType.setPrecursorResourceTypeId(resourceType.getPrecursorResourceTypeId());
+            roomResourceType.setPrecursorUnitTypeId(resourceType.getPrecursorUnitTypeId());
 
             rows.add(roomResourceType);
         }
@@ -101,6 +102,8 @@ public final class ConfigurationImport {
             roomUnitType.setDefense(unitType.getDefense());
             roomUnitType.setArmor(unitType.getArmor());
             roomUnitType.setHealth(unitType.getHealth());
+            roomUnitType.setPrecursorResourceTypeId(unitType.getPrecursorResourceTypeId());
+            roomUnitType.setPrecursorUnitTypeId(unitType.getPrecursorUnitTypeId());
 
             rows.add(roomUnitType);
         }
@@ -125,6 +128,7 @@ public final class ConfigurationImport {
             roomBuildingType.setName(buildingType.getName());
             roomBuildingType.setIcon(buildingType.getIcon());
             roomBuildingType.setProducedResourceTypeId(buildingType.getProducedResourceTypeId());
+            roomBuildingType.setProducedUnitTypeId(buildingType.getProducedUnitTypeId());
             roomBuildingType.setMinDistanceMeters(buildingType.getMinDistanceMeters());
             roomBuildingType.setMaxDistanceMeters(buildingType.getMaxDistanceMeters());
 

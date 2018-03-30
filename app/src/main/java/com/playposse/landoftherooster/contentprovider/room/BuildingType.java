@@ -13,12 +13,20 @@ import static android.arch.persistence.room.ForeignKey.NO_ACTION;
  * The Room entity for the building type.
  */
 @Entity(tableName = "building_type",
-        indices = @Index("produced_resource_type_id"),
-        foreignKeys = @ForeignKey(
-                entity = BuildingType.class,
-                parentColumns = "id",
-                childColumns = "produced_resource_type_id",
-                onDelete = NO_ACTION))
+        indices = {
+                @Index("produced_resource_type_id"),
+                @Index("produced_unit_type_id")},
+        foreignKeys = {
+                @ForeignKey(
+                        entity = BuildingType.class,
+                        parentColumns = "id",
+                        childColumns = "produced_resource_type_id",
+                        onDelete = NO_ACTION),
+                @ForeignKey(
+                        entity = UnitType.class,
+                        parentColumns = "id",
+                        childColumns = "produced_unit_type_id",
+                        onDelete = NO_ACTION)})
 public class BuildingType {
 
     @PrimaryKey(autoGenerate = false)
@@ -32,6 +40,9 @@ public class BuildingType {
 
     @ColumnInfo(name = "produced_resource_type_id")
     private Integer producedResourceTypeId;
+
+    @ColumnInfo(name = "produced_unit_type_id")
+    private Integer producedUnitTypeId;
 
     @ColumnInfo(name = "min_distance_meters")
     private Integer minDistanceMeters;
@@ -69,6 +80,14 @@ public class BuildingType {
 
     public void setProducedResourceTypeId(Integer producedResourceTypeId) {
         this.producedResourceTypeId = producedResourceTypeId;
+    }
+
+    public Integer getProducedUnitTypeId() {
+        return producedUnitTypeId;
+    }
+
+    public void setProducedUnitTypeId(Integer producedUnitTypeId) {
+        this.producedUnitTypeId = producedUnitTypeId;
     }
 
     public Integer getMinDistanceMeters() {

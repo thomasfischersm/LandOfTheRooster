@@ -36,7 +36,7 @@
       "id": 5,
       "name": "village",
       "icon": "village",
-      "producedResourceTypeId": 4,
+      "producedUnitTypeId": 1,
       "minDistanceMeters": 150,
       "maxDistanceMeters": 300
     }
