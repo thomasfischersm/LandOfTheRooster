@@ -75,7 +75,7 @@ public interface RoosterDao {
     @Query("select unit.id as id, unit.unit_type_id as unit_type_id, unit.health as health, unit.located_at_building_id as location_at_building_id, unit_type.id as type_id, unit_type.name as type_name, unit_type.carrying_capacity as type_carrying_capacity, unit_type.attack as type_attack, unit_type.defense as type_defense, unit_type.armor as type_armoer, unit_type.health as type_heatlh, unit_type.precursor_resource_type_id as type_precursor_resource_type_id, unit_type.precursor_unit_type_id as type_precursor_unit_type_id from unit join unit_type on (unit.unit_type_id = unit_type.id) where located_at_building_id is null order by unit.unit_type_id asc, unit.health asc, unit.id asc")
     List<UnitWithType> getUnitsWithTypeJoiningUser();
 
-    @Query("select unit.id as id, unit.unit_type_id as unit_type_id, unit.health as health, unit.located_at_building_id as location_at_building_id, unit_type.id as type_id, unit_type.name as type_name, unit_type.carrying_capacity as type_carrying_capacity, unit_type.attack as type_attack, unit_type.defense as type_defense, unit_type.armor as type_armoer, unit_type.health as type_heatlh, unit_type.precursor_resource_type_id as type_precursor_resource_type_id, unit_type.precursor_unit_type_id as type_precursor_unit_type_id from unit join unit_type on (unit.unit_type_id = unit_type.id) where located_at_building_id is null order by unit.unit_type_id asc, unit.health asc, unit.id asc")
+    @Query("select unit.id as id, unit.unit_type_id as unit_type_id, unit.health as health, unit.located_at_building_id as location_at_building_id, unit_type.id as type_id, unit_type.name as type_name, unit_type.carrying_capacity as type_carrying_capacity, unit_type.attack as type_attack, unit_type.defense as type_defense, unit_type.armor as type_armoer, unit_type.health as type_health, unit_type.precursor_resource_type_id as type_precursor_resource_type_id, unit_type.precursor_unit_type_id as type_precursor_unit_type_id from unit join unit_type on (unit.unit_type_id = unit_type.id) where located_at_building_id is null order by unit.unit_type_id asc, unit.health asc, unit.id asc")
     LiveData<List<UnitWithType>> getUnitsWithTypeJoiningUserAsLiveData();
 
     @Insert
@@ -89,6 +89,9 @@ public interface RoosterDao {
 
     @Query("select sum(amount) from resource")
     int getResourceCount();
+
+    @Query("select sum(unit_type.carrying_capacity) from unit join unit_type on (unit.unit_type_id = unit_type.id)")
+    int getCarryingCapacity();
 
     @Query("select resource.id as id, resource.resource_type_id, resource.amount, resource_type.id as type_id, resource_type.name as type_name, resource_type.precursor_resource_type_id as type_precursor_resource_type_id, resource_type.precursor_unit_type_id as type_precursor_unit_type_id from resource join resource_type on (resource.resource_type_id=resource_type.id) where amount > 0 order by resource_type.id asc")
     LiveData<List<ResourceWithType>> getAllResourcesWithType();

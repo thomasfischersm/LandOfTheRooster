@@ -11,7 +11,6 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.Unit;
 import com.playposse.landoftherooster.contentprovider.room.UnitType;
-import com.playposse.landoftherooster.contentprovider.room.UnitWithType;
 
 import java.util.List;
 
@@ -53,9 +52,13 @@ class ProductionExecutor {
         }
 
         // Check if the user has a free storage slot
-        if (precursorResourceType != null) {
-            // The precursor will be consumed and make room for any potentially created resource.
-        } else if (!hasSpareCarryingCapacity(context)) {
+        int productionAmount = calculateProductionAmount(
+                context,
+                precursorResourceType,
+                precursorUnitType,
+                producedResourceType,
+                producedUnitType);
+        if (productionAmount <= 0) {
             Log.d(LOG_TAG, "produce: Cannot produce because the user doesn't have spare " +
                     "carrying capacity.");
             // TODO: Notify the user with a vibration and message.
@@ -69,7 +72,7 @@ class ProductionExecutor {
         } else if (precursorResourceType != null) {
             // Try to debit precursor resource type
 
-            if (!debit(context, precursorResourceType)) {
+            if (!debit(context, precursorResourceType, productionAmount)) {
                 Log.d(LOG_TAG, "produce: Building requires unit precursor: "
                         + buildingWithType.getBuildingType().getName()
                         + " that the user is missing: " + precursorResourceType.getName());
@@ -78,7 +81,7 @@ class ProductionExecutor {
         } else if (precursorUnitType != null) {
             // Try to debit precursor resource type
 
-            if (!debit(context, precursorUnitType)) {
+            if (!debit(context, precursorUnitType, productionAmount)) {
                 Log.d(LOG_TAG, "produce: Building requires precursor: "
                         + buildingWithType.getBuildingType().getName()
                         + " that the user is missing: " + precursorUnitType.getName());
@@ -88,30 +91,44 @@ class ProductionExecutor {
 
         // Credit production.
         if (producedResourceType != null) {
-            credit(context, producedResourceType);
+            credit(context, producedResourceType, productionAmount);
         } else if (producedUnitType != null) {
-            credit(context, producedUnitType);
+            credit(context, producedUnitType, productionAmount);
         }
     }
 
-    private static boolean hasSpareCarryingCapacity(Context context) {
-        // Determine current load.
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-        int currentLoad = dao.getResourceCount();
-        Log.d(LOG_TAG, "hasSpareCarryingCapacity: Current load is " + currentLoad);
+    private static int calculateProductionAmount(
+            Context context,
+            @Nullable ResourceType precursorResourceType,
+            @Nullable UnitType precursorUnitType,
+            @Nullable ResourceType producedResourceType,
+            @Nullable UnitType producedUnitType) {
 
-        // Determine current carrying capacity.
-        List<UnitWithType> unitWithTypes = dao.getUnitsWithTypeJoiningUser();
-        int carryingCapacity = 1; // Initiate with 1 for the user himself/herself.
-        if (unitWithTypes != null) {
-            for (UnitWithType unitWithType : unitWithTypes) {
-                carryingCapacity += unitWithType.getType().getCarryingCapacity();
-            }
+        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+        int precursorResourceAmount = getResourceAmount(context, precursorResourceType);
+        int precursorUnitAmount = getUnitAmount(context, precursorUnitType);
+        int precursorAmount = Math.max(precursorResourceAmount, precursorUnitAmount);
+        boolean isPrecursorRequired =
+                (precursorResourceType != null) || (precursorUnitType != null);
+
+        if (producedUnitType != null) {
+            // production doesn't require carrying capacity. Only the precursor amount is limiting.
+            return (precursorResourceType != null) ? precursorResourceAmount : precursorUnitAmount;
         }
 
-        Log.d(LOG_TAG, "hasSpareCarryingCapacity: Current carrying capacity is " + carryingCapacity);
+        int maxCarryingCapacity = dao.getCarryingCapacity() + 1; // +1 for the user itself.
+        int freeCarryingCapacity = maxCarryingCapacity - dao.getResourceCount();
+        int futureAvailableCarryingCapacity =
+                Math.min(maxCarryingCapacity, freeCarryingCapacity + precursorResourceAmount);
+        int productionAmount =
+                isPrecursorRequired
+                        ? Math.min(precursorAmount, futureAvailableCarryingCapacity)
+                        : futureAvailableCarryingCapacity;
 
-        return currentLoad + 1 <= carryingCapacity;
+        Log.i(LOG_TAG, "calculateProductionAmount: Determined production amount: "
+                + productionAmount);
+
+        return productionAmount;
     }
 
     @Nullable
@@ -223,12 +240,12 @@ class ProductionExecutor {
         }
     }
 
-    private static boolean debit(Context context, ResourceType resourceType) {
+    private static boolean debit(Context context, ResourceType resourceType, int productionAmount) {
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
         Resource resource = dao.getResourceByTypeId(resourceType.getId());
 
-        if (resource.getAmount() >= 1) {
-            resource.setAmount(resource.getAmount() - 1);
+        if (resource.getAmount() >= productionAmount) {
+            resource.setAmount(resource.getAmount() - productionAmount);
             dao.update(resource);
             return true;
         } else {
@@ -239,12 +256,14 @@ class ProductionExecutor {
     }
 
 
-    private static boolean debit(Context context, UnitType unitType) {
+    private static boolean debit(Context context, UnitType unitType, int productionAmount) {
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
         List<Unit> units = dao.getUnitsByTypeId(unitType.getId());
 
-        if ((units != null) && (units.size() > 0)) {
-            dao.deleteUnit(units.get(0));
+        if ((units != null) && (units.size() >= productionAmount)) {
+            for (int i = 0; i < productionAmount; i++) {
+                dao.deleteUnit(units.get(0));
+            }
             return true;
         } else {
             Log.d(LOG_TAG, "debitResourceType: Building requires precursor: "
@@ -253,31 +272,60 @@ class ProductionExecutor {
         }
     }
 
-    private static void credit(Context context, ResourceType producedResourceType) {
+    private static void credit(
+            Context context,
+            ResourceType producedResourceType,
+            int productionAmount) {
+
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
         Resource producedResource = dao.getResourceByTypeId(producedResourceType.getId());
 
         if (producedResource == null) {
-            producedResource = new Resource(producedResourceType.getId(), 1);
+            producedResource = new Resource(producedResourceType.getId(), productionAmount);
             dao.insert(producedResource);
         } else {
-            producedResource.setAmount(producedResource.getAmount() + 1);
+            producedResource.setAmount(producedResource.getAmount() + productionAmount);
             dao.update(producedResource);
         }
 
         Log.d(LOG_TAG, "credit: Credited resource " + producedResourceType.getName());
     }
 
-    private static void credit(Context context, UnitType unitType) {
+    private static void credit(Context context, UnitType unitType, int productionAmount) {
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
 
-        Unit unit = new Unit();
-        unit.setUnitTypeId(unitType.getId());
-        unit.setHealth(unitType.getHealth());
-        unit.setLocatedAtBuildingId(null); // Null because the unit will be with the user.
+        for (int i = 0; i < productionAmount; i++) {
+            Unit unit = new Unit();
+            unit.setUnitTypeId(unitType.getId());
+            unit.setHealth(unitType.getHealth());
+            unit.setLocatedAtBuildingId(null); // Null because the unit will be with the user.
 
-        dao.insert(unit);
+            dao.insert(unit);
+        }
 
-        Log.d(LOG_TAG, "credit: Created unit " + unitType.getName());
+        Log.d(LOG_TAG, "credit: Created " + productionAmount + " units of "
+                + unitType.getName());
+    }
+
+    private static int getResourceAmount(Context context, @Nullable ResourceType resourceType) {
+        if (resourceType == null) {
+            return 0;
+        }
+
+        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+        Resource resource = dao.getResourceByTypeId(resourceType.getId());
+
+        return (resource != null) ? resource.getAmount() : 0;
+    }
+
+    private static int getUnitAmount(Context context, @Nullable UnitType unitType) {
+        if (unitType == null) {
+            return 0;
+        }
+
+        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+        List<Unit> units = dao.getUnitsByTypeId(unitType.getId());
+
+        return (units != null) ? units.size() : 0;
     }
 }
