@@ -7,8 +7,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.playposse.landoftherooster.contentprovider.room.Building;
-import com.playposse.landoftherooster.contentprovider.room.BuildingType;
+import com.playposse.landoftherooster.contentprovider.room.entity.Building;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 

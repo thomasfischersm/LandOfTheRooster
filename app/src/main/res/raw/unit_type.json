@@ -6,6 +6,7 @@
       "carryingCapacity": 1,
       "attack": 1,
       "defense": 1,
+      "damage": 3,
       "armor": 0,
       "health": 10,
       "precursorResourceTypeId": 3
@@ -16,6 +17,7 @@
       "carryingCapacity": 0,
       "attack": 10,
       "defense": 5,
+      "damage": 6,
       "armor": 2,
       "health": 10,
       "precursorUnitTypeId": 1

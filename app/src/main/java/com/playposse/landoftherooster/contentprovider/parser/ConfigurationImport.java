@@ -64,11 +64,11 @@ public final class ConfigurationImport {
             return;
         }
 
-        List<com.playposse.landoftherooster.contentprovider.room.ResourceType> rows =
+        List<com.playposse.landoftherooster.contentprovider.room.entity.ResourceType> rows =
                 new ArrayList<>(resourceTypes.size());
         for (ResourceType resourceType : resourceTypes) {
-            com.playposse.landoftherooster.contentprovider.room.ResourceType roomResourceType =
-                    new com.playposse.landoftherooster.contentprovider.room.ResourceType();
+            com.playposse.landoftherooster.contentprovider.room.entity.ResourceType roomResourceType =
+                    new com.playposse.landoftherooster.contentprovider.room.entity.ResourceType();
 
             roomResourceType.setId(resourceType.getId());
             roomResourceType.setName(resourceType.getName());
@@ -89,17 +89,18 @@ public final class ConfigurationImport {
             return;
         }
 
-        List<com.playposse.landoftherooster.contentprovider.room.UnitType> rows =
+        List<com.playposse.landoftherooster.contentprovider.room.entity.UnitType> rows =
                 new ArrayList<>(unitTypes.size());
         for (UnitType unitType : unitTypes) {
-            com.playposse.landoftherooster.contentprovider.room.UnitType roomUnitType =
-                    new com.playposse.landoftherooster.contentprovider.room.UnitType();
+            com.playposse.landoftherooster.contentprovider.room.entity.UnitType roomUnitType =
+                    new com.playposse.landoftherooster.contentprovider.room.entity.UnitType();
 
             roomUnitType.setId(unitType.getId());
             roomUnitType.setName(unitType.getName());
             roomUnitType.setCarryingCapacity(unitType.getCarryingCapacity());
             roomUnitType.setAttack(unitType.getAttack());
             roomUnitType.setDefense(unitType.getDefense());
+            roomUnitType.setDamage(unitType.getDamage());
             roomUnitType.setArmor(unitType.getArmor());
             roomUnitType.setHealth(unitType.getHealth());
             roomUnitType.setPrecursorResourceTypeId(unitType.getPrecursorResourceTypeId());
@@ -119,11 +120,11 @@ public final class ConfigurationImport {
             return;
         }
 
-        List<com.playposse.landoftherooster.contentprovider.room.BuildingType> rows =
+        List<com.playposse.landoftherooster.contentprovider.room.entity.BuildingType> rows =
                 new ArrayList<>(buildingTypes.size());
         for (BuildingType buildingType : buildingTypes) {
-            com.playposse.landoftherooster.contentprovider.room.BuildingType roomBuildingType =
-                    new com.playposse.landoftherooster.contentprovider.room.BuildingType();
+            com.playposse.landoftherooster.contentprovider.room.entity.BuildingType roomBuildingType =
+                    new com.playposse.landoftherooster.contentprovider.room.entity.BuildingType();
             roomBuildingType.setId(buildingType.getId());
             roomBuildingType.setName(buildingType.getName());
             roomBuildingType.setIcon(buildingType.getIcon());
@@ -131,6 +132,9 @@ public final class ConfigurationImport {
             roomBuildingType.setProducedUnitTypeId(buildingType.getProducedUnitTypeId());
             roomBuildingType.setMinDistanceMeters(buildingType.getMinDistanceMeters());
             roomBuildingType.setMaxDistanceMeters(buildingType.getMaxDistanceMeters());
+            roomBuildingType.setEnemyUnitCount(buildingType.getEnemyUnitCount());
+            roomBuildingType.setEnemyUnitTypeId(buildingType.getEnemyUnitTypeId());
+            roomBuildingType.setConquestPrizeResourceTypeId(buildingType.getConquestPrizeResourceTypeId());
 
             rows.add(roomBuildingType);
         }

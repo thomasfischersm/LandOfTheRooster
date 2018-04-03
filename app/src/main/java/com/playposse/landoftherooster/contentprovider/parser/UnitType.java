@@ -10,6 +10,7 @@ public class UnitType {
     private int carryingCapacity;
     private int attack;
     private int defense;
+    private int damage;
     private int armor;
     private int health;
     private Integer precursorResourceTypeId;
@@ -33,6 +34,10 @@ public class UnitType {
 
     public int getDefense() {
         return defense;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 
     public int getArmor() {

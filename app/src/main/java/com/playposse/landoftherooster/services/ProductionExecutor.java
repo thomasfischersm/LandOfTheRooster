@@ -4,22 +4,25 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.playposse.landoftherooster.contentprovider.room.BuildingWithType;
-import com.playposse.landoftherooster.contentprovider.room.Resource;
-import com.playposse.landoftherooster.contentprovider.room.ResourceType;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDaoUtil;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
+import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
-import com.playposse.landoftherooster.contentprovider.room.Unit;
-import com.playposse.landoftherooster.contentprovider.room.UnitType;
+import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 
 import java.util.List;
 
 /**
  * A class that executes the production of a building.
  */
-class ProductionExecutor {
+final class ProductionExecutor {
 
     private static final String LOG_TAG = ProductionExecutor.class.getSimpleName();
+
+    private ProductionExecutor() {}
 
     static void produce(Context context, BuildingWithType buildingWithType) {
         Log.d(LOG_TAG, "produce: Attempting production rules for building "
@@ -91,9 +94,9 @@ class ProductionExecutor {
 
         // Credit production.
         if (producedResourceType != null) {
-            credit(context, producedResourceType, productionAmount);
+            RoosterDaoUtil.credit(context, producedResourceType, productionAmount);
         } else if (producedUnitType != null) {
-            credit(context, producedUnitType, productionAmount);
+            RoosterDaoUtil.credit(context, producedUnitType, productionAmount);
         }
     }
 
@@ -105,8 +108,8 @@ class ProductionExecutor {
             @Nullable UnitType producedUnitType) {
 
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-        int precursorResourceAmount = getResourceAmount(context, precursorResourceType);
-        int precursorUnitAmount = getUnitAmount(context, precursorUnitType);
+        int precursorResourceAmount = RoosterDaoUtil.getResourceAmount(context, precursorResourceType);
+        int precursorUnitAmount = RoosterDaoUtil.getUnitAmount(context, precursorUnitType);
         int precursorAmount = Math.max(precursorResourceAmount, precursorUnitAmount);
         boolean isPrecursorRequired =
                 (precursorResourceType != null) || (precursorUnitType != null);
@@ -270,62 +273,5 @@ class ProductionExecutor {
                     + " that the user is missing: " + unitType.getName());
             return false;
         }
-    }
-
-    private static void credit(
-            Context context,
-            ResourceType producedResourceType,
-            int productionAmount) {
-
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-        Resource producedResource = dao.getResourceByTypeId(producedResourceType.getId());
-
-        if (producedResource == null) {
-            producedResource = new Resource(producedResourceType.getId(), productionAmount);
-            dao.insert(producedResource);
-        } else {
-            producedResource.setAmount(producedResource.getAmount() + productionAmount);
-            dao.update(producedResource);
-        }
-
-        Log.d(LOG_TAG, "credit: Credited resource " + producedResourceType.getName());
-    }
-
-    private static void credit(Context context, UnitType unitType, int productionAmount) {
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-
-        for (int i = 0; i < productionAmount; i++) {
-            Unit unit = new Unit();
-            unit.setUnitTypeId(unitType.getId());
-            unit.setHealth(unitType.getHealth());
-            unit.setLocatedAtBuildingId(null); // Null because the unit will be with the user.
-
-            dao.insert(unit);
-        }
-
-        Log.d(LOG_TAG, "credit: Created " + productionAmount + " units of "
-                + unitType.getName());
-    }
-
-    private static int getResourceAmount(Context context, @Nullable ResourceType resourceType) {
-        if (resourceType == null) {
-            return 0;
-        }
-
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-        Resource resource = dao.getResourceByTypeId(resourceType.getId());
-
-        return (resource != null) ? resource.getAmount() : 0;
-    }
-
-    private static int getUnitAmount(Context context, @Nullable UnitType unitType) {
-        if (unitType == null) {
-            return 0;
-        }
-
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-        List<Unit> units = dao.getUnitsByTypeId(unitType.getId());
-
-        return (units != null) ? units.size() : 0;
     }
 }

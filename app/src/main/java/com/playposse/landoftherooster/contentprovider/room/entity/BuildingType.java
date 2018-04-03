@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.room;
+package com.playposse.landoftherooster.contentprovider.room.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -18,7 +18,7 @@ import static android.arch.persistence.room.ForeignKey.NO_ACTION;
                 @Index("produced_unit_type_id")},
         foreignKeys = {
                 @ForeignKey(
-                        entity = BuildingType.class,
+                        entity = ResourceType.class,
                         parentColumns = "id",
                         childColumns = "produced_resource_type_id",
                         onDelete = NO_ACTION),
@@ -26,6 +26,16 @@ import static android.arch.persistence.room.ForeignKey.NO_ACTION;
                         entity = UnitType.class,
                         parentColumns = "id",
                         childColumns = "produced_unit_type_id",
+                        onDelete = NO_ACTION),
+                @ForeignKey(
+                        entity = UnitType.class,
+                        parentColumns = "id",
+                        childColumns = "enemy_unit_type_id",
+                        onDelete = NO_ACTION),
+                @ForeignKey(
+                        entity = ResourceType.class,
+                        parentColumns = "id",
+                        childColumns = "conquest_prize_resource_type_id",
                         onDelete = NO_ACTION)})
 public class BuildingType {
 
@@ -49,6 +59,15 @@ public class BuildingType {
 
     @ColumnInfo(name = "max_distance_meters")
     private Integer maxDistanceMeters;
+
+    @ColumnInfo(name = "enemy_unit_count")
+    private Integer enemyUnitCount;
+
+    @ColumnInfo(name = "enemy_unit_type_id")
+    private Integer enemyUnitTypeId;
+
+    @ColumnInfo(name = "conquest_prize_resource_type_id")
+    private Integer conquestPrizeResourceTypeId;
 
     public int getId() {
         return id;
@@ -104,5 +123,29 @@ public class BuildingType {
 
     public void setMaxDistanceMeters(Integer maxDistanceMeters) {
         this.maxDistanceMeters = maxDistanceMeters;
+    }
+
+    public Integer getEnemyUnitCount() {
+        return enemyUnitCount;
+    }
+
+    public void setEnemyUnitCount(Integer enemyUnitCount) {
+        this.enemyUnitCount = enemyUnitCount;
+    }
+
+    public Integer getEnemyUnitTypeId() {
+        return enemyUnitTypeId;
+    }
+
+    public void setEnemyUnitTypeId(Integer enemyUnitTypeId) {
+        this.enemyUnitTypeId = enemyUnitTypeId;
+    }
+
+    public Integer getConquestPrizeResourceTypeId() {
+        return conquestPrizeResourceTypeId;
+    }
+
+    public void setConquestPrizeResourceTypeId(Integer conquestPrizeResourceTypeId) {
+        this.conquestPrizeResourceTypeId = conquestPrizeResourceTypeId;
     }
 }

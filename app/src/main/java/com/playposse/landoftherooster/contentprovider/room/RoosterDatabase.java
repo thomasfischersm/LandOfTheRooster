@@ -4,12 +4,19 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.playposse.landoftherooster.contentprovider.RoosterDatabaseHelper;
 import com.playposse.landoftherooster.contentprovider.parser.ConfigurationImport;
+import com.playposse.landoftherooster.contentprovider.room.entity.Building;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
+import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
+import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
+import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 
 /**
  * A Room database that goes to our Sqlite instance.
@@ -21,8 +28,9 @@ import com.playposse.landoftherooster.contentprovider.parser.ConfigurationImport
         ResourceType.class,
         Unit.class,
         UnitType.class},
-        version = 8,
+        version = 9,
         exportSchema = true)
+@TypeConverters({DateConverter.class})
 public abstract class RoosterDatabase extends RoomDatabase {
 
     private static final String LOG_TAG = RoosterDatabase.class.getSimpleName();

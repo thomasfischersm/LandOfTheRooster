@@ -9,6 +9,16 @@ import android.arch.persistence.room.Update;
 import android.database.Cursor;
 import android.support.annotation.Nullable;
 
+import com.playposse.landoftherooster.contentprovider.room.entity.Building;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
+import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
+import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
+import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
+
 import java.util.List;
 
 /**
@@ -54,11 +64,14 @@ public interface RoosterDao {
     @Query("select * from building")
     List<Building> getAllBuildings();
 
-    @Query("select building.id as id, building.building_type_id, building.latitude, building.longitude, building_type.id as type_id, building_type.name as type_name, building_type.icon as type_icon, building_type.produced_resource_type_id as type_produced_resource_type_id, building_type.produced_unit_type_id as type_produced_unit_type_id, building_type.min_distance_meters as type_min_distance_meters, building_type.max_distance_meters as type_max_distance_meters from building join building_type on (building.building_type_id = building_type.id) order by building.id asc")
+    @Query("select building.id as id, building.building_type_id, building.latitude, building.longitude, building_type.id as type_id, building_type.name as type_name, building_type.icon as type_icon, building_type.produced_resource_type_id as type_produced_resource_type_id, building_type.produced_unit_type_id as type_produced_unit_type_id, building_type.min_distance_meters as type_min_distance_meters, building_type.max_distance_meters as type_max_distance_meters, building_type.enemy_unit_count as type_enemy_unit_count, building_type.enemy_unit_type_id as type_enemy_unit_type_id, building_type.conquest_prize_resource_type_id as type_conquest_prize_resource_type_id from building join building_type on (building.building_type_id = building_type.id) order by building.id asc")
     LiveData<List<BuildingWithType>> getAllBuildingsWithTypeAsLiveData();
 
-    @Query("select building.id as id, building.building_type_id, building.latitude, building.longitude, building_type.id as type_id, building_type.name as type_name, building_type.icon as type_icon, building_type.produced_resource_type_id as type_produced_resource_type_id, building_type.produced_unit_type_id as type_produced_unit_type_id, building_type.min_distance_meters as type_min_distance_meters, building_type.max_distance_meters as type_max_distance_meters from building join building_type on (building.building_type_id = building_type.id) order by building.id asc")
+    @Query("select building.id as id, building.building_type_id, building.latitude, building.longitude, building_type.id as type_id, building_type.name as type_name, building_type.icon as type_icon, building_type.produced_resource_type_id as type_produced_resource_type_id, building_type.produced_unit_type_id as type_produced_unit_type_id, building_type.min_distance_meters as type_min_distance_meters, building_type.max_distance_meters as type_max_distance_meters, building_type.enemy_unit_count as type_enemy_unit_count, building_type.enemy_unit_type_id as type_enemy_unit_type_id, building_type.conquest_prize_resource_type_id as type_conquest_prize_resource_type_id from building join building_type on (building.building_type_id = building_type.id) order by building.id asc")
     List<BuildingWithType> getAllBuildingsWithType();
+
+    @Query("select building.id as id, building.building_type_id, building.latitude, building.longitude, building_type.id as type_id, building_type.name as type_name, building_type.icon as type_icon, building_type.produced_resource_type_id as type_produced_resource_type_id, building_type.produced_unit_type_id as type_produced_unit_type_id, building_type.min_distance_meters as type_min_distance_meters, building_type.max_distance_meters as type_max_distance_meters, building_type.enemy_unit_count as type_enemy_unit_count, building_type.enemy_unit_type_id as type_enemy_unit_type_id, building_type.conquest_prize_resource_type_id as type_conquest_prize_resource_type_id from building join building_type on (building.building_type_id = building_type.id) where building.id=:buildingId")
+    BuildingWithType getBuildingWithTypeByBuildingId(int buildingId);
 
     @Query("select * from resource_type where id=:resourceTypeId")
     ResourceType getResourceTypeById(int resourceTypeId);
@@ -86,6 +99,12 @@ public interface RoosterDao {
 
     @Update
     void update(Resource resource);
+
+    @Update
+    void update(Unit unit);
+
+    @Update
+    void update(Building building);
 
     @Query("select sum(amount) from resource")
     int getResourceCount();

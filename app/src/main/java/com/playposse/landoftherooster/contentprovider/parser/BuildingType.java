@@ -12,6 +12,9 @@ public class BuildingType {
     private Integer producedUnitTypeId;
     private Integer minDistanceMeters;
     private Integer maxDistanceMeters;
+    private Integer enemyUnitCount;
+    private Integer enemyUnitTypeId;
+    private Integer conquestPrizeResourceTypeId;
 
     public int getId() {
         return id;
@@ -39,5 +42,17 @@ public class BuildingType {
 
     public Integer getMaxDistanceMeters() {
         return maxDistanceMeters;
+    }
+
+    public Integer getEnemyUnitCount() {
+        return enemyUnitCount;
+    }
+
+    public Integer getEnemyUnitTypeId() {
+        return enemyUnitTypeId;
+    }
+
+    public Integer getConquestPrizeResourceTypeId() {
+        return conquestPrizeResourceTypeId;
     }
 }

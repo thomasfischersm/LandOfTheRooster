@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.room;
+package com.playposse.landoftherooster.contentprovider.room.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -6,6 +6,9 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import java.util.Date;
 
 import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 
@@ -30,6 +33,10 @@ public class Building {
 
     private double latitude;
     private double longitude;
+
+    @ColumnInfo(name ="last_conquest")
+    @Nullable
+    private Date lastConquest;
 
     public Building() {
     }
@@ -71,5 +78,14 @@ public class Building {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    @Nullable
+    public Date getLastConquest() {
+        return lastConquest;
+    }
+
+    public void setLastConquest(@Nullable Date lastConquest) {
+        this.lastConquest = lastConquest;
     }
 }

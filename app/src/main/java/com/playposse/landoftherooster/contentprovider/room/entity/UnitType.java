@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.room;
+package com.playposse.landoftherooster.contentprovider.room.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -35,6 +35,7 @@ public class UnitType {
 
     private int attack;
     private int defense;
+    private int damage;
     private int armor;
     private int health;
 
@@ -82,6 +83,14 @@ public class UnitType {
 
     public void setDefense(int defense) {
         this.defense = defense;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 
     public int getArmor() {

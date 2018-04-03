@@ -38,15 +38,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.playposse.landoftherooster.R;
-import com.playposse.landoftherooster.contentprovider.room.Building;
-import com.playposse.landoftherooster.contentprovider.room.BuildingType;
-import com.playposse.landoftherooster.contentprovider.room.BuildingWithType;
-import com.playposse.landoftherooster.contentprovider.room.ResourceWithType;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
-import com.playposse.landoftherooster.contentprovider.room.Unit;
-import com.playposse.landoftherooster.contentprovider.room.UnitType;
-import com.playposse.landoftherooster.contentprovider.room.UnitWithType;
+import com.playposse.landoftherooster.contentprovider.room.entity.Building;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
+import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
+import com.playposse.landoftherooster.dialog.BattleAvailableDialog;
+import com.playposse.landoftherooster.services.broadcastintent.BattleAvailableBroadcastIntent;
+import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
+import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
 import com.playposse.landoftherooster.util.RecyclerViewLiveDataAdapter;
 
 import java.util.List;
@@ -114,6 +118,9 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     protected void onResume() {
         super.onResume();
+
+        RoosterBroadcastManager.getInstance(this)
+                .register(new KingdomActivityBroadcastReceiver());
     }
 
     @Override
@@ -121,6 +128,9 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         super.onPause();
 
         fusedLocationClient.removeLocationUpdates(locationCallback);
+
+        RoosterBroadcastManager.getInstance(this)
+                .unregister(new KingdomActivityBroadcastReceiver());
     }
 
     @Override
@@ -212,11 +222,11 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     }
 
     private void getLocationPermission() {
-    /*
-     * Request location permission, so that we can get the location of the
-     * device. The result of the permission request is handled by a callback,
-     * onRequestPermissionsResult.
-     */
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -371,6 +381,25 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+        }
+    }
+
+    /**
+     * A {@link RoosterBroadcastManager.RoosterBroadcastReceiver} that listens for events from
+     * the location aware services to interact with the user about them.
+     */
+    class KingdomActivityBroadcastReceiver
+            implements RoosterBroadcastManager.RoosterBroadcastReceiver {
+
+        @Override
+        public void onReceive(RoosterBroadcastIntent roosterIntent) {
+            if (roosterIntent instanceof BattleAvailableBroadcastIntent) {
+                BattleAvailableBroadcastIntent battleAvailableBroadcastIntent =
+                        (BattleAvailableBroadcastIntent) roosterIntent;
+                BattleAvailableDialog.show(
+                        KingdomActivity.this,
+                        battleAvailableBroadcastIntent.getBuildingId());
+            }
         }
     }
 }

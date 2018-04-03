@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.room;
+package com.playposse.landoftherooster.contentprovider.room.entity;
 
 import android.arch.persistence.room.Embedded;
 

@@ -5,10 +5,13 @@ import android.location.Location;
 import android.support.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.playposse.landoftherooster.contentprovider.room.Building;
-import com.playposse.landoftherooster.contentprovider.room.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
+import com.playposse.landoftherooster.contentprovider.room.entity.Building;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+import com.playposse.landoftherooster.services.broadcastintent.LeftBuildingBroadcastIntent;
+import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
 
 import java.util.List;
 
@@ -29,6 +32,8 @@ public class BuildingInteractionService implements ILocationAwareService {
 
     private final Context context;
 
+    private BuildingWithType currentBuildingWithType = null;
+
     BuildingInteractionService(Context context) {
         this.context = context;
     }
@@ -37,10 +42,21 @@ public class BuildingInteractionService implements ILocationAwareService {
     public void onLocationUpdate(LatLng latLng) {
         BuildingWithType buildingWithType = findCurrentBuilding(latLng);
         if (buildingWithType == null) {
-            return;
-        }
+            if (currentBuildingWithType != null) {
+                currentBuildingWithType = null;
+                RoosterBroadcastManager.send(context, new LeftBuildingBroadcastIntent());
+            }
+        } else if (currentBuildingWithType == null) {
+            currentBuildingWithType = buildingWithType;
 
-        ProductionExecutor.produce(context, buildingWithType);
+            BuildingType buildingType = buildingWithType.getBuildingType();
+            if ((buildingType.getProducedResourceTypeId() != null)
+                    || (buildingType.getProducedUnitTypeId() != null)) {
+                ProductionExecutor.produce(context, buildingWithType);
+            } else if (buildingType.getEnemyUnitCount() != null) {
+                BattleExecutor.promptUser(context, buildingWithType);
+            }
+        }
     }
 
     @Nullable
