@@ -24,9 +24,9 @@ public final class ConfigurationImport {
     private ConfigurationImport() {
     }
 
-    public static void startImport(Context context) {
-        new ImportAsyncTask(context).execute();
-    }
+//    public static void startImport(Context context) {
+//        new ImportAsyncTask(context).execute();
+//    }
 
     public static void importAll(Context context, RoosterDatabase database) throws IOException {
         RoosterDao dao = database.getDao();
@@ -156,22 +156,22 @@ public final class ConfigurationImport {
     /**
      * An {@link AsyncTask} that imports the configuration.
      */
-    private static final class ImportAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private final Context context;
-
-        private ImportAsyncTask(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                importAll(context, RoosterDatabase.getInstance(context));
-            } catch (IOException ex) {
-                Log.e(LOG_TAG, "doInBackground: Failed to import configuration data.", ex);
-            }
-            return null;
-        }
-    }
+//    private static final class ImportAsyncTask extends AsyncTask<Void, Void, Void> {
+//
+//        private final Context context;
+//
+//        private ImportAsyncTask(Context context) {
+//            this.context = context;
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            try {
+//                importAll(context, RoosterDatabase.getInstance(context));
+//            } catch (IOException ex) {
+//                Log.e(LOG_TAG, "doInBackground: Failed to import configuration data.", ex);
+//            }
+//            return null;
+//        }
+//    }
 }

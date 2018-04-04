@@ -7,6 +7,8 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.google.common.base.MoreObjects;
+
 import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 
 /**
@@ -147,5 +149,21 @@ public class BuildingType {
 
     public void setConquestPrizeResourceTypeId(Integer conquestPrizeResourceTypeId) {
         this.conquestPrizeResourceTypeId = conquestPrizeResourceTypeId;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("name", name)
+                .add("icon", icon)
+                .add("producedResourceTypeId", producedResourceTypeId)
+                .add("producedUnitTypeId", producedUnitTypeId)
+                .add("minDistanceMeters", minDistanceMeters)
+                .add("maxDistanceMeters", maxDistanceMeters)
+                .add("enemyUnitCount", enemyUnitCount)
+                .add("enemyUnitTypeId", enemyUnitTypeId)
+                .add("conquestPrizeResourceTypeId", conquestPrizeResourceTypeId)
+                .toString();
     }
 }

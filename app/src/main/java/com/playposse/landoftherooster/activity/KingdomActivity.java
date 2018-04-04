@@ -4,10 +4,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -92,27 +94,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         // TODO: This could possibly be removed or reduced.
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        RoosterDao dao = RoosterDatabase.getInstance(this).getDao();
-        LiveData<List<ResourceWithType>> resourcesWithType = dao.getAllResourcesWithType();
-        LiveData<List<UnitWithType>> unitsWithType = dao.getUnitsWithTypeJoiningUserAsLiveData();
-
-        // Set up resources view.
-        resourceRecyclerView.setHasFixedSize(true); // Small performance improvement.
-        resourceRecyclerView.setLayoutManager(new LinearLayoutManager(
-                this,
-                LinearLayoutManager.VERTICAL,
-                false));
-        resourceAdapter = new ResourceAdapter(this, resourcesWithType);
-        resourceRecyclerView.setAdapter(resourceAdapter);
-
-        // Set up unit view.
-        unitRecyclerView.setHasFixedSize(true); // Small performance improvement.
-        unitRecyclerView.setLayoutManager(new LinearLayoutManager(
-                this,
-                LinearLayoutManager.VERTICAL,
-                false));
-        unitAdapter = new UnitAdapter(this, unitsWithType);
-        unitRecyclerView.setAdapter(unitAdapter);
+        new LoadDataAsyncTask().execute();
     }
 
     @Override
@@ -400,6 +382,47 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                         KingdomActivity.this,
                         battleAvailableBroadcastIntent.getBuildingId());
             }
+        }
+    }
+
+    /**
+     * An {@link AsyncTask} that loads the data from the database to display in the view.
+     */
+    class LoadDataAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private LiveData<List<ResourceWithType>> resourcesWithType;
+        private LiveData<List<UnitWithType>> unitsWithType;
+        private Context context = KingdomActivity.this;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+            resourcesWithType = dao.getAllResourcesWithType();
+            unitsWithType = dao.getUnitsWithTypeJoiningUserAsLiveData();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+            // Set up resources view.
+            resourceRecyclerView.setHasFixedSize(true); // Small performance improvement.
+            resourceRecyclerView.setLayoutManager(new LinearLayoutManager(
+                    context,
+                    LinearLayoutManager.VERTICAL,
+                    false));
+            resourceAdapter = new ResourceAdapter(KingdomActivity.this, resourcesWithType);
+            resourceRecyclerView.setAdapter(resourceAdapter);
+
+            // Set up unit view.
+            unitRecyclerView.setHasFixedSize(true); // Small performance improvement.
+            unitRecyclerView.setLayoutManager(new LinearLayoutManager(
+                    context,
+                    LinearLayoutManager.VERTICAL,
+                    false));
+            unitAdapter = new UnitAdapter(KingdomActivity.this, unitsWithType);
+            unitRecyclerView.setAdapter(unitAdapter);
         }
     }
 }

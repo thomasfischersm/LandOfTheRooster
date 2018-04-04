@@ -30,12 +30,12 @@ public class BuildingDiscoveryService implements ILocationAwareService {
 
     /**
      * An additional distance that the user can go while still being able to discover a building.
-     *
+     * <p>
      * <p>Each building type has a min and a max. The discovery service decides on an actual
      * distance somewhere between those maximum. As long as the user has walked the distance, a
      * discovery happens. However, to prevent a really far building from all other buildings, a
      * safeguard prevents the discovery when the user exceeds the max distance.
-     *
+     * <p>
      * <p>While that is good, if the actual distance and the max distance is very close, GPS
      * inaccuracy could make it hard to for the user to trigger. So a fudge factor is added to max
      * to ensure that a reasonable discovery is made.
@@ -55,6 +55,7 @@ public class BuildingDiscoveryService implements ILocationAwareService {
     }
 
     private void initNextBuildingType() {
+        Log.i(LOG_TAG, "initNextBuildingType: Start initNextBuildingType");
         Building lastBuilding = getLastBuilding(context);
         Log.i(LOG_TAG, "initNextBuildingType: Last building is of type " + lastBuilding);
 
@@ -80,6 +81,7 @@ public class BuildingDiscoveryService implements ILocationAwareService {
                     "discovered.");
             nextDistance = null;
         }
+        Log.i(LOG_TAG, "initNextBuildingType: End initNextBuildingType");
     }
 
     @Nullable
@@ -122,6 +124,9 @@ public class BuildingDiscoveryService implements ILocationAwareService {
     }
 
     private void checkIfBuildingDiscovered(LatLng currentLatLng) {
+        Log.i(LOG_TAG, "checkIfBuildingDiscovered: Called with latitude: "
+                + currentLatLng.latitude + " longitude: " + currentLatLng.longitude);
+
         if (nextBuildingType == null) {
             Log.d(LOG_TAG, "checkIfBuildingDiscovered: No more next building types to " +
                     "discover.");
@@ -129,6 +134,8 @@ public class BuildingDiscoveryService implements ILocationAwareService {
         }
 
         Float distance = getMinDistanceFromCurrentBuildings(currentLatLng);
+        Log.i(LOG_TAG, "checkIfBuildingDiscovered: Distance from nearest building: "
+                + distance);
 
         if (distance == null) {
             Log.e(LOG_TAG, "checkIfBuildingDiscovered: Can't check because the distance is " +
@@ -151,6 +158,8 @@ public class BuildingDiscoveryService implements ILocationAwareService {
         Location currentLocation = new Location("");
         currentLocation.setLatitude(currentLatLng.latitude);
         currentLocation.setLongitude(currentLatLng.longitude);
+        Log.d(LOG_TAG, "getMinDistanceFromCurrentBuildings: Current location: "
+                + "latitude: " + currentLatLng.latitude + " longitude: " + currentLatLng.longitude);
 
         Float min = null;
         Float max = null; // Gather for future use.

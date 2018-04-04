@@ -1,10 +1,8 @@
 package com.playposse.landoftherooster;
 
 import android.content.Context;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
@@ -20,6 +18,12 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+
 /**
  * A UI test that walks around the map a bit.
  */
@@ -28,6 +32,8 @@ import java.io.IOException;
 public class BasicWalkingUiTest {
 
     private static final String LOG_TAG = BasicWalkingUiTest.class.getSimpleName();
+
+    private static final int DEFAULT_BUILDING_DISTANCE = 310;
 
     @Rule
     public ActivityTestRule<KingdomActivity> activityRule =
@@ -59,57 +65,51 @@ public class BasicWalkingUiTest {
     public void walk() throws InterruptedException {
         LocationManager locationManager =
                 (LocationManager) targetContext.getSystemService(Context.LOCATION_SERVICE);
-        enableMockLocationProvider(locationManager);
+        MockLocationUtil.enableMockLocationProvider(locationManager);
 
-        setMockLocation(locationManager, 34.001, -118.485);
-        Thread.sleep(1_000);
-        setMockLocation(locationManager, 34.002, -118.485);
-        Thread.sleep(1_000);
-        setMockLocation(locationManager, 34.003, -118.485);
-        Thread.sleep(1_000);
-        setMockLocation(locationManager, 34.004, -118.485);
-        Thread.sleep(1_000);
-        setMockLocation(locationManager, 34.005, -118.485);
-        Thread.sleep(1_000);
-        setMockLocation(locationManager, 34.006, -118.485);
-        Thread.sleep(1_000);
-    }
+        // Move to castle.
+        Location castleLocation = new Location(LocationManager.GPS_PROVIDER);
+        castleLocation.setLatitude(34.001);
+        castleLocation.setLongitude(-118.485);
+        MockLocationUtil.setMockLocation(locationManager, castleLocation);
 
-    private void setMockLocation(
-            LocationManager locationManager,
-            double latitude,
-            double longitude) {
+        // Move to wheat field.
+        Location fieldLocation =
+                MockLocationUtil.moveNorth(castleLocation, DEFAULT_BUILDING_DISTANCE);
+        MockLocationUtil.setMockLocation(locationManager, fieldLocation);
+        onView(withId(R.id.resource_recycler_view))
+                .check(matches(hasDescendant(withText("wheat: 1"))));
 
-        Location location = new Location(LocationManager.GPS_PROVIDER);
-        location.setLatitude(latitude);
-        location.setLongitude(longitude);
-        location.setAccuracy(1);
-        location.setBearingAccuracyDegrees(1);
-        location.setSpeedAccuracyMetersPerSecond(1);
-        location.setVerticalAccuracyMeters(1);
-        location.setTime(System.currentTimeMillis());
-        location.setElapsedRealtimeNanos(System.nanoTime());
+        // Move to mill.
+        Location millLocation =
+                MockLocationUtil.moveNorth(fieldLocation, DEFAULT_BUILDING_DISTANCE);
+        MockLocationUtil.setMockLocation(locationManager, millLocation);
+        onView(withId(R.id.resource_recycler_view))
+                .check(matches(hasDescendant(withText("flour: 1"))));
 
-        locationManager.setTestProviderLocation(LocationManager.GPS_PROVIDER, location);
-    }
+        // Move to mill.
+        Location bakeryLocation =
+                MockLocationUtil.moveNorth(millLocation, DEFAULT_BUILDING_DISTANCE);
+        MockLocationUtil.setMockLocation(locationManager, bakeryLocation);
+        onView(withId(R.id.resource_recycler_view))
+                .check(matches(hasDescendant(withText("bread: 1"))));
 
-    private void enableMockLocationProvider(LocationManager locationManager) {
-        locationManager.addTestProvider(
-                LocationManager.GPS_PROVIDER,
-                false,
-                false,
-                false,
-                false,
-                true,
-                true,
-                true,
-                Criteria.POWER_LOW,
-                Criteria.ACCURACY_FINE);
-        locationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true);
-        locationManager.setTestProviderStatus(
-                LocationManager.GPS_PROVIDER,
-                LocationProvider.AVAILABLE,
-                null,
-                System.currentTimeMillis());
+        // Move to village.
+        Location villageLocation =
+                MockLocationUtil.moveNorth(bakeryLocation, DEFAULT_BUILDING_DISTANCE);
+        MockLocationUtil.setMockLocation(locationManager, villageLocation);
+        onView(withId(R.id.unit_recycler_view))
+                .check(matches(hasDescendant(withText("peasant: 1"))));
+
+        MockLocationUtil.setMockLocation(locationManager, 34.003, -118.485);
+        Thread.sleep(1_000);
+        MockLocationUtil.setMockLocation(locationManager, 34.004, -118.485);
+        Thread.sleep(1_000);
+        MockLocationUtil.setMockLocation(locationManager, 34.005, -118.485);
+        Thread.sleep(1_000);
+        MockLocationUtil.setMockLocation(locationManager, 34.006, -118.485);
+
+
+        Thread.sleep(10_000);
     }
 }

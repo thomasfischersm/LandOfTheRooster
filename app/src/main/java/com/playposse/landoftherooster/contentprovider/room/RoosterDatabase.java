@@ -41,7 +41,7 @@ public abstract class RoosterDatabase extends RoomDatabase {
 
     public abstract RoosterDao getDao();
 
-    public static RoosterDatabase getInstance(Context context) {
+    public static synchronized RoosterDatabase getInstance(Context context) {
         Log.i(LOG_TAG, "getInstance: RoosterDatabase getInstance is called.");
         if (instance == null) {
             MutableBoolean isDbInitNeeded = new MutableBoolean(false);
