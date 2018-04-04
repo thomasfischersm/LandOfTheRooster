@@ -18,6 +18,7 @@ import java.util.List;
  * An importer for configuration data from JSON files to the Sqlite database.
  */
 public final class ConfigurationImport {
+
     private static final String LOG_TAG = ConfigurationImport.class.getSimpleName();
 
     private ConfigurationImport() {
@@ -27,12 +28,13 @@ public final class ConfigurationImport {
         new ImportAsyncTask(context).execute();
     }
 
-    public static void importAll(Context context) throws IOException {
+    public static void importAll(Context context, RoosterDatabase database) throws IOException {
+        RoosterDao dao = database.getDao();
+
         // Gather information.
         List<BuildingType> buildingTypes = ConfigurationParser.readBuildingTypes(context);
         int jsonBuildingTypeCount = buildingTypes.size();
-        int dbBuildingTypeCount = readDbBuildingTypeCount(context);
-        RoosterDatabase db = RoosterDatabase.getInstance(context);
+        int dbBuildingTypeCount = readDbBuildingTypeCount(dao);
 
         // Skip if already imported.
         if (jsonBuildingTypeCount == dbBuildingTypeCount) {
@@ -43,20 +45,19 @@ public final class ConfigurationImport {
         // Reset the types in the database if the configuration files have changed.
         if (dbBuildingTypeCount > 0) {
             Log.d(LOG_TAG, "importAll: Deleting old configuration data from the db.");
-            RoosterDao dao = db.getDao();
             dao.deleteBuildingTypes();
         }
 
-        importResourceTypes(context);
-        importUnitTypes(context);
-        importBuildingTypes(context, buildingTypes);
+        importResourceTypes(context, dao);
+        importUnitTypes(context, dao);
+        importBuildingTypes(dao, buildingTypes);
 
         if (BuildConfig.DEBUG) {
-            DatabaseDumper.dumpTables(db.getOpenHelper());
+            DatabaseDumper.dumpTables(database.getOpenHelper());
         }
     }
 
-    private static void importResourceTypes(Context context) throws IOException {
+    private static void importResourceTypes(Context context, RoosterDao dao) throws IOException {
         List<ResourceType> resourceTypes = ConfigurationParser.readResourceTypes(context);
 
         if (resourceTypes == null) {
@@ -78,10 +79,10 @@ public final class ConfigurationImport {
             rows.add(roomResourceType);
         }
 
-        RoosterDatabase.getInstance(context).getDao().insertResourceTypes(rows);
+        dao.insertResourceTypes(rows);
     }
 
-    private static void importUnitTypes(Context context) throws IOException {
+    private static void importUnitTypes(Context context, RoosterDao dao) throws IOException {
         List<UnitType> unitTypes = ConfigurationParser.readUnitTypes(context);
 
         if (unitTypes == null) {
@@ -109,10 +110,10 @@ public final class ConfigurationImport {
             rows.add(roomUnitType);
         }
 
-        RoosterDatabase.getInstance(context).getDao().insertUnitTypes(rows);
+        dao.insertUnitTypes(rows);
     }
 
-    private static void importBuildingTypes(Context context, List<BuildingType> buildingTypes)
+    private static void importBuildingTypes(RoosterDao dao, List<BuildingType> buildingTypes)
             throws IOException {
 
         if (buildingTypes == null) {
@@ -139,12 +140,11 @@ public final class ConfigurationImport {
             rows.add(roomBuildingType);
         }
 
-        RoosterDatabase.getInstance(context).getDao().insertBuildingTypes(rows);
+        dao.insertBuildingTypes(rows);
     }
 
-    private static int readDbBuildingTypeCount(Context context) throws IOException {
-        Cursor cursor =
-                RoosterDatabase.getInstance(context).getDao().getCursorForBuildingTypeCount();
+    private static int readDbBuildingTypeCount(RoosterDao dao) throws IOException {
+        Cursor cursor = dao.getCursorForBuildingTypeCount();
 
         try {
             return cursor.getCount();
@@ -167,7 +167,7 @@ public final class ConfigurationImport {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                importAll(context);
+                importAll(context, RoosterDatabase.getInstance(context));
             } catch (IOException ex) {
                 Log.e(LOG_TAG, "doInBackground: Failed to import configuration data.", ex);
             }

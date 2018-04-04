@@ -18,6 +18,8 @@ import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 
+import java.io.IOException;
+
 /**
  * A Room database that goes to our Sqlite instance.
  */
@@ -40,15 +42,30 @@ public abstract class RoosterDatabase extends RoomDatabase {
     public abstract RoosterDao getDao();
 
     public static RoosterDatabase getInstance(Context context) {
+        Log.i(LOG_TAG, "getInstance: RoosterDatabase getInstance is called.");
         if (instance == null) {
+            MutableBoolean isDbInitNeeded = new MutableBoolean(false);
             instance = Room.databaseBuilder(
                     context,
                     RoosterDatabase.class,
                     RoosterDatabaseHelper.DB_NAME)
                     .fallbackToDestructiveMigration()
-                    .addCallback(new RoosterDatabaseCallback(context))
+                    .addCallback(new RoosterDatabaseCallback(context, isDbInitNeeded))
                     .build();
+
+            // Force the database to be initialized by making a simple call.
+            instance.getDao().getLastBuilding();
+
+            Log.i(LOG_TAG, "getInstance: isDbInitNeeded = " + isDbInitNeeded.isValue());
+            if (isDbInitNeeded.isValue()) {
+                try {
+                    ConfigurationImport.importAll(context, instance);
+                } catch (IOException ex) {
+                    Log.e(LOG_TAG, "getInstance: Failed to import initial data.", ex);
+                }
+            }
         }
+        Log.i(LOG_TAG, "getInstance: RoosterDatabase getInstance has completed.");
         return instance;
     }
 
@@ -58,15 +75,18 @@ public abstract class RoosterDatabase extends RoomDatabase {
     private static class RoosterDatabaseCallback extends Callback {
 
         private final Context context;
+        private final MutableBoolean isDbInitNeeded;
 
-        private RoosterDatabaseCallback(Context context) {
+        private RoosterDatabaseCallback(Context context, MutableBoolean isDbInitNeeded) {
             this.context = context;
+            this.isDbInitNeeded = isDbInitNeeded;
         }
 
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             Log.e(LOG_TAG, "onCreate: Importing configuration into new db.");
-            ConfigurationImport.startImport(context);
+//            ConfigurationImport.startImport(context);
+            isDbInitNeeded.setValue(true);
         }
     }
 }
