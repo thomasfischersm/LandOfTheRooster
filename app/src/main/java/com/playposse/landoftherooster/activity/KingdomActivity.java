@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -59,6 +60,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class KingdomActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -68,13 +70,14 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
     @BindView(R.id.resource_recycler_view) RecyclerView resourceRecyclerView;
     @BindView(R.id.unit_recycler_view) RecyclerView unitRecyclerView;
+    @BindView(R.id.center_button) Button centerButton;
 
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
     private boolean locationPermissionGranted = false;
-    private boolean isMapLocationInitialized = false;
     private ResourceAdapter resourceAdapter;
     private UnitAdapter unitAdapter;
+    private boolean isUserCentered = false;
 
     private LocationCallback locationCallback = new ThisLocationCallback();
 
@@ -93,6 +96,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
         // TODO: This could possibly be removed or reduced.
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
 
         new LoadDataAsyncTask().execute();
     }
@@ -201,6 +205,26 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         LiveData<List<BuildingWithType>> liveData =
                 RoosterDatabase.getInstance(this).getDao().getAllBuildingsWithTypeAsLiveData();
         liveData.observe(this, observer);
+
+        map.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
+            @Override
+            public void onCameraMoveStarted(int reason) {
+                if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+                    onUserMovedTheMap();
+                }
+            }
+        });
+    }
+
+    private void onUserMovedTheMap() {
+        isUserCentered = true;
+        centerButton.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.center_button)
+    void onCenterButtonClicked() {
+        isUserCentered = false;
+        centerButton.setVisibility(View.GONE);
     }
 
     private void getLocationPermission() {
@@ -246,12 +270,11 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
             super.onLocationResult(locationResult);
 
             Log.d(LOG_TAG, "onLocationResult: Got new location");
-            if (!isMapLocationInitialized) {
+            if (!isUserCentered) {
                 Location location = locationResult.getLastLocation();
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                 map.moveCamera(CameraUpdateFactory.zoomTo(17));
-                isMapLocationInitialized = true;
             }
         }
     }

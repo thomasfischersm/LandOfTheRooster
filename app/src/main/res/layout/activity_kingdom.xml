@@ -16,11 +16,11 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/resource_recycler_view"
-        android:layout_height="100dp"
         android:layout_width="0dp"
+        android:layout_height="100dp"
         map:layout_constraintBottom_toBottomOf="parent"
-        map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintEnd_toStartOf="@id/unit_recycler_view"/>
+        map:layout_constraintEnd_toStartOf="@id/unit_recycler_view"
+        map:layout_constraintStart_toStartOf="parent"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/unit_recycler_view"
@@ -29,5 +29,13 @@
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintStart_toEndOf="@+id/resource_recycler_view"/>
+
+    <Button
+        android:id="@+id/center_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" android:text="@string/recenter_map"
+        map:layout_constraintBottom_toBottomOf="@+id/map"
+        map:layout_constraintStart_toStartOf="@+id/map"/>
 </android.support.constraint.ConstraintLayout>
 

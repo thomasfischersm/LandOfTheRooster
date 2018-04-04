@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.playposse.landoftherooster.activity.KingdomActivity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -58,14 +59,24 @@ public class BasicWalkingUiTest {
 //                        new FrameworkSQLiteOpenHelperFactory());
 //        migrationTestHelper.createDatabase(RoosterDatabaseHelper.DB_NAME, 9);
 
+        LocationManager locationManager =
+                (LocationManager) targetContext.getSystemService(Context.LOCATION_SERVICE);
+        MockLocationUtil.enableMockLocationProvider(locationManager);
+
         Log.i(LOG_TAG, "setUp: The BasicWalkingUiTest is done initializing.");
+    }
+
+    @After
+    public void tearDown() {
+        LocationManager locationManager =
+                (LocationManager) targetContext.getSystemService(Context.LOCATION_SERVICE);
+        MockLocationUtil.disableMockLocationProvider(locationManager);
     }
 
     @Test
     public void walk() throws InterruptedException {
         LocationManager locationManager =
                 (LocationManager) targetContext.getSystemService(Context.LOCATION_SERVICE);
-        MockLocationUtil.enableMockLocationProvider(locationManager);
 
         // Move to castle.
         Location castleLocation = new Location(LocationManager.GPS_PROVIDER);

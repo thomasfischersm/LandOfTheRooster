@@ -36,6 +36,12 @@ public final class MockLocationUtil {
                 System.currentTimeMillis());
     }
 
+    public static void disableMockLocationProvider(LocationManager locationManager) {
+        locationManager.clearTestProviderEnabled(LocationManager.GPS_PROVIDER);
+        locationManager.clearTestProviderStatus(LocationManager.GPS_PROVIDER);
+        locationManager.clearTestProviderLocation(LocationManager.GPS_PROVIDER);
+    }
+
     static void setMockLocation(LocationManager locationManager, Location location) {
         setMockLocation(locationManager, location.getLatitude(), location.getLongitude());
     }
