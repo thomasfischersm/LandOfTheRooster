@@ -1,6 +1,8 @@
 package com.playposse.landoftherooster.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
@@ -34,17 +36,15 @@ public class BattleActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        if (savedInstanceState.containsKey(BATTLE_SUMMARY_KEY)) {
+        if ((savedInstanceState != null) && savedInstanceState.containsKey(BATTLE_SUMMARY_KEY)) {
             battleSummary = savedInstanceState.getParcelable(BATTLE_SUMMARY_KEY);
+            showBattleSummary();
         } else {
-            int buildingId = ActivityNavigator.getBuildingId(getIntent());
-            RoosterDao dao = RoosterDatabase.getInstance(this).getDao();
-            BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
-
-            Battle battle = new Battle(this, buildingWithType); // Move this into an AsyncTask
-            battleSummary = battle.fight();
+            new ExecuteBattleAsyncTask().execute();
         }
+    }
 
+    private void showBattleSummary() {
         if (battleSummary.isDidFriendsWin()) {
             battleOutcomeTextView.setText(R.string.battle_victory_msg);
         } else {
@@ -57,5 +57,29 @@ public class BattleActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
         outState.putParcelable(BATTLE_SUMMARY_KEY,battleSummary);
+    }
+
+    /**
+     * An {@link AsyncTask} that executes the battle.
+     */
+    class ExecuteBattleAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Context context = BattleActivity.this;
+            int buildingId = ActivityNavigator.getBuildingId(getIntent());
+            RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+            BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+
+            Battle battle = new Battle(context, buildingWithType);
+            battleSummary = battle.fight();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            showBattleSummary();
+        }
     }
 }

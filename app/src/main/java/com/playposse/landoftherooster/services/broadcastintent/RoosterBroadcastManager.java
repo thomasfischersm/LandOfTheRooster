@@ -98,6 +98,7 @@ public class RoosterBroadcastManager {
                         Constructor<? extends RoosterBroadcastIntent> constructor =
                                 roosterIntentClass.getConstructor();
                         RoosterBroadcastIntent roosterIntent = constructor.newInstance();
+                        roosterIntent.createFromIntent(intent);
 
                         for (RoosterBroadcastReceiver roosterReceiver : roosterReceivers) {
                             roosterReceiver.onReceive(roosterIntent);

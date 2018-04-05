@@ -53,7 +53,7 @@ class BattleGroup {
         List<BattleEventParcelable> events = new ArrayList<>();
 
         for (int i = 0; i < friendUnits.size(); i++) {
-            int j = friendUnits.size() % enemyUnits.size();
+            int j = i % enemyUnits.size();
             boolean canDefend = (i == j);
             UnitWithType attacker = friendUnits.get(i);
             UnitWithType defender = enemyUnits.get(j);
@@ -61,7 +61,7 @@ class BattleGroup {
         }
 
         for (int i = 0; i < enemyUnits.size(); i++) {
-            int j = enemyUnits.size() % friendUnits.size();
+            int j = i % friendUnits.size();
             boolean canDefend = (i == j);
             UnitWithType attacker = enemyUnits.get(i);
             UnitWithType defender = friendUnits.get(j);
@@ -80,11 +80,13 @@ class BattleGroup {
         int attack = rand.nextInt(attacker.getType().getAttack() + 1);
         int defense = rand.nextInt(defender.getType().getDefense() + 1);
 
-        if (attack > defense) {
+        if (!canDefend || (attack > defense)) {
             // Attack was succeeded. Calculate damage.
             int damage = rand.nextInt(attacker.getType().getDamage() + 1);
             int armor = defender.getType().getArmor();
-            int actualDamage = damage - armor;
+            int actualDamage = Math.max(0, damage - armor);
+            int previousHealth = defender.getUnit().getHealth();
+            defender.getUnit().setHealth(Math.max(0, previousHealth - actualDamage));
             return new BattleEventParcelable(
                     isFriendAttack,
                     attacker,
@@ -93,7 +95,8 @@ class BattleGroup {
                     defense,
                     damage,
                     armor,
-                    actualDamage);
+                    actualDamage,
+                    defender.getUnit().getHealth());
         } else {
             return new BattleEventParcelable(
                     isFriendAttack,
@@ -103,7 +106,8 @@ class BattleGroup {
                     defense,
                     0,
                     0,
-                    0);
+                    0,
+                    defender.getUnit().getHealth());
         }
     }
 }

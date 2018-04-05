@@ -47,6 +47,16 @@
       "producedUnitTypeId": 2,
       "minDistanceMeters": 150,
       "maxDistanceMeters": 300
+    },
+    {
+      "id": 7,
+      "name": "goblin cave",
+      "icon": "goblin_cave",
+      "minDistanceMeters": 150,
+      "maxDistanceMeters": 300,
+      "enemyUnitCount": 3,
+      "enemyUnitTypeId": 3,
+      "conquestPrizeResourceTypeId": 4
     }
   ]
 }

@@ -21,6 +21,16 @@
       "armor": 2,
       "health": 10,
       "precursorUnitTypeId": 1
+    },
+    {
+      "id": 3,
+      "name": "goblin",
+      "carryingCapacity": 0,
+      "attack": 10,
+      "defense": 2,
+      "damage": 8,
+      "armor": 2,
+      "health": 10
     }
   ]
 }

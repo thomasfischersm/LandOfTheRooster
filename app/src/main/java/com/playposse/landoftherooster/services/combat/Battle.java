@@ -1,6 +1,7 @@
 package com.playposse.landoftherooster.services.combat;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDaoUtil;
@@ -21,6 +22,8 @@ import java.util.Random;
  * A business object that represents and simulated a single battle.
  */
 public class Battle {
+
+    private static final String LOG_TAG = Battle.class.getSimpleName();
 
     private static final int DEFAULT_CONQUEST_PRIZE_RESOURCE_AMOUNT = 1;
 
@@ -93,6 +96,11 @@ public class Battle {
         int min = Math.min(aliveFriendUnits.size(), aliveEnemyUnits.size());
         int max = Math.max(aliveFriendUnits.size(), aliveEnemyUnits.size());
 
+        // Exit early if one side has been decimated.
+        if (min == 0) {
+            return;
+        }
+
         // Add unit pairings.
         for (int i = 0; i < min; i++) {
             battleGroups.add(new BattleGroup(aliveFriendUnits.get(i), aliveEnemyUnits.get(i)));
@@ -110,7 +118,7 @@ public class Battle {
             }
         } else {
             for (int i = min; i < max; i++) {
-                battleGroups.get(i % min).addFriendUnit(aliveEnemyUnits.get(i));
+                battleGroups.get(i % min).addEnemyUnit(aliveEnemyUnits.get(i));
             }
         }
     }
@@ -128,6 +136,7 @@ public class Battle {
     }
 
     public BattleSummaryParcelable fight() {
+        Log.i(LOG_TAG, "fight: Starting battle");
         do {
             fightRound();
         } while (battleGroups.size() > 0);
@@ -148,6 +157,8 @@ public class Battle {
     }
 
     private void fightRound() {
+        Log.i(LOG_TAG, "fightRound: Starting fight round.");
+
         // Re-create battle groups if necessary
         if ((battleGroups.size() == 0) || (hasDeathInAGroup())) {
             createBattleGroups();

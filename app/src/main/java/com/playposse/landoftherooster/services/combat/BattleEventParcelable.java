@@ -3,6 +3,7 @@ package com.playposse.landoftherooster.services.combat;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 
@@ -11,6 +12,8 @@ import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
  * of what happened during the battle.
  */
 public final class BattleEventParcelable implements Parcelable {
+
+    private static final String LOG_TAG = BattleEventParcelable.class.getSimpleName();
 
     private final boolean isFriendAttack;
     private final String attackerUnitName;
@@ -27,6 +30,9 @@ public final class BattleEventParcelable implements Parcelable {
     @Nullable
     private final Integer actualDamage;
 
+    @Nullable
+    private final Integer remainingHealth;
+
     BattleEventParcelable(
             boolean isFriendAttack,
             UnitWithType attackerUnitWithType,
@@ -34,7 +40,8 @@ public final class BattleEventParcelable implements Parcelable {
             int attack, int defense,
             @Nullable Integer damage,
             @Nullable Integer armor,
-            @Nullable Integer actualDamage) {
+            @Nullable Integer actualDamage,
+            @Nullable Integer remainingHealth) {
 
         this.isFriendAttack = isFriendAttack;
         this.attackerUnitName = attackerUnitWithType.getType().getName();
@@ -44,6 +51,13 @@ public final class BattleEventParcelable implements Parcelable {
         this.damage = damage;
         this.armor = armor;
         this.actualDamage = actualDamage;
+        this.remainingHealth = remainingHealth;
+
+        Log.i(LOG_TAG, "BattleEventParcelable: " + attackerUnitName + " attacked "
+                + defenderUnitName + " with attack " + attack + " and met defense " + defense
+                + " with damage " + damage + " against armor " + armor
+                + " for an actual damage of " + actualDamage
+                + " and remaining health of " + remainingHealth);
     }
 
     private BattleEventParcelable(Parcel in) {
@@ -55,6 +69,7 @@ public final class BattleEventParcelable implements Parcelable {
         damage = in.readInt();
         armor = in.readInt();
         actualDamage = in.readInt();
+        remainingHealth = in.readInt();
     }
 
     @Override
@@ -72,6 +87,7 @@ public final class BattleEventParcelable implements Parcelable {
         out.writeInt(damage);
         out.writeInt(armor);
         out.writeInt(actualDamage);
+        out.writeInt(remainingHealth);
     }
 
     public static final Parcelable.Creator<BattleEventParcelable> CREATOR

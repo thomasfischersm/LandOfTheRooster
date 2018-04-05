@@ -3,6 +3,7 @@ package com.playposse.landoftherooster.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.playposse.landoftherooster.R;
@@ -24,56 +25,85 @@ public final class BattleAvailableDialog {
     private BattleAvailableDialog() {
     }
 
-    public static void show(final Context context, final int buildingId) {
-        // Detect if the user walked away from the building.
-        final BuildingProximityDialogReceiver receiver =
-                new BuildingProximityDialogReceiver(context);
+    public static void show(Context context, int buildingId) {
+        new LoadDialogAsyncTask(context, buildingId).execute();
+    }
 
-        // Load data to display.
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-        BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
-        BuildingType buildingType = buildingWithType.getBuildingType();
-        UnitType unitType = dao.getUnitTypeById(buildingType.getEnemyUnitTypeId());
+    /**
+     * An {@link AsyncTask} that loads the battle information and then displays it to the user in
+     * a dialog.
+     */
+    static class LoadDialogAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        if (unitType == null) {
-            Log.e(LOG_TAG, "show: Something went wrong. The building doesn't have enemy " +
-                    "units: " + buildingId + " - " + buildingType.getId());
-            return;
+        private final Context context;
+        private final int buildingId;
+
+        private BuildingType buildingType;
+        private UnitType unitType;
+
+        LoadDialogAsyncTask(Context context, int buildingId) {
+            this.context = context;
+            this.buildingId = buildingId;
         }
 
-        String msg = context.getString(
-                R.string.battle_available_dialog_msg,
-                buildingType.getName(),
-                buildingType.getEnemyUnitCount(),
-                unitType.getName());
+        @Override
+        protected Void doInBackground(Void... voids) {
 
-        AlertDialog dialog = new AlertDialog.Builder(context)
-                .setTitle(R.string.battle_available_dialog_title)
-                .setMessage(msg)
-                .setNegativeButton(
-                        R.string.dialog_no_button,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                RoosterBroadcastManager.getInstance(context)
-                                        .unregister(receiver);
-                            }
-                        })
-                .setPositiveButton(
-                        R.string.dialog_yes_button,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                RoosterBroadcastManager.getInstance(context)
-                                        .unregister(receiver);
+            // Load data to display.
+            RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+            BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+            buildingType = buildingWithType.getBuildingType();
+            unitType = dao.getUnitTypeById(buildingType.getEnemyUnitTypeId());
 
-                                ActivityNavigator.startBattleActivity(context, buildingId);
-                            }
-                        })
-                .show();
+            if (unitType == null) {
+                Log.e(LOG_TAG, "show: Something went wrong. The building doesn't have enemy " +
+                        "units: " + buildingId + " - " + buildingType.getId());
+                return null;
+            }
 
-        receiver.setDialog(dialog);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            // Detect if the user walked away from the building.
+            final BuildingProximityDialogReceiver receiver =
+                    new BuildingProximityDialogReceiver(context);
+
+            String msg = context.getString(
+                    R.string.battle_available_dialog_msg,
+                    buildingType.getName(),
+                    buildingType.getEnemyUnitCount(),
+                    unitType.getName());
+
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle(R.string.battle_available_dialog_title)
+                    .setMessage(msg)
+                    .setNegativeButton(
+                            R.string.dialog_no_button,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    RoosterBroadcastManager.getInstance(context)
+                                            .unregister(receiver);
+                                }
+                            })
+                    .setPositiveButton(
+                            R.string.dialog_yes_button,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    RoosterBroadcastManager.getInstance(context)
+                                            .unregister(receiver);
+
+                                    ActivityNavigator.startBattleActivity(context, buildingId);
+                                }
+                            })
+                    .show();
+
+            receiver.setDialog(dialog);
+        }
     }
 }
