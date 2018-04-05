@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" creator="MapSource 6.16.1" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+    <trk>
+        <name>emulate</name>
+        <trkseg>
+            <!-- castle --><trkpt lat="34.007266" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:00Z</time></trkpt>
+            <trkpt lat="34.008" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:01Z</time></trkpt>
+            <trkpt lat="34.009" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:02Z</time></trkpt>
+            <trkpt lat="34.010" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:03Z</time></trkpt>
+            <trkpt lat="34.011" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:04Z</time></trkpt>
+            <trkpt lat="34.012" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:05Z</time></trkpt>
+            <trkpt lat="34.013" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:06Z</time></trkpt>
+            <trkpt lat="34.014" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:07Z</time></trkpt>
+            <trkpt lat="34.015" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:08Z</time></trkpt>
+            <trkpt lat="34.016" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:09Z</time></trkpt>
+            <trkpt lat="34.017" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:10Z</time></trkpt>
+            <trkpt lat="34.018" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:11Z</time></trkpt>
+            <trkpt lat="34.019" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:12Z</time></trkpt>
+            <trkpt lat="34.020" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:13Z</time></trkpt>
+            <trkpt lat="34.021" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:14Z</time></trkpt>
+            <trkpt lat="34.022" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:15Z</time></trkpt>
+            <trkpt lat="34.023" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:16Z</time></trkpt>
+            <trkpt lat="34.024" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:17Z</time></trkpt>
+            <trkpt lat="34.025" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:18Z</time></trkpt>
+            <trkpt lat="34.026" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:19Z</time></trkpt>
+            <trkpt lat="34.027" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:20Z</time></trkpt>
+            <trkpt lat="34.028" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:21Z</time></trkpt>
+            <trkpt lat="34.029" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:22Z</time></trkpt>
+            <trkpt lat="34.030" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:23Z</time></trkpt>
+            <trkpt lat="34.031" lon="-118.485565"><ele>0.000000</ele><time>2014-03-05T20:00:24Z</time></trkpt>
+        </trkseg>
+    </trk>
+</gpx>
