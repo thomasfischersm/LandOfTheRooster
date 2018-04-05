@@ -3,19 +3,30 @@ package com.playposse.landoftherooster.services.combat;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A data class that describes the battle outcome.
  */
 public class BattleSummaryParcelable implements Parcelable {
 
     private final boolean didFriendsWin;
+    private final List<BattleEventParcelable> battleEvents;
 
-    public BattleSummaryParcelable(boolean didFriendsWin) {
+    public BattleSummaryParcelable(
+            boolean didFriendsWin,
+            List<BattleEventParcelable> battleEvents) {
+
         this.didFriendsWin = didFriendsWin;
+        this.battleEvents = battleEvents;
     }
 
     private BattleSummaryParcelable(Parcel in) {
         didFriendsWin = (in.readByte() != 0);
+
+        battleEvents = new ArrayList<>();
+        in.readList(battleEvents, null);
     }
 
     @Override
@@ -26,6 +37,7 @@ public class BattleSummaryParcelable implements Parcelable {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeByte((byte) (didFriendsWin ? 1 : 0));
+        out.writeList(battleEvents);
     }
 
     public static final Parcelable.Creator<BattleSummaryParcelable> CREATOR
@@ -41,5 +53,9 @@ public class BattleSummaryParcelable implements Parcelable {
 
     public boolean isDidFriendsWin() {
         return didFriendsWin;
+    }
+
+    public List<BattleEventParcelable> getBattleEvents() {
+        return battleEvents;
     }
 }

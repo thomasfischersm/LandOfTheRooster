@@ -137,4 +137,9 @@ public final class BattleEventParcelable implements Parcelable {
     public Integer getActualDamage() {
         return actualDamage;
     }
+
+    @Nullable
+    public Integer getRemainingHealth() {
+        return remainingHealth;
+    }
 }

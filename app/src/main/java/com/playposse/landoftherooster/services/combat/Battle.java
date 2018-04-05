@@ -153,7 +153,7 @@ public class Battle {
             saveConquestPrize();
         }
 
-        return new BattleSummaryParcelable(hasFriendWon);
+        return new BattleSummaryParcelable(hasFriendWon, events);
     }
 
     private void fightRound() {

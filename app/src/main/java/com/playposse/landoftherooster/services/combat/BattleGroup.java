@@ -57,7 +57,9 @@ class BattleGroup {
             boolean canDefend = (i == j);
             UnitWithType attacker = friendUnits.get(i);
             UnitWithType defender = enemyUnits.get(j);
-            events.add(fight(attacker, defender, canDefend, true));
+            if (defender.getUnit().getHealth() > 0) {
+                events.add(fight(attacker, defender, canDefend, true));
+            }
         }
 
         for (int i = 0; i < enemyUnits.size(); i++) {
@@ -65,7 +67,9 @@ class BattleGroup {
             boolean canDefend = (i == j);
             UnitWithType attacker = enemyUnits.get(i);
             UnitWithType defender = friendUnits.get(j);
-            events.add(fight(attacker, defender, canDefend, false));
+            if (defender.getUnit().getHealth() > 0) {
+                events.add(fight(attacker, defender, canDefend, false));
+            }
         }
         return events;
     }

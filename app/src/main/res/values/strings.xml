@@ -15,6 +15,11 @@
     <!-- Battle activity -->
     <string name="battle_victory_msg">Victory!</string>
     <string name="battle_defeat_msg">Defeat!</string>
+    <string name="return_to_map_button_label">Return to map</string>
+    <string name="battle_event_friendly_attack_success"><![CDATA[<font color="#1E88E5">%1$s</font> attacked <font color="#F44336">%2$s</font> with attack %3$d against defense %4$d causing %5$d damage against %6$d armor resulting in health dropping from %7$d to %8$d.]]></string>
+    <string name="battle_event_friendly_attack_failure"><![CDATA[<font color="#1E88E5">%1$s</font> failed attack on <font color="#F44336">%2$s</font> with attack %3$d against defense %4$d.]]></string>
+    <string name="battle_event_enemy_attack_success"><![CDATA[<font color="#F44336">%1$s</font> attacked <font color="#1E88E5">%2$s</font> with attack %3$d against defense %4$d causing %5$d damage against %6$d armor resulting in health dropping from %7$d to %8$d.]]></string>
+    <string name="battle_event_enemy_attack_failure"><![CDATA[<font color="#F44336">%1$s</font> failed attack on <font color="#1E88E5">%2$s</font> with attack %3$d against defense %4$d.]]></string>
 
     <!-- Battle available dialog -->
     <string name="battle_available_dialog_title">Battle available!</string>
