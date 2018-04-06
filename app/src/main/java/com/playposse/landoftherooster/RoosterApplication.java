@@ -54,7 +54,8 @@ public class RoosterApplication extends Application {
     class CreateDebugDataAsyncTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
-            createUnits(6, 2);
+            createUnits(1, 2);
+            createUnits(1, 1);
             return null;
         }
 

@@ -5,6 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.activity.ActivityNavigator;
@@ -13,7 +19,13 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A dialog that notifies the user that a battle is available to be fought.
@@ -39,7 +51,10 @@ public final class BattleAvailableDialog {
         private final int buildingId;
 
         private BuildingType buildingType;
-        private UnitType unitType;
+        private UnitType enemyUnitType;
+        private Map<Integer, UnitType> friendlyUnitTypes = new HashMap<>();
+        private Map<Integer, Integer> friendlyUnitCountByType = new HashMap<>();
+        private List<UnitWithType> friendlyUnitWithTypes;
 
         LoadDialogAsyncTask(Context context, int buildingId) {
             this.context = context;
@@ -53,12 +68,26 @@ public final class BattleAvailableDialog {
             RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
             BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
             buildingType = buildingWithType.getBuildingType();
-            unitType = dao.getUnitTypeById(buildingType.getEnemyUnitTypeId());
+            enemyUnitType = dao.getUnitTypeById(buildingType.getEnemyUnitTypeId());
 
-            if (unitType == null) {
+            if (enemyUnitType == null) {
                 Log.e(LOG_TAG, "show: Something went wrong. The building doesn't have enemy " +
                         "units: " + buildingId + " - " + buildingType.getId());
                 return null;
+            }
+
+            // Get the player's unit types.
+            friendlyUnitWithTypes = dao.getUnitsWithTypeJoiningUser();
+            for (UnitWithType unitWithType : friendlyUnitWithTypes) {
+                int unitTypeId = unitWithType.getType().getId();
+                if (!friendlyUnitTypes.containsKey(unitTypeId)) {
+                    friendlyUnitTypes.put(unitTypeId, unitWithType.getType());
+
+                    friendlyUnitCountByType.put(unitTypeId, 1);
+                } else {
+                    int amount = friendlyUnitCountByType.get(unitTypeId);
+                    friendlyUnitCountByType.put(unitTypeId, amount + 1);
+                }
             }
 
             return null;
@@ -70,17 +99,14 @@ public final class BattleAvailableDialog {
             final BuildingProximityDialogReceiver receiver =
                     new BuildingProximityDialogReceiver(context);
 
-            String msg = context.getString(
-                    R.string.battle_available_dialog_msg,
-                    buildingType.getName(),
-                    buildingType.getEnemyUnitCount(),
-                    unitType.getName());
+            // Create custom view.
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View rootView = inflater.inflate(R.layout.battle_available_dialog, null);
 
             AlertDialog dialog = new AlertDialog.Builder(context)
-                    .setTitle(R.string.battle_available_dialog_title)
-                    .setMessage(msg)
+                    .setView(rootView)
                     .setNegativeButton(
-                            R.string.dialog_no_button,
+                            R.string.withdraw_button,
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -90,7 +116,7 @@ public final class BattleAvailableDialog {
                                 }
                             })
                     .setPositiveButton(
-                            R.string.dialog_yes_button,
+                            R.string.attack_button,
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -104,6 +130,81 @@ public final class BattleAvailableDialog {
                     .show();
 
             receiver.setDialog(dialog);
+
+            buildUnitStatsTable(rootView);
+        }
+
+        private void buildUnitStatsTable(View rootView) {
+            // Collect all unit types.
+            List<UnitType> unitTypes = new ArrayList<>(friendlyUnitTypes.values());
+            unitTypes.add(enemyUnitType);
+
+            TableLayout tableLayout = rootView.findViewById(R.id.unit_stats_table_layout);
+            TextView unitSummaryTextView = rootView.findViewById(R.id.unit_summary_text_view);
+
+            unitSummaryTextView.setText(getUnitSummaryText());
+
+            addingHeadingRow(tableLayout);
+
+            for (UnitType unitType : unitTypes) {
+                TableRow tableRow = new TableRow(context);
+                tableLayout.addView(tableRow);
+
+                addTableCell(tableRow, unitType.getName());
+                addTableCell(tableRow, unitType.getAttack());
+                addTableCell(tableRow, unitType.getDefense());
+                addTableCell(tableRow, unitType.getDamage());
+                addTableCell(tableRow, unitType.getArmor());
+                addTableCell(tableRow, unitType.getHealth());
+            }
+        }
+
+        private void addingHeadingRow(TableLayout tableLayout) {
+            TableRow headingTableRow = new TableRow(context);
+            tableLayout.addView(headingTableRow);
+
+            TextView typeTextView = new TextView(context);
+            typeTextView.setText(context.getString(R.string.unit_type_name_heading));
+            typeTextView.setGravity(Gravity.START);
+            headingTableRow.addView(typeTextView);
+
+            addTableCell(headingTableRow, context.getString(R.string.attack_value_heading));
+            addTableCell(headingTableRow, context.getString(R.string.defense_value_heading));
+            addTableCell(headingTableRow, context.getString(R.string.damage_value_heading));
+            addTableCell(headingTableRow, context.getString(R.string.armor_value_heading));
+            addTableCell(headingTableRow, context.getString(R.string.health_value_heading));
+        }
+
+        private void addTableCell(TableRow tableRow, int value) {
+            addTableCell(tableRow, Integer.toString(value));
+        }
+
+        private void addTableCell(TableRow tableRow, String text) {
+            TextView typeTextView = new TextView(context);
+            typeTextView.setText(text);
+            typeTextView.setGravity(Gravity.END);
+            tableRow.addView(typeTextView);
+        }
+
+        private String getUnitSummaryText() {
+            StringBuilder sb = new StringBuilder();
+
+            for (UnitType friendlyUnitType : friendlyUnitTypes.values()) {
+                int friendlyUnitCount = friendlyUnitCountByType.get(friendlyUnitType.getId());
+                if (sb.length() > 0) {
+                    sb.append(", ");
+                }
+                sb.append(friendlyUnitCount);
+                sb.append(" ");
+                sb.append(friendlyUnitType.getName());
+            }
+
+            sb.append(" vs ");
+            sb.append(buildingType.getEnemyUnitCount());
+            sb.append(" ");
+            sb.append(enemyUnitType.getName());
+
+            return sb.toString();
         }
     }
 }

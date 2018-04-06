@@ -24,6 +24,15 @@
     <!-- Battle available dialog -->
     <string name="battle_available_dialog_title">Battle available!</string>
     <string name="battle_available_dialog_msg">You are at the entrance of the %1$s. %2$d %3$s await you inside.\n\nWill you fight them?</string>
+    <string name="battle_symbol_content_description">An illustration to set the mood for a battle.</string>
+    <string name="unit_type_name_heading"/>
+    <string name="attack_value_heading">Attack</string>
+    <string name="defense_value_heading">Defense</string>
+    <string name="damage_value_heading">Damage</string>
+    <string name="armor_value_heading">Armor</string>
+    <string name="health_value_heading">Health</string>
+    <string name="attack_button">Attack</string>
+    <string name="withdraw_button">Withdraw</string>
 
     <!-- Common -->
     <string name="dialog_yes_button">Yes</string>
