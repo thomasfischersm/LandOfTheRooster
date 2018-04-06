@@ -137,6 +137,14 @@ public class Battle {
 
     public BattleSummaryParcelable fight() {
         Log.i(LOG_TAG, "fight: Starting battle");
+
+        List<UnitWithType> startingAliveFriendUnits = getAliveFriendUnits();
+        int startingFriendUnitCount = startingAliveFriendUnits.size();
+        int startingFriendHealth = getCommulativeHealth(startingAliveFriendUnits);
+        List<UnitWithType> startingAliveEnemyUnits = getAliveEnemyUnits();
+        int startingEnemyUnitCount = startingAliveEnemyUnits.size();
+        int startingEnemyHealth = getCommulativeHealth(startingAliveEnemyUnits);
+
         do {
             fightRound();
         } while (battleGroups.size() > 0);
@@ -153,7 +161,16 @@ public class Battle {
             saveConquestPrize();
         }
 
-        return new BattleSummaryParcelable(hasFriendWon, events);
+        int endingFriendHealth = getCommulativeHealth(aliveFriendUnits);
+        int endingEnemyHealth = getCommulativeHealth(aliveEnemyUnits);
+
+        return new BattleSummaryParcelable(
+                hasFriendWon,
+                startingFriendUnitCount - aliveFriendUnits.size(),
+                startingFriendHealth - endingFriendHealth,
+                startingEnemyUnitCount - aliveEnemyUnits.size(),
+                startingEnemyHealth - endingEnemyHealth,
+                events);
     }
 
     private void fightRound() {
@@ -197,6 +214,18 @@ public class Battle {
                 context,
                 conquestPrizeResourceType,
                 DEFAULT_CONQUEST_PRIZE_RESOURCE_AMOUNT);
+    }
+
+    private int getCommulativeHealth(List<UnitWithType> unitWithTypes) {
+        int health = 0;
+
+        if (unitWithTypes != null) {
+            for (UnitWithType unitWithType : unitWithTypes) {
+                health += unitWithType.getUnit().getHealth();
+            }
+        }
+
+        return health;
     }
 
     public static Random getRandom() {

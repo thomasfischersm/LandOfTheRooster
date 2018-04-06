@@ -12,12 +12,14 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+import com.playposse.landoftherooster.glide.GlideApp;
 import com.playposse.landoftherooster.services.combat.Battle;
 import com.playposse.landoftherooster.services.combat.BattleEventParcelable;
 import com.playposse.landoftherooster.services.combat.BattleSummaryParcelable;
@@ -38,6 +40,8 @@ public class BattleActivity extends AppCompatActivity {
     private BattleSummaryParcelable battleSummary;
 
     @BindView(R.id.battle_outcome_text_view) TextView battleOutcomeTextView;
+    @BindView(R.id.battle_outcome_image_view) ImageView battleOutcomeImageView;
+    @BindView(R.id.battle_info_text_view) TextView battleInfoTextView;
     @BindView(R.id.battle_events_recycler_view) RecyclerView battleEventsRecyclerView;
 
     @Override
@@ -59,9 +63,23 @@ public class BattleActivity extends AppCompatActivity {
     private void showBattleSummary() {
         if (battleSummary.isDidFriendsWin()) {
             battleOutcomeTextView.setText(R.string.battle_victory_msg);
+            GlideApp.with(this)
+                    .load(R.drawable.victory)
+                    .into(battleOutcomeImageView);
         } else {
             battleOutcomeTextView.setText(R.string.battle_defeat_msg);
+            GlideApp.with(this)
+                    .load(R.drawable.defeat)
+                    .into(battleOutcomeImageView);
         }
+
+        String infoStr = getString(
+                R.string.battle_info,
+                battleSummary.getEnemyUnitCountLost(),
+                battleSummary.getEnemyHealthLost(),
+                battleSummary.getFriendlyUnitCountLost(),
+                battleSummary.getFriendlyHealthLost());
+        battleInfoTextView.setText(infoStr);
 
         battleEventsRecyclerView.setHasFixedSize(true);
         battleEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));

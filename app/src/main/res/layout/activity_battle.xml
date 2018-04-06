@@ -12,19 +12,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="22sp"
+        android:padding="8dp"
+        android:textColor="#000"
+        android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/battle_victory_msg"/>
+
+    <ImageView
+        android:id="@+id/battle_outcome_image_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/battle_outcome_content_description"
+        app:layout_constraintEnd_toEndOf="@+id/end_guide"
+        app:layout_constraintStart_toStartOf="@+id/start_guide"
+        app:layout_constraintTop_toBottomOf="@+id/battle_outcome_text_view"
+        tools:src="@drawable/victory"/>
+
+    <TextView
+        android:id="@+id/battle_info_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/return_to_map_button"
+        app:layout_constraintTop_toBottomOf="@+id/battle_outcome_image_view"
+        tools:text="Enemy lost 3 units and 240 health.\nYou lost 10 units and 480 health."/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/battle_events_recycler_view"
-        app:layout_constraintTop_toBottomOf="@+id/battle_outcome_text_view"
-        app:layout_constraintBottom_toTopOf="@+id/return_to_map_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="0dp"
-        android:layout_height="0dp" />
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/return_to_map_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/battle_outcome_text_view"/>
 
     <Button
         android:id="@+id/return_to_map_button"
@@ -34,5 +61,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/start_guide"
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".25"/>
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/end_guide"
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".75"/>
 
 </android.support.constraint.ConstraintLayout>

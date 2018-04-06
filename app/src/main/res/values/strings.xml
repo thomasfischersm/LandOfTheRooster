@@ -15,6 +15,8 @@
     <!-- Battle activity -->
     <string name="battle_victory_msg">Victory!</string>
     <string name="battle_defeat_msg">Defeat!</string>
+    <string name="battle_outcome_content_description">An illustration to highlight the battle outcome.</string>
+    <string name="battle_info">Enemy lost %1$d units and %2$d health.\nYou lost %3$d units and %4$d health.</string>
     <string name="return_to_map_button_label">Return to map</string>
     <string name="battle_event_friendly_attack_success"><![CDATA[<font color="#1E88E5">%1$s</font> attacked <font color="#F44336">%2$s</font> with attack %3$d against defense %4$d causing %5$d damage against %6$d armor resulting in health dropping from %7$d to %8$d.]]></string>
     <string name="battle_event_friendly_attack_failure"><![CDATA[<font color="#1E88E5">%1$s</font> failed attack on <font color="#F44336">%2$s</font> with attack %3$d against defense %4$d.]]></string>
