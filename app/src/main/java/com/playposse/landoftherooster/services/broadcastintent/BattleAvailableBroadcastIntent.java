@@ -7,11 +7,14 @@ import android.content.Intent;
  */
 public class BattleAvailableBroadcastIntent implements RoosterBroadcastIntent {
 
-    public static final String EVENT_NAME = BattleAvailableBroadcastIntent.class.getName();
+    private static final String EVENT_NAME = BattleAvailableBroadcastIntent.class.getName();
     private static final String BUILDING_ID_EXTRA = "buildingId";
 
     private int buildingId;
 
+    /**
+     * Default constructor called by reflection.
+     */
     BattleAvailableBroadcastIntent() {
     }
 

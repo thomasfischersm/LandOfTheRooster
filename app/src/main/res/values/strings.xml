@@ -36,6 +36,15 @@
     <string name="attack_button">Attack</string>
     <string name="withdraw_button">Withdraw</string>
 
+    <!-- Building needs to respawn dialog -->
+    <string name="building_needs_to_respawn_dialog_title">Nobody is here!</string>
+    <string name="building_needs_to_respawn_dialog_msg">
+        You have decimated everyone here.\n
+        Wait for someone to return.
+    </string>
+    <string name="building_needs_to_respawn_dialog_countdown">%1$02d : %2$02d : %3$02d</string>
+    <string name="countdown_content_description">Drawing of a clock to indicate a countdown.</string>
+
     <!-- Common -->
     <string name="dialog_yes_button">Yes</string>
     <string name="dialog_no_button">No</string>

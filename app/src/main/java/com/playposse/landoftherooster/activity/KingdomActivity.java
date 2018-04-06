@@ -51,7 +51,9 @@ import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 import com.playposse.landoftherooster.dialog.BattleAvailableDialog;
+import com.playposse.landoftherooster.dialog.BuildingNeedsToRespawnDialog;
 import com.playposse.landoftherooster.services.broadcastintent.BattleAvailableBroadcastIntent;
+import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
 import com.playposse.landoftherooster.util.RecyclerViewLiveDataAdapter;
@@ -404,6 +406,13 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                 BattleAvailableDialog.show(
                         KingdomActivity.this,
                         battleAvailableBroadcastIntent.getBuildingId());
+            } else if (roosterIntent instanceof BuildingNeedsToRespawnBroadcastIntent) {
+                BuildingNeedsToRespawnBroadcastIntent buildingNeedsToRespawnBroadcastIntent =
+                        (BuildingNeedsToRespawnBroadcastIntent) roosterIntent;
+                BuildingNeedsToRespawnDialog.show(
+                        KingdomActivity.this,
+                        buildingNeedsToRespawnBroadcastIntent.getRemainingMs());
+
             }
         }
     }

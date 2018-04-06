@@ -30,6 +30,7 @@ public class RoosterBroadcastManager {
             new ArrayList<Class<? extends RoosterBroadcastIntent>>() {{
                 add(BattleAvailableBroadcastIntent.class);
                 add(LeftBuildingBroadcastIntent.class);
+                add(BuildingNeedsToRespawnBroadcastIntent.class);
             }};
 
     public RoosterBroadcastManager(Context context) {

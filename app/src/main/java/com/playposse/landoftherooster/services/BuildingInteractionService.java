@@ -10,9 +10,11 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.LeftBuildingBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +31,11 @@ public class BuildingInteractionService implements ILocationAwareService {
      * inaccuracy of the GPS location.
      */
     private static final int INTERACTION_RADIUS = 30;
+
+    /**
+     * Time in ms that it takes for a battle building to respawn units.
+     */
+    private static final int RESPAWN_DURATION = 24 * 60 * 60 * 1_000;
 
     private final Context context;
 
@@ -54,9 +61,33 @@ public class BuildingInteractionService implements ILocationAwareService {
                     || (buildingType.getProducedUnitTypeId() != null)) {
                 ProductionExecutor.produce(context, buildingWithType);
             } else if (buildingType.getEnemyUnitCount() != null) {
-                BattleExecutor.promptUser(context, buildingWithType);
+                onFoundBattleBuilding(buildingWithType);
             }
         }
+    }
+
+    private void onFoundBattleBuilding(BuildingWithType buildingWithType) {
+        // Reset last conquest date if necessary
+        Building building = buildingWithType.getBuilding();
+        Date lastConquest = building.getLastConquest();
+        if (lastConquest != null) {
+            long lastConquestMs = lastConquest.getTime();
+            if (lastConquestMs + RESPAWN_DURATION > System.currentTimeMillis()) {
+                // Building has not yet re-spawned.
+                long remainingMs = lastConquestMs + RESPAWN_DURATION - System.currentTimeMillis();
+                RoosterBroadcastManager.send(
+                        context,
+                        new BuildingNeedsToRespawnBroadcastIntent(remainingMs));
+                return;
+            } else {
+                // Respawn building.
+                building.setLastConquest(null);
+                RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+                dao.update(building);
+            }
+        }
+
+        BattleExecutor.promptUser(context, buildingWithType);
     }
 
     @Nullable

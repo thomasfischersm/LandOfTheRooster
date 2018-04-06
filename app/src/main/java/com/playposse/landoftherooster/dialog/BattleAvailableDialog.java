@@ -101,7 +101,7 @@ public final class BattleAvailableDialog {
 
             // Create custom view.
             LayoutInflater inflater = LayoutInflater.from(context);
-            View rootView = inflater.inflate(R.layout.battle_available_dialog, null);
+            View rootView = inflater.inflate(R.layout.dialog_battle_available, null);
 
             AlertDialog dialog = new AlertDialog.Builder(context)
                     .setView(rootView)
