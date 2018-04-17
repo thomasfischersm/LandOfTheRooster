@@ -13,8 +13,6 @@ public class UnitType {
     private int damage;
     private int armor;
     private int health;
-    private Integer precursorResourceTypeId;
-    private Integer precursorUnitTypeId;
 
     public int getId() {
         return id;
@@ -46,13 +44,5 @@ public class UnitType {
 
     public int getHealth() {
         return health;
-    }
-
-    public Integer getPrecursorResourceTypeId() {
-        return precursorResourceTypeId;
-    }
-
-    public Integer getPrecursorUnitTypeId() {
-        return precursorUnitTypeId;
     }
 }

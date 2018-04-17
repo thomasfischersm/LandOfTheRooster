@@ -8,8 +8,6 @@ public class BuildingType {
     private int id;
     private String name;
     private String icon;
-    private Integer producedResourceTypeId;
-    private Integer producedUnitTypeId;
     private Integer minDistanceMeters;
     private Integer maxDistanceMeters;
     private Integer enemyUnitCount;
@@ -26,14 +24,6 @@ public class BuildingType {
 
     public String getIcon() {
         return icon;
-    }
-
-    public Integer getProducedResourceTypeId() {
-        return producedResourceTypeId;
-    }
-
-    public Integer getProducedUnitTypeId() {
-        return producedUnitTypeId;
     }
 
     public Integer getMinDistanceMeters() {

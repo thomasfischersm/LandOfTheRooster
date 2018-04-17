@@ -4,7 +4,6 @@
       "id": 1,
       "name": "castle",
       "icon": "castle",
-      "producedResourceTypeId": null,
       "minDistanceMeters": null,
       "maxDistanceMeters": null
     },
@@ -12,7 +11,6 @@
       "id": 2,
       "name": "wheat field",
       "icon": "wheat_field",
-      "producedResourceTypeId": 1,
       "minDistanceMeters": 150,
       "maxDistanceMeters": 300
     },
@@ -20,7 +18,6 @@
       "id": 3,
       "name": "mill",
       "icon": "mill",
-      "producedResourceTypeId": 2,
       "minDistanceMeters": 150,
       "maxDistanceMeters": 300
     },
@@ -28,7 +25,6 @@
       "id": 4,
       "name": "bakery",
       "icon": "bakery",
-      "producedResourceTypeId": 3,
       "minDistanceMeters": 150,
       "maxDistanceMeters": 300
     },
@@ -36,7 +32,6 @@
       "id": 5,
       "name": "village",
       "icon": "village",
-      "producedUnitTypeId": 1,
       "minDistanceMeters": 150,
       "maxDistanceMeters": 300
     },
@@ -44,7 +39,6 @@
       "id": 6,
       "name": "barracks",
       "icon": "barracks",
-      "producedUnitTypeId": 2,
       "minDistanceMeters": 150,
       "maxDistanceMeters": 300
     },

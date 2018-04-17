@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.playposse.landoftherooster.contentprovider.RoosterDatabaseHelper;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
@@ -24,7 +25,7 @@ public class RoosterApplication extends Application {
 
         // Start with a fresh database when running for debug.
         if (BuildConfig.DEBUG) {
-//            getApplicationContext().deleteDatabase(RoosterDatabaseHelper.DB_NAME);
+            getApplicationContext().deleteDatabase(RoosterDatabaseHelper.DB_NAME);
             Log.i(LOG_TAG, "onCreate: Reset RoosterDatabase");
         }
 

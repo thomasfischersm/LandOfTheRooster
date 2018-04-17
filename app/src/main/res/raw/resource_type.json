@@ -2,18 +2,15 @@
   "resourceTypes": [
     {
       "id": 1,
-      "name": "wheat",
-      "precursorResourceTypeId" : null
+      "name": "wheat"
     },
     {
       "id": 2,
-      "name": "flour",
-      "precursorResourceTypeId" : 1
+      "name": "flour"
     },
     {
       "id": 3,
-      "name": "bread",
-      "precursorResourceTypeId" : 2
+      "name": "bread"
     },
     {
       "id": 4,

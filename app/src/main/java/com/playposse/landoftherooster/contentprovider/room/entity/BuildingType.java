@@ -3,7 +3,6 @@ package com.playposse.landoftherooster.contentprovider.room.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -15,20 +14,7 @@ import static android.arch.persistence.room.ForeignKey.NO_ACTION;
  * The Room entity for the building type.
  */
 @Entity(tableName = "building_type",
-        indices = {
-                @Index("produced_resource_type_id"),
-                @Index("produced_unit_type_id")},
         foreignKeys = {
-                @ForeignKey(
-                        entity = ResourceType.class,
-                        parentColumns = "id",
-                        childColumns = "produced_resource_type_id",
-                        onDelete = NO_ACTION),
-                @ForeignKey(
-                        entity = UnitType.class,
-                        parentColumns = "id",
-                        childColumns = "produced_unit_type_id",
-                        onDelete = NO_ACTION),
                 @ForeignKey(
                         entity = UnitType.class,
                         parentColumns = "id",
@@ -49,12 +35,6 @@ public class BuildingType {
 
     @NonNull
     private String icon;
-
-    @ColumnInfo(name = "produced_resource_type_id")
-    private Integer producedResourceTypeId;
-
-    @ColumnInfo(name = "produced_unit_type_id")
-    private Integer producedUnitTypeId;
 
     @ColumnInfo(name = "min_distance_meters")
     private Integer minDistanceMeters;
@@ -93,22 +73,6 @@ public class BuildingType {
 
     public void setIcon(String icon) {
         this.icon = icon;
-    }
-
-    public Integer getProducedResourceTypeId() {
-        return producedResourceTypeId;
-    }
-
-    public void setProducedResourceTypeId(Integer producedResourceTypeId) {
-        this.producedResourceTypeId = producedResourceTypeId;
-    }
-
-    public Integer getProducedUnitTypeId() {
-        return producedUnitTypeId;
-    }
-
-    public void setProducedUnitTypeId(Integer producedUnitTypeId) {
-        this.producedUnitTypeId = producedUnitTypeId;
     }
 
     public Integer getMinDistanceMeters() {
@@ -157,8 +121,6 @@ public class BuildingType {
                 .add("id", id)
                 .add("name", name)
                 .add("icon", icon)
-                .add("producedResourceTypeId", producedResourceTypeId)
-                .add("producedUnitTypeId", producedUnitTypeId)
                 .add("minDistanceMeters", minDistanceMeters)
                 .add("maxDistanceMeters", maxDistanceMeters)
                 .add("enemyUnitCount", enemyUnitCount)

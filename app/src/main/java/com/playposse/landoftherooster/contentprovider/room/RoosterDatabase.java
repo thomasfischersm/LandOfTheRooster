@@ -13,6 +13,7 @@ import com.playposse.landoftherooster.contentprovider.RoosterDatabaseHelper;
 import com.playposse.landoftherooster.contentprovider.parser.ConfigurationImport;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
+import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
@@ -26,11 +27,12 @@ import java.io.IOException;
 @Database(entities = {
         Building.class,
         BuildingType.class,
+        ProductionRule.class,
         Resource.class,
         ResourceType.class,
         Unit.class,
         UnitType.class},
-        version = 9,
+        version = 10,
         exportSchema = true)
 @TypeConverters({DateConverter.class})
 public abstract class RoosterDatabase extends RoomDatabase {

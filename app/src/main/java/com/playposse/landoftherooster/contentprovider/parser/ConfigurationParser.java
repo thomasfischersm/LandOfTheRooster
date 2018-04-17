@@ -54,4 +54,16 @@ final class ConfigurationParser {
             Closeables.close(reader, false);
         }
     }
+
+    public static List<ProductionRule> readProductionRules(Context context) throws IOException {
+        InputStream inputStream = context.getResources().openRawResource(R.raw.production_rules);
+        InputStreamReader reader = new InputStreamReader(inputStream);
+        try {
+            Gson gson = new GsonBuilder().create();
+            ProductionRuleRoot root = gson.fromJson(reader, ProductionRuleRoot.class);
+            return root.getProductionRules();
+        } finally {
+            Closeables.close(reader, false);
+        }
+    }
 }

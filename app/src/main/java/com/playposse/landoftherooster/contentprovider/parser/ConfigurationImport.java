@@ -51,6 +51,7 @@ public final class ConfigurationImport {
         importResourceTypes(context, dao);
         importUnitTypes(context, dao);
         importBuildingTypes(dao, buildingTypes);
+        importProductionRules(context, dao);
 
         if (BuildConfig.DEBUG) {
             DatabaseDumper.dumpTables(database.getOpenHelper());
@@ -73,8 +74,6 @@ public final class ConfigurationImport {
 
             roomResourceType.setId(resourceType.getId());
             roomResourceType.setName(resourceType.getName());
-            roomResourceType.setPrecursorResourceTypeId(resourceType.getPrecursorResourceTypeId());
-            roomResourceType.setPrecursorUnitTypeId(resourceType.getPrecursorUnitTypeId());
 
             rows.add(roomResourceType);
         }
@@ -104,8 +103,6 @@ public final class ConfigurationImport {
             roomUnitType.setDamage(unitType.getDamage());
             roomUnitType.setArmor(unitType.getArmor());
             roomUnitType.setHealth(unitType.getHealth());
-            roomUnitType.setPrecursorResourceTypeId(unitType.getPrecursorResourceTypeId());
-            roomUnitType.setPrecursorUnitTypeId(unitType.getPrecursorUnitTypeId());
 
             rows.add(roomUnitType);
         }
@@ -129,8 +126,6 @@ public final class ConfigurationImport {
             roomBuildingType.setId(buildingType.getId());
             roomBuildingType.setName(buildingType.getName());
             roomBuildingType.setIcon(buildingType.getIcon());
-            roomBuildingType.setProducedResourceTypeId(buildingType.getProducedResourceTypeId());
-            roomBuildingType.setProducedUnitTypeId(buildingType.getProducedUnitTypeId());
             roomBuildingType.setMinDistanceMeters(buildingType.getMinDistanceMeters());
             roomBuildingType.setMaxDistanceMeters(buildingType.getMaxDistanceMeters());
             roomBuildingType.setEnemyUnitCount(buildingType.getEnemyUnitCount());
@@ -141,6 +136,33 @@ public final class ConfigurationImport {
         }
 
         dao.insertBuildingTypes(rows);
+    }
+
+    private static void importProductionRules(Context context, RoosterDao dao) throws IOException {
+        List<ProductionRule> productionRules = ConfigurationParser.readProductionRules(context);
+
+        if (productionRules == null) {
+            Log.w(LOG_TAG, "importProductionRules: No production rules found!");
+            return;
+        }
+
+        List<com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule> rows =
+                new ArrayList<>();
+        for (ProductionRule productionRule : productionRules) {
+            com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule roomProductionRule =
+                    new com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule();
+
+            roomProductionRule.setId(productionRule.getId());
+            roomProductionRule.setBuildingId(productionRule.getBuildingId());
+            roomProductionRule.setInputResourceTypeIds(productionRule.getInputResourceTypeIds());
+            roomProductionRule.setInputUnitTypeIds(productionRule.getInputUnitTypeIds());
+            roomProductionRule.setOutputResourceTypeId(productionRule.getOutputResourceTypeId());
+            roomProductionRule.setOutputUnitTypeId(productionRule.getOutputUnitTypeId());
+
+            rows.add(roomProductionRule);
+        }
+
+        dao.insertProductionRules(rows);
     }
 
     private static int readDbBuildingTypeCount(RoosterDao dao) throws IOException {

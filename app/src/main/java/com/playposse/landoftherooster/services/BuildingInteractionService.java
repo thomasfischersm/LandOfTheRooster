@@ -57,10 +57,12 @@ public class BuildingInteractionService implements ILocationAwareService {
             currentBuildingWithType = buildingWithType;
 
             BuildingType buildingType = buildingWithType.getBuildingType();
-            if ((buildingType.getProducedResourceTypeId() != null)
-                    || (buildingType.getProducedUnitTypeId() != null)) {
-                ProductionExecutor.produce(context, buildingWithType);
-            } else if (buildingType.getEnemyUnitCount() != null) {
+
+            // Try producing.
+            ProductionExecutor.produce(context, buildingWithType);
+
+            // Try fighting.
+            if (buildingType.getEnemyUnitCount() != null) {
                 onFoundBattleBuilding(buildingWithType);
             }
         }

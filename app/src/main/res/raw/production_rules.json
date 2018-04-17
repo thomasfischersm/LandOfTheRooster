@@ -1,0 +1,44 @@
+{
+  "productionRules": [
+    {
+      "id": 1,
+      "buildingId": 2,
+      "inputResourceTypeIds": null,
+      "inputUnitTypeIds": null,
+      "outputResourceTypeId": 1,
+      "outputUnitTypeId": null
+    },
+    {
+      "id": 2,
+      "buildingId": 3,
+      "inputResourceTypeIds": "1",
+      "inputUnitTypeIds": null,
+      "outputResourceTypeId": 2,
+      "outputUnitTypeId": null
+    },
+    {
+      "id": 3,
+      "buildingId": 4,
+      "inputResourceTypeIds": "2",
+      "inputUnitTypeIds": null,
+      "outputResourceTypeId": 3,
+      "outputUnitTypeId": null
+    },
+    {
+      "id": 4,
+      "buildingId": 5,
+      "inputResourceTypeIds": "3",
+      "inputUnitTypeIds": null,
+      "outputResourceTypeId": null,
+      "outputUnitTypeId": 1
+    },
+    {
+      "id": 5,
+      "buildingId": 6,
+      "inputResourceTypeIds": null,
+      "inputUnitTypeIds": "1",
+      "outputResourceTypeId": null,
+      "outputUnitTypeId": 2
+    }
+  ]
+}

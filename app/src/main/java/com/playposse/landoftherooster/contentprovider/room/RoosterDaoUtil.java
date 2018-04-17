@@ -42,26 +42,26 @@ public final class RoosterDaoUtil {
         return (units != null) ? units.size() : 0;
     }
 
-    public static void credit(
+    public static void creditResource(
             Context context,
-            ResourceType producedResourceType,
+            int producedResourceTypeId,
             int productionAmount) {
 
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-        Resource producedResource = dao.getResourceByTypeId(producedResourceType.getId());
+        Resource producedResource = dao.getResourceByTypeId(producedResourceTypeId);
 
         if (producedResource == null) {
-            producedResource = new Resource(producedResourceType.getId(), productionAmount);
+            producedResource = new Resource(producedResourceTypeId, productionAmount);
             dao.insert(producedResource);
         } else {
             producedResource.setAmount(producedResource.getAmount() + productionAmount);
             dao.update(producedResource);
         }
 
-        Log.d(LOG_TAG, "credit: Credited resource " + producedResourceType.getName());
+        Log.d(LOG_TAG, "creditUnit: Credited resource " + producedResourceTypeId);
     }
 
-    public static void credit(Context context, UnitType unitType, int productionAmount) {
+    public static void creditUnit(Context context, UnitType unitType, int productionAmount) {
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
 
         for (int i = 0; i < productionAmount; i++) {
@@ -73,6 +73,6 @@ public final class RoosterDaoUtil {
             dao.insert(unit);
         }
 
-        Log.d(LOG_TAG, "credit: Created " + productionAmount + " units of "
+        Log.d(LOG_TAG, "creditUnit: Created " + productionAmount + " units of "
                 + unitType.getName());
     }}
