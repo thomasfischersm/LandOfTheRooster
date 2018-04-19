@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.dialog;
+package com.playposse.landoftherooster.dialog.support;
 
 import android.content.Context;
 
@@ -10,7 +10,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 /**
  * An {@link ActionData} to assign a peasant to a building
  */
-class UnitActionData extends ActionData {
+public class UnitActionData extends ActionData {
 
     private final int unitTypeId;
     private final long buildingId;
@@ -20,7 +20,7 @@ class UnitActionData extends ActionData {
     private int buildingUnitCount;
     private UnitType unitType;
 
-    UnitActionData(
+    public UnitActionData(
             Context context,
             RoosterDao dao,
             int unitTypeId,
@@ -40,19 +40,19 @@ class UnitActionData extends ActionData {
     }
 
     @Override
-    protected String getUserString() {
+    public String getUserString() {
         String unitTypeName = unitType.getName();
         return getContext().getString(R.string.unit_template, userUnitCount, unitTypeName);
     }
 
     @Override
-    protected String getBuildingString() {
+    public String getBuildingString() {
         String unitTypeName = unitType.getName();
         return getContext().getString(R.string.unit_template, buildingUnitCount, unitTypeName);
     }
 
     @Override
-    protected String getActionString() {
+    public String getActionString() {
         switch (actionType) {
             case DROP_OFF:
                 return getContext().getString(R.string.drop_off_action);
@@ -84,7 +84,7 @@ class UnitActionData extends ActionData {
     }
 
     @Override
-    protected boolean isAvailable() {
+    public boolean isAvailable() {
         switch (actionType) {
             case DROP_OFF:
                 return userUnitCount > 0;

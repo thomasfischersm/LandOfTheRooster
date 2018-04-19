@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.dialog;
+package com.playposse.landoftherooster.dialog.support;
 
 import android.content.Context;
 
@@ -8,7 +8,7 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
  * A data class that captures the data for an action. It contains the amount that the user
  * has with him/her and what is at the building.
  */
-abstract class ActionData implements Runnable {
+public abstract class ActionData implements Runnable {
 
     public enum ActionType {
         DROP_OFF,
@@ -31,17 +31,17 @@ abstract class ActionData implements Runnable {
     /**
      * Returns a string to describe the amount the user carries with him/her.
      */
-    protected abstract String getUserString();
+    public abstract String getUserString();
 
     /**
      * returns a string to describe the amount the building has.
      */
-    protected abstract String getBuildingString();
+    public abstract String getBuildingString();
 
     /**
      * Returns a string to label the possible user action.
      */
-    protected abstract String getActionString();
+    public abstract String getActionString();
 
     /**
      * Perform the action for a single unit.
@@ -51,7 +51,7 @@ abstract class ActionData implements Runnable {
     /**
      * Checks if the action is available.
      */
-    protected abstract boolean isAvailable();
+    public abstract boolean isAvailable();
 
     protected Context getContext() {
         return context;

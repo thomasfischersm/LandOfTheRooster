@@ -21,6 +21,10 @@ import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithTy
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
+import com.playposse.landoftherooster.dialog.support.ActionData;
+import com.playposse.landoftherooster.dialog.support.PeasantActionData;
+import com.playposse.landoftherooster.dialog.support.ResourceActionData;
+import com.playposse.landoftherooster.dialog.support.UnitActionData;
 import com.playposse.landoftherooster.glide.GlideApp;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
@@ -35,7 +39,7 @@ import butterknife.BindView;
 
 import static android.view.View.GONE;
 import static com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil.PRODUCTION_CYCLE_MS;
-import static com.playposse.landoftherooster.dialog.PeasantActionData.MAX_PEASANT_BUILDING_CAPACITY;
+import static com.playposse.landoftherooster.dialog.support.PeasantActionData.MAX_PEASANT_BUILDING_CAPACITY;
 
 /**
  * A dialog that lets the user drop off resources, pickup resources, and assign peasants to a

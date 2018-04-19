@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.dialog;
+package com.playposse.landoftherooster.dialog.support;
 
 import android.content.Context;
 
@@ -11,7 +11,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithTy
 /**
  * An {@link ActionData} for a resource.
  */
-class ResourceActionData extends ActionData {
+public class ResourceActionData extends ActionData {
 
     private final int resourceTypeId;
     private final long buildingId;
@@ -21,7 +21,7 @@ class ResourceActionData extends ActionData {
     private ResourceWithType buildingResourceWithType;
     private ResourceType resourceType;
 
-    ResourceActionData(
+    public ResourceActionData(
             Context context,
             RoosterDao dao,
             int resourceTypeId,
@@ -49,7 +49,7 @@ class ResourceActionData extends ActionData {
     }
 
     @Override
-    protected String getUserString() {
+    public String getUserString() {
         final int amount;
         if (userResourceWithType != null) {
             amount = userResourceWithType.getResource().getAmount();
@@ -61,7 +61,7 @@ class ResourceActionData extends ActionData {
     }
 
     @Override
-    protected String getBuildingString() {
+    public String getBuildingString() {
         final int amount;
         if (buildingResourceWithType != null) {
             amount = buildingResourceWithType.getResource().getAmount();
@@ -73,7 +73,7 @@ class ResourceActionData extends ActionData {
     }
 
     @Override
-    protected String getActionString() {
+    public String getActionString() {
         switch (actionType) {
             case DROP_OFF:
                 return getContext().getString(R.string.drop_off_action);
@@ -111,7 +111,7 @@ class ResourceActionData extends ActionData {
     }
 
     @Override
-    protected boolean isAvailable() {
+    public boolean isAvailable() {
         switch (actionType) {
             case DROP_OFF:
                 return (userResourceWithType != null)

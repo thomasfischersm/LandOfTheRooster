@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.dialog;
+package com.playposse.landoftherooster.dialog.support;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
  * A {@link RoosterBroadcastManager.RoosterBroadcastReceiver} that makes the dialog disappear
  * if the user walks away from the building.
  */
-class BuildingProximityDialogReceiver implements RoosterBroadcastManager.RoosterBroadcastReceiver {
+public class BuildingProximityDialogReceiver implements RoosterBroadcastManager.RoosterBroadcastReceiver {
 
     private static final String LOG_TAG = BuildingProximityDialogReceiver.class.getSimpleName();
 
@@ -25,7 +25,7 @@ class BuildingProximityDialogReceiver implements RoosterBroadcastManager.Rooster
     @Nullable
     private ScheduledExecutorService scheduledExecutorService;
 
-    BuildingProximityDialogReceiver(Context context) {
+    public BuildingProximityDialogReceiver(Context context) {
         RoosterBroadcastManager.getInstance(context)
                 .register(this);
     }
@@ -46,7 +46,7 @@ class BuildingProximityDialogReceiver implements RoosterBroadcastManager.Rooster
         }
     }
 
-    void setDialog(AlertDialog dialog) {
+    public void setDialog(AlertDialog dialog) {
         this.dialog = dialog;
     }
 

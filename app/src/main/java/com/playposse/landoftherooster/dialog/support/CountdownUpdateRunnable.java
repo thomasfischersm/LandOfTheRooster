@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.dialog;
+package com.playposse.landoftherooster.dialog.support;
 
 import android.widget.TextView;
 
@@ -7,7 +7,7 @@ import com.playposse.landoftherooster.R;
 /**
  * A {@link Runnable} that updates the countdown clock.
  */
-class CountdownUpdateRunnable implements Runnable {
+public class CountdownUpdateRunnable implements Runnable {
 
     private static final int SECOND_IN_MS = 1_000;
 
@@ -15,7 +15,7 @@ class CountdownUpdateRunnable implements Runnable {
 
     private long remainingMs;
 
-    CountdownUpdateRunnable(TextView countdownTextView, long remainingMs) {
+    public CountdownUpdateRunnable(TextView countdownTextView, long remainingMs) {
         this.countdownTextView = countdownTextView;
         this.remainingMs = remainingMs;
     }

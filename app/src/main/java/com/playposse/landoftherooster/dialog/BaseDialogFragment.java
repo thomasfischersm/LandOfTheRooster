@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.dialog.support.BuildingProximityDialogReceiver;
+import com.playposse.landoftherooster.dialog.support.CountdownUpdateRunnable;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
 
 import java.lang.ref.WeakReference;

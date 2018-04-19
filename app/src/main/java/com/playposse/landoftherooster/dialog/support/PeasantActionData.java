@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.dialog;
+package com.playposse.landoftherooster.dialog.support;
 
 import android.content.Context;
 
@@ -12,7 +12,7 @@ import static com.playposse.landoftherooster.dialog.BuildingInteractionDialogFra
 /**
  * An {@link ActionData} to assign a peasant to a building
  */
-class PeasantActionData extends ActionData {
+public class PeasantActionData extends ActionData {
 
     public static final int MAX_PEASANT_BUILDING_CAPACITY = 5;
 
@@ -23,7 +23,7 @@ class PeasantActionData extends ActionData {
     private int buildingUnitCount;
     private UnitType unitType;
 
-    PeasantActionData(
+    public PeasantActionData(
             Context context,
             RoosterDao dao,
             int unitTypeId,
@@ -41,19 +41,19 @@ class PeasantActionData extends ActionData {
     }
 
     @Override
-    protected String getUserString() {
+    public String getUserString() {
         String unitTypeName = unitType.getName();
         return getContext().getString(R.string.unit_template, userUnitCount, unitTypeName);
     }
 
     @Override
-    protected String getBuildingString() {
+    public String getBuildingString() {
         String unitTypeName = unitType.getName();
         return getContext().getString(R.string.unit_template, buildingUnitCount, unitTypeName);
     }
 
     @Override
-    protected String getActionString() {
+    public String getActionString() {
         return getContext().getString(R.string.assign_action);
     }
 
@@ -66,7 +66,7 @@ class PeasantActionData extends ActionData {
     }
 
     @Override
-    protected boolean isAvailable() {
+    public boolean isAvailable() {
         return (userUnitCount > 0) && (buildingUnitCount < MAX_PEASANT_BUILDING_CAPACITY);
     }
 }
