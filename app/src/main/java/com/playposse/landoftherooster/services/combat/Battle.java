@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
-import com.playposse.landoftherooster.contentprovider.room.RoosterDaoUtil;
+import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;

@@ -84,6 +84,18 @@ public final class StringUtil {
         return numbers;
     }
 
+    public static List<Long> splitToLongList(@Nullable String str) {
+        List<Long> numbers = new ArrayList<>();
+
+        if (str != null) {
+            for (String split : str.split(",")) {
+                numbers.add(Long.parseLong(split.trim()));
+            }
+        }
+
+        return numbers;
+    }
+
     public static String capitalize(@Nullable String str) {
         if ((str == null) || (str.length() == 0)) {
             return str;

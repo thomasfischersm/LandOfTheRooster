@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
-import com.playposse.landoftherooster.contentprovider.room.RoosterDaoUtil;
+import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 
 import static com.playposse.landoftherooster.dialog.BuildingInteractionDialog.IMPLIED_PEASANT_COUNT;

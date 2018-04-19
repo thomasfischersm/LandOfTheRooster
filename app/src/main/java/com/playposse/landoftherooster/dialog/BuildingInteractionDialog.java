@@ -14,7 +14,9 @@ import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
-import com.playposse.landoftherooster.contentprovider.room.RoosterDaoUtil;
+import com.playposse.landoftherooster.contentprovider.room.datahandler.InputResourceTypeIterator;
+import com.playposse.landoftherooster.contentprovider.room.datahandler.InputUnitTypeIterator;
+import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
@@ -36,7 +38,7 @@ import butterknife.ButterKnife;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.playposse.landoftherooster.contentprovider.room.RoosterDaoUtil.PRODUCTION_CYCLE_MS;
+import static com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil.PRODUCTION_CYCLE_MS;
 import static com.playposse.landoftherooster.dialog.PeasantActionData.MAX_PEASANT_BUILDING_CAPACITY;
 
 /**
@@ -213,27 +215,20 @@ public final class BuildingInteractionDialog {
         private String formatProductionInput(ProductionRule productionRule) {
             StringBuilder sb = new StringBuilder();
 
-            List<Integer> resourceTypeIds =
-                    StringUtil.splitToIntList(productionRule.getInputResourceTypeIds());
-            for (int resourceTypeId : resourceTypeIds) {
+            for (ResourceType resourceType : new InputResourceTypeIterator(dao, productionRule)) {
                 if (sb.length() > 0) {
                     sb.append(LIST_SEPARATOR);
                 }
 
-                // TODO: Optimize loading of strings to a single query.
-                ResourceType resourceType = dao.getResourceTypeById(resourceTypeId);
                 sb.append("1 " + resourceType.getName());
             }
 
-            List<Integer> unitTypeIds =
-                    StringUtil.splitToIntList(productionRule.getInputUnitTypeIds());
-            for (int unitTypeId : unitTypeIds) {
+            for (UnitType unitType : new InputUnitTypeIterator(dao, productionRule)) {
                 if (sb.length() > 0) {
                     sb.append(LIST_SEPARATOR);
                 }
 
                 // TODO: Optimize loading of strings to a single query.
-                UnitType unitType = dao.getUnitTypeById(unitTypeId);
                 sb.append("1 " + unitType.getName());
             }
 

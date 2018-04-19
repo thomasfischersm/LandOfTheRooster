@@ -1,9 +1,11 @@
-package com.playposse.landoftherooster.contentprovider.room;
+package com.playposse.landoftherooster.contentprovider.room.datahandler;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;

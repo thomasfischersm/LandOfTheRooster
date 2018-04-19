@@ -81,6 +81,12 @@ public interface RoosterDao {
     @Insert
     void insertResourceTypes(List<ResourceType> resourceTypes);
 
+    @Query("select * from resource_type where id=:resourceTypeId")
+    ResourceType getResourceTypeById(int resourceTypeId);
+
+    @Query("select * from resource_type where id in (:resourceTypeIds)")
+    List<ResourceType> getResourceTypesById(List<Long> resourceTypeIds);
+
     @Query("delete from resource_type")
     void deleteResourceTypes();
 
@@ -115,6 +121,12 @@ public interface RoosterDao {
     @Insert
     void insertUnitTypes(List<UnitType> rows);
 
+    @Query("select * from unit_type where id=:unitTypeId")
+    UnitType getUnitTypeById(int unitTypeId);
+
+    @Query("select * from unit_type where id in (:unitTypeIds)")
+    List<UnitType> getUnitTypesById(List<Long> unitTypeIds);
+
 
     // Units
     @Insert
@@ -122,12 +134,6 @@ public interface RoosterDao {
 
     @Update
     void update(Unit unit);
-
-    @Query("select * from resource_type where id=:resourceTypeId")
-    ResourceType getResourceTypeById(int resourceTypeId);
-
-    @Query("select * from unit_type where id=:unitTypeId")
-    UnitType getUnitTypeById(int unitTypeId);
 
     @Query("select * from unit where unit_type_id=:unitTypeId and located_at_building_id is null")
     List<Unit> getUnitsJoiningUserByTypeId(int unitTypeId);
