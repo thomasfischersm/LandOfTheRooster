@@ -18,15 +18,15 @@ public final class ActivityNavigator {
         context.startActivity(new Intent(context, KingdomActivity.class));
     }
 
-    public static void startBattleActivity(Context context, int buildingId) {
+    public static void startBattleActivity(Context context, long buildingId) {
         Intent intent = new Intent(context, BattleActivity.class);
         intent.putExtra(BUILDING_ID_EXTRA_PARAMETER, buildingId);
         context.startActivity(intent);
     }
 
     @Nullable
-    public static Integer getBuildingId(Intent intent) {
-        int buildingId = intent.getIntExtra(BUILDING_ID_EXTRA_PARAMETER, NULL_CONSTANT);
+    public static Long getBuildingId(Intent intent) {
+        long buildingId = intent.getIntExtra(BUILDING_ID_EXTRA_PARAMETER, NULL_CONSTANT);
         return (buildingId != NULL_CONSTANT) ? buildingId : null;
     }
 }

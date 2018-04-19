@@ -33,7 +33,7 @@ public class Resource {
     private int amount;
 
     @ColumnInfo(name = "located_at_building_id")
-    private Integer locatedAtBuildingId;
+    private Long locatedAtBuildingId;
 
     public Resource() {
     }
@@ -42,7 +42,7 @@ public class Resource {
     public Resource(
             @NonNull int resourceTypeId,
             @NonNull int amount,
-            @Nullable Integer locatedAtBuildingId) {
+            @Nullable Long locatedAtBuildingId) {
 
         this.resourceTypeId = resourceTypeId;
         this.amount = amount;
@@ -75,11 +75,11 @@ public class Resource {
         this.amount = amount;
     }
 
-    public Integer getLocatedAtBuildingId() {
+    public Long getLocatedAtBuildingId() {
         return locatedAtBuildingId;
     }
 
-    public void setLocatedAtBuildingId(Integer locatedAtBuildingId) {
+    public void setLocatedAtBuildingId(Long locatedAtBuildingId) {
         this.locatedAtBuildingId = locatedAtBuildingId;
     }
 }

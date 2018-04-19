@@ -119,7 +119,7 @@ final class ProductionExecutor {
             Integer outputUnitTypeId = productionRule.getOutputUnitTypeId();
             if (outputUnitTypeId != null) {
                 UnitType unitType = dao.getUnitTypeById(outputUnitTypeId);
-                RoosterDaoUtil.creditUnit(context, unitType, 1);
+                RoosterDaoUtil.creditUnit(context, unitType, 1, null);
             }
         }
 

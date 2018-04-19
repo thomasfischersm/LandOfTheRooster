@@ -37,7 +37,7 @@ public final class BattleAvailableDialog {
     private BattleAvailableDialog() {
     }
 
-    public static void show(Context context, int buildingId) {
+    public static void show(Context context, long buildingId) {
         new LoadDialogAsyncTask(context, buildingId).execute();
     }
 
@@ -48,7 +48,7 @@ public final class BattleAvailableDialog {
     static class LoadDialogAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private final Context context;
-        private final int buildingId;
+        private final long buildingId;
 
         private BuildingType buildingType;
         private UnitType enemyUnitType;
@@ -56,7 +56,7 @@ public final class BattleAvailableDialog {
         private Map<Integer, Integer> friendlyUnitCountByType = new HashMap<>();
         private List<UnitWithType> friendlyUnitWithTypes;
 
-        LoadDialogAsyncTask(Context context, int buildingId) {
+        LoadDialogAsyncTask(Context context, long buildingId) {
             this.context = context;
             this.buildingId = buildingId;
         }

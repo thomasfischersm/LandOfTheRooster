@@ -14,7 +14,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithTy
 class ResourceActionData extends ActionData {
 
     private final int resourceTypeId;
-    private final int buildingId;
+    private final long buildingId;
     private final ActionType actionType;
 
     private ResourceWithType userResourceWithType;
@@ -25,7 +25,7 @@ class ResourceActionData extends ActionData {
             Context context,
             RoosterDao dao,
             int resourceTypeId,
-            int buildingId,
+            long buildingId,
             ActionType ActionType) {
 
         super(context, dao);
@@ -103,6 +103,7 @@ class ResourceActionData extends ActionData {
                         buildingResourceWithType,
                         resourceTypeId,
                         buildingId);
+                break;
             default:
                 throw new IllegalStateException(
                         "Unexpected action type: " + actionType);

@@ -26,7 +26,7 @@ import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 public class Building {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "building_type_id")
     @NonNull
@@ -51,13 +51,15 @@ public class Building {
         this.buildingTypeId = buildingTypeId;
         this.latitude = latitude;
         this.longitude = longitude;
+
+        lastProduction = new Date();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

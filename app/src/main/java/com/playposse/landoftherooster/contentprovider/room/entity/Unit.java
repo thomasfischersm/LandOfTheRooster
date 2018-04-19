@@ -25,7 +25,7 @@ public class Unit {
     private int health;
 
     @ColumnInfo(name = "located_at_building_id")
-    private Integer locatedAtBuildingId;
+    private Long locatedAtBuildingId;
 
     public int getId() {
         return id;
@@ -51,11 +51,11 @@ public class Unit {
         this.health = health;
     }
 
-    public Integer getLocatedAtBuildingId() {
+    public Long getLocatedAtBuildingId() {
         return locatedAtBuildingId;
     }
 
-    public void setLocatedAtBuildingId(Integer locatedAtBuildingId) {
+    public void setLocatedAtBuildingId(Long locatedAtBuildingId) {
         this.locatedAtBuildingId = locatedAtBuildingId;
     }
 }

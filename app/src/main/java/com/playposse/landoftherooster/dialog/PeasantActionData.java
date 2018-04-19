@@ -17,7 +17,7 @@ class PeasantActionData extends ActionData {
     public static final int MAX_PEASANT_BUILDING_CAPACITY = 5;
 
     private final int unitTypeId;
-    private final int buildingId;
+    private final long buildingId;
 
     private int userUnitCount;
     private int buildingUnitCount;
@@ -27,7 +27,7 @@ class PeasantActionData extends ActionData {
             Context context,
             RoosterDao dao,
             int unitTypeId,
-            int buildingId) {
+            long buildingId) {
 
         super(context, dao);
 

@@ -7,10 +7,12 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDaoUtil;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
-import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
-import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
+import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
 
 import java.util.List;
 import java.util.Random;
@@ -105,14 +107,21 @@ public class BuildingDiscoveryService implements ILocationAwareService {
     }
 
     private void placeNextBuilding(LatLng currentLatLng) {
+        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+
         // Check if we have a good GPS location.
 
         // Create the building.
-        Building building =
-                new Building(nextBuildingType.getId(), currentLatLng.latitude, currentLatLng.longitude);
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-        dao.insertBuilding(building);
+        Building building = new Building(
+                nextBuildingType.getId(),
+                currentLatLng.latitude,
+                currentLatLng.longitude);
+        long buildingId = dao.insertBuilding(building);
+        building.setId(buildingId);
         Log.d(LOG_TAG, "placeNextBuilding: Placed building: " + nextBuildingType.getName());
+
+        // Create first resource/Unit if free.
+        createFirstFreeItem(dao, building);
 
         // Prepare to place the next building.
         initNextBuildingType();
@@ -121,6 +130,27 @@ public class BuildingDiscoveryService implements ILocationAwareService {
         // Maybe, the activity can simply observe the building table?
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(500);
+    }
+
+    private void createFirstFreeItem(RoosterDao dao, Building building) {
+        List<ProductionRule> productionRules =
+                dao.getProductionRulesByBuildingTypeId(building.getBuildingTypeId());
+
+        for (ProductionRule productionRule : productionRules) {
+            if (!productionRule.isFree()) {
+                continue;
+            }
+
+            Integer resourceTypeId = productionRule.getOutputResourceTypeId();
+            if (resourceTypeId != null) {
+                RoosterDaoUtil.creditResource(context, resourceTypeId, 1, building.getId());
+            }
+
+            Integer unitTypeId = productionRule.getOutputUnitTypeId();
+            if (unitTypeId != null) {
+                RoosterDaoUtil.creditUnit(context, unitTypeId, 1, building.getId());
+            }
+        }
     }
 
     private void checkIfBuildingDiscovered(LatLng currentLatLng) {
@@ -191,7 +221,7 @@ public class BuildingDiscoveryService implements ILocationAwareService {
     }
 
     @Override
-    public void onLocationUpdate(LatLng latLng) {
+    public synchronized void onLocationUpdate(LatLng latLng) {
         handleFirstBuilding(latLng);
         checkIfBuildingDiscovered(latLng);
     }

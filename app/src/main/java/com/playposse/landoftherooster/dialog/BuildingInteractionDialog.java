@@ -58,7 +58,7 @@ public final class BuildingInteractionDialog {
     private BuildingInteractionDialog() {
     }
 
-    public static void show(Context context, int buildingId) {
+    public static void show(Context context, long buildingId) {
         new LoadingAsyncTask(context, buildingId).execute();
     }
 
@@ -68,7 +68,7 @@ public final class BuildingInteractionDialog {
     static class LoadingAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private final Context context;
-        private final int buildingId;
+        private final long buildingId;
 
         @BindView(R.id.building_name_text_view) TextView buildingNameTextView;
         @BindView(R.id.building_icon_image_view) ImageView buildingIconImageView;
@@ -92,7 +92,7 @@ public final class BuildingInteractionDialog {
         private ScheduledExecutorService scheduledExecutorService;
         private BuildingProximityDialogReceiver proximityReceiver;
 
-        private LoadingAsyncTask(Context context, int buildingId) {
+        private LoadingAsyncTask(Context context, long buildingId) {
             this.context = context;
             this.buildingId = buildingId;
         }

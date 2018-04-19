@@ -51,7 +51,7 @@ public final class RoosterDaoUtil {
             Context context,
             int resourceTypeId,
             int amount,
-            @Nullable Integer buildingId) {
+            @Nullable Long buildingId) {
 
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
         final ResourceWithType resourceWithType;
@@ -70,7 +70,7 @@ public final class RoosterDaoUtil {
             Resource resource,
             int resourceTypeId,
             int amount,
-            @Nullable Integer buildingId) {
+            @Nullable Long buildingId) {
 
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
 
@@ -90,19 +90,37 @@ public final class RoosterDaoUtil {
         Log.d(LOG_TAG, "creditUnit: Credited resourceWithType " + resourceTypeId);
     }
 
-    public static void creditUnit(Context context, UnitType unitType, int productionAmount) {
+    public static void creditUnit(
+            Context context,
+            int unitTypeId,
+            int amount,
+            @javax.annotation.Nullable Long buildingId) {
+
+        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+        UnitType unitType = dao.getUnitTypeById(unitTypeId);
+
+        creditUnit(context, unitType, amount, buildingId);
+    }
+
+    public static void creditUnit(
+            Context context,
+            UnitType unitType,
+            int amount,
+            @javax.annotation.Nullable Long buildingId) {
+
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
 
-        for (int i = 0; i < productionAmount; i++) {
+        for (int i = 0; i < amount; i++) {
             Unit unit = new Unit();
-            unit.setUnitTypeId(unitType.getId());
+            int unitTypeId = unitType.getId();
+            unit.setUnitTypeId(unitTypeId);
             unit.setHealth(unitType.getHealth());
-            unit.setLocatedAtBuildingId(null); // Null because the unit will be with the user.
+            unit.setLocatedAtBuildingId(buildingId);
 
             dao.insert(unit);
         }
 
-        Log.d(LOG_TAG, "creditUnit: Created " + productionAmount + " units of "
+        Log.d(LOG_TAG, "creditUnit: Created " + amount + " units of "
                 + unitType.getName());
     }
 
@@ -111,7 +129,7 @@ public final class RoosterDaoUtil {
             ResourceWithType userResourceWithType,
             ResourceWithType buildingResourceWithType,
             int resourceTypeId,
-            int buildingId) {
+            long buildingId) {
 
         if ((userResourceWithType == null)
                 || (userResourceWithType.getResource().getAmount() < 1)) {
@@ -126,9 +144,11 @@ public final class RoosterDaoUtil {
                 -1,
                 null);
 
+        Resource buildingResource =
+                (buildingResourceWithType != null) ? buildingResourceWithType.getResource() : null;
         creditResource(
                 context,
-                buildingResourceWithType.getResource(),
+                buildingResource,
                 resourceTypeId,
                 1,
                 buildingId);
@@ -136,10 +156,10 @@ public final class RoosterDaoUtil {
 
     public static void moveResourceFromBuilding(
             Context context,
-            ResourceWithType userResourceWithType,
-            ResourceWithType buildingResourceWithType,
+            @Nullable ResourceWithType userResourceWithType,
+            @Nullable ResourceWithType buildingResourceWithType,
             int resourceTypeId,
-            int buildingId) {
+            long buildingId) {
 
         if ((buildingResourceWithType == null)
                 || (buildingResourceWithType.getResource().getAmount() < 1)) {
@@ -147,9 +167,11 @@ public final class RoosterDaoUtil {
                     "The building doesn't have the resource to move to the building.");
         }
 
+        Resource userResource =
+                (userResourceWithType != null) ? userResourceWithType.getResource() : null;
         creditResource(
                 context,
-                userResourceWithType.getResource(),
+                userResource,
                 resourceTypeId,
                 1,
                 null);
@@ -162,7 +184,7 @@ public final class RoosterDaoUtil {
                 buildingId);
     }
 
-    public static void transferUnitToBuilding(Context context, int unitTypeId, int buildingId) {
+    public static void transferUnitToBuilding(Context context, int unitTypeId, long buildingId) {
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
 
         List<Unit> units = dao.getUnitsJoiningUserByTypeId(unitTypeId);
@@ -182,7 +204,7 @@ public final class RoosterDaoUtil {
         dao.update(unit);
     }
 
-    public static void transferUnitFromBuilding(Context context, int unitTypeId, int buildingId) {
+    public static void transferUnitFromBuilding(Context context, int unitTypeId, long buildingId) {
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
 
         List<Unit> units = dao.getUnits(unitTypeId, buildingId);

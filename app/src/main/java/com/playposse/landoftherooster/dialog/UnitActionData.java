@@ -13,7 +13,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 class UnitActionData extends ActionData {
 
     private final int unitTypeId;
-    private final int buildingId;
+    private final long buildingId;
     private final ActionType actionType;
 
     private int userUnitCount;
@@ -24,7 +24,7 @@ class UnitActionData extends ActionData {
             Context context,
             RoosterDao dao,
             int unitTypeId,
-            int buildingId,
+            long buildingId,
             ActionType actionType) {
 
         super(context, dao);

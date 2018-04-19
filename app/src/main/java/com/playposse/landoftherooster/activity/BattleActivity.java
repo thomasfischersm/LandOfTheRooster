@@ -107,7 +107,7 @@ public class BattleActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             Context context = BattleActivity.this;
-            int buildingId = ActivityNavigator.getBuildingId(getIntent());
+            long buildingId = ActivityNavigator.getBuildingId(getIntent());
             RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
             BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
 

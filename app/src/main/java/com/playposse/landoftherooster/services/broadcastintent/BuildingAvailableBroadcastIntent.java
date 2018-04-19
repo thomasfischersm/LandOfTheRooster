@@ -11,7 +11,7 @@ public class BuildingAvailableBroadcastIntent implements RoosterBroadcastIntent 
     private static final String EVENT_NAME = BuildingAvailableBroadcastIntent.class.getName();
     private static final String BUILDING_ID_EXTRA = "buildingId";
 
-    private int buildingId;
+    private long buildingId;
 
     /**
      * Default constructor for reflection.
@@ -19,13 +19,13 @@ public class BuildingAvailableBroadcastIntent implements RoosterBroadcastIntent 
     public BuildingAvailableBroadcastIntent() {
     }
 
-    public BuildingAvailableBroadcastIntent(int buildingId) {
+    public BuildingAvailableBroadcastIntent(long buildingId) {
         this.buildingId = buildingId;
     }
 
     @Override
     public void createFromIntent(Intent localIntent) {
-        buildingId = localIntent.getIntExtra(BUILDING_ID_EXTRA, -1);
+        buildingId = localIntent.getLongExtra(BUILDING_ID_EXTRA, -1);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class BuildingAvailableBroadcastIntent implements RoosterBroadcastIntent 
         return intent;
     }
 
-    public int getBuildingId() {
+    public long getBuildingId() {
         return buildingId;
     }
 }
