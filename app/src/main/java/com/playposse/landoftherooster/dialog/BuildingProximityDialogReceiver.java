@@ -8,6 +8,10 @@ import com.playposse.landoftherooster.services.broadcastintent.LeftBuildingBroad
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
 
+import java.util.concurrent.ScheduledExecutorService;
+
+import javax.annotation.Nullable;
+
 /**
  * A {@link RoosterBroadcastManager.RoosterBroadcastReceiver} that makes the dialog disappear
  * if the user walks away from the building.
@@ -17,6 +21,9 @@ class BuildingProximityDialogReceiver implements RoosterBroadcastManager.Rooster
     private static final String LOG_TAG = BuildingProximityDialogReceiver.class.getSimpleName();
 
     private AlertDialog dialog;
+
+    @Nullable
+    private ScheduledExecutorService scheduledExecutorService;
 
     BuildingProximityDialogReceiver(Context context) {
         RoosterBroadcastManager.getInstance(context)
@@ -29,6 +36,10 @@ class BuildingProximityDialogReceiver implements RoosterBroadcastManager.Rooster
             Log.i(LOG_TAG, "onReceive: Automatically dismissing dialog because the user " +
                     "walked away from the building.");
 
+            if (scheduledExecutorService != null) {
+                scheduledExecutorService.shutdownNow();
+            }
+
             if (dialog != null) {
                 dialog.dismiss();
             }
@@ -37,5 +48,11 @@ class BuildingProximityDialogReceiver implements RoosterBroadcastManager.Rooster
 
     void setDialog(AlertDialog dialog) {
         this.dialog = dialog;
+    }
+
+    public void setScheduledExecutorService(
+            @Nullable ScheduledExecutorService scheduledExecutorService) {
+
+        this.scheduledExecutorService = scheduledExecutorService;
     }
 }

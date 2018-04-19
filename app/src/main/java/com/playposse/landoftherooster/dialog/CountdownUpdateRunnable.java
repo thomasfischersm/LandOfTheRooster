@@ -43,6 +43,6 @@ class CountdownUpdateRunnable implements Runnable {
             }
         });
 
-        // TODO: Start battle dialog if 0 is reached.
+        // TODO: Start battle dialog if 0 is reached. -> Make more generic for reuse of this class.
     }
 }

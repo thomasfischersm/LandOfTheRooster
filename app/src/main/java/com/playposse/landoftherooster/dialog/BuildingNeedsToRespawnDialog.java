@@ -28,7 +28,7 @@ public final class BuildingNeedsToRespawnDialog {
         // Inflate layout
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View rootView = layoutInflater.inflate(R.layout.dialog_building_needs_to_respawn, null);
-        TextView countdownTextView = rootView.findViewById(R.id.coutndown_text_view);
+        TextView countdownTextView = rootView.findViewById(R.id.countdown_text_view);
 
         final ScheduledExecutorService scheduledExecutorService =
                 Executors.newSingleThreadScheduledExecutor();

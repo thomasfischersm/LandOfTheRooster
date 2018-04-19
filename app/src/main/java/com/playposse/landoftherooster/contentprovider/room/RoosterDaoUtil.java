@@ -19,7 +19,8 @@ public final class RoosterDaoUtil {
 
     private static final String LOG_TAG = RoosterDaoUtil.class.getSimpleName();
 
-    private static final int PRODUCTION_CYCLE_MINUTES = 60;
+    public static final int PRODUCTION_CYCLE_MINUTES = 60;
+    public static final int PRODUCTION_CYCLE_MS = PRODUCTION_CYCLE_MINUTES * 60 * 1_000;
 
     private RoosterDaoUtil() {
     }

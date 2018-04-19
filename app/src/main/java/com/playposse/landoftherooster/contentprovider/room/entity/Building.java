@@ -35,9 +35,13 @@ public class Building {
     private double latitude;
     private double longitude;
 
-    @ColumnInfo(name ="last_conquest")
+    @ColumnInfo(name = "last_conquest")
     @Nullable
     private Date lastConquest;
+
+    @ColumnInfo(name = "last_production")
+    @Nullable
+    private Date lastProduction;
 
     public Building() {
     }
@@ -89,5 +93,14 @@ public class Building {
 
     public void setLastConquest(@Nullable Date lastConquest) {
         this.lastConquest = lastConquest;
+    }
+
+    @Nullable
+    public Date getLastProduction() {
+        return lastProduction;
+    }
+
+    public void setLastProduction(@Nullable Date lastProduction) {
+        this.lastProduction = lastProduction;
     }
 }

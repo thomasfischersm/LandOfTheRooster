@@ -25,11 +25,18 @@ import com.playposse.landoftherooster.glide.GlideApp;
 import com.playposse.landoftherooster.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static com.playposse.landoftherooster.contentprovider.room.RoosterDaoUtil.PRODUCTION_CYCLE_MS;
 import static com.playposse.landoftherooster.dialog.PeasantActionData.MAX_PEASANT_BUILDING_CAPACITY;
 
 /**
@@ -71,7 +78,8 @@ public final class BuildingInteractionDialog {
         @BindView(R.id.production_rules_text_view) TextView productionRulesTextView;
         @BindView(R.id.production_speed_heading_text_view) TextView productionSpeedHeadingTextView;
         @BindView(R.id.production_speed_text_view) TextView productionSpeedTextView;
-        @BindView(R.id.next_unit_count_down_text_view) TextView nextUnitcountDownTextView;
+        @BindView(R.id.countdown_heading_text_view) TextView countDownHeadingTextView;
+        @BindView(R.id.countdown_text_view) TextView countDownTextView;
 
         private RoosterDao dao;
         private BuildingWithType buildingWithType;
@@ -81,6 +89,8 @@ public final class BuildingInteractionDialog {
         private List<ActionData> actions = new ArrayList<>();
         private int peasantCount;
         private View rootView;
+        private ScheduledExecutorService scheduledExecutorService;
+        private BuildingProximityDialogReceiver proximityReceiver;
 
         private LoadingAsyncTask(Context context, int buildingId) {
             this.context = context;
@@ -107,8 +117,7 @@ public final class BuildingInteractionDialog {
         @Override
         protected void onPostExecute(Void aVoid) {
             // Detect if the user walked away from the building.
-            final BuildingProximityDialogReceiver receiver =
-                    new BuildingProximityDialogReceiver(context);
+            proximityReceiver = new BuildingProximityDialogReceiver(context);
 
             // Create custom layout.
             LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -124,12 +133,16 @@ public final class BuildingInteractionDialog {
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    if (scheduledExecutorService != null) {
+                                        scheduledExecutorService.shutdownNow();
+                                    }
+
                                     dialog.dismiss();
                                 }
                             })
                     .show();
 
-            receiver.setDialog(dialog);
+            proximityReceiver.setDialog(dialog);
         }
 
         private void populateView() {
@@ -143,18 +156,22 @@ public final class BuildingInteractionDialog {
 
             populateSpeed();
 
-            // TODO: Show countdown clock to next unit produced.
+            populateCountdownClock();
 
+            int drawableId = context.getResources().getIdentifier(
+                    buildingType.getIcon(),
+                    "drawable",
+                    context.getPackageName());
             GlideApp.with(context)
-                    .load(buildingType.getIcon())
+                    .load(drawableId)
                     .into(buildingIconImageView);
 
         }
 
         private void populateProductionRules() {
             if (productionRules.size() == 0) {
-                productionRulesHeadingTextView.setVisibility(View.GONE);
-                productionRulesTextView.setVisibility(View.GONE);
+                productionRulesHeadingTextView.setVisibility(GONE);
+                productionRulesTextView.setVisibility(GONE);
                 return;
             }
 
@@ -304,8 +321,8 @@ public final class BuildingInteractionDialog {
 
             if (actions.size() == 0) {
                 // Hide actions.
-                actionGridLayout.setVisibility(View.GONE);
-                actionHeadingTextView.setVisibility(View.GONE);
+                actionGridLayout.setVisibility(GONE);
+                actionHeadingTextView.setVisibility(GONE);
                 return;
             }
 
@@ -346,8 +363,8 @@ public final class BuildingInteractionDialog {
         private void populateSpeed() {
             if (productionRules.size() == 0) {
                 // Hide production speed if the building produces nothing.
-                productionSpeedHeadingTextView.setVisibility(View.GONE);
-                productionSpeedTextView.setVisibility(View.GONE);
+                productionSpeedHeadingTextView.setVisibility(GONE);
+                productionSpeedTextView.setVisibility(GONE);
                 return;
             }
 
@@ -365,6 +382,48 @@ public final class BuildingInteractionDialog {
             }
 
             productionSpeedTextView.setText(sb.toString());
+        }
+
+        private void populateCountdownClock() {
+            // Cancel old timer.
+            if (scheduledExecutorService != null) {
+                scheduledExecutorService.shutdownNow();
+                scheduledExecutorService = null;
+            }
+
+            // Skip if the building produces nothing.
+            if (productionRules.size() == 0) {
+                setCountdownVisibility(GONE);
+                return;
+            }
+
+            // TODO: Check if the item is already produced.
+
+            setCountdownVisibility(VISIBLE);
+
+            // Calculate remaining time.
+            Date lastProduction = buildingWithType.getBuilding().getLastProduction();
+            if (lastProduction == null) {
+                return;
+            }
+            long lastProductionMs = lastProduction.getTime();
+            long remainingMs = lastProductionMs + PRODUCTION_CYCLE_MS - System.currentTimeMillis();
+            if (remainingMs <= 0) {
+                return;
+            }
+
+            // Start countdown timer.
+            scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+            CountdownUpdateRunnable countdownTask =
+                    new CountdownUpdateRunnable(countDownTextView, remainingMs);
+            scheduledExecutorService.scheduleAtFixedRate(countdownTask, 1, 1, TimeUnit.SECONDS);
+
+            proximityReceiver.setScheduledExecutorService(scheduledExecutorService);
+        }
+
+        private void setCountdownVisibility(int visibility) {
+            countDownHeadingTextView.setVisibility(visibility);
+            countDownTextView.setVisibility(visibility);
         }
     }
 
