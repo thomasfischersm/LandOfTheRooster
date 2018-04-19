@@ -26,7 +26,7 @@ public final class ActivityNavigator {
 
     @Nullable
     public static Long getBuildingId(Intent intent) {
-        long buildingId = intent.getIntExtra(BUILDING_ID_EXTRA_PARAMETER, NULL_CONSTANT);
+        long buildingId = intent.getLongExtra(BUILDING_ID_EXTRA_PARAMETER, NULL_CONSTANT);
         return (buildingId != NULL_CONSTANT) ? buildingId : null;
     }
 }

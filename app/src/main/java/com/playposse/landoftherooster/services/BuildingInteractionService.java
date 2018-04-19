@@ -59,14 +59,15 @@ public class BuildingInteractionService implements ILocationAwareService {
 
             BuildingType buildingType = buildingWithType.getBuildingType();
 
-            // Show user the building resources dialog.
-            RoosterBroadcastManager.send(
-                    context,
-                    new BuildingAvailableBroadcastIntent(buildingWithType.getBuilding().getId()));
-
-            // Try fighting.
             if (buildingType.getEnemyUnitCount() != null) {
+                // Try fighting.
                 onFoundBattleBuilding(buildingWithType);
+            } else {
+
+                // Show user the building resources dialog.
+                RoosterBroadcastManager.send(
+                        context,
+                        new BuildingAvailableBroadcastIntent(buildingWithType.getBuilding().getId()));
             }
         }
     }
