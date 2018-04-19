@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <!--
-    This isn't a true layout. The BuildingInteractionDialog won't use the view group but will use
+    This isn't a true layout. The BuildingInteractionDialogFragment won't use the view group but will use
     the children and arrange it in its own view group. Using a layout file makes the configuration
     of the views easier.
     -->

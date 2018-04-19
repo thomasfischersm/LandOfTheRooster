@@ -7,7 +7,7 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 
-import static com.playposse.landoftherooster.dialog.BuildingInteractionDialog.IMPLIED_PEASANT_COUNT;
+import static com.playposse.landoftherooster.dialog.BuildingInteractionDialogFragment.IMPLIED_PEASANT_COUNT;
 
 /**
  * An {@link ActionData} to assign a peasant to a building

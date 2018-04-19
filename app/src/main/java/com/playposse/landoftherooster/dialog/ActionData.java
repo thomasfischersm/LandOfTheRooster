@@ -8,7 +8,7 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
  * A data class that captures the data for an action. It contains the amount that the user
  * has with him/her and what is at the building.
  */
-abstract class ActionData {
+abstract class ActionData implements Runnable {
 
     public enum ActionType {
         DROP_OFF,
@@ -21,6 +21,11 @@ abstract class ActionData {
     ActionData(Context context, RoosterDao dao) {
         this.context = context;
         this.dao = dao;
+    }
+
+    @Override
+    public void run() {
+        performAction();
     }
 
     /**
