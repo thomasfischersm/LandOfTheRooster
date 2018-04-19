@@ -23,6 +23,8 @@ public class RoosterApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        GameConfig.init(this);
+
         // Start with a fresh database when running for debug.
         if (BuildConfig.DEBUG) {
             getApplicationContext().deleteDatabase(RoosterDatabaseHelper.DB_NAME);

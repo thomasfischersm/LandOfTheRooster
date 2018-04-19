@@ -36,7 +36,7 @@ final class ProductionExecutor {
         List<ProductionRule> productionRules =
                 dao.getProductionRulesByBuildingTypeId(buildingTypeId);
 
-        if ((productionRules == null) || (productionRules.size() ==0)) {
+        if ((productionRules == null) || (productionRules.size() == 0)) {
             Log.i(LOG_TAG, "produce2: There are no production rules for building type "
                     + buildingTypeId);
             return;

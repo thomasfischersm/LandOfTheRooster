@@ -18,14 +18,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import static com.playposse.landoftherooster.GameConfig.DEFAULT_CONQUEST_PRIZE_RESOURCE_AMOUNT;
+
 /**
  * A business object that represents and simulated a single battle.
  */
 public class Battle {
 
     private static final String LOG_TAG = Battle.class.getSimpleName();
-
-    private static final int DEFAULT_CONQUEST_PRIZE_RESOURCE_AMOUNT = 1;
 
     private final Context context;
     private final BuildingWithType buildingWithType;

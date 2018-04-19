@@ -7,14 +7,13 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 
-import static com.playposse.landoftherooster.dialog.BuildingInteractionDialogFragment.IMPLIED_PEASANT_COUNT;
+import static com.playposse.landoftherooster.GameConfig.IMPLIED_PEASANT_COUNT;
+import static com.playposse.landoftherooster.GameConfig.MAX_PEASANT_BUILDING_CAPACITY;
 
 /**
  * An {@link ActionData} to assign a peasant to a building
  */
 public class PeasantActionData extends ActionData {
-
-    public static final int MAX_PEASANT_BUILDING_CAPACITY = 5;
 
     private final int unitTypeId;
     private final long buildingId;

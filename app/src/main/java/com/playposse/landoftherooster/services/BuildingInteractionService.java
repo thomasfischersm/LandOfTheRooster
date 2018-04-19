@@ -18,6 +18,9 @@ import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastM
 import java.util.Date;
 import java.util.List;
 
+import static com.playposse.landoftherooster.GameConfig.BATTLE_RESPAWN_DURATION;
+import static com.playposse.landoftherooster.GameConfig.INTERACTION_RADIUS;
+
 /**
  * A service that detects when the user walks into the area of an existing building. It enables the
  * user to do the functions that the building offers. In particularly, it converts one resource into
@@ -26,17 +29,6 @@ import java.util.List;
 public class BuildingInteractionService implements ILocationAwareService {
 
     private static final String LOG_TAG = BuildingInteractionService.class.getSimpleName();
-
-    /**
-     * The radius in meters within a building can be interacted with. This counteracts the
-     * inaccuracy of the GPS location.
-     */
-    private static final int INTERACTION_RADIUS = 30;
-
-    /**
-     * Time in ms that it takes for a battle building to respawn units.
-     */
-    private static final int RESPAWN_DURATION = 24 * 60 * 60 * 1_000;
 
     private final Context context;
 
@@ -78,9 +70,9 @@ public class BuildingInteractionService implements ILocationAwareService {
         Date lastConquest = building.getLastConquest();
         if (lastConquest != null) {
             long lastConquestMs = lastConquest.getTime();
-            if (lastConquestMs + RESPAWN_DURATION > System.currentTimeMillis()) {
+            if (lastConquestMs + BATTLE_RESPAWN_DURATION > System.currentTimeMillis()) {
                 // Building has not yet re-spawned.
-                long remainingMs = lastConquestMs + RESPAWN_DURATION - System.currentTimeMillis();
+                long remainingMs = lastConquestMs + BATTLE_RESPAWN_DURATION - System.currentTimeMillis();
                 RoosterBroadcastManager.send(
                         context,
                         new BuildingNeedsToRespawnBroadcastIntent(remainingMs));

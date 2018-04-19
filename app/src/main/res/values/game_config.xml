@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Game configuration constants. -->
+    <!-- The idea is to have product flavors for different games that use this code as the game
+         engine. Each game could have its own global game configuration. -->
+
+    <!-- Each building has a number of peasants that exist without having to create unit rows. -->
+    <integer name="implied_peasant_count">1</integer>
+
+    <integer name="peasant_id">1</integer>
+
+    <integer name="max_peasant_building_capacity">5</integer>
+
+    <integer name="default_conquest_prize_resource_amount">1</integer>
+
+    <integer name="initial_building_type_id">0</integer>
+
+    <integer name="max_grace_distance">100</integer>
+
+    <integer name="interaction_radius">30</integer>
+
+    <integer name="battle_respawn_duration">86400000</integer> <!-- 24 hours -->
+
+    <integer name="production_cycle_minutes">60</integer>
+</resources>

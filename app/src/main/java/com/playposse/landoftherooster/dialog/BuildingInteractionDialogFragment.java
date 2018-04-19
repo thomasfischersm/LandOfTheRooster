@@ -37,8 +37,10 @@ import java.util.List;
 import butterknife.BindView;
 
 import static android.view.View.GONE;
-import static com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil.PRODUCTION_CYCLE_MS;
-import static com.playposse.landoftherooster.dialog.support.PeasantActionData.MAX_PEASANT_BUILDING_CAPACITY;
+import static com.playposse.landoftherooster.GameConfig.IMPLIED_PEASANT_COUNT;
+import static com.playposse.landoftherooster.GameConfig.MAX_PEASANT_BUILDING_CAPACITY;
+import static com.playposse.landoftherooster.GameConfig.PEASANT_ID;
+import static com.playposse.landoftherooster.GameConfig.PRODUCTION_CYCLE_MS;
 
 /**
  * A dialog that lets the user drop off resources, pickup resources, and assign peasants to a
@@ -46,13 +48,6 @@ import static com.playposse.landoftherooster.dialog.support.PeasantActionData.MA
  */
 public class BuildingInteractionDialogFragment extends BaseDialogFragment {
 
-    /**
-     * Base amount of peasants in each building. A building is implied to have at least one peasant,
-     * who cannot leave. To save database space, this peasant doesn't have a unit instance.
-     */
-    public static final int IMPLIED_PEASANT_COUNT = 1;
-
-    private static final int PEASANT_ID = 1;
     private static final String NEW_LINE_CHARACTER = "\n";
     private static final String LIST_SEPARATOR = ", ";
     private static final String BUILDING_ID_ARG = "buildingId";

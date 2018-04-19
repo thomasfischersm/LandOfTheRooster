@@ -17,6 +17,9 @@ import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule
 import java.util.List;
 import java.util.Random;
 
+import static com.playposse.landoftherooster.GameConfig.INITIAL_BUILDING_TYPE_ID;
+import static com.playposse.landoftherooster.GameConfig.MAX_GRACE_DISTANCE;
+
 /**
  * A background service that discovers buildings.
  * <p>
@@ -27,22 +30,6 @@ import java.util.Random;
 public class BuildingDiscoveryService implements ILocationAwareService {
 
     private static final String LOG_TAG = BuildingDiscoveryService.class.getSimpleName();
-
-    private static final int INITIAL_BUILDING_TYPE = 0;
-
-    /**
-     * An additional distance that the user can go while still being able to discover a building.
-     * <p>
-     * <p>Each building type has a min and a max. The discovery service decides on an actual
-     * distance somewhere between those maximum. As long as the user has walked the distance, a
-     * discovery happens. However, to prevent a really far building from all other buildings, a
-     * safeguard prevents the discovery when the user exceeds the max distance.
-     * <p>
-     * <p>While that is good, if the actual distance and the max distance is very close, GPS
-     * inaccuracy could make it hard to for the user to trigger. So a fudge factor is added to max
-     * to ensure that a reasonable discovery is made.
-     */
-    private static final int MAX_GRACE_DISTANCE = 100;
 
     private final Context context;
     private final Random random = new Random();
@@ -62,7 +49,7 @@ public class BuildingDiscoveryService implements ILocationAwareService {
         Log.i(LOG_TAG, "initNextBuildingType: Last building is of type " + lastBuilding);
 
         if (lastBuilding == null) {
-            nextBuildingType = getNextBuildingType(context, INITIAL_BUILDING_TYPE);
+            nextBuildingType = getNextBuildingType(context, INITIAL_BUILDING_TYPE_ID);
             Log.i(LOG_TAG, "initNextBuildingType: Loaded initial building type "
                     + nextBuildingType);
         } else {
