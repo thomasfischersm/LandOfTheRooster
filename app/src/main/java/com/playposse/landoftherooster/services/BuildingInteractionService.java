@@ -10,6 +10,7 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.LeftBuildingBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
@@ -58,8 +59,10 @@ public class BuildingInteractionService implements ILocationAwareService {
 
             BuildingType buildingType = buildingWithType.getBuildingType();
 
-            // Try producing.
-            ProductionExecutor.produce(context, buildingWithType);
+            // Show user the building resources dialog.
+            RoosterBroadcastManager.send(
+                    context,
+                    new BuildingAvailableBroadcastIntent(buildingWithType.getBuilding().getId()));
 
             // Try fighting.
             if (buildingType.getEnemyUnitCount() != null) {

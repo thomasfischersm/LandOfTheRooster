@@ -72,7 +72,7 @@ public final class StringUtil {
         return DateFormat.format(pattern, timeInMillis).toString();
     }
 
-    public static List<Integer> parseNumberList(@Nullable String str) {
+    public static List<Integer> splitToIntList(@Nullable String str) {
         List<Integer> numbers = new ArrayList<>();
 
         if (str != null) {
@@ -82,5 +82,13 @@ public final class StringUtil {
         }
 
         return numbers;
+    }
+
+    public static String capitalize(@Nullable String str) {
+        if ((str == null) || (str.length() == 0)) {
+            return str;
+        }
+
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 }

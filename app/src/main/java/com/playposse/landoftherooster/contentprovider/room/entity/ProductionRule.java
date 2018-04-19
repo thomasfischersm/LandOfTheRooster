@@ -7,6 +7,8 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.playposse.landoftherooster.util.StringUtil;
+
 import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 
 /**
@@ -96,5 +98,9 @@ public class ProductionRule {
 
     public void setOutputUnitTypeId(Integer outputUnitTypeId) {
         this.outputUnitTypeId = outputUnitTypeId;
+    }
+
+    public boolean isFree() {
+        return StringUtil.isEmpty(inputResourceTypeIds) && StringUtil.isEmpty(inputUnitTypeIds);
     }
 }

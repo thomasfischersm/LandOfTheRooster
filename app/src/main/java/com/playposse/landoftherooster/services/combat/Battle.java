@@ -213,7 +213,8 @@ public class Battle {
         RoosterDaoUtil.creditResource(
                 context,
                 conquestPrizeResourceType.getId(),
-                DEFAULT_CONQUEST_PRIZE_RESOURCE_AMOUNT);
+                DEFAULT_CONQUEST_PRIZE_RESOURCE_AMOUNT,
+                null);
     }
 
     private int getCommulativeHealth(List<UnitWithType> unitWithTypes) {

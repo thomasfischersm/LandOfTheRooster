@@ -51,8 +51,10 @@ import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 import com.playposse.landoftherooster.dialog.BattleAvailableDialog;
+import com.playposse.landoftherooster.dialog.BuildingInteractionDialog;
 import com.playposse.landoftherooster.dialog.BuildingNeedsToRespawnDialog;
 import com.playposse.landoftherooster.services.broadcastintent.BattleAvailableBroadcastIntent;
+import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
@@ -412,7 +414,12 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                 BuildingNeedsToRespawnDialog.show(
                         KingdomActivity.this,
                         buildingNeedsToRespawnBroadcastIntent.getRemainingMs());
-
+            } else if (roosterIntent instanceof BuildingAvailableBroadcastIntent) {
+                BuildingAvailableBroadcastIntent buildingAvailableBroadcastIntent =
+                        (BuildingAvailableBroadcastIntent) roosterIntent;
+                BuildingInteractionDialog.show(
+                        KingdomActivity.this,
+                        buildingAvailableBroadcastIntent.getBuildingId());
             }
         }
     }
@@ -429,7 +436,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         @Override
         protected Void doInBackground(Void... voids) {
             RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-            resourcesWithType = dao.getAllResourcesWithType();
+            resourcesWithType = dao.getAllResourcesWithTypeJoiningUser();
             unitsWithType = dao.getUnitsWithTypeJoiningUserAsLiveData();
 
             return null;

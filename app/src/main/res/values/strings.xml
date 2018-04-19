@@ -45,6 +45,21 @@
     <string name="building_needs_to_respawn_dialog_countdown">%1$02d : %2$02d : %3$02d</string>
     <string name="countdown_content_description">Drawing of a clock to indicate a countdown.</string>
 
+    <!-- Building resources dialog -->
+    <string name="building_icon_content_description">An illustrative icon for the building.</string>
+    <string name="actions_heading">Actions</string>
+    <string name="production_rules_heading">Production</string>
+    <string name="production_speed_heading">Speed</string>
+    <string name="next_unit_count_down_heading">Next unit produced</string>
+    <string name="production_rule_template">%1$s creates %2$s.</string>
+    <string name="free_production_rule_template">Generates %1$s for free.</string>
+    <string name="unit_template">%1$d %2$s</string>
+    <string name="drop_off_action">Drop off</string>
+    <string name="pick_up_action">Pick up</string>
+    <string name="assign_action">Assign</string>
+    <string name="production_speed">%1$d peasants produce 1 unit per %2$d minutes.</string>
+    <string name="production_speed_hint">\n(Add a peasant to cut the time to %1$d minutes.)</string>
+
     <!-- Common -->
     <string name="dialog_yes_button">Yes</string>
     <string name="dialog_no_button">No</string>

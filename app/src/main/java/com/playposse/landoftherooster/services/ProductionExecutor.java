@@ -60,7 +60,7 @@ final class ProductionExecutor {
         if (producesResource && !consumesResource) {
             // The production rule may convert a unit to a resource or produce a resource for free.
             int maxCarryingCapacity = dao.getCarryingCapacity() + 1; // +1 for the user itself.
-            int freeCarryingCapacity = maxCarryingCapacity - dao.getResourceCount();
+            int freeCarryingCapacity = maxCarryingCapacity - dao.getResourceCountJoiningUser();
 
             if (freeCarryingCapacity < 1) {
                 Log.i(LOG_TAG, "produceOneThing: The user has no more carrying capacity left.");
@@ -71,9 +71,9 @@ final class ProductionExecutor {
         // Check for required precursors.
         Map<Integer, Resource> resourceMap = new HashMap<>();
         List<Integer> inputResourceTypeIds =
-                StringUtil.parseNumberList(productionRule.getInputResourceTypeIds());
+                StringUtil.splitToIntList(productionRule.getInputResourceTypeIds());
         for (int resourceTypeId : inputResourceTypeIds) {
-            Resource resource = dao.getResourceByTypeId(resourceTypeId);
+            Resource resource = dao.getResourceJoiningUserByTypeId(resourceTypeId);
             if ((resource == null) || (resource.getAmount() < 1)) {
                 Log.d(LOG_TAG, "produceOneThing: Missing resource type " + resourceTypeId);
                 return false;
@@ -85,9 +85,9 @@ final class ProductionExecutor {
         // Check for required precursors.
         Map<Integer, Unit> unitMap = new HashMap<>();
         List<Integer> inputUnitTypeIds =
-                StringUtil.parseNumberList(productionRule.getInputUnitTypeIds());
+                StringUtil.splitToIntList(productionRule.getInputUnitTypeIds());
         for (int unitTypeId : inputUnitTypeIds) {
-            List<Unit> units = dao.getUnitsByTypeId(unitTypeId);
+            List<Unit> units = dao.getUnitsJoiningUserByTypeId(unitTypeId);
             if ((units == null) || (units.size() < 1)) {
                 Log.d(LOG_TAG, "produceOneThing: Missing unit type " + unitTypeId);
                 return false;
@@ -99,8 +99,12 @@ final class ProductionExecutor {
         // Debit resources.
         for (int resourceTypeId : inputResourceTypeIds) {
             Resource resource = resourceMap.get(resourceTypeId);
-            resource.setAmount(resource.getAmount() - 1);
-            dao.update(resource);
+            RoosterDaoUtil.creditResource(
+                    context,
+                    resource,
+                    resourceTypeId,
+                    -1,
+                    null);
         }
 
         // Debit units.
@@ -110,7 +114,7 @@ final class ProductionExecutor {
 
         // Credit production
         if (outputResourceTypeId != null) {
-            RoosterDaoUtil.creditResource(context, outputResourceTypeId, 1);
+            RoosterDaoUtil.creditResource(context, outputResourceTypeId, 1, null);
         } else {
             Integer outputUnitTypeId = productionRule.getOutputUnitTypeId();
             if (outputUnitTypeId != null) {
@@ -221,7 +225,7 @@ final class ProductionExecutor {
 //        }
 //
 //        int maxCarryingCapacity = dao.getCarryingCapacity() + 1; // +1 for the user itself.
-//        int freeCarryingCapacity = maxCarryingCapacity - dao.getResourceCount();
+//        int freeCarryingCapacity = maxCarryingCapacity - dao.getResourceCountJoiningUser();
 //        int futureAvailableCarryingCapacity =
 //                Math.min(maxCarryingCapacity, freeCarryingCapacity + precursorResourceAmount);
 //        int productionAmount =
@@ -346,7 +350,7 @@ final class ProductionExecutor {
 //
 //    private static boolean debit(Context context, ResourceType resourceType, int productionAmount) {
 //        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-//        Resource resource = dao.getResourceByTypeId(resourceType.getId());
+//        Resource resource = dao.getResourceJoiningUserByTypeId(resourceType.getId());
 //
 //        if (resource.getAmount() >= productionAmount) {
 //            resource.setAmount(resource.getAmount() - productionAmount);
@@ -362,7 +366,7 @@ final class ProductionExecutor {
 //
 //    private static boolean debit(Context context, UnitType unitType, int productionAmount) {
 //        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-//        List<Unit> units = dao.getUnitsByTypeId(unitType.getId());
+//        List<Unit> units = dao.getUnitsJoiningUserByTypeId(unitType.getId());
 //
 //        if ((units != null) && (units.size() >= productionAmount)) {
 //            for (int i = 0; i < productionAmount; i++) {

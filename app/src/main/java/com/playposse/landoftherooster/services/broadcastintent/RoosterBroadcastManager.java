@@ -31,6 +31,7 @@ public class RoosterBroadcastManager {
                 add(BattleAvailableBroadcastIntent.class);
                 add(LeftBuildingBroadcastIntent.class);
                 add(BuildingNeedsToRespawnBroadcastIntent.class);
+                add(BuildingAvailableBroadcastIntent.class);
             }};
 
     public RoosterBroadcastManager(Context context) {

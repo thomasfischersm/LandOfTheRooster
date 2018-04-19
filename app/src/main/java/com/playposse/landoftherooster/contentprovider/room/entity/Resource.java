@@ -3,9 +3,12 @@ package com.playposse.landoftherooster.contentprovider.room.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
+
+import javax.annotation.Nullable;
 
 import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 
@@ -29,12 +32,21 @@ public class Resource {
     @NonNull
     private int amount;
 
+    @ColumnInfo(name = "located_at_building_id")
+    private Integer locatedAtBuildingId;
+
     public Resource() {
     }
 
-    public Resource(@NonNull int resourceTypeId, @NonNull int amount) {
+    @Ignore
+    public Resource(
+            @NonNull int resourceTypeId,
+            @NonNull int amount,
+            @Nullable Integer locatedAtBuildingId) {
+
         this.resourceTypeId = resourceTypeId;
         this.amount = amount;
+        this.locatedAtBuildingId = locatedAtBuildingId;
     }
 
     public int getId() {
@@ -61,5 +73,13 @@ public class Resource {
 
     public void setAmount(@NonNull int amount) {
         this.amount = amount;
+    }
+
+    public Integer getLocatedAtBuildingId() {
+        return locatedAtBuildingId;
+    }
+
+    public void setLocatedAtBuildingId(Integer locatedAtBuildingId) {
+        this.locatedAtBuildingId = locatedAtBuildingId;
     }
 }

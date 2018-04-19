@@ -32,7 +32,7 @@ import java.io.IOException;
         ResourceType.class,
         Unit.class,
         UnitType.class},
-        version = 10,
+        version = 11,
         exportSchema = true)
 @TypeConverters({DateConverter.class})
 public abstract class RoosterDatabase extends RoomDatabase {
