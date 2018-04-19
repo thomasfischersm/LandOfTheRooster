@@ -14,16 +14,17 @@ import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.InputResourceTypeIterator;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.InputUnitTypeIterator;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
-import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.glide.GlideApp;
+import com.playposse.landoftherooster.util.SimpleStringJoiner;
 import com.playposse.landoftherooster.util.StringUtil;
 
 import java.util.ArrayList;
@@ -213,46 +214,39 @@ public final class BuildingInteractionDialog {
         }
 
         private String formatProductionInput(ProductionRule productionRule) {
-            StringBuilder sb = new StringBuilder();
+            SimpleStringJoiner joiner =
+                    new SimpleStringJoiner(LIST_SEPARATOR, "1 ", null);
 
             for (ResourceType resourceType : new InputResourceTypeIterator(dao, productionRule)) {
-                if (sb.length() > 0) {
-                    sb.append(LIST_SEPARATOR);
-                }
-
-                sb.append("1 " + resourceType.getName());
+                joiner.add(resourceType.getName());
             }
 
             for (UnitType unitType : new InputUnitTypeIterator(dao, productionRule)) {
-                if (sb.length() > 0) {
-                    sb.append(LIST_SEPARATOR);
-                }
-
-                // TODO: Optimize loading of strings to a single query.
-                sb.append("1 " + unitType.getName());
+                joiner.add(unitType.getName());
             }
 
-            return sb.toString();
+            return joiner.toString();
         }
 
         private String formatProductionOutput(ProductionRule productionRule) {
-            StringBuilder sb = new StringBuilder();
+            SimpleStringJoiner joiner =
+                    new SimpleStringJoiner(LIST_SEPARATOR, "1 ", null);
 
             Integer resourceTypeId = productionRule.getOutputResourceTypeId();
             if (resourceTypeId != null) {
                 // TODO: Optimize loading of strings to a single query.
                 ResourceType resourceType = dao.getResourceTypeById(resourceTypeId);
-                sb.append("1 " + resourceType.getName());
+                joiner.add(resourceType.getName());
             }
 
             Integer unitTypeId = productionRule.getOutputUnitTypeId();
             if (unitTypeId != null) {
                 // TODO: Optimize loading of strings to a single query.
                 UnitType unitType = dao.getUnitTypeById(unitTypeId);
-                sb.append("1 " + unitType.getName());
+                joiner.add(unitType.getName());
             }
 
-            return sb.toString();
+            return joiner.toString();
         }
 
         private void generateActions() {
