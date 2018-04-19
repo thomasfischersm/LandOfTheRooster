@@ -1,11 +1,8 @@
-package com.playposse.landoftherooster.activity;
+package com.playposse.landoftherooster.dialog;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -28,15 +25,16 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
- * An {@link Activity} that carries out a battle.
+ * A dialog that carries out the battle and shows the result.
  */
-public class BattleActivity extends AppCompatActivity {
+public class BattleDialogFragment extends BaseDialogFragment {
 
     private static final String BATTLE_SUMMARY_KEY = "battleSummary";
+    private static final String BUILDING_ID_KEY = "buildingId";
 
+    private long buildingId;
     private BattleSummaryParcelable battleSummary;
 
     @BindView(R.id.battle_outcome_text_view) TextView battleOutcomeTextView;
@@ -44,20 +42,56 @@ public class BattleActivity extends AppCompatActivity {
     @BindView(R.id.battle_info_text_view) TextView battleInfoTextView;
     @BindView(R.id.battle_events_recycler_view) RecyclerView battleEventsRecyclerView;
 
+    public BattleDialogFragment() {
+        super(R.layout.dialog_battle);
+
+        setShowReturnToMapButton(true);
+    }
+
+    public static BattleDialogFragment newInstance(long buildingId) {
+        BattleDialogFragment fragment = new BattleDialogFragment();
+        Bundle args = new Bundle();
+        args.putLong(BUILDING_ID_KEY, buildingId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_battle);
-
-        ButterKnife.bind(this);
+    protected void readArguments(Bundle savedInstanceState) {
+        if (getArguments() != null) {
+            buildingId = getArguments().getLong(BUILDING_ID_KEY);
+        }
 
         if ((savedInstanceState != null) && savedInstanceState.containsKey(BATTLE_SUMMARY_KEY)) {
             battleSummary = savedInstanceState.getParcelable(BATTLE_SUMMARY_KEY);
-            showBattleSummary();
-        } else {
-            new ExecuteBattleAsyncTask().execute();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable(BATTLE_SUMMARY_KEY, battleSummary);
+    }
+
+    @Override
+    protected void doInBackground() {
+        // Check if the battle has already completed. Avoid redoing the battle for screen rotations.
+        if (battleSummary != null) {
+            return;
+        }
+
+        Context context = getActivity();
+        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
+        BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+
+        Battle battle = new Battle(context, buildingWithType);
+        battleSummary = battle.fight();
+    }
+
+    @Override
+    protected void onPostExecute() {
+        showBattleSummary();
     }
 
     private void showBattleSummary() {
@@ -82,45 +116,9 @@ public class BattleActivity extends AppCompatActivity {
         battleInfoTextView.setText(infoStr);
 
         battleEventsRecyclerView.setHasFixedSize(true);
-        battleEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        battleEventsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         BattleEventAdapter adapter = new BattleEventAdapter(battleSummary.getBattleEvents());
         battleEventsRecyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putParcelable(BATTLE_SUMMARY_KEY, battleSummary);
-    }
-
-    @OnClick(R.id.return_to_map_button)
-    void onReturnToMapButtonClicked() {
-        ActivityNavigator.startKingdomActivity(this);
-    }
-
-    /**
-     * An {@link AsyncTask} that executes the battle.
-     */
-    class ExecuteBattleAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Context context = BattleActivity.this;
-            long buildingId = ActivityNavigator.getBuildingId(getIntent());
-            RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-            BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
-
-            Battle battle = new Battle(context, buildingWithType);
-            battleSummary = battle.fight();
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            showBattleSummary();
-        }
     }
 
     /**
@@ -137,7 +135,7 @@ public class BattleActivity extends AppCompatActivity {
         @NonNull
         @Override
         public BattleEventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(BattleActivity.this).inflate(
+            View view = LayoutInflater.from(getActivity()).inflate(
                     R.layout.list_item_battle_event,
                     parent,
                     false);

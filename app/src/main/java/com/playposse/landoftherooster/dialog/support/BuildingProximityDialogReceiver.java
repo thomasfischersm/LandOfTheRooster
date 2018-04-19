@@ -1,7 +1,6 @@
 package com.playposse.landoftherooster.dialog.support;
 
-import android.app.AlertDialog;
-import android.content.Context;
+import android.app.DialogFragment;
 import android.util.Log;
 
 import com.playposse.landoftherooster.services.broadcastintent.LeftBuildingBroadcastIntent;
@@ -20,13 +19,15 @@ public class BuildingProximityDialogReceiver implements RoosterBroadcastManager.
 
     private static final String LOG_TAG = BuildingProximityDialogReceiver.class.getSimpleName();
 
-    private AlertDialog dialog;
+    private final DialogFragment dialogFragment;
 
     @Nullable
     private ScheduledExecutorService scheduledExecutorService;
 
-    public BuildingProximityDialogReceiver(Context context) {
-        RoosterBroadcastManager.getInstance(context)
+    public BuildingProximityDialogReceiver(DialogFragment dialogFragment) {
+        this.dialogFragment = dialogFragment;
+
+        RoosterBroadcastManager.getInstance(dialogFragment.getActivity())
                 .register(this);
     }
 
@@ -36,23 +37,7 @@ public class BuildingProximityDialogReceiver implements RoosterBroadcastManager.
             Log.i(LOG_TAG, "onReceive: Automatically dismissing dialog because the user " +
                     "walked away from the building.");
 
-            if (scheduledExecutorService != null) {
-                scheduledExecutorService.shutdownNow();
-            }
-
-            if (dialog != null) {
-                dialog.dismiss();
-            }
+            dialogFragment.dismiss();
         }
-    }
-
-    public void setDialog(AlertDialog dialog) {
-        this.dialog = dialog;
-    }
-
-    public void setScheduledExecutorService(
-            @Nullable ScheduledExecutorService scheduledExecutorService) {
-
-        this.scheduledExecutorService = scheduledExecutorService;
     }
 }

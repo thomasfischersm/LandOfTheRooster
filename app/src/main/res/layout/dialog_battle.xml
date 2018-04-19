@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.BattleActivity">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/battle_outcome_text_view"
@@ -39,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/return_to_map_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/battle_outcome_image_view"
         tools:text="Enemy lost 3 units and 240 health.\nYou lost 10 units and 480 health."/>
 
@@ -48,19 +47,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/return_to_map_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/battle_outcome_text_view"/>
-
-    <Button
-        android:id="@+id/return_to_map_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/return_to_map_button_label"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/start_guide"
@@ -76,5 +66,4 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent=".75"/>
-
 </android.support.constraint.ConstraintLayout>

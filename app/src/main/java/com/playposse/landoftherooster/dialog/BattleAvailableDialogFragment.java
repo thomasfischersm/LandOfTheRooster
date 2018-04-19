@@ -68,7 +68,8 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         dismiss();
 
-                        ActivityNavigator.startBattleActivity(getActivity(), buildingId);
+                        BattleDialogFragment.newInstance(buildingId)
+                                .show(getFragmentManager(), null);
                     }
                 });
     }

@@ -77,8 +77,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
         // Make the dialog disappear when the user walks away.
         if (disappearOnDistance) {
-            proximityReceiver = new BuildingProximityDialogReceiver(getActivity());
-            proximityReceiver.setDialog(dialog);
+            proximityReceiver = new BuildingProximityDialogReceiver(this);
         }
 
         new LoadAsyncTask(this, null).execute();
