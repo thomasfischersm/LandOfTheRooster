@@ -346,7 +346,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
         // TODO: Check if the item is already produced.
 
         // Calculate remaining time.
-        Date lastProduction = buildingWithType.getBuilding().getLastProduction();
+        Date lastProduction = buildingWithType.getBuilding().getProductionStart();
         if (lastProduction == null) {
             return;
         }

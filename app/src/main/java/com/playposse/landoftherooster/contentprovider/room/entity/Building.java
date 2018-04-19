@@ -39,9 +39,9 @@ public class Building {
     @Nullable
     private Date lastConquest;
 
-    @ColumnInfo(name = "last_production")
+    @ColumnInfo(name = "production_start")
     @Nullable
-    private Date lastProduction;
+    private Date productionStart;
 
     public Building() {
     }
@@ -51,8 +51,6 @@ public class Building {
         this.buildingTypeId = buildingTypeId;
         this.latitude = latitude;
         this.longitude = longitude;
-
-        lastProduction = new Date();
     }
 
     public long getId() {
@@ -98,11 +96,11 @@ public class Building {
     }
 
     @Nullable
-    public Date getLastProduction() {
-        return lastProduction;
+    public Date getProductionStart() {
+        return productionStart;
     }
 
-    public void setLastProduction(@Nullable Date lastProduction) {
-        this.lastProduction = lastProduction;
+    public void setProductionStart(@Nullable Date productionStart) {
+        this.productionStart = productionStart;
     }
 }
