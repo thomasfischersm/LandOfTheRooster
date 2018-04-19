@@ -49,6 +49,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         isInitialized = true;
 
+        readArguments(savedInstanceState);
+
         // Inflate custom layout
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         rootView = inflater.inflate(layoutResId, null);
@@ -96,6 +98,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
         closeCountdown();
     }
+
+    protected abstract void readArguments(Bundle savedInstanceState);
 
     protected abstract void doInBackground();
 
@@ -149,14 +153,13 @@ public abstract class BaseDialogFragment extends DialogFragment {
     }
 
     protected void startCountdown(
-            TextView headingTextView,
+            @Nullable TextView headingTextView,
             TextView countdownTextView,
             long remainingMs) {
 
         closeCountdown();
 
-        headingTextView.setVisibility(View.VISIBLE);
-        countdownTextView.setVisibility(View.VISIBLE);
+        setCountdownVisibility(headingTextView, countdownTextView, View.VISIBLE);
 
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         CountdownUpdateRunnable countdownTask =
@@ -164,11 +167,20 @@ public abstract class BaseDialogFragment extends DialogFragment {
         scheduledExecutorService.scheduleAtFixedRate(countdownTask, 1, 1, TimeUnit.SECONDS);
     }
 
-    protected void clearCountdown(TextView headingTextView, TextView countdownTextView) {
+    protected void clearCountdown(@Nullable TextView headingTextView, TextView countdownTextView) {
         closeCountdown();
 
-        headingTextView.setVisibility(View.GONE);
-        countdownTextView.setVisibility(View.GONE);
+        setCountdownVisibility(headingTextView, countdownTextView, View.GONE);
+    }
+
+    private void setCountdownVisibility(
+            @Nullable TextView headingTextView,
+            TextView countdownTextView, int gone) {
+
+        if (headingTextView != null) {
+            headingTextView.setVisibility(gone);
+        }
+        countdownTextView.setVisibility(gone);
     }
 
     private void closeCountdown() {

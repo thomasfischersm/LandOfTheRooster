@@ -1,6 +1,5 @@
 package com.playposse.landoftherooster.dialog;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -86,10 +85,8 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    protected void readArguments(Bundle savedInstanceState) {
         buildingId = getArguments().getLong(BUILDING_ID_ARG);
-
-        return super.onCreateDialog(savedInstanceState);
     }
 
     @Override

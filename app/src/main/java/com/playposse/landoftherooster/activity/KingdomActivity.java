@@ -52,7 +52,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 import com.playposse.landoftherooster.dialog.BattleAvailableDialogFragment;
 import com.playposse.landoftherooster.dialog.BuildingInteractionDialogFragment;
-import com.playposse.landoftherooster.dialog.BuildingNeedsToRespawnDialog;
+import com.playposse.landoftherooster.dialog.BuildingNeedsToRespawnDialogFragment;
 import com.playposse.landoftherooster.services.broadcastintent.BattleAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
@@ -408,9 +408,8 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
             } else if (roosterIntent instanceof BuildingNeedsToRespawnBroadcastIntent) {
                 BuildingNeedsToRespawnBroadcastIntent buildingNeedsToRespawnBroadcastIntent =
                         (BuildingNeedsToRespawnBroadcastIntent) roosterIntent;
-                BuildingNeedsToRespawnDialog.show(
-                        KingdomActivity.this,
-                        buildingNeedsToRespawnBroadcastIntent.getRemainingMs());
+                BuildingNeedsToRespawnDialogFragment.newInstance(roosterIntent)
+                        .show(getFragmentManager(), null);
             } else if (roosterIntent instanceof BuildingAvailableBroadcastIntent) {
                 BuildingInteractionDialogFragment.newInstance(roosterIntent)
                         .show(getFragmentManager(), null);
