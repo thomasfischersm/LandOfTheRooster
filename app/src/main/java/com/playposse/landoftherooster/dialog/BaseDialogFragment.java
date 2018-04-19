@@ -26,13 +26,14 @@ import butterknife.ButterKnife;
  * A wrapper that makes it easier to deal with {@link AlertDialog.Builder}. The dialogs of this
  * app commonly have a custom view with
  */
-public abstract class BaseDialogFragment<D extends BaseDialogFragment<?>> extends DialogFragment {
+public abstract class BaseDialogFragment extends DialogFragment {
 
     private final int layoutResId;
 
     private boolean isInitialized = false;
-    private boolean showReturnToMapButton = false;
     private boolean disappearOnDistance = false;
+    @Nullable private ButtonInfo positiveButtonInfo;
+    @Nullable private ButtonInfo negativeButtonInfo;
 
     private View rootView;
     private BuildingProximityDialogReceiver proximityReceiver;
@@ -54,18 +55,20 @@ public abstract class BaseDialogFragment<D extends BaseDialogFragment<?>> extend
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(rootView);
 
-        // Add positive action to return to map.
-        if (showReturnToMapButton) {
-            builder
-                    .setPositiveButton(
-                            R.string.return_to_map_button_label,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dismiss();
-                                }
-                            });
+        // Add positive button.
+        if (positiveButtonInfo != null) {
+            builder.setPositiveButton(
+                    positiveButtonInfo.buttonLabelResId,
+                    positiveButtonInfo.getOnClickListener());
         }
+
+        // Add negative button.
+        if (negativeButtonInfo != null) {
+            builder.setNegativeButton(
+                    negativeButtonInfo.buttonLabelResId,
+                    negativeButtonInfo.getOnClickListener());
+        }
+
         AlertDialog dialog = builder.create();
 
         // Make the dialog disappear when the user walks away.
@@ -96,29 +99,51 @@ public abstract class BaseDialogFragment<D extends BaseDialogFragment<?>> extend
 
     protected abstract void onPostExecute();
 
-    protected void onCountdownAtZero() {}
-
-    @SuppressWarnings("unchecked")
-    private D get() {
-        return (D) this;
+    protected void onCountdownAtZero() {
     }
 
     private void failOnInitialized() {
         if (isInitialized) {
-            throw new IllegalStateException("Cannot configure BaseDialogFragment after initialization.");
+            throw new IllegalStateException(
+                    "Cannot configure BaseDialogFragment after initialization.");
         }
     }
 
-    public D setShowReturnToMapButton(boolean showReturnToMapButton) {
+    protected void setShowReturnToMapButton(boolean showReturnToMapButton) {
         failOnInitialized();
-        this.showReturnToMapButton = showReturnToMapButton;
-        return get();
+
+        // Add positive action to return to map.
+        if (showReturnToMapButton) {
+            positiveButtonInfo = new ButtonInfo(
+                    R.string.return_to_map_button_label,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dismiss();
+                        }
+                    });
+        } else {
+            positiveButtonInfo = null;
+        }
     }
 
-    public D setDisappearOnDistance(boolean disappearOnDistance) {
+    protected void setDisappearOnDistance(boolean disappearOnDistance) {
         failOnInitialized();
         this.disappearOnDistance = disappearOnDistance;
-        return get();
+    }
+
+    protected void setPositiveButton(
+            int buttonLabelResId,
+            DialogInterface.OnClickListener clickListener) {
+
+        positiveButtonInfo = new ButtonInfo(buttonLabelResId, clickListener);
+    }
+
+    protected void setNegativeButton(
+            int buttonLabelResId,
+            DialogInterface.OnClickListener clickListener) {
+
+        negativeButtonInfo = new ButtonInfo(buttonLabelResId, clickListener);
     }
 
     protected void startCountdown(
@@ -161,18 +186,18 @@ public abstract class BaseDialogFragment<D extends BaseDialogFragment<?>> extend
      */
     private static class LoadAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private final WeakReference<BaseDialogFragment<?>> fragmentReference;
+        private final WeakReference<BaseDialogFragment> fragmentReference;
         @Nullable private final Runnable runnable;
 
-        private LoadAsyncTask(BaseDialogFragment<?> fragment, @Nullable Runnable runnable) {
+        private LoadAsyncTask(BaseDialogFragment fragment, @Nullable Runnable runnable) {
             this.runnable = runnable;
 
-            fragmentReference = new WeakReference<BaseDialogFragment<?>>(fragment);
+            fragmentReference = new WeakReference<BaseDialogFragment>(fragment);
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            BaseDialogFragment<?> fragment = fragmentReference.get();
+            BaseDialogFragment fragment = fragmentReference.get();
             if ((fragment != null) && (runnable != null)) {
                 runnable.run();
             }
@@ -186,12 +211,35 @@ public abstract class BaseDialogFragment<D extends BaseDialogFragment<?>> extend
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            BaseDialogFragment<?> fragment = fragmentReference.get();
+            BaseDialogFragment fragment = fragmentReference.get();
             if (fragment != null) {
                 ButterKnife.bind(fragment, fragment.rootView);
 
                 fragment.onPostExecute();
             }
+        }
+    }
+
+    /**
+     * A little helper to keep information about optional positive and negative dialog buttons
+     * together.
+     */
+    private static class ButtonInfo {
+
+        private final int buttonLabelResId;
+        private final DialogInterface.OnClickListener onClickListener;
+
+        private ButtonInfo(int buttonLabelResId, DialogInterface.OnClickListener onClickListener) {
+            this.buttonLabelResId = buttonLabelResId;
+            this.onClickListener = onClickListener;
+        }
+
+        private int getButtonLabelResId() {
+            return buttonLabelResId;
+        }
+
+        private DialogInterface.OnClickListener getOnClickListener() {
+            return onClickListener;
         }
     }
 }

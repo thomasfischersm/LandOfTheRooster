@@ -50,7 +50,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithTy
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
-import com.playposse.landoftherooster.dialog.BattleAvailableDialog;
+import com.playposse.landoftherooster.dialog.BattleAvailableDialogFragment;
 import com.playposse.landoftherooster.dialog.BuildingInteractionDialogFragment;
 import com.playposse.landoftherooster.dialog.BuildingNeedsToRespawnDialog;
 import com.playposse.landoftherooster.services.broadcastintent.BattleAvailableBroadcastIntent;
@@ -403,11 +403,8 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         @Override
         public void onReceive(RoosterBroadcastIntent roosterIntent) {
             if (roosterIntent instanceof BattleAvailableBroadcastIntent) {
-                BattleAvailableBroadcastIntent battleAvailableBroadcastIntent =
-                        (BattleAvailableBroadcastIntent) roosterIntent;
-                BattleAvailableDialog.show(
-                        KingdomActivity.this,
-                        battleAvailableBroadcastIntent.getBuildingId());
+                BattleAvailableDialogFragment.newInstance(roosterIntent)
+                        .show(getFragmentManager(), null);
             } else if (roosterIntent instanceof BuildingNeedsToRespawnBroadcastIntent) {
                 BuildingNeedsToRespawnBroadcastIntent buildingNeedsToRespawnBroadcastIntent =
                         (BuildingNeedsToRespawnBroadcastIntent) roosterIntent;
@@ -415,12 +412,8 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                         KingdomActivity.this,
                         buildingNeedsToRespawnBroadcastIntent.getRemainingMs());
             } else if (roosterIntent instanceof BuildingAvailableBroadcastIntent) {
-                BuildingAvailableBroadcastIntent buildingAvailableBroadcastIntent =
-                        (BuildingAvailableBroadcastIntent) roosterIntent;
-                long buildingId = buildingAvailableBroadcastIntent.getBuildingId();
-                BuildingInteractionDialogFragment buildingInteractionDialogFragment =
-                        BuildingInteractionDialogFragment.newInstance(buildingId);
-                buildingInteractionDialogFragment.show(getFragmentManager(), null);
+                BuildingInteractionDialogFragment.newInstance(roosterIntent)
+                        .show(getFragmentManager(), null);
             }
         }
     }

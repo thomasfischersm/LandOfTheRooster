@@ -22,6 +22,8 @@ import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.glide.GlideApp;
+import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
+import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
 import com.playposse.landoftherooster.util.SimpleStringJoiner;
 import com.playposse.landoftherooster.util.StringUtil;
 
@@ -39,8 +41,7 @@ import static com.playposse.landoftherooster.dialog.PeasantActionData.MAX_PEASAN
  * A dialog that lets the user drop off resources, pickup resources, and assign peasants to a
  * building.
  */
-public class BuildingInteractionDialogFragment
-        extends BaseDialogFragment<BuildingInteractionDialogFragment> {
+public class BuildingInteractionDialogFragment extends BaseDialogFragment {
 
     /**
      * Base amount of peasants in each building. A building is implied to have at least one peasant,
@@ -80,7 +81,12 @@ public class BuildingInteractionDialogFragment
         setDisappearOnDistance(true);
     }
 
-    public static BuildingInteractionDialogFragment newInstance(long buildingId) {
+    public static BuildingInteractionDialogFragment newInstance(
+            RoosterBroadcastIntent roosterIntent) {
+
+        BuildingAvailableBroadcastIntent intent = (BuildingAvailableBroadcastIntent) roosterIntent;
+        long buildingId = intent.getBuildingId();
+
         BuildingInteractionDialogFragment fragment = new BuildingInteractionDialogFragment();
         Bundle args = new Bundle();
         args.putLong(BUILDING_ID_ARG, buildingId);
