@@ -14,6 +14,7 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.InputResourceTypeIterator;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.InputUnitTypeIterator;
+import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
@@ -31,7 +32,6 @@ import com.playposse.landoftherooster.util.SimpleStringJoiner;
 import com.playposse.landoftherooster.util.StringUtil;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,7 +40,6 @@ import static android.view.View.GONE;
 import static com.playposse.landoftherooster.GameConfig.IMPLIED_PEASANT_COUNT;
 import static com.playposse.landoftherooster.GameConfig.MAX_PEASANT_BUILDING_CAPACITY;
 import static com.playposse.landoftherooster.GameConfig.PEASANT_ID;
-import static com.playposse.landoftherooster.GameConfig.PRODUCTION_CYCLE_MS;
 
 /**
  * A dialog that lets the user drop off resources, pickup resources, and assign peasants to a
@@ -60,6 +59,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
     private String productionRulesStr;
     private List<ActionData> actions = new ArrayList<>();
     private int peasantCount;
+    private Long remainingMs;
 
     @BindView(R.id.building_name_text_view) TextView buildingNameTextView;
     @BindView(R.id.building_icon_image_view) ImageView buildingIconImageView;
@@ -110,6 +110,8 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
         productionRulesStr = generateProductionRulesStr();
 
         generateActions();
+
+        remainingMs = ProductionCycleUtil.getRemainingProductionTimeMs(dao, buildingWithType);
     }
 
     @Override
@@ -343,20 +345,10 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
             return;
         }
 
-        // TODO: Check if the item is already produced.
-
-        // Calculate remaining time.
-        Date lastProduction = buildingWithType.getBuilding().getProductionStart();
-        if (lastProduction == null) {
-            return;
+        if (remainingMs != null) {
+            startCountdown(countDownHeadingTextView, countDownTextView, remainingMs);
+        } else {
+            clearCountdown(countDownHeadingTextView, countDownTextView);
         }
-        long lastProductionMs = lastProduction.getTime();
-        long remainingMs = lastProductionMs + PRODUCTION_CYCLE_MS - System.currentTimeMillis();
-        if (remainingMs <= 0) {
-            return;
-        }
-
-        // Start countdown timer.
-        startCountdown(countDownHeadingTextView, countDownTextView, remainingMs);
     }
 }

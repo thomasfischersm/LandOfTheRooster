@@ -13,6 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+import static com.playposse.landoftherooster.GameConfig.IMPLIED_PEASANT_COUNT;
+import static com.playposse.landoftherooster.GameConfig.PEASANT_ID;
+import static com.playposse.landoftherooster.GameConfig.PRODUCTION_CYCLE_MS;
+
 /**
  * A utility class that helps dealing with the production cycle of buildings.
  */
@@ -53,6 +59,27 @@ public final class ProductionCycleUtil {
         if (hasUnblockedFreeProductionRule(dao, building)) {
             setBuildingProductionStart(dao, building);
         }
+    }
+
+    @Nullable
+    public static Long getRemainingProductionTimeMs(
+            RoosterDao dao,
+            BuildingWithType buildingWithType) {
+
+        Building building = buildingWithType.getBuilding();
+
+        // Check if no production is running.
+        if (building.getProductionStart() == null) {
+            return null;
+        }
+
+        // Get peasants working in building.
+        int peasantCount = dao.getUnitCount(PEASANT_ID, building.getId()) + IMPLIED_PEASANT_COUNT;
+
+        long cycleMs = PRODUCTION_CYCLE_MS / peasantCount;
+        long startMs = building.getProductionStart().getTime();
+        long remainingMs = startMs + cycleMs - System.currentTimeMillis();
+        return Math.max(remainingMs, 0);
     }
 
     private static boolean hasUnblockedFreeProductionRule(RoosterDao dao, Building building) {
