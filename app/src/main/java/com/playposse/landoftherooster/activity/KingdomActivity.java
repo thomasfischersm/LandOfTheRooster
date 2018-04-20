@@ -101,7 +101,6 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         // TODO: This could possibly be removed or reduced.
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-
         new LoadDataAsyncTask().execute();
     }
 
