@@ -11,43 +11,43 @@
       "id": 2,
       "name": "wheat field",
       "icon": "wheat_field",
-      "minDistanceMeters": 150,
-      "maxDistanceMeters": 300
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     },
     {
       "id": 3,
       "name": "mill",
       "icon": "mill",
-      "minDistanceMeters": 150,
-      "maxDistanceMeters": 300
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     },
     {
       "id": 4,
       "name": "bakery",
       "icon": "bakery",
-      "minDistanceMeters": 150,
-      "maxDistanceMeters": 300
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     },
     {
       "id": 5,
       "name": "village",
       "icon": "village",
-      "minDistanceMeters": 150,
-      "maxDistanceMeters": 300
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     },
     {
       "id": 6,
       "name": "barracks",
       "icon": "barracks",
-      "minDistanceMeters": 150,
-      "maxDistanceMeters": 300
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     },
     {
       "id": 7,
       "name": "goblin cave",
       "icon": "goblin_cave",
-      "minDistanceMeters": 150,
-      "maxDistanceMeters": 300,
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160,
       "enemyUnitCount": 3,
       "enemyUnitTypeId": 3,
       "conquestPrizeResourceTypeId": 4
