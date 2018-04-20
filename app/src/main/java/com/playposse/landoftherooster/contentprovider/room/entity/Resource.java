@@ -27,7 +27,7 @@ public class Resource {
 
     @ColumnInfo(name = "resource_type_id")
     @NonNull
-    private int resourceTypeId;
+    private long resourceTypeId;
 
     @NonNull
     private int amount;
@@ -40,7 +40,7 @@ public class Resource {
 
     @Ignore
     public Resource(
-            @NonNull int resourceTypeId,
+            @NonNull long resourceTypeId,
             @NonNull int amount,
             @Nullable Long locatedAtBuildingId) {
 
@@ -58,11 +58,11 @@ public class Resource {
     }
 
     @NonNull
-    public int getResourceTypeId() {
+    public long getResourceTypeId() {
         return resourceTypeId;
     }
 
-    public void setResourceTypeId(@NonNull int resourceTypeId) {
+    public void setResourceTypeId(@NonNull long resourceTypeId) {
         this.resourceTypeId = resourceTypeId;
     }
 

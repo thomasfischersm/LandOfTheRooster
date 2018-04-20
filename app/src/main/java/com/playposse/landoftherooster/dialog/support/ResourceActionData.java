@@ -4,7 +4,9 @@ import android.content.Context;
 
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
+import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
 
@@ -13,7 +15,8 @@ import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithTy
  */
 public class ResourceActionData extends ActionData {
 
-    private final int resourceTypeId;
+    private final long resourceTypeId;
+    private final BuildingWithType buildingWithType;
     private final long buildingId;
     private final ActionType actionType;
 
@@ -24,15 +27,17 @@ public class ResourceActionData extends ActionData {
     public ResourceActionData(
             Context context,
             RoosterDao dao,
-            int resourceTypeId,
-            long buildingId,
+            long resourceTypeId,
+            BuildingWithType buildingWithType,
             ActionType ActionType) {
 
         super(context, dao);
 
         this.resourceTypeId = resourceTypeId;
-        this.buildingId = buildingId;
+        this.buildingWithType = buildingWithType;
         this.actionType = ActionType;
+
+        buildingId = buildingWithType.getBuilding().getId();
 
         // Load data.
         userResourceWithType = dao.getResourceWithTypeJoiningUser(resourceTypeId);
@@ -95,6 +100,7 @@ public class ResourceActionData extends ActionData {
                         buildingResourceWithType,
                         resourceTypeId,
                         buildingId);
+                ProductionCycleUtil.setProductionStartOnDropOff(getDao(), buildingWithType);
                 break;
             case PICKUP:
                 RoosterDaoUtil.moveResourceFromBuilding(
@@ -103,6 +109,7 @@ public class ResourceActionData extends ActionData {
                         buildingResourceWithType,
                         resourceTypeId,
                         buildingId);
+                ProductionCycleUtil.setProductionStartOnPickup(getDao(), buildingWithType);
                 break;
             default:
                 throw new IllegalStateException(

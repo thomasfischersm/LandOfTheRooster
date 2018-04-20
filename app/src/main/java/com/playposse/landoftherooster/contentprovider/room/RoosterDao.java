@@ -17,6 +17,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitCountByType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 
@@ -82,7 +83,7 @@ public interface RoosterDao {
     void insertResourceTypes(List<ResourceType> resourceTypes);
 
     @Query("select * from resource_type where id=:resourceTypeId")
-    ResourceType getResourceTypeById(int resourceTypeId);
+    ResourceType getResourceTypeById(long resourceTypeId);
 
     @Query("select * from resource_type where id in (:resourceTypeIds)")
     List<ResourceType> getResourceTypesById(List<Long> resourceTypeIds);
@@ -99,16 +100,19 @@ public interface RoosterDao {
     void update(Resource resource);
 
     @Query("select * from resource where resource_type_id=:resourceTypeId and located_at_building_id is null")
-    Resource getResourceJoiningUserByTypeId(int resourceTypeId);
+    Resource getResourceJoiningUserByTypeId(long resourceTypeId);
 
     @Query("select resource.id as id, resource.resource_type_id, resource.amount, resource.located_at_building_id as located_at_building_id, resource_type.id as type_id, resource_type.name as type_name from resource join resource_type on (resource.resource_type_id=resource_type.id) where amount > 0 and resource_type.id = :resourceTypeId and resource.located_at_building_id is null order by resource_type.id asc")
-    ResourceWithType getResourceWithTypeJoiningUser(int resourceTypeId);
+    ResourceWithType getResourceWithTypeJoiningUser(long resourceTypeId);
 
     @Query("select resource.id as id, resource.resource_type_id, resource.amount, resource.located_at_building_id as located_at_building_id, resource_type.id as type_id, resource_type.name as type_name from resource join resource_type on (resource.resource_type_id=resource_type.id) where amount > 0 and resource_type.id = :resourceTypeId and resource.located_at_building_id = :buildingId order by resource_type.id asc")
-    ResourceWithType getResourceWithType(int resourceTypeId, Long buildingId);
+    ResourceWithType getResourceWithType(long resourceTypeId, Long buildingId);
 
     @Query("select resource.id as id, resource.resource_type_id, resource.amount, resource.located_at_building_id as located_at_building_id, resource_type.id as type_id, resource_type.name as type_name from resource join resource_type on (resource.resource_type_id=resource_type.id) where amount > 0 and located_at_building_id is null order by resource_type.id asc")
     LiveData<List<ResourceWithType>> getAllResourcesWithTypeJoiningUser();
+
+    @Query("select * from resource where located_at_building_id=:buildingId")
+    List<Resource> getResourcesByBuildingId(long buildingId);
 
     @Query("select sum(amount) from resource where located_at_building_id is null")
     int getResourceCountJoiningUser();
@@ -122,7 +126,7 @@ public interface RoosterDao {
     void insertUnitTypes(List<UnitType> rows);
 
     @Query("select * from unit_type where id=:unitTypeId")
-    UnitType getUnitTypeById(int unitTypeId);
+    UnitType getUnitTypeById(long unitTypeId);
 
     @Query("select * from unit_type where id in (:unitTypeIds)")
     List<UnitType> getUnitTypesById(List<Long> unitTypeIds);
@@ -136,10 +140,10 @@ public interface RoosterDao {
     void update(Unit unit);
 
     @Query("select * from unit where unit_type_id=:unitTypeId and located_at_building_id is null")
-    List<Unit> getUnitsJoiningUserByTypeId(int unitTypeId);
+    List<Unit> getUnitsJoiningUserByTypeId(long unitTypeId);
 
     @Query("select * from unit where unit_type_id=:unitTypeId and located_at_building_id=:buildingId")
-    List<Unit> getUnits(int unitTypeId, long buildingId);
+    List<Unit> getUnits(long unitTypeId, long buildingId);
 
     @Query("select unit.id as id, unit.unit_type_id as unit_type_id, unit.health as health, unit.located_at_building_id as located_at_building_id, unit_type.id as type_id, unit_type.name as type_name, unit_type.carrying_capacity as type_carrying_capacity, unit_type.attack as type_attack, unit_type.defense as type_defense, unit_type.damage as type_damage, unit_type.armor as type_armor, unit_type.health as type_health from unit join unit_type on (unit.unit_type_id = unit_type.id) where located_at_building_id is null order by unit_type.attack desc, unit.unit_type_id asc, unit.health desc, unit.id asc")
     List<UnitWithType> getUnitsWithTypeJoiningUser();
@@ -151,10 +155,13 @@ public interface RoosterDao {
     int getCarryingCapacity();
 
     @Query("select count(*) from unit where unit_type_id=:unitTypeId and located_at_building_id is null")
-    int getUnitCountJoiningUser(int unitTypeId);
+    int getUnitCountJoiningUser(long unitTypeId);
 
     @Query("select count(*) from unit where unit_type_id=:unitTypeId and located_at_building_id=:buildingId")
-    int getUnitCount(int unitTypeId, long buildingId);
+    int getUnitCount(long unitTypeId, long buildingId);
+
+    @Query("select unit_type_id, count(id) as count from unit where located_at_building_id = :buildingId group by unit_type_id")
+    List<UnitCountByType> getUnitCountByBuilding(long buildingId);
 
     @Delete
     void deleteUnit(Unit unit);

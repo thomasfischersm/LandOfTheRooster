@@ -46,10 +46,10 @@ public class ProductionRule {
     private String inputUnitTypeIds;
 
     @ColumnInfo(name = "output_resource_type_id")
-    private Integer outputResourceTypeId;
+    private Long outputResourceTypeId;
 
     @ColumnInfo(name = "output_unit_type_id")
-    private Integer outputUnitTypeId;
+    private Long outputUnitTypeId;
 
     public int getId() {
         return id;
@@ -84,19 +84,19 @@ public class ProductionRule {
         this.inputUnitTypeIds = inputUnitTypeIds;
     }
 
-    public Integer getOutputResourceTypeId() {
+    public Long getOutputResourceTypeId() {
         return outputResourceTypeId;
     }
 
-    public void setOutputResourceTypeId(Integer outputResourceTypeId) {
+    public void setOutputResourceTypeId(Long outputResourceTypeId) {
         this.outputResourceTypeId = outputResourceTypeId;
     }
 
-    public Integer getOutputUnitTypeId() {
+    public Long getOutputUnitTypeId() {
         return outputUnitTypeId;
     }
 
-    public void setOutputUnitTypeId(Integer outputUnitTypeId) {
+    public void setOutputUnitTypeId(Long outputUnitTypeId) {
         this.outputUnitTypeId = outputUnitTypeId;
     }
 

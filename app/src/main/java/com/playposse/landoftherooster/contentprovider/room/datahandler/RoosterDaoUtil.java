@@ -50,7 +50,7 @@ public final class RoosterDaoUtil {
 
     public static void creditResource(
             Context context,
-            int resourceTypeId,
+            long resourceTypeId,
             int amount,
             @Nullable Long buildingId) {
 
@@ -69,7 +69,7 @@ public final class RoosterDaoUtil {
     public static void creditResource(
             Context context,
             Resource resource,
-            int resourceTypeId,
+            long resourceTypeId,
             int amount,
             @Nullable Long buildingId) {
 
@@ -93,7 +93,7 @@ public final class RoosterDaoUtil {
 
     public static void creditUnit(
             Context context,
-            int unitTypeId,
+            long unitTypeId,
             int amount,
             @javax.annotation.Nullable Long buildingId) {
 
@@ -129,7 +129,7 @@ public final class RoosterDaoUtil {
             Context context,
             ResourceWithType userResourceWithType,
             ResourceWithType buildingResourceWithType,
-            int resourceTypeId,
+            long resourceTypeId,
             long buildingId) {
 
         if ((userResourceWithType == null)
@@ -159,7 +159,7 @@ public final class RoosterDaoUtil {
             Context context,
             @Nullable ResourceWithType userResourceWithType,
             @Nullable ResourceWithType buildingResourceWithType,
-            int resourceTypeId,
+            long resourceTypeId,
             long buildingId) {
 
         if ((buildingResourceWithType == null)
@@ -185,7 +185,7 @@ public final class RoosterDaoUtil {
                 buildingId);
     }
 
-    public static void transferUnitToBuilding(Context context, int unitTypeId, long buildingId) {
+    public static void transferUnitToBuilding(Context context, long unitTypeId, long buildingId) {
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
 
         List<Unit> units = dao.getUnitsJoiningUserByTypeId(unitTypeId);
@@ -205,7 +205,7 @@ public final class RoosterDaoUtil {
         dao.update(unit);
     }
 
-    public static void transferUnitFromBuilding(Context context, int unitTypeId, long buildingId) {
+    public static void transferUnitFromBuilding(Context context, long unitTypeId, long buildingId) {
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
 
         List<Unit> units = dao.getUnits(unitTypeId, buildingId);

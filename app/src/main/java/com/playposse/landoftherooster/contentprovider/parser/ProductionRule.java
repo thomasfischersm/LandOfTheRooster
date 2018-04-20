@@ -9,8 +9,8 @@ public class ProductionRule {
     private int buildingId;
     private String inputResourceTypeIds;
     private String inputUnitTypeIds;
-    private Integer outputResourceTypeId;
-    private Integer outputUnitTypeId;
+    private Long outputResourceTypeId;
+    private Long outputUnitTypeId;
 
     public int getId() {
         return id;
@@ -28,11 +28,11 @@ public class ProductionRule {
         return inputUnitTypeIds;
     }
 
-    public Integer getOutputResourceTypeId() {
+    public Long getOutputResourceTypeId() {
         return outputResourceTypeId;
     }
 
-    public Integer getOutputUnitTypeId() {
+    public Long getOutputUnitTypeId() {
         return outputUnitTypeId;
     }
 }

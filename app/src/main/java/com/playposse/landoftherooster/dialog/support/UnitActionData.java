@@ -4,7 +4,9 @@ import android.content.Context;
 
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
+import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 
 /**
@@ -12,7 +14,8 @@ import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
  */
 public class UnitActionData extends ActionData {
 
-    private final int unitTypeId;
+    private final long unitTypeId;
+    private final BuildingWithType buildingWithType;
     private final long buildingId;
     private final ActionType actionType;
 
@@ -23,15 +26,17 @@ public class UnitActionData extends ActionData {
     public UnitActionData(
             Context context,
             RoosterDao dao,
-            int unitTypeId,
-            long buildingId,
+            long unitTypeId,
+            BuildingWithType buildingWithType,
             ActionType actionType) {
 
         super(context, dao);
 
         this.unitTypeId = unitTypeId;
-        this.buildingId = buildingId;
+        this.buildingWithType = buildingWithType;
         this.actionType = actionType;
+
+        buildingId = buildingWithType.getBuilding().getId();
 
         // Load data.
         userUnitCount = dao.getUnitCountJoiningUser(unitTypeId);
@@ -71,12 +76,14 @@ public class UnitActionData extends ActionData {
                         getContext(),
                         unitTypeId,
                         buildingId);
+                ProductionCycleUtil.setProductionStartOnDropOff(getDao(), buildingWithType);
                 break;
             case PICKUP:
                 RoosterDaoUtil.transferUnitFromBuilding(
                         getContext(),
                         unitTypeId,
                         buildingId);
+                ProductionCycleUtil.setProductionStartOnPickup(getDao(), buildingWithType);
                 break;
             default:
                 throw new IllegalStateException("Unexpected action type: " + actionType);

@@ -54,7 +54,7 @@ final class ProductionExecutor {
             ProductionRule productionRule) {
 
         // Check carrying capacity.
-        Integer outputResourceTypeId = productionRule.getOutputResourceTypeId();
+        Long outputResourceTypeId = productionRule.getOutputResourceTypeId();
         boolean producesResource = (outputResourceTypeId != null);
         boolean consumesResource = !StringUtil.isEmpty(productionRule.getInputResourceTypeIds());
         if (producesResource && !consumesResource) {
@@ -116,7 +116,7 @@ final class ProductionExecutor {
         if (outputResourceTypeId != null) {
             RoosterDaoUtil.creditResource(context, outputResourceTypeId, 1, null);
         } else {
-            Integer outputUnitTypeId = productionRule.getOutputUnitTypeId();
+            Long outputUnitTypeId = productionRule.getOutputUnitTypeId();
             if (outputUnitTypeId != null) {
                 UnitType unitType = dao.getUnitTypeById(outputUnitTypeId);
                 RoosterDaoUtil.creditUnit(context, unitType, 1, null);

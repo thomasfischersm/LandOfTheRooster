@@ -195,14 +195,14 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
         SimpleStringJoiner joiner =
                 new SimpleStringJoiner(LIST_SEPARATOR, "1 ", null);
 
-        Integer resourceTypeId = productionRule.getOutputResourceTypeId();
+        Long resourceTypeId = productionRule.getOutputResourceTypeId();
         if (resourceTypeId != null) {
             // TODO: Optimize loading of strings to a single query.
             ResourceType resourceType = dao.getResourceTypeById(resourceTypeId);
             joiner.add(resourceType.getName());
         }
 
-        Integer unitTypeId = productionRule.getOutputUnitTypeId();
+        Long unitTypeId = productionRule.getOutputUnitTypeId();
         if (unitTypeId != null) {
             // TODO: Optimize loading of strings to a single query.
             UnitType unitType = dao.getUnitTypeById(unitTypeId);
@@ -225,7 +225,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
                         getActivity(),
                         dao,
                         inputResourceTypeId,
-                        buildingId,
+                        buildingWithType,
                         ResourceActionData.ActionType.DROP_OFF));
             }
 
@@ -237,29 +237,29 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
                         getActivity(),
                         dao,
                         inputUnitTypeId,
-                        buildingId,
+                        buildingWithType,
                         ActionData.ActionType.DROP_OFF));
             }
 
             // output resource
-            Integer outputResourceTypeId = productionRule.getOutputResourceTypeId();
+            Long outputResourceTypeId = productionRule.getOutputResourceTypeId();
             if (outputResourceTypeId != null) {
                 actions.add(new ResourceActionData(
                         getActivity(),
                         dao,
                         outputResourceTypeId,
-                        buildingId,
+                        buildingWithType,
                         ResourceActionData.ActionType.PICKUP));
             }
 
             // output unit
-            Integer outputUnitTypeId = productionRule.getOutputUnitTypeId();
+            Long outputUnitTypeId = productionRule.getOutputUnitTypeId();
             if (outputUnitTypeId != null) {
                 actions.add(new UnitActionData(
                         getActivity(),
                         dao,
                         outputUnitTypeId,
-                        buildingId,
+                        buildingWithType,
                         ResourceActionData.ActionType.PICKUP));
             }
         }
