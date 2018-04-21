@@ -72,11 +72,10 @@ public class BuildingInteractionService implements ILocationAwareService {
             long lastConquestMs = lastConquest.getTime();
             if (lastConquestMs + BATTLE_RESPAWN_DURATION > System.currentTimeMillis()) {
                 // Building has not yet re-spawned.
-                long remainingMs = lastConquestMs + BATTLE_RESPAWN_DURATION - System.currentTimeMillis();
                 long buildingId = buildingWithType.getBuilding().getId();
                 RoosterBroadcastManager.send(
                         context,
-                        new BuildingNeedsToRespawnBroadcastIntent(buildingId, remainingMs));
+                        new BuildingNeedsToRespawnBroadcastIntent(buildingId));
                 return;
             } else {
                 // Respawn building.

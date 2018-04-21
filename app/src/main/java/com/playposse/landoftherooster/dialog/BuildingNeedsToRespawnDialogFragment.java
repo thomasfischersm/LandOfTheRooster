@@ -4,10 +4,15 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
 
 import butterknife.BindView;
+
+import static com.playposse.landoftherooster.GameConfig.BATTLE_RESPAWN_DURATION;
 
 /**
  * A dialog that tells the user that the building needs to respawn before the user can attack it
@@ -18,7 +23,6 @@ public class BuildingNeedsToRespawnDialogFragment extends BaseDialogFragment {
     private static final String LOG_TAG = BuildingNeedsToRespawnDialogFragment.class.getSimpleName();
 
     private static final String BUILDING_ID_ARG = "buildingId";
-    private static final String REMAINING_MS_ARG = "remainingMs";
 
     private long buildingId;
     private long remainingMs;
@@ -37,12 +41,10 @@ public class BuildingNeedsToRespawnDialogFragment extends BaseDialogFragment {
         BuildingNeedsToRespawnBroadcastIntent intent =
                 (BuildingNeedsToRespawnBroadcastIntent) roosterIntent;
         long buildingId = intent.getBuildingId();
-        long remainingMs = intent.getRemainingMs();
 
         BuildingNeedsToRespawnDialogFragment fragment = new BuildingNeedsToRespawnDialogFragment();
         Bundle args = new Bundle();
         args.putLong(BUILDING_ID_ARG, buildingId);
-        args.putLong(REMAINING_MS_ARG, remainingMs);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,24 +52,14 @@ public class BuildingNeedsToRespawnDialogFragment extends BaseDialogFragment {
     @Override
     protected void readArguments(Bundle savedInstanceState) {
         buildingId = getArguments().getLong(BUILDING_ID_ARG);
-
-        if ((savedInstanceState != null) && savedInstanceState.containsKey(REMAINING_MS_ARG)) {
-            remainingMs = savedInstanceState.getLong(REMAINING_MS_ARG);
-        } else {
-            remainingMs = getArguments().getLong(REMAINING_MS_ARG);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putLong(REMAINING_MS_ARG, getCountdownRemainingMs());
     }
 
     @Override
     protected void doInBackground() {
-        // Nothing to do.
+        RoosterDao dao = RoosterDatabase.getInstance(getActivity()).getDao();
+        BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+        long lastConquestMs = buildingWithType.getBuilding().getLastConquest().getTime();
+        remainingMs = lastConquestMs + BATTLE_RESPAWN_DURATION - System.currentTimeMillis();
     }
 
     @Override

@@ -9,11 +9,9 @@ public class BuildingNeedsToRespawnBroadcastIntent implements RoosterBroadcastIn
 
     private static final String EVENT_NAME = BuildingNeedsToRespawnBroadcastIntent.class.getName();
     private static final String BUILDING_ID_EXTRA = "buildingId";
-    private static final String REMAINING_MS_EXTRA = "remainingMs";
     private static final int DEFAULT_NULL_VALUE = -1;
 
     private long buildingId;
-    private long remainingMs;
 
     /**
      * Default constructor called by reflection.
@@ -21,30 +19,23 @@ public class BuildingNeedsToRespawnBroadcastIntent implements RoosterBroadcastIn
     public BuildingNeedsToRespawnBroadcastIntent() {
     }
 
-    public BuildingNeedsToRespawnBroadcastIntent(long buildingId, long remainingMs) {
+    public BuildingNeedsToRespawnBroadcastIntent(long buildingId) {
         this.buildingId = buildingId;
-        this.remainingMs = remainingMs;
     }
 
     @Override
     public void createFromIntent(Intent localIntent) {
         buildingId = localIntent.getLongExtra(BUILDING_ID_EXTRA, DEFAULT_NULL_VALUE);
-        remainingMs = localIntent.getLongExtra(REMAINING_MS_EXTRA, DEFAULT_NULL_VALUE);
     }
 
     @Override
     public Intent createLocalIntent() {
         Intent intent = new Intent(EVENT_NAME);
         intent.putExtra(BUILDING_ID_EXTRA, buildingId);
-        intent.putExtra(REMAINING_MS_EXTRA, remainingMs);
         return intent;
     }
 
     public long getBuildingId() {
         return buildingId;
-    }
-
-    public long getRemainingMs() {
-        return remainingMs;
     }
 }
