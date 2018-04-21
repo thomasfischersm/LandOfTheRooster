@@ -279,7 +279,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
     private void populateActionGrid() {
         actionGridLayout.removeAllViews();
 
-        if (actions.size() == 0) {
+        if ((actions.size() == 0) || (productionRules.size() == 0)) {
             // Hide actions.
             actionGridLayout.setVisibility(GONE);
             actionHeadingTextView.setVisibility(GONE);
