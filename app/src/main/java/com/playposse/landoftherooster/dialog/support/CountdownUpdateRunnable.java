@@ -4,6 +4,8 @@ import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
 
+import javax.annotation.Nullable;
+
 /**
  * A {@link Runnable} that updates the countdown clock.
  */
@@ -12,18 +14,30 @@ public class CountdownUpdateRunnable implements Runnable {
     private static final int SECOND_IN_MS = 1_000;
 
     private final TextView countdownTextView;
+    @Nullable private final Runnable countdownCompleteRunnable;
 
     private long remainingMs;
 
-    public CountdownUpdateRunnable(TextView countdownTextView, long remainingMs) {
+    public CountdownUpdateRunnable(
+            TextView countdownTextView,
+            long remainingMs,
+            @Nullable Runnable countdownCompleteRunnable) {
+
         this.countdownTextView = countdownTextView;
         this.remainingMs = remainingMs;
+        this.countdownCompleteRunnable = countdownCompleteRunnable;
     }
 
     @Override
     public void run() {
+        // Stop countdown at 0.
+        if (remainingMs == 0) {
+            return;
+        }
+
         // Increment time.
         remainingMs -= SECOND_IN_MS;
+        remainingMs = Math.max(0, remainingMs);
 
         // Calculate time.
         long seconds = remainingMs / 1_000 % 60;
@@ -43,6 +57,12 @@ public class CountdownUpdateRunnable implements Runnable {
             }
         });
 
-        // TODO: Start battle dialog if 0 is reached. -> Make more generic for reuse of this class.
+        if ((remainingMs == 0) && (countdownCompleteRunnable != null)) {
+            countdownCompleteRunnable.run();
+        }
+    }
+
+    public long getRemainingMs() {
+        return remainingMs;
     }
 }

@@ -133,7 +133,13 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
         GlideApp.with(getActivity())
                 .load(drawableId)
                 .into(buildingIconImageView);
+    }
 
+    @Override
+    protected void onCountdownComplete() {
+        // TODO: Find a way to delay until the backend service had a chance to complete the
+        // production.
+        reload(null);
     }
 
     private void populateProductionRules() {

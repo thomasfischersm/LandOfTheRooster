@@ -9,7 +9,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
-import com.playposse.landoftherooster.activity.ActivityNavigator;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
@@ -46,7 +45,6 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
     @BindView(R.id.unit_summary_text_view) TextView unitSummaryTextView;
 
 
-
     public BattleAvailableDialogFragment() {
         super(R.layout.dialog_battle_available);
 
@@ -77,7 +75,10 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
     public static BattleAvailableDialogFragment newInstance(RoosterBroadcastIntent roosterIntent) {
         BattleAvailableBroadcastIntent intent = (BattleAvailableBroadcastIntent) roosterIntent;
         long buildingId = intent.getBuildingId();
+        return newInstance(buildingId);
+    }
 
+    public static BattleAvailableDialogFragment newInstance(long buildingId) {
         BattleAvailableDialogFragment fragment = new BattleAvailableDialogFragment();
         Bundle args = new Bundle();
         args.putLong(BUILDING_ID_ARG, buildingId);

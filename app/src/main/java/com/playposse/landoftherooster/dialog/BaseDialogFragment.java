@@ -38,8 +38,9 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @Nullable private ButtonInfo negativeButtonInfo;
 
     private View rootView;
-    private BuildingProximityDialogReceiver proximityReceiver;
-    private ScheduledExecutorService scheduledExecutorService;
+    @Nullable private BuildingProximityDialogReceiver proximityReceiver;
+    @Nullable private ScheduledExecutorService scheduledExecutorService;
+    @Nullable private CountdownUpdateRunnable countdownTask;
 
     protected BaseDialogFragment(int layoutResId) {
         this.layoutResId = layoutResId;
@@ -104,7 +105,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     protected abstract void onPostExecute();
 
-    protected void onCountdownAtZero() {
+    protected void onCountdownComplete() {
     }
 
     private void failOnInitialized() {
@@ -160,9 +161,19 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
         setCountdownVisibility(headingTextView, countdownTextView, View.VISIBLE);
 
+        Runnable countdownCompleteRunnable = new Runnable() {
+            @Override
+            public void run() {
+                closeCountdown();
+                onCountdownComplete();
+            }
+        };
+
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        CountdownUpdateRunnable countdownTask =
-                new CountdownUpdateRunnable(countdownTextView, remainingMs);
+        countdownTask = new CountdownUpdateRunnable(
+                countdownTextView,
+                remainingMs,
+                countdownCompleteRunnable);
         scheduledExecutorService.scheduleAtFixedRate(countdownTask, 1, 1, TimeUnit.SECONDS);
     }
 
@@ -186,6 +197,14 @@ public abstract class BaseDialogFragment extends DialogFragment {
         if (scheduledExecutorService != null) {
             scheduledExecutorService.shutdownNow();
             scheduledExecutorService = null;
+        }
+    }
+
+    protected long getCountdownRemainingMs() {
+        if (countdownTask != null) {
+            return countdownTask.getRemainingMs();
+        } else {
+            return -1;
         }
     }
 

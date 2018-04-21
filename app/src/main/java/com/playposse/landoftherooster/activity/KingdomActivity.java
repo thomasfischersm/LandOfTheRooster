@@ -405,8 +405,6 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                 BattleAvailableDialogFragment.newInstance(roosterIntent)
                         .show(getFragmentManager(), null);
             } else if (roosterIntent instanceof BuildingNeedsToRespawnBroadcastIntent) {
-                BuildingNeedsToRespawnBroadcastIntent buildingNeedsToRespawnBroadcastIntent =
-                        (BuildingNeedsToRespawnBroadcastIntent) roosterIntent;
                 BuildingNeedsToRespawnDialogFragment.newInstance(roosterIntent)
                         .show(getFragmentManager(), null);
             } else if (roosterIntent instanceof BuildingAvailableBroadcastIntent) {
