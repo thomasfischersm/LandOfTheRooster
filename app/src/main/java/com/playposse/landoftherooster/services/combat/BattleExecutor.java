@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.services;
+package com.playposse.landoftherooster.services.combat;
 
 import android.content.Context;
 
@@ -9,7 +9,7 @@ import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastM
 /**
  * Handler for the logic when a building with a potential battle is within range of the user.
  */
-final class BattleExecutor {
+public final class BattleExecutor {
 
     private BattleExecutor() {}
 

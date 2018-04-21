@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.services;
+package com.playposse.landoftherooster.services.location;
 
 import android.content.Context;
 import android.location.Location;
@@ -37,7 +37,7 @@ public class BuildingDiscoveryService implements ILocationAwareService {
     private BuildingType nextBuildingType;
     private Integer nextDistance;
 
-    BuildingDiscoveryService(Context context) {
+    public BuildingDiscoveryService(Context context) {
         this.context = context;
 
         initNextBuildingType();

@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.services;
+package com.playposse.landoftherooster.services.location;
 
 import android.content.Context;
 import android.location.Location;
@@ -10,6 +10,7 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+import com.playposse.landoftherooster.services.combat.BattleExecutor;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.LeftBuildingBroadcastIntent;
@@ -34,7 +35,7 @@ public class BuildingInteractionService implements ILocationAwareService {
 
     private BuildingWithType currentBuildingWithType = null;
 
-    BuildingInteractionService(Context context) {
+    public BuildingInteractionService(Context context) {
         this.context = context;
     }
 

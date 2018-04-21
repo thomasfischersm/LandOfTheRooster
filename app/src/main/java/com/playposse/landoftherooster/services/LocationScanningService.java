@@ -17,6 +17,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.activity.KingdomActivity;
 import com.playposse.landoftherooster.activity.StopActivity;
+import com.playposse.landoftherooster.services.location.BuildingDiscoveryService;
+import com.playposse.landoftherooster.services.location.BuildingInteractionService;
+import com.playposse.landoftherooster.services.location.ILocationAwareService;
 import com.playposse.landoftherooster.util.ConvenientLocationProvider;
 
 import java.util.ArrayList;

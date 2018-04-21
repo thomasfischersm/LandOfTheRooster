@@ -1,6 +1,4 @@
-package com.playposse.landoftherooster.services;
-
-import android.content.Context;
+package com.playposse.landoftherooster.services.location;
 
 import com.google.android.gms.maps.model.LatLng;
 
