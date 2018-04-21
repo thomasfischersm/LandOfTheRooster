@@ -33,6 +33,7 @@ public class BuildingNeedsToRespawnDialogFragment extends BaseDialogFragment {
         super(R.layout.dialog_building_needs_to_respawn);
 
         setDisappearOnDistance(true);
+        setShowReturnToMapButton(true);
     }
 
     public static BuildingNeedsToRespawnDialogFragment newInstance(

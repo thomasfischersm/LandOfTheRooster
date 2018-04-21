@@ -84,6 +84,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     private boolean isUserCentered = false;
 
     private LocationCallback locationCallback = new ThisLocationCallback();
+    private KingdomActivityBroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +109,9 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     protected void onResume() {
         super.onResume();
 
+        broadcastReceiver = new KingdomActivityBroadcastReceiver();
         RoosterBroadcastManager.getInstance(this)
-                .register(new KingdomActivityBroadcastReceiver());
+                .register(broadcastReceiver);
     }
 
     @Override
@@ -119,7 +121,8 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         fusedLocationClient.removeLocationUpdates(locationCallback);
 
         RoosterBroadcastManager.getInstance(this)
-                .unregister(new KingdomActivityBroadcastReceiver());
+                .unregister(broadcastReceiver);
+        broadcastReceiver = null;
     }
 
     @Override
