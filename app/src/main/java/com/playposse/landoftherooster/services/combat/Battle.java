@@ -140,10 +140,10 @@ public class Battle {
 
         List<UnitWithType> startingAliveFriendUnits = getAliveFriendUnits();
         int startingFriendUnitCount = startingAliveFriendUnits.size();
-        int startingFriendHealth = getCommulativeHealth(startingAliveFriendUnits);
+        int startingFriendHealth = getComulativeHealth(startingAliveFriendUnits);
         List<UnitWithType> startingAliveEnemyUnits = getAliveEnemyUnits();
         int startingEnemyUnitCount = startingAliveEnemyUnits.size();
-        int startingEnemyHealth = getCommulativeHealth(startingAliveEnemyUnits);
+        int startingEnemyHealth = getComulativeHealth(startingAliveEnemyUnits);
 
         do {
             fightRound();
@@ -161,8 +161,8 @@ public class Battle {
             saveConquestPrize();
         }
 
-        int endingFriendHealth = getCommulativeHealth(aliveFriendUnits);
-        int endingEnemyHealth = getCommulativeHealth(aliveEnemyUnits);
+        int endingFriendHealth = getComulativeHealth(aliveFriendUnits);
+        int endingEnemyHealth = getComulativeHealth(aliveEnemyUnits);
 
         return new BattleSummaryParcelable(
                 hasFriendWon,
@@ -192,7 +192,7 @@ public class Battle {
             Unit unit = unitWithType.getUnit();
             if (unit.getHealth() <= 0) {
                 // Delete unit.
-                dao.deleteUnit(unit);
+                dao.delete(unit);
             } else {
                 // Save injury.
                 dao.update(unit);
@@ -217,7 +217,7 @@ public class Battle {
                 null);
     }
 
-    private int getCommulativeHealth(List<UnitWithType> unitWithTypes) {
+    private int getComulativeHealth(List<UnitWithType> unitWithTypes) {
         int health = 0;
 
         if (unitWithTypes != null) {

@@ -97,25 +97,37 @@ public final class ProductionCycleUtil {
                 continue;
             }
 
-            // Check if the output resource is still waiting to be picked up.
-            Long resourceTypeId = productionRule.getOutputResourceTypeId();
-            if ((resourceTypeId != null)
-                    && resourceMap.containsKey(resourceTypeId)
-                    && (resourceMap.get(resourceTypeId) > 0)) {
-                continue;
-            }
-
-            // Check if the output unit type is still waiting to be picked up.
-            Long unitTypeId = productionRule.getOutputUnitTypeId();
-            if ((unitTypeId != null)
-                    && unitMap.containsKey(unitTypeId)
-                    && (unitMap.get(unitTypeId) > 0)) {
+            // Skip free production rules that are blocked by output waiting for pickup.
+            if (isFreeProductionRuleBlocked(resourceMap, unitMap, productionRule)) {
                 continue;
             }
 
             return true;
         }
 
+        return false;
+    }
+
+    public static boolean isFreeProductionRuleBlocked(
+            Map<Long, Integer> resourceMap,
+            Map<Long, Integer> unitMap,
+            ProductionRule productionRule) {
+
+        // Check if the output resource is still waiting to be picked up.
+        Long resourceTypeId = productionRule.getOutputResourceTypeId();
+        if ((resourceTypeId != null)
+                && resourceMap.containsKey(resourceTypeId)
+                && (resourceMap.get(resourceTypeId) > 0)) {
+            return true;
+        }
+
+        // Check if the output unit type is still waiting to be picked up.
+        Long unitTypeId = productionRule.getOutputUnitTypeId();
+        if ((unitTypeId != null)
+                && unitMap.containsKey(unitTypeId)
+                && (unitMap.get(unitTypeId) > 0)) {
+            return true;
+        }
         return false;
     }
 
@@ -127,41 +139,51 @@ public final class ProductionCycleUtil {
         List<ProductionRule> productionRules =
                 dao.getProductionRulesByBuildingTypeId(building.getBuildingTypeId());
 
-        nextProductionRule: for (ProductionRule productionRule : productionRules) {
-            // Skip free production rules.
-            if (productionRule.isFree()) {
-                continue;
+        for (ProductionRule productionRule : productionRules) {
+            if (hasProductionInputs(resourceMap, unitMap, productionRule)) {
+                return true;
             }
-
-            // Check resource inputs.
-            List<Long> inputResourceTypeIds =
-                    StringUtil.splitToLongList(productionRule.getInputResourceTypeIds());
-            for (long resourceTypeId : inputResourceTypeIds) {
-                // Skip if input resource is missing.
-                if (!resourceMap.containsKey(resourceTypeId)
-                        || (resourceMap.get(resourceTypeId) < 1)) {
-                    continue nextProductionRule;
-                }
-            }
-
-            // Check unit inputs.
-            List<Long> inputUnitTypeIds =
-                    StringUtil.splitToLongList(productionRule.getInputUnitTypeIds());
-            for (long unitTypeId : inputUnitTypeIds) {
-                if (!unitMap.containsKey(unitTypeId) || (unitMap.get(unitTypeId) < 1)) {
-                    continue nextProductionRule;
-                }
-            }
-
-            return true;
         }
         return false;
+    }
+
+    public static boolean hasProductionInputs(
+            Map<Long, Integer> resourceMap,
+            Map<Long, Integer> unitMap,
+            ProductionRule productionRule) {
+
+        // Skip free production rules.
+        if (productionRule.isFree()) {
+            return true;
+        }
+
+        // Check resource inputs.
+        List<Long> inputResourceTypeIds =
+                StringUtil.splitToLongList(productionRule.getInputResourceTypeIds());
+        for (long resourceTypeId : inputResourceTypeIds) {
+            // Skip if input resource is missing.
+            if (!resourceMap.containsKey(resourceTypeId)
+                    || (resourceMap.get(resourceTypeId) < 1)) {
+                return false;
+            }
+        }
+
+        // Check unit inputs.
+        List<Long> inputUnitTypeIds =
+                StringUtil.splitToLongList(productionRule.getInputUnitTypeIds());
+        for (long unitTypeId : inputUnitTypeIds) {
+            if (!unitMap.containsKey(unitTypeId) || (unitMap.get(unitTypeId) < 1)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
      * Builds a map (resourceTypeId -> amount) for how many resources a building has stored.
      */
-    private static Map<Long, Integer> getResourcesInBuilding(RoosterDao dao, Building building) {
+    public static Map<Long, Integer> getResourcesInBuilding(RoosterDao dao, Building building) {
         Map<Long, Integer> resourceMap = new HashMap<>();
         List<Resource> resources = dao.getResourcesByBuildingId(building.getId());
         for (Resource resource : resources) {
@@ -174,7 +196,7 @@ public final class ProductionCycleUtil {
      * Builds a map (unitTypeId -> unitCount) for how many units of each type are inside of a
      * building.
      */
-    private static Map<Long, Integer> getUnitCountsInBuilding(RoosterDao dao, Building building) {
+    public static Map<Long, Integer> getUnitCountsInBuilding(RoosterDao dao, Building building) {
         Map<Long, Integer> unitMap = new HashMap<>();
         List<UnitCountByType> unitCounts = dao.getUnitCountByBuilding(building.getId());
         for (UnitCountByType unitCount : unitCounts) {

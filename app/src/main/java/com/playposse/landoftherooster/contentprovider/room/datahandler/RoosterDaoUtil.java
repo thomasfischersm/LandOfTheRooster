@@ -111,14 +111,33 @@ public final class RoosterDaoUtil {
 
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
 
-        for (int i = 0; i < amount; i++) {
-            Unit unit = new Unit();
-            int unitTypeId = unitType.getId();
-            unit.setUnitTypeId(unitTypeId);
-            unit.setHealth(unitType.getHealth());
-            unit.setLocatedAtBuildingId(buildingId);
+        if (amount > 0) {
+            // Create new units.
+            for (int i = 0; i < amount; i++) {
+                Unit unit = new Unit();
+                int unitTypeId = unitType.getId();
+                unit.setUnitTypeId(unitTypeId);
+                unit.setHealth(unitType.getHealth());
+                unit.setLocatedAtBuildingId(buildingId);
 
-            dao.insert(unit);
+                dao.insert(unit);
+            }
+        } else {
+            // Remove units.
+            final List<Unit> units;
+            if (buildingId != null) {
+                units = dao.getUnits(unitType.getId(), buildingId);
+            } else {
+                units = dao.getUnitsJoiningUserByTypeId(unitType.getId());
+            }
+
+            for (int i = 0; i < Math.abs(amount); i++) {
+                if (units.size() == 0) {
+                    throw new IllegalStateException(
+                            "Trying to delete more units than the player has!");
+                }
+                dao.delete(units.get(0));
+            }
         }
 
         Log.d(LOG_TAG, "creditUnit: Created " + amount + " units of "

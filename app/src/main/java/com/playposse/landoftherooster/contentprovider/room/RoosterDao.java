@@ -37,7 +37,7 @@ public interface RoosterDao {
     List<BuildingType> getAllBuildingTypes();
 
     @Query("select * from building_type where id > :lastBuildingTypeId order by id asc limit 1")
-    BuildingType getNextBuildingType(int lastBuildingTypeId);
+    BuildingType getNextBuildingType(long lastBuildingTypeId);
 
     @Query("select id from building_type")
     Cursor getCursorForBuildingTypeCount();
@@ -75,7 +75,7 @@ public interface RoosterDao {
     void insertProductionRules(List<ProductionRule> productionRules);
 
     @Query("select * from production_rule where production_rule.building_id=:buildingTypeId")
-    List<ProductionRule> getProductionRulesByBuildingTypeId(int buildingTypeId);
+    List<ProductionRule> getProductionRulesByBuildingTypeId(long buildingTypeId);
 
 
     // Resource types
@@ -164,7 +164,7 @@ public interface RoosterDao {
     List<UnitCountByType> getUnitCountByBuilding(long buildingId);
 
     @Delete
-    void deleteUnit(Unit unit);
+    void delete(Unit unit);
 
     @Query("delete from unit")
     void deleteUnits();
