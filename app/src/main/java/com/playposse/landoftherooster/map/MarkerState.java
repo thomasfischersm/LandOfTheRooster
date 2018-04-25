@@ -23,6 +23,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -45,6 +46,7 @@ public class MarkerState {
     private boolean isReady;
     private int pendingProductionCount;
     private int completedProductionCount;
+    private boolean canUserDropItem;
     private Marker marker;
 
     MarkerState(Context context, long buildingId) {
@@ -67,11 +69,13 @@ public class MarkerState {
         int newPendingCount = computePendingProductionCount(productionRules, resourceMap, unitMap);
         int newCompletedCount =
                 computeCompletedProductionCount(productionRules, resourceMap, unitMap);
-        boolean newIsReady = (newCompletedCount > 0);
+        boolean newCanUserDropItem = computeCanUserDropItem(productionRules);
+        boolean newIsReady = (newCompletedCount > 0) || newCanUserDropItem;
 
         if ((pendingProductionCount == newPendingCount)
                 && (completedProductionCount == newCompletedCount)
                 && (isReady == newIsReady)
+                && (canUserDropItem == newCanUserDropItem)
                 && (marker != null)) {
             // Nothing to do. There is no change.
             return;
@@ -80,6 +84,8 @@ public class MarkerState {
         isReady = newIsReady;
         pendingProductionCount = newPendingCount;
         completedProductionCount = newCompletedCount;
+        canUserDropItem = newCanUserDropItem;
+
         reapplyToMap(context, map);
 
         long end = System.currentTimeMillis();
@@ -301,5 +307,38 @@ public class MarkerState {
                 markerState.marker.setIcon(buildingIcon);
             }
         }
+    }
+
+    /**
+     * Checks if the user carries a resource or unit that could be dropped off at the building.
+     * Units with carrying capacity are ignored because the user may want to keep those in the
+     * caravan.
+     */
+    private boolean computeCanUserDropItem(List<ProductionRule> productionRules) {
+        Map<Long, Integer> resourceMap = ProductionCycleUtil.getResourcesJoiningUser(dao);
+        Map<Long, Integer> unitMap = ProductionCycleUtil.getUnitCountsJoiningUser(dao);
+
+        for (ProductionRule productionRule : productionRules) {
+            for (long resourceTypeId : productionRule.getSplitInputResourceTypeIds()) {
+                if (resourceMap.containsKey(resourceTypeId)
+                        && (resourceMap.get(resourceTypeId) > 0)) {
+                    return true;
+                }
+            }
+
+            for (long unitTypeId : productionRule.getSplitInputUnitTypeIds()) {
+                if ((unitTypeId != GameConfig.PEASANT_ID)
+                        && unitMap.containsKey(unitTypeId)
+                        && (unitMap.get(unitTypeId) > 0)) {
+
+                    UnitType unitType = dao.getUnitTypeById(unitTypeId);
+                    if (unitType.getCarryingCapacity() == 0) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -202,6 +202,24 @@ public final class ProductionCycleUtil {
         return unitMap;
     }
 
+    public static Map<Long, Integer> getResourcesJoiningUser(RoosterDao dao) {
+        Map<Long, Integer> resourceMap = new HashMap<>();
+        List<Resource> resources = dao.getAllResourcesJoiningUser();
+        for (Resource resource : resources) {
+            resourceMap.put(resource.getResourceTypeId(), resource.getAmount());
+        }
+        return resourceMap;
+    }
+
+    public static Map<Long, Integer> getUnitCountsJoiningUser(RoosterDao dao) {
+        Map<Long, Integer> unitMap = new HashMap<>();
+        List<UnitCountByType> unitCounts = dao.getUnitCountsJoiningUser();
+        for (UnitCountByType unitCount : unitCounts) {
+            unitMap.put(unitCount.getUnitTypeId(), unitCount.getCount());
+        }
+        return unitMap;
+    }
+
     private static void setBuildingProductionStart(RoosterDao dao, Building building) {
         building.setProductionStart(new Date());
         dao.update(building);
