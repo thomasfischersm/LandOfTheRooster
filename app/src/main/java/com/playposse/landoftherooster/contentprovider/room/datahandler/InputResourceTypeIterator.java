@@ -33,8 +33,7 @@ public class InputResourceTypeIterator implements Iterator<ResourceType>, Iterab
     }
 
     private void loadResourceTypes() {
-        List<Long> resourceTypeIds =
-                StringUtil.splitToLongList(productionRule.getInputResourceTypeIds());
+        List<Long> resourceTypeIds = productionRule.getSplitInputResourceTypeIds();
 
         List<ResourceType> resourceTypes = dao.getResourceTypesById(resourceTypeIds);
 

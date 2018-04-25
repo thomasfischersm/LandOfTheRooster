@@ -114,6 +114,9 @@ public interface RoosterDao {
     @Query("select * from resource where located_at_building_id=:buildingId")
     List<Resource> getResourcesByBuildingId(long buildingId);
 
+    @Query("select * from resource")
+    LiveData<List<Resource>> getAllResourcesAsLiveData();
+
     @Query("select sum(amount) from resource where located_at_building_id is null")
     int getResourceCountJoiningUser();
 
@@ -162,6 +165,9 @@ public interface RoosterDao {
 
     @Query("select unit_type_id, count(id) as count from unit where located_at_building_id = :buildingId group by unit_type_id")
     List<UnitCountByType> getUnitCountByBuilding(long buildingId);
+
+    @Query("Select * from unit")
+    LiveData<List<Unit>> getAllUnitsAsLiveData();
 
     @Delete
     void delete(Unit unit);

@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
-import com.playposse.landoftherooster.util.StringUtil;
 
 import java.util.Iterator;
 import java.util.List;
@@ -33,8 +32,7 @@ public class InputUnitTypeIterator implements Iterator<UnitType>, Iterable<UnitT
     }
 
     private void loadUnitTypes() {
-        List<Long> unitTypeIds =
-                StringUtil.splitToLongList(productionRule.getInputUnitTypeIds());
+        List<Long> unitTypeIds = productionRule.getSplitInputUnitTypeIds();
 
         List<UnitType> unitTypes = dao.getUnitTypesById(unitTypeIds);
 

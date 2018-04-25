@@ -68,7 +68,36 @@ public final class GameConfig {
 
     public static int PRODUCTION_CYCLE_MS;
 
+    /**
+     * Color for the oval background of a map marker to represent the building ready status.
+     */
+    public static int BUILDING_READY_COLOR;
 
+    /**
+     * Color for the circle on the building map marker to indicate a pending production run.
+     */
+    public static int PENDING_PRODUCTION_COLOR;
+
+    /**
+     * Color for the circle on the building map marker to indicate a completed production run.
+     */
+    public static int COMPLETED_PRODUCTION_COLOR;
+
+    /**
+     * The maximum number of production circles that are drawn on the building map marker.
+     */
+    public static int MAX_PRODUCTION_CIRCLE_COUNT;
+
+    /**
+     * The margin to the edge of the building icons for production circles on the building map
+     * marker.
+     */
+    public static int PRODUCTION_CIRCLE_MARGIN;
+
+    /**
+     * The radius for production circles on the building map marker.
+     */
+    public static int PRODUCTION_CIRCLE_RADIUS;
 
     private GameConfig() {}
 
@@ -84,9 +113,19 @@ public final class GameConfig {
         BATTLE_RESPAWN_DURATION = get(context, R.integer.battle_respawn_duration);
         PRODUCTION_CYCLE_MINUTES = get(context, R.integer.production_cycle_minutes);
         PRODUCTION_CYCLE_MS = PRODUCTION_CYCLE_MINUTES * 60 * 1_000;
+        BUILDING_READY_COLOR = getColor(context, R.color.building_ready_color);
+        PENDING_PRODUCTION_COLOR = getColor(context, R.color.pending_production_color);
+        COMPLETED_PRODUCTION_COLOR = getColor(context, R.color.completed_production_color);
+        MAX_PRODUCTION_CIRCLE_COUNT = get(context, R.integer.max_production_circle_count);
+        PRODUCTION_CIRCLE_MARGIN = get(context, R.integer.production_circle_margin);
+        PRODUCTION_CIRCLE_RADIUS = get(context, R.integer.production_circle_radius);
     }
 
     private static int get(Context context, int resId) {
         return context.getResources().getInteger(resId);
+    }
+
+    private static int getColor(Context context, int resId) {
+        return context.getResources().getColor(resId);
     }
 }

@@ -6,7 +6,6 @@ import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithTy
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitCountByType;
-import com.playposse.landoftherooster.util.StringUtil;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -158,8 +157,7 @@ public final class ProductionCycleUtil {
         }
 
         // Check resource inputs.
-        List<Long> inputResourceTypeIds =
-                StringUtil.splitToLongList(productionRule.getInputResourceTypeIds());
+        List<Long> inputResourceTypeIds = productionRule.getSplitInputResourceTypeIds();
         for (long resourceTypeId : inputResourceTypeIds) {
             // Skip if input resource is missing.
             if (!resourceMap.containsKey(resourceTypeId)
@@ -169,8 +167,7 @@ public final class ProductionCycleUtil {
         }
 
         // Check unit inputs.
-        List<Long> inputUnitTypeIds =
-                StringUtil.splitToLongList(productionRule.getInputUnitTypeIds());
+        List<Long> inputUnitTypeIds = productionRule.getSplitInputUnitTypeIds();
         for (long unitTypeId : inputUnitTypeIds) {
             if (!unitMap.containsKey(unitTypeId) || (unitMap.get(unitTypeId) < 1)) {
                 return false;

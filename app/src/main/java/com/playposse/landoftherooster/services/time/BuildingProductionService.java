@@ -148,15 +148,13 @@ public class BuildingProductionService extends PeriodicService {
         long buildingId = building.getId();
 
         // Debit input resources.
-        List<Long> InputResourceTypeIds =
-                StringUtil.splitToLongList(productionRule.getInputResourceTypeIds());
+        List<Long> InputResourceTypeIds = productionRule.getSplitInputResourceTypeIds();
         for (Long inputResourceTypeId : InputResourceTypeIds) {
             RoosterDaoUtil.creditResource(getContext(), inputResourceTypeId, -1, buildingId);
         }
 
         // Debit input units.
-        List<Long> InputUnitTypeIds =
-                StringUtil.splitToLongList(productionRule.getInputUnitTypeIds());
+        List<Long> InputUnitTypeIds = productionRule.getSplitInputUnitTypeIds();
         for (Long inputUnitTypeId : InputUnitTypeIds) {
             RoosterDaoUtil.creditUnit(getContext(), inputUnitTypeId, -1, buildingId);
         }

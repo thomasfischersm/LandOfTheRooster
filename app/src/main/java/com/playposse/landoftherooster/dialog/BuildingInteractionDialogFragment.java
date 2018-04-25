@@ -226,9 +226,8 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
         // Generate actions based on production rules.
         for (ProductionRule productionRule : productionRules) {
             // input resources
-            List<Integer> inputResourceTypeIds =
-                    StringUtil.splitToIntList(productionRule.getInputResourceTypeIds());
-            for (int inputResourceTypeId : inputResourceTypeIds) {
+            List<Long> inputResourceTypeIds = productionRule.getSplitInputResourceTypeIds();
+            for (long inputResourceTypeId : inputResourceTypeIds) {
                 actions.add(new ResourceActionData(
                         getActivity(),
                         dao,
@@ -238,9 +237,8 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
             }
 
             // input units
-            List<Integer> inputUnitTypeIds =
-                    StringUtil.splitToIntList(productionRule.getInputUnitTypeIds());
-            for (int inputUnitTypeId : inputUnitTypeIds) {
+            List<Long> inputUnitTypeIds = productionRule.getSplitInputUnitTypeIds();
+            for (long inputUnitTypeId : inputUnitTypeIds) {
                 actions.add(new UnitActionData(
                         getActivity(),
                         dao,

@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 
 import com.playposse.landoftherooster.util.StringUtil;
 
+import java.util.List;
+
 import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 
 /**
@@ -102,5 +104,13 @@ public class ProductionRule {
 
     public boolean isFree() {
         return StringUtil.isEmpty(inputResourceTypeIds) && StringUtil.isEmpty(inputUnitTypeIds);
+    }
+
+    public List<Long> getSplitInputResourceTypeIds() {
+        return StringUtil.splitToLongList(getInputResourceTypeIds());
+    }
+
+    public List<Long> getSplitInputUnitTypeIds() {
+        return StringUtil.splitToLongList(getInputUnitTypeIds());
     }
 }

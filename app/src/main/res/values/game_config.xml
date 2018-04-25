@@ -22,4 +22,16 @@
     <integer name="battle_respawn_duration">3600000</integer> <!-- 1 hour -->
 
     <integer name="production_cycle_minutes">10</integer>
+
+    <color name="building_ready_color">#66bb6a</color>
+
+    <color name="pending_production_color">#90a4ae</color>
+
+    <color name="completed_production_color">#263238</color>
+
+    <integer name="max_production_circle_count">5</integer>
+
+    <integer name="production_circle_margin">5</integer>
+
+    <integer name="production_circle_radius">6</integer>
 </resources>

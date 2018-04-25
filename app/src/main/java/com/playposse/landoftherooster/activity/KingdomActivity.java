@@ -3,16 +3,12 @@ package com.playposse.landoftherooster.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.SupportActivity;
@@ -35,17 +31,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
-import com.playposse.landoftherooster.contentprovider.room.entity.Building;
-import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
-import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
@@ -53,6 +43,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 import com.playposse.landoftherooster.dialog.BattleAvailableDialogFragment;
 import com.playposse.landoftherooster.dialog.BuildingInteractionDialogFragment;
 import com.playposse.landoftherooster.dialog.BuildingNeedsToRespawnDialogFragment;
+import com.playposse.landoftherooster.map.MarkerStateRegistry;
 import com.playposse.landoftherooster.services.broadcastintent.BattleAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
@@ -85,6 +76,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
     private LocationCallback locationCallback = new ThisLocationCallback();
     private KingdomActivityBroadcastReceiver broadcastReceiver;
+    private MarkerStateRegistry markerStateRegistry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,34 +175,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         startLocationUpdates();
 
         // Update buildings on the map.
-        Observer<List<BuildingWithType>> observer = new Observer<List<BuildingWithType>>() {
-            @Override
-            public void onChanged(@Nullable List<BuildingWithType> buildingsWithType) {
-                // Clear old markers.
-                map.clear();
-
-                // Re-draw all markers.
-                if (buildingsWithType != null) {
-                    for (BuildingWithType buildingWithType : buildingsWithType) {
-                        Building building = buildingWithType.getBuilding();
-                        BuildingType buildingType = buildingWithType.getBuildingType();
-
-                        int drawableId = getResources().getIdentifier(
-                                buildingType.getIcon(),
-                                "drawable",
-                                getPackageName());
-
-                        Location location = new Location("");
-                        location.setLatitude(building.getLatitude());
-                        location.setLongitude(building.getLongitude());
-                        addMarker(location, drawableId, buildingType.getName());
-                    }
-                }
-            }
-        };
-        LiveData<List<BuildingWithType>> liveData =
-                RoosterDatabase.getInstance(this).getDao().getAllBuildingsWithTypeAsLiveData();
-        liveData.observe(this, observer);
+        markerStateRegistry = new MarkerStateRegistry(this, map);
 
         map.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
@@ -287,19 +252,6 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
     private static LatLng fromLocation(Location location) {
         return new LatLng(location.getLatitude(), location.getLongitude());
-    }
-
-    private void addMarker(Location location, int drawable, String label) {
-        Bitmap bitmap =
-                BitmapFactory.decodeResource(getResources(), drawable);
-        Bitmap scaledBitmap =
-                Bitmap.createScaledBitmap(bitmap, 100, 100, true);
-        BitmapDescriptor castleIcon = BitmapDescriptorFactory.fromBitmap(scaledBitmap);
-
-        LatLng latLng = fromLocation(location);
-        map.addMarker(new MarkerOptions().position(latLng)
-                .title(label)
-                .icon(castleIcon));
     }
 
     /**
