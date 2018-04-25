@@ -3,6 +3,7 @@ package com.playposse.landoftherooster;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
+import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntegerRes;
 
@@ -21,7 +22,7 @@ public final class GameConfig {
      * The unitTypeId for a peasant. This should be more configurable in the future. It implies
      * which units can work inside of a building.
      */
-    public static int PEASANT_ID;
+    public static long PEASANT_ID;
 
     /**
      * The maximum amount of peasants that can work in a building.
@@ -97,12 +98,12 @@ public final class GameConfig {
      * The margin to the edge of the building icons for production circles on the building map
      * marker.
      */
-    public static int PRODUCTION_CIRCLE_MARGIN;
+    public static float PRODUCTION_CIRCLE_MARGIN;
 
     /**
      * The radius for production circles on the building map marker.
      */
-    public static int PRODUCTION_CIRCLE_RADIUS;
+    public static float PRODUCTION_CIRCLE_RADIUS;
 
     private GameConfig() {}
 
@@ -122,8 +123,8 @@ public final class GameConfig {
         PENDING_PRODUCTION_COLOR = getColor(context, R.color.pending_production_color);
         COMPLETED_PRODUCTION_COLOR = getColor(context, R.color.completed_production_color);
         MAX_PRODUCTION_CIRCLE_COUNT = get(context, R.integer.max_production_circle_count);
-        PRODUCTION_CIRCLE_MARGIN = get(context, R.integer.production_circle_margin);
-        PRODUCTION_CIRCLE_RADIUS = get(context, R.integer.production_circle_radius);
+        PRODUCTION_CIRCLE_MARGIN = getDimension(context, R.dimen.production_circle_margin);
+        PRODUCTION_CIRCLE_RADIUS = getDimension(context, R.dimen.production_circle_radius);
     }
 
     private static int get(Context context, @IntegerRes int resId) {
@@ -136,5 +137,9 @@ public final class GameConfig {
 
     private static Drawable getDrawable(Context context, @DrawableRes int resId) {
         return context.getResources().getDrawable(resId);
+    }
+
+    private static float getDimension(Context context, @DimenRes int resId) {
+        return context.getResources().getDimension(resId);
     }
 }

@@ -11,7 +11,6 @@ import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDa
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
-import com.playposse.landoftherooster.util.StringUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -94,7 +93,7 @@ public class BuildingProductionService extends PeriodicService {
 
         long productionEnd =
                 building.getProductionStart().getTime() + GameConfig.PRODUCTION_CYCLE_MS;
-        if (productionEnd < System.currentTimeMillis()) {
+        if (!isProductionTimeFinished(buildingWithType, unitMap)) {
             // Do nothing. Production hasn't completed yet.
             return;
         }
@@ -130,7 +129,7 @@ public class BuildingProductionService extends PeriodicService {
 
         long productionEnd =
                 building.getProductionStart().getTime() + GameConfig.PRODUCTION_CYCLE_MS;
-        if (productionEnd < System.currentTimeMillis()) {
+        if (!isProductionTimeFinished(buildingWithType, unitMap)) {
             // Do nothing. Production hasn't completed yet.
             return;
         }
@@ -204,5 +203,24 @@ public class BuildingProductionService extends PeriodicService {
     private void clearProductionStart(Building building) {
         building.setProductionStart(null);
         dao.update(building);
+    }
+
+    private boolean isProductionTimeFinished(
+            BuildingWithType buildingWithType,
+            Map<Long, Integer> unitMap) {
+
+        Building building = buildingWithType.getBuilding();
+
+        // Get peasant count.
+        final int peasantCount;
+        if (unitMap.containsKey(GameConfig.PEASANT_ID)) {
+            peasantCount = unitMap.get(GameConfig.PEASANT_ID) + GameConfig.IMPLIED_PEASANT_COUNT;
+        } else {
+            peasantCount = GameConfig.IMPLIED_PEASANT_COUNT;
+        }
+
+        int productionCycleMs = GameConfig.PRODUCTION_CYCLE_MS / peasantCount;
+        long productionEnd = building.getProductionStart().getTime() + productionCycleMs;
+        return (productionEnd < System.currentTimeMillis());
     }
 }

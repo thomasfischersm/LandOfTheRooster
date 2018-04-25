@@ -131,7 +131,14 @@ public class MarkerState {
                 totalCount += count;
             } else {
                 // This is a free production rule.
-                totalCount++;
+                boolean freeProductionRuleBlocked =
+                        ProductionCycleUtil.isFreeProductionRuleBlocked(
+                                resourceMap,
+                                unitMap,
+                                productionRule);
+                if (!freeProductionRuleBlocked) {
+                    totalCount++;
+                }
             }
         }
 
@@ -235,11 +242,11 @@ public class MarkerState {
     }
 
     private void drawProductionCircle(int index, Canvas canvas, int width, Paint paint) {
-        int margin = GameConfig.PRODUCTION_CIRCLE_MARGIN;
-        int radius = GameConfig.PRODUCTION_CIRCLE_RADIUS;
-        int x = width - margin - radius;
-        x += index * (2 * radius + margin);
-        int y = margin + radius;
+        float margin = GameConfig.PRODUCTION_CIRCLE_MARGIN;
+        float radius = GameConfig.PRODUCTION_CIRCLE_RADIUS;
+        float x = width - margin - radius;
+        x -= index * (2 * radius + margin);
+        float y = margin + radius;
 
         canvas.drawCircle(x, y, radius, paint);
     }

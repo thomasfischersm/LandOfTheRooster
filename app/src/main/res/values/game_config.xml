@@ -21,7 +21,7 @@
 
     <integer name="battle_respawn_duration">3600000</integer> <!-- 1 hour -->
 
-    <integer name="production_cycle_minutes">10</integer>
+    <integer name="production_cycle_minutes">1</integer>
 
     <drawable name="building_ready_bg">@drawable/ready_building_bg</drawable>
 
@@ -31,7 +31,7 @@
 
     <integer name="max_production_circle_count">5</integer>
 
-    <integer name="production_circle_margin">5</integer>
+    <dimen name="production_circle_margin">2dp</dimen>
 
-    <integer name="production_circle_radius">10</integer>
+    <dimen name="production_circle_radius">3dp</dimen>
 </resources>

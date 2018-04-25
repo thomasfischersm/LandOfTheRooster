@@ -15,7 +15,7 @@ import static com.playposse.landoftherooster.GameConfig.MAX_PEASANT_BUILDING_CAP
  */
 public class PeasantActionData extends ActionData {
 
-    private final int unitTypeId;
+    private final long unitTypeId;
     private final long buildingId;
 
     private int userUnitCount;
@@ -25,7 +25,7 @@ public class PeasantActionData extends ActionData {
     public PeasantActionData(
             Context context,
             RoosterDao dao,
-            int unitTypeId,
+            long unitTypeId,
             long buildingId) {
 
         super(context, dao);
