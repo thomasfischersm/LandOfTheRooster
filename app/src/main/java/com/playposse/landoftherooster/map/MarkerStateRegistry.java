@@ -11,6 +11,7 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
+import com.playposse.landoftherooster.util.TimedAsyncTask;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -51,7 +52,7 @@ public class MarkerStateRegistry {
         Observer<List<Resource>> resourceObserver = new Observer<List<Resource>>() {
             @Override
             public void onChanged(@Nullable List<Resource> resources) {
-                new ResoruceUpdateAsyncTask(
+                new ResourceUpdateAsyncTask(
                         MarkerStateRegistry.this,
                         resources)
                         .execute();
@@ -111,7 +112,7 @@ public class MarkerStateRegistry {
     /**
      * Awkward {@link AsyncTask} pattern to get the database work on a background thread.
      */
-    private static class BuildingUpdateAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class BuildingUpdateAsyncTask extends TimedAsyncTask {
 
         private final WeakReference<MarkerStateRegistry> markerStateRegistryRef;
         private final List<BuildingWithType> buildingsWithType;
@@ -126,25 +127,24 @@ public class MarkerStateRegistry {
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected void doInBackground() {
             MarkerStateRegistry markerStateRegistry = markerStateRegistryRef.get();
 
             if (markerStateRegistry != null) {
                 markerStateRegistry.onBuildingUpdate(buildingsWithType);
             }
-            return null;
         }
     }
 
     /**
      * Awkward {@link AsyncTask} pattern to get the database work on a background thread.
      */
-    private static class ResoruceUpdateAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class ResourceUpdateAsyncTask extends TimedAsyncTask {
 
         private final WeakReference<MarkerStateRegistry> markerStateRegistryRef;
         private final List<Resource> resources;
 
-        private ResoruceUpdateAsyncTask(
+        private ResourceUpdateAsyncTask(
                 MarkerStateRegistry markerStateRegistry,
                 List<Resource> resources) {
 
@@ -154,20 +154,19 @@ public class MarkerStateRegistry {
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected void doInBackground() {
             MarkerStateRegistry markerStateRegistry = markerStateRegistryRef.get();
 
             if (markerStateRegistry != null) {
                 markerStateRegistry.onResourceUpdate(resources);
             }
-            return null;
         }
     }
 
     /**
      * Awkward {@link AsyncTask} pattern to get the database work on a background thread.
      */
-    private static class UnitUpdateAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class UnitUpdateAsyncTask extends TimedAsyncTask {
 
         private final WeakReference<MarkerStateRegistry> markerStateRegistryRef;
         private final List<Unit> units;
@@ -182,13 +181,12 @@ public class MarkerStateRegistry {
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected void doInBackground() {
             MarkerStateRegistry markerStateRegistry = markerStateRegistryRef.get();
 
             if (markerStateRegistry != null) {
                 markerStateRegistry.onUnitUpdate(units);
             }
-            return null;
         }
     }
 }

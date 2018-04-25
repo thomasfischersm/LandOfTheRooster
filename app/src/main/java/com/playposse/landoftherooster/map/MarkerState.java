@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -33,6 +34,8 @@ import java.util.Map;
  */
 public class MarkerState {
 
+    private static final String LOG_TAG = MarkerState.class.getSimpleName();
+
     private static final String DRAWABLE_RESOURCE_TYPE = "drawable";
 
     private final Context context;
@@ -52,6 +55,8 @@ public class MarkerState {
     }
 
     public void checkForChange(GoogleMap map) {
+        long start = System.currentTimeMillis();
+
         BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
         Building building = buildingWithType.getBuilding();
         List<ProductionRule> productionRules =
@@ -62,7 +67,7 @@ public class MarkerState {
         int newPendingCount = computePendingProductionCount(productionRules, resourceMap, unitMap);
         int newCompletedCount =
                 computeCompletedProductionCount(productionRules, resourceMap, unitMap);
-        boolean newIsReady = (completedProductionCount > 0);
+        boolean newIsReady = (newCompletedCount > 0);
 
         if ((pendingProductionCount == newPendingCount)
                 && (completedProductionCount == newCompletedCount)
@@ -76,6 +81,14 @@ public class MarkerState {
         pendingProductionCount = newPendingCount;
         completedProductionCount = newCompletedCount;
         reapplyToMap(context, map);
+
+        long end = System.currentTimeMillis();
+        Log.i(LOG_TAG, "checkForChange: Checked building for change: "
+                + buildingWithType.getBuildingType().getName() + " "
+                + (end - start)
+                + "ms. isReady: " + isReady
+                + " pendingProductionCount: " + pendingProductionCount
+                + " completedProductionCount " + completedProductionCount);
     }
 
     private int computePendingProductionCount(
@@ -116,6 +129,9 @@ public class MarkerState {
 
             if (count != null) {
                 totalCount += count;
+            } else {
+                // This is a free production rule.
+                totalCount++;
             }
         }
 
