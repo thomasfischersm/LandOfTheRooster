@@ -23,7 +23,7 @@
 
     <integer name="production_cycle_minutes">10</integer>
 
-    <color name="building_ready_color">#66bb6a</color>
+    <drawable name="building_ready_bg">@drawable/ready_building_bg</drawable>
 
     <color name="pending_production_color">#90a4ae</color>
 
@@ -33,5 +33,5 @@
 
     <integer name="production_circle_margin">5</integer>
 
-    <integer name="production_circle_radius">6</integer>
+    <integer name="production_circle_radius">10</integer>
 </resources>

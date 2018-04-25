@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -172,11 +172,9 @@ public class MarkerState {
 
         // Draw ready background.
         if (isReady) {
-            RectF ovalRect = new RectF(0, 0, width, height);
-            Paint ovalPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            ovalPaint.setColor(GameConfig.BUILDING_READY_COLOR);
-
-            canvas.drawOval(ovalRect, ovalPaint);
+            Drawable readyBgDrawable = GameConfig.BUILDING_READY_BG;
+            readyBgDrawable.setBounds(0, 0, width, height);
+            readyBgDrawable.draw(canvas);
         }
 
         // Draw building icon.

@@ -1,6 +1,10 @@
 package com.playposse.landoftherooster;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.IntegerRes;
 
 /**
  * A global constant class that reads its values from game_config.xml during the application start.
@@ -69,9 +73,10 @@ public final class GameConfig {
     public static int PRODUCTION_CYCLE_MS;
 
     /**
-     * Color for the oval background of a map marker to represent the building ready status.
+     * Background drawable for the oval background of a map marker to represent the building ready
+     * status.
      */
-    public static int BUILDING_READY_COLOR;
+    public static Drawable BUILDING_READY_BG;
 
     /**
      * Color for the circle on the building map marker to indicate a pending production run.
@@ -113,7 +118,7 @@ public final class GameConfig {
         BATTLE_RESPAWN_DURATION = get(context, R.integer.battle_respawn_duration);
         PRODUCTION_CYCLE_MINUTES = get(context, R.integer.production_cycle_minutes);
         PRODUCTION_CYCLE_MS = PRODUCTION_CYCLE_MINUTES * 60 * 1_000;
-        BUILDING_READY_COLOR = getColor(context, R.color.building_ready_color);
+        BUILDING_READY_BG = getDrawable(context, R.drawable.building_ready_bg);
         PENDING_PRODUCTION_COLOR = getColor(context, R.color.pending_production_color);
         COMPLETED_PRODUCTION_COLOR = getColor(context, R.color.completed_production_color);
         MAX_PRODUCTION_CIRCLE_COUNT = get(context, R.integer.max_production_circle_count);
@@ -121,11 +126,15 @@ public final class GameConfig {
         PRODUCTION_CIRCLE_RADIUS = get(context, R.integer.production_circle_radius);
     }
 
-    private static int get(Context context, int resId) {
+    private static int get(Context context, @IntegerRes int resId) {
         return context.getResources().getInteger(resId);
     }
 
-    private static int getColor(Context context, int resId) {
+    private static int getColor(Context context, @ColorRes int resId) {
         return context.getResources().getColor(resId);
+    }
+
+    private static Drawable getDrawable(Context context, @DrawableRes int resId) {
+        return context.getResources().getDrawable(resId);
     }
 }
