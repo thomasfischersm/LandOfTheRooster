@@ -81,6 +81,7 @@ public class RoosterBroadcastManager {
         if (roosterReceivers.size() == 0) {
             LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
             localBroadcastManager.unregisterReceiver(localReceiver);
+            localReceiver = null;
         }
     }
 
@@ -92,6 +93,8 @@ public class RoosterBroadcastManager {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+            Log.i(LOG_TAG, "onReceive: LocalBroadcastReceiver received event " + action
+                    + " for " + roosterReceivers.size() + " receivers");
 
             // Check for registered rooster intent.
             try {

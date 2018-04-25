@@ -21,7 +21,7 @@
 
     <integer name="battle_respawn_duration">3600000</integer> <!-- 1 hour -->
 
-    <integer name="production_cycle_minutes">1</integer>
+    <integer name="production_cycle_minutes">10</integer>
 
     <drawable name="building_ready_bg">@drawable/ready_building_bg</drawable>
 
