@@ -36,7 +36,7 @@ public final class GameConfig {
 
     /**
      * The first building type id that the user discovers.
-     *
+     * <p>
      * <p>Note: This is actually 1 smaller than the actual id.
      */
     public static int INITIAL_BUILDING_TYPE_ID;
@@ -105,7 +105,13 @@ public final class GameConfig {
      */
     public static float PRODUCTION_CIRCLE_RADIUS;
 
-    private GameConfig() {}
+    /**
+     * Minutes that it takes to heal one health point for unit.
+     */
+    public static int HEALING_PER_HEALTH_POINT_DURATION_MINUTES;
+
+    private GameConfig() {
+    }
 
     static void init(Context context) {
         IMPLIED_PEASANT_COUNT = get(context, R.integer.implied_peasant_count);
@@ -125,6 +131,8 @@ public final class GameConfig {
         MAX_PRODUCTION_CIRCLE_COUNT = get(context, R.integer.max_production_circle_count);
         PRODUCTION_CIRCLE_MARGIN = getDimension(context, R.dimen.production_circle_margin);
         PRODUCTION_CIRCLE_RADIUS = getDimension(context, R.dimen.production_circle_radius);
+        HEALING_PER_HEALTH_POINT_DURATION_MINUTES =
+                get(context, R.integer.healing_per_health_point_duration_minutes);
     }
 
     private static int get(Context context, @IntegerRes int resId) {

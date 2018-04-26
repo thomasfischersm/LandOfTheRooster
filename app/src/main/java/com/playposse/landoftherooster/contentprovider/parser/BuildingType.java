@@ -13,6 +13,7 @@ public class BuildingType {
     private Integer enemyUnitCount;
     private Integer enemyUnitTypeId;
     private Integer conquestPrizeResourceTypeId;
+    private boolean healsUnits;
 
     public int getId() {
         return id;
@@ -44,5 +45,9 @@ public class BuildingType {
 
     public Integer getConquestPrizeResourceTypeId() {
         return conquestPrizeResourceTypeId;
+    }
+
+    public boolean isHealsUnits() {
+        return healsUnits;
     }
 }

@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 
 import com.google.common.base.MoreObjects;
 
+import java.util.Date;
+
 import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 
 /**
@@ -54,6 +56,9 @@ public class BuildingType {
 
     @ColumnInfo(name = "conquest_prize_resource_type_id")
     private Integer conquestPrizeResourceTypeId;
+
+    @ColumnInfo(name = "heals_units")
+    private boolean healsUnits;
 
     public int getId() {
         return id;
@@ -119,6 +124,14 @@ public class BuildingType {
         this.conquestPrizeResourceTypeId = conquestPrizeResourceTypeId;
     }
 
+    public boolean isHealsUnits() {
+        return healsUnits;
+    }
+
+    public void setHealsUnits(boolean healsUnits) {
+        this.healsUnits = healsUnits;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -130,6 +143,7 @@ public class BuildingType {
                 .add("enemyUnitCount", enemyUnitCount)
                 .add("enemyUnitTypeId", enemyUnitTypeId)
                 .add("conquestPrizeResourceTypeId", conquestPrizeResourceTypeId)
+                .add("healsUnits", healsUnits)
                 .toString();
     }
 }

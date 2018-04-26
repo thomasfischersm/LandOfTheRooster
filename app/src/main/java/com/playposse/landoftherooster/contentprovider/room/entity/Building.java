@@ -43,6 +43,10 @@ public class Building {
     @Nullable
     private Date productionStart;
 
+    @ColumnInfo(name = "healing_started")
+    @Nullable
+    private Date healingStarted;
+
     public Building() {
     }
 
@@ -102,5 +106,14 @@ public class Building {
 
     public void setProductionStart(@Nullable Date productionStart) {
         this.productionStart = productionStart;
+    }
+
+    @Nullable
+    public Date getHealingStarted() {
+        return healingStarted;
+    }
+
+    public void setHealingStarted(@Nullable Date healingStarted) {
+        this.healingStarted = healingStarted;
     }
 }

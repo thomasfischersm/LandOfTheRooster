@@ -32,6 +32,9 @@ import java.util.Map;
 /**
  * A class that keeps track of a marker on the Google Map. It is intelligent about detecting
  * changes and updating itself.
+ *
+ * <p>TODO: Consider that completed resources cannot be picked up if the player has no carrying
+ * capacity!
  */
 public class MarkerState {
 

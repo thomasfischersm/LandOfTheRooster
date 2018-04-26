@@ -51,6 +51,14 @@
       "enemyUnitCount": 3,
       "enemyUnitTypeId": 3,
       "conquestPrizeResourceTypeId": 4
+    },
+    {
+      "id": 8,
+      "name": "hospital",
+      "icon": "hospital",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160,
+      "healsUnits": true
     }
   ]
 }

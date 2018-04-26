@@ -34,4 +34,6 @@
     <dimen name="production_circle_margin">2dp</dimen>
 
     <dimen name="production_circle_radius">3dp</dimen>
+
+    <integer name="healing_per_health_point_duration_minutes">1</integer>
 </resources>

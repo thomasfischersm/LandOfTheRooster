@@ -11,6 +11,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 
 import java.util.List;
 
@@ -46,6 +47,20 @@ public final class RoosterDaoUtil {
         List<Unit> units = dao.getUnitsJoiningUserByTypeId(unitType.getId());
 
         return (units != null) ? units.size() : 0;
+    }
+
+    public static int getUnitAmount(long unitTypeId, List<UnitWithType> unitWithTypes) {
+        if ((unitWithTypes == null) || (unitWithTypes.size() ==0)) {
+            return 0;
+        }
+
+        int count = 0;
+        for (UnitWithType unitWithType : unitWithTypes) {
+            if (unitWithType.getType().getId() == unitTypeId) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public static void creditResource(

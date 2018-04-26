@@ -21,6 +21,7 @@ import com.playposse.landoftherooster.services.location.BuildingDiscoveryService
 import com.playposse.landoftherooster.services.location.BuildingInteractionService;
 import com.playposse.landoftherooster.services.location.ILocationAwareService;
 import com.playposse.landoftherooster.services.time.BuildingProductionService;
+import com.playposse.landoftherooster.services.time.HospitalService;
 import com.playposse.landoftherooster.util.ConvenientLocationProvider;
 
 import java.util.ArrayList;
@@ -43,8 +44,8 @@ public class LocationScanningService extends Service {
     private final List<ILocationAwareService> dependentServices = new ArrayList<>();
 
     private ConvenientLocationProvider convenientLocationProvider;
-
     private BuildingProductionService buildingProductionService;
+    private HospitalService hospitalService;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -162,6 +163,9 @@ public class LocationScanningService extends Service {
 
         buildingProductionService = new BuildingProductionService(getApplicationContext());
         buildingProductionService.start();
+
+        hospitalService = new HospitalService(getApplicationContext());
+        hospitalService.start();
     }
 
     @Override
@@ -172,6 +176,11 @@ public class LocationScanningService extends Service {
         if (buildingProductionService != null) {
             buildingProductionService.stop();
             buildingProductionService = null;
+        }
+
+        if (hospitalService != null) {
+            hospitalService.stop();
+            hospitalService = null;
         }
     }
 

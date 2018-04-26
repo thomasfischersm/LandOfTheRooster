@@ -2,7 +2,6 @@ package com.playposse.landoftherooster.contentprovider.parser;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.playposse.landoftherooster.BuildConfig;
@@ -131,6 +130,7 @@ public final class ConfigurationImport {
             roomBuildingType.setEnemyUnitCount(buildingType.getEnemyUnitCount());
             roomBuildingType.setEnemyUnitTypeId(buildingType.getEnemyUnitTypeId());
             roomBuildingType.setConquestPrizeResourceTypeId(buildingType.getConquestPrizeResourceTypeId());
+            roomBuildingType.setHealsUnits(buildingType.isHealsUnits());
 
             rows.add(roomBuildingType);
         }
@@ -174,26 +174,4 @@ public final class ConfigurationImport {
             cursor.close();
         }
     }
-
-    /**
-     * An {@link AsyncTask} that imports the configuration.
-     */
-//    private static final class ImportAsyncTask extends AsyncTask<Void, Void, Void> {
-//
-//        private final Context context;
-//
-//        private ImportAsyncTask(Context context) {
-//            this.context = context;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//            try {
-//                importAll(context, RoosterDatabase.getInstance(context));
-//            } catch (IOException ex) {
-//                Log.e(LOG_TAG, "doInBackground: Failed to import configuration data.", ex);
-//            }
-//            return null;
-//        }
-//    }
 }
