@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/building_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textColor="#000"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Hospital"/>
+
+        <ImageView
+            android:id="@+id/building_icon_image_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/building_icon_content_description"
+            app:layout_constraintEnd_toEndOf="@+id/right_guide_line"
+            app:layout_constraintStart_toStartOf="@+id/left_guide_line"
+            app:layout_constraintTop_toBottomOf="@+id/building_name_text_view"
+            tools:src="@drawable/hospital"/>
+
+        <TextView
+            android:id="@+id/building_function_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:text="@string/hospital_function"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/building_icon_image_view"/>
+
+        <TextView
+            android:id="@+id/wounded_heading_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/wounded_heading"
+            android:textAllCaps="true"
+            android:textColor="#000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/building_function_text_view"/>
+
+        <android.support.v7.widget.GridLayout
+            android:id="@+id/wounded_grid_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            app:columnCount="3"
+            app:layout_constraintTop_toBottomOf="@+id/wounded_heading_text_view"
+            tools:layout_height="40dp"/>
+
+        <TextView
+            android:id="@+id/hospitalized_heading_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/hospitalized_heading"
+            android:textAllCaps="true"
+            android:textColor="#000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wounded_grid_layout"/>
+
+        <android.support.v7.widget.GridLayout
+            android:id="@+id/hospitalized_grid_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            app:columnCount="3"
+            app:layout_constraintTop_toBottomOf="@+id/hospitalized_heading_text_view"
+            tools:layout_height="40dp"/>
+
+        <TextView
+            android:id="@+id/recovered_heading_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/recovered_heading"
+            android:textAllCaps="true"
+            android:textColor="#000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hospitalized_grid_layout"/>
+
+        <android.support.v7.widget.GridLayout
+            android:id="@+id/recovered_grid_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            app:columnCount="3"
+            app:layout_constraintTop_toBottomOf="@+id/recovered_heading_text_view"
+            tools:layout_height="40dp"/>
+
+        <TextView
+            android:id="@+id/staff_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/hospital_staff_heading"
+            android:textAllCaps="true"
+            android:textColor="#000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recovered_grid_layout"/>
+
+        <android.support.v7.widget.GridLayout
+            android:id="@+id/staff_grid_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:columnCount="3"
+            app:layout_constraintTop_toBottomOf="@+id/staff_text_view">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:text="@string/peasant_label"
+                app:layout_columnWeight="1"/>
+
+            <TextView
+                android:id="@+id/peasant_count_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                app:layout_columnWeight="1"
+                tools:text="1 / 5"/>
+
+            <Button
+                android:id="@+id/assign_peasant_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:text="@string/assign_button_label"
+                app:layout_columnWeight="1"/>
+        </android.support.v7.widget.GridLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:text="@string/hospital_assign_hint"
+            app:layout_constraintTop_toBottomOf="@+id/staff_grid_layout"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/left_guide_line"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="10dp"
+            app:layout_constraintGuide_percent=".33"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/right_guide_line"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".66"/>
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

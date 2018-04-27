@@ -25,9 +25,9 @@ import com.playposse.landoftherooster.dialog.support.ActionData;
 import com.playposse.landoftherooster.dialog.support.PeasantActionData;
 import com.playposse.landoftherooster.dialog.support.ResourceActionData;
 import com.playposse.landoftherooster.dialog.support.UnitActionData;
-import com.playposse.landoftherooster.glide.GlideApp;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
+import com.playposse.landoftherooster.util.GlideUtil;
 import com.playposse.landoftherooster.util.SimpleStringJoiner;
 import com.playposse.landoftherooster.util.StringUtil;
 
@@ -126,13 +126,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
 
         populateCountdownClock();
 
-        int drawableId = getActivity().getResources().getIdentifier(
-                buildingType.getIcon(),
-                "drawable",
-                getActivity().getPackageName());
-        GlideApp.with(getActivity())
-                .load(drawableId)
-                .into(buildingIconImageView);
+        GlideUtil.loadBuildingIcon(buildingIconImageView, buildingWithType);
     }
 
     @Override

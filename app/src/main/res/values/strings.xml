@@ -60,6 +60,21 @@
     <string name="production_speed">%1$d peasants produce 1 unit per %2$d minutes.</string>
     <string name="production_speed_hint">\n(Add a peasant to cut the time to %1$d minutes.)</string>
 
+    <!-- Hospital dialog -->
+    <string name="hospital_function">Heals injured units.</string>
+    <string name="wounded_heading">Wounded Units</string>
+    <string name="admit_button_label">Admit</string>
+    <string name="hospitalized_heading">Hospitalized Units</string>
+    <string name="recovered_heading">Recovered Units</string>
+    <string name="pick_up_button_label">Pick up</string>
+    <string name="hospital_staff_heading">Staff</string>
+    <string name="peasant_label">Peasants</string>
+    <string name="peasant_count">%1$d / %2$d</string>
+    <string name="assign_button_label">Assign</string>
+    <string name="wounded_health">%1$d / %2$d</string>
+    <string name="healing_estimate">%1$d min</string>
+    <string name="hospital_assign_hint">(Assign up to 5 peasants to speed up healing.)</string>
+
     <!-- Common -->
     <string name="dialog_yes_button">Yes</string>
     <string name="dialog_no_button">No</string>

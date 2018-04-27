@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.room;
+package com.playposse.landoftherooster.util;
 
 /**
  * A boolean that can be modified. This helps for passing an object into another method and getting

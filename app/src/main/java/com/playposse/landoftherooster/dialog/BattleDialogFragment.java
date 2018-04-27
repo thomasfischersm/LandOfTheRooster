@@ -97,12 +97,12 @@ public class BattleDialogFragment extends BaseDialogFragment {
     private void showBattleSummary() {
         if (battleSummary.isDidFriendsWin()) {
             battleOutcomeTextView.setText(R.string.battle_victory_msg);
-            GlideApp.with(this)
+            GlideApp.with(getActivity())
                     .load(R.drawable.victory)
                     .into(battleOutcomeImageView);
         } else {
             battleOutcomeTextView.setText(R.string.battle_defeat_msg);
-            GlideApp.with(this)
+            GlideApp.with(getActivity())
                     .load(R.drawable.defeat)
                     .into(battleOutcomeImageView);
         }

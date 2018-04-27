@@ -124,19 +124,27 @@ public class HospitalService extends SmartPeriodicService {
             return null;
         }
 
+        int peasantCount = RoosterDaoUtil.getUnitAmount(GameConfig.PEASANT_ID, unitWithTypes)
+                + GameConfig.IMPLIED_PEASANT_COUNT;
+        peasantCount = Math.min(peasantCount, GameConfig.MAX_PEASANT_BUILDING_CAPACITY);
+
+        long healingTimeMs = computeHealingDuration(firstSickUnitWithType, peasantCount);
+        long healingStartedMs = healingStarted.getTime();
+        return healingStartedMs + healingTimeMs;
+    }
+
+    public static long computeHealingDuration(
+            UnitWithType firstSickUnitWithType,
+            int peasantCount) {
+
         // Compute needed health recovery.
         Unit unit = firstSickUnitWithType.getUnit();
         UnitType unitType = firstSickUnitWithType.getType();
         int neededHealth = unitType.getHealth() - unit.getHealth();
 
-        int peasantCount = RoosterDaoUtil.getUnitAmount(GameConfig.PEASANT_ID, unitWithTypes)
-                + GameConfig.IMPLIED_PEASANT_COUNT;
-
         // Calculate healing time.
         int healingRate = GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MINUTES;
-        long healingTimeMs = neededHealth * healingRate * 60 * 1_000 / peasantCount;
-        long healingStartedMs = healingStarted.getTime();
-        return healingStartedMs + healingTimeMs;
+        return (long) (neededHealth * healingRate * 60 * 1_000 / peasantCount);
     }
 
     private void clearHealingStart(BuildingWithType buildingWithType) {

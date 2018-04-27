@@ -10,11 +10,12 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
-import com.playposse.landoftherooster.services.combat.BattleExecutor;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
+import com.playposse.landoftherooster.services.broadcastintent.HospitalAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.LeftBuildingBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
+import com.playposse.landoftherooster.services.combat.BattleExecutor;
 
 import java.util.Date;
 import java.util.List;
@@ -55,8 +56,12 @@ public class BuildingInteractionService implements ILocationAwareService {
             if (buildingType.getEnemyUnitCount() != null) {
                 // Try fighting.
                 onFoundBattleBuilding(buildingWithType);
+            } else if (buildingType.isHealsUnits()) {
+                // Show hospital dialog.
+                RoosterBroadcastManager.send(
+                        context,
+                        new HospitalAvailableBroadcastIntent(buildingWithType.getBuilding().getId()));
             } else {
-
                 // Show user the building resources dialog.
                 RoosterBroadcastManager.send(
                         context,

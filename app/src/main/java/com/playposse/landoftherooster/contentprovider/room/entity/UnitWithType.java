@@ -28,4 +28,8 @@ public class UnitWithType {
     public void setType(UnitType type) {
         this.type = type;
     }
+
+    public boolean isInjured() {
+        return unit.getHealth() < type.getHealth();
+    }
 }

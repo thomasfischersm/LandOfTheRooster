@@ -45,10 +45,12 @@ import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 import com.playposse.landoftherooster.dialog.BattleAvailableDialogFragment;
 import com.playposse.landoftherooster.dialog.BuildingInteractionDialogFragment;
 import com.playposse.landoftherooster.dialog.BuildingNeedsToRespawnDialogFragment;
+import com.playposse.landoftherooster.dialog.HospitalDialogFragment;
 import com.playposse.landoftherooster.map.MarkerStateRegistry;
 import com.playposse.landoftherooster.services.broadcastintent.BattleAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
+import com.playposse.landoftherooster.services.broadcastintent.HospitalAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
 import com.playposse.landoftherooster.util.RecyclerViewLiveDataAdapter;
@@ -370,6 +372,9 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                         .show(getFragmentManager(), null);
             } else if (roosterIntent instanceof BuildingAvailableBroadcastIntent) {
                 BuildingInteractionDialogFragment.newInstance(roosterIntent)
+                        .show(getFragmentManager(), null);
+            } else if (roosterIntent instanceof HospitalAvailableBroadcastIntent) {
+                HospitalDialogFragment.newInstance(roosterIntent)
                         .show(getFragmentManager(), null);
             }
         }

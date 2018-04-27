@@ -230,11 +230,15 @@ public final class RoosterDaoUtil {
         }
 
         Unit unit = units.get(0);
+        transferUnitToBuilding(context, unit, buildingId);
+    }
 
+    public static void transferUnitToBuilding(Context context, Unit unit, long buildingId) {
         if (unit.getLocatedAtBuildingId() != null) {
             throw new IllegalStateException("The unit is already at a building! " + unit.getId());
         }
 
+        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
         unit.setLocatedAtBuildingId(buildingId);
         dao.update(unit);
     }
@@ -250,6 +254,11 @@ public final class RoosterDaoUtil {
         }
 
         Unit unit = units.get(0);
+        transferUnitFromBuilding(context, unit, buildingId);
+    }
+
+    public static void transferUnitFromBuilding(Context context, Unit unit, long buildingId) {
+        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
 
         if (unit.getLocatedAtBuildingId() == null) {
             throw new IllegalStateException(
