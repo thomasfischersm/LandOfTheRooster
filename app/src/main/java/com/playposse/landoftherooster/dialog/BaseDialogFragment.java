@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -29,6 +30,8 @@ import butterknife.ButterKnife;
  * app commonly have a custom view with
  */
 public abstract class BaseDialogFragment extends DialogFragment {
+
+    private static final String LOG_TAG = BaseDialogFragment.class.getSimpleName();
 
     private final int layoutResId;
 
@@ -224,11 +227,12 @@ public abstract class BaseDialogFragment extends DialogFragment {
         private LoadAsyncTask(BaseDialogFragment fragment, @Nullable Runnable runnable) {
             this.runnable = runnable;
 
-            fragmentReference = new WeakReference<BaseDialogFragment>(fragment);
+            fragmentReference = new WeakReference<>(fragment);
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
+            Log.d(LOG_TAG, "doInBackground: Start loading dialog");
             BaseDialogFragment fragment = fragmentReference.get();
             if ((fragment != null) && (runnable != null)) {
                 runnable.run();
@@ -238,17 +242,20 @@ public abstract class BaseDialogFragment extends DialogFragment {
             if (fragment != null) {
                 fragment.doInBackground();
             }
+            Log.d(LOG_TAG, "doInBackground: Finished loading dialog");
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            Log.d(LOG_TAG, "onPostExecute: Start populating dialog.");
             BaseDialogFragment fragment = fragmentReference.get();
             if (fragment != null) {
                 ButterKnife.bind(fragment, fragment.rootView);
 
                 fragment.onPostExecute();
             }
+            Log.d(LOG_TAG, "onPostExecute: Finished populating dialog.");
         }
     }
 

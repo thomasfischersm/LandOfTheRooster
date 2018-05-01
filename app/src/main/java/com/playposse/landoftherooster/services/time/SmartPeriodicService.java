@@ -6,6 +6,7 @@ import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
@@ -24,6 +25,8 @@ import java.util.concurrent.TimeUnit;
  * periodic. Rather than checking every minute, it intelligently knows when it should be triggered.
  */
 public abstract class SmartPeriodicService implements LifecycleOwner {
+
+    private static final String LOG_TAG = SmartPeriodicService.class.getSimpleName();
 
     private final Context context;
     private final RoosterDao dao;
@@ -45,6 +48,7 @@ public abstract class SmartPeriodicService implements LifecycleOwner {
     public void start() {
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         lifecycleRegistry.markState(Lifecycle.State.STARTED);
+        Log.d(LOG_TAG, "start: Started SmartPeriodicService: " + getClass().getName());
     }
 
     /**
@@ -55,7 +59,13 @@ public abstract class SmartPeriodicService implements LifecycleOwner {
                 new AsyncObserver<SmartPeriodicService, T>(this) {
                     @Override
                     protected void onChangedAsync(SmartPeriodicService caller) {
+                        Log.d(LOG_TAG, "onChangedAsync: LiveData has changed!");
+                        long start = System.currentTimeMillis();
+
                         onLiveDataChanged();
+
+                        Log.d(LOG_TAG, "onChangedAsync: Handled LiveData change in "
+                                + (System.currentTimeMillis() - start));
                     }
                 };
 
@@ -65,6 +75,8 @@ public abstract class SmartPeriodicService implements LifecycleOwner {
     protected abstract void onLiveDataChanged();
 
     protected void scheduleNextBuildingEvent(final BuildingWithType buildingWithType, long timeMs) {
+        Log.d(LOG_TAG, "scheduleNextBuildingEvent: Scheduled building event in " + timeMs);
+
         // Cancel potential previous building event.
         final long buildingId = buildingWithType.getBuilding().getId();
         if (buildingIdToRunnableMap.containsKey(buildingId)) {
@@ -74,10 +86,17 @@ public abstract class SmartPeriodicService implements LifecycleOwner {
         CancelableRunnable runnable = new CancelableRunnable() {
             @Override
             public void maybeRun() {
+                Log.d(LOG_TAG, "maybeRun: Invoked building event runnable");
+                long start = System.currentTimeMillis();
+
                 if (buildingIdToRunnableMap.containsKey(buildingId)) {
                     buildingIdToRunnableMap.remove(buildingId);
                 }
+
                 onBuildingEvent(buildingWithType);
+
+                Log.d(LOG_TAG, "maybeRun: Handled building event in "
+                        + (System.currentTimeMillis() - start));
             }
         };
 

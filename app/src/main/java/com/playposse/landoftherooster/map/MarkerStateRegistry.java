@@ -89,7 +89,7 @@ public class MarkerStateRegistry {
         markerState.checkForChange(map);
     }
 
-    public void checkForChange() {
+    private void checkForChange() {
         for (MarkerState markerState : markerStates.values()) {
             markerState.checkForChange(map);
         }

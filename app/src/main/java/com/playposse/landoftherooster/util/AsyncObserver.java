@@ -3,6 +3,7 @@ package com.playposse.landoftherooster.util;
 import android.arch.lifecycle.Observer;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.lang.ref.WeakReference;
 
@@ -10,6 +11,8 @@ import java.lang.ref.WeakReference;
  * An {@link Observer} that executes the result on a background thread of an {@link AsyncTask}.
  */
 public abstract class AsyncObserver<C, T> implements Observer<T> {
+
+    private static final String LOG_TAG = AsyncObserver.class.getSimpleName();
 
     private final WeakReference<C> callerRef;
 
@@ -37,10 +40,12 @@ public abstract class AsyncObserver<C, T> implements Observer<T> {
 
         @Override
         protected void doInBackground(AsyncObserver<C, T> observer) {
+            Log.d(LOG_TAG, "doInBackground: Start");
             C caller = callerRef.get();
             if (caller != null) {
                 observer.onChangedAsync(caller);
             }
+            Log.d(LOG_TAG, "doInBackground: End");
         }
     }
 }

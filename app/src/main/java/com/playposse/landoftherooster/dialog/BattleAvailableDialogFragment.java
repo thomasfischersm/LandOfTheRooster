@@ -49,6 +49,7 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
         super(R.layout.dialog_battle_available);
 
         setShowReturnToMapButton(true);
+        setDisappearOnDistance(true);
 
         setNegativeButton(
                 R.string.withdraw_button,

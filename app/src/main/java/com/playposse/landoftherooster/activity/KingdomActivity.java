@@ -374,8 +374,12 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                 BuildingInteractionDialogFragment.newInstance(roosterIntent)
                         .show(getFragmentManager(), null);
             } else if (roosterIntent instanceof HospitalAvailableBroadcastIntent) {
-                HospitalDialogFragment.newInstance(roosterIntent)
-                        .show(getFragmentManager(), null);
+//                HospitalDialogFragment.newInstance(roosterIntent)
+//                        .show(getFragmentManager(), null);
+                Log.d(LOG_TAG, " \n\n\n\n\n\nonReceive: Start opening hospital dialog");
+                HospitalDialogFragment fragment = HospitalDialogFragment.newInstance(roosterIntent);
+                fragment.show(getFragmentManager(), null);
+                Log.d(LOG_TAG, "onReceive: Done opening hospital dialog.");
             }
         }
     }

@@ -25,7 +25,9 @@ public abstract class RecyclerViewLiveDataAdapter<VH extends RecyclerView.ViewHo
         liveData.observe(activity, new Observer<List<D>>() {
             @Override
             public void onChanged(@Nullable List<D> ds) {
+                Log.d(LOG_TAG, "onChanged: Start");
                 notifyDataSetChanged();
+                Log.d(LOG_TAG, "onChanged: End");
             }
         });
     }

@@ -2,6 +2,7 @@ package com.playposse.landoftherooster.dialog;
 
 import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,6 +32,8 @@ import butterknife.BindView;
  * A dialog that allows the user to drop off and pickup wounded/recovered units at a hospital.
  */
 public class HospitalDialogFragment extends BaseDialogFragment {
+
+    private static final String LOG_TAG = HospitalDialogFragment.class.getSimpleName();
 
     private static final String BUILDING_ID_ARG = "buildingId";
 
@@ -62,12 +65,15 @@ public class HospitalDialogFragment extends BaseDialogFragment {
     }
 
     public static HospitalDialogFragment newInstance(RoosterBroadcastIntent roosterIntent) {
+        Log.d(LOG_TAG, "newInstance: Start newInstance");
         HospitalAvailableBroadcastIntent intent = (HospitalAvailableBroadcastIntent) roosterIntent;
         Bundle args = new Bundle();
         args.putLong(BUILDING_ID_ARG, intent.getBuildingId());
 
         HospitalDialogFragment fragment = new HospitalDialogFragment();
         fragment.setArguments(args);
+
+        Log.d(LOG_TAG, "newInstance: End newInstance");
         return fragment;
     }
 
@@ -78,6 +84,7 @@ public class HospitalDialogFragment extends BaseDialogFragment {
 
     @Override
     protected void doInBackground() {
+        Log.d(LOG_TAG, "doInBackground: Start doInBackground");
         RoosterDao dao = RoosterDatabase.getInstance(getActivity()).getDao();
 
         buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
@@ -102,19 +109,27 @@ public class HospitalDialogFragment extends BaseDialogFragment {
                 }
             }
         }
+        Log.d(LOG_TAG, "doInBackground: End doInBackground");
     }
 
     @Override
     protected void onPostExecute() {
+        Log.d(LOG_TAG, "onPostExecute: Starting to populate.");
+
         // Populate header.
         String buildingName = StringUtil.capitalize(buildingWithType.getBuildingType().getName());
         buildingNameTextView.setText(buildingName);
         GlideUtil.loadBuildingIcon(buildingIconImageView, buildingWithType);
+        Log.d(LOG_TAG, "onPostExecute: 1");
 
         populateWoundedSection();
+        Log.d(LOG_TAG, "onPostExecute: 2");
         populateHospitalizedSection();
+        Log.d(LOG_TAG, "onPostExecute: 3");
         populateRecoveredSection();
+        Log.d(LOG_TAG, "onPostExecute: 4");
         populatePeasantSection();
+        Log.d(LOG_TAG, "onPostExecute: Finished populating");
     }
 
     private void populateWoundedSection() {
@@ -131,30 +146,7 @@ public class HospitalDialogFragment extends BaseDialogFragment {
         woundedGridLayout.removeAllViews();
 
         for (final UnitWithType unitWithType : woundedUnitWithTypes) {
-            new GridLayoutRowViewHolder(woundedGridLayout, R.layout.list_item_wounded_unit) {
-
-                @BindView(R.id.unit_type_name_text_view) TextView unitTypeNameTextView;
-                @BindView(R.id.health_text_view) TextView healthTextView;
-                @BindView(R.id.admit_button) Button admitButton;
-
-                @Override
-                protected void loadData() {
-                    String healthStr = getString(
-                            R.string.wounded_health,
-                            unitWithType.getUnit().getHealth(),
-                            unitWithType.getType().getHealth());
-
-                    unitTypeNameTextView.setText(unitWithType.getType().getName());
-                    healthTextView.setText(healthStr);
-
-                    admitButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            onAdmitWoundedUnitClicked(unitWithType);
-                        }
-                    });
-                }
-            };
+            new WoundedRowViewHolder().apply(unitWithType);
         }
     }
 
@@ -171,36 +163,9 @@ public class HospitalDialogFragment extends BaseDialogFragment {
         hospitalizedGridLayout.setVisibility(View.VISIBLE);
         hospitalizedGridLayout.removeAllViews();
 
-        final MutableLong healingDurationSum = new MutableLong(0);
+        final MutableLong healingDurationSum = new MutableLong(0);// TODO Subtract already passed building healing start
         for (final UnitWithType unitWithType : hospitalizedUnitWithTypes) {
-            new GridLayoutRowViewHolder(
-                    hospitalizedGridLayout,
-                    R.layout.list_item_hospitalized_unit) {
-
-                @BindView(R.id.unit_type_name_text_view) TextView unitTypeNameTextView;
-                @BindView(R.id.health_text_view) TextView healthTextView;
-                @BindView(R.id.estimated_time_text_view) TextView estimatedTimeTextView;
-
-                @Override
-                protected void loadData() {
-                    String healthStr = getString(
-                            R.string.wounded_health,
-                            unitWithType.getUnit().getHealth(),
-                            unitWithType.getType().getHealth());
-
-                    long healingDuration = HospitalService.computeHealingDuration(
-                            unitWithType,
-                            peasantCountInBuilding);
-                    healingDurationSum.add(healingDuration);
-                    healingDurationSum.divide(60 * 1_000);
-                    String estimateStr =
-                            getString(R.string.healing_estimate, healingDurationSum.getValue());
-
-                    unitTypeNameTextView.setText(unitWithType.getType().getName());
-                    healthTextView.setText(healthStr);
-                    estimatedTimeTextView.setText(estimateStr);
-                }
-            };
+            new HospitalizedGridLayoutRowViewHolder(healingDurationSum).apply(unitWithType);
         }
     }
 
@@ -214,28 +179,18 @@ public class HospitalDialogFragment extends BaseDialogFragment {
         }
 
         // Show empty section.
+        Log.d(LOG_TAG, "populateRecoveredSection: a");
         recoveredHeadingTextView.setVisibility(View.VISIBLE);
+        Log.d(LOG_TAG, "populateRecoveredSection: b");
         recoveredGridLayout.setVisibility(View.VISIBLE);
+        Log.d(LOG_TAG, "populateRecoveredSection: c");
         recoveredGridLayout.removeAllViews();
+        Log.d(LOG_TAG, "populateRecoveredSection: e");
 
         for (final UnitWithType unitWithType : recoveredUnitWithTypes) {
-            new GridLayoutRowViewHolder(recoveredGridLayout, R.layout.list_item_recovered_unit) {
-
-                @BindView(R.id.unit_type_name_text_view) TextView unitTypeNameTextView;
-                @BindView(R.id.pick_up_button) Button pickUpButton;
-
-                @Override
-                protected void loadData() {
-                    unitTypeNameTextView.setText(unitWithType.getType().getName());
-
-                    pickUpButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            onPickUpRecoveredUnitClicked(unitWithType);
-                        }
-                    });
-                }
-            };
+            Log.d(LOG_TAG, "populateRecoveredSection: f");
+            new RecoveredRowViewHolder().apply(unitWithType);
+            Log.d(LOG_TAG, "populateRecoveredSection: i");
         }
     }
 
@@ -294,5 +249,103 @@ public class HospitalDialogFragment extends BaseDialogFragment {
                         buildingId);
             }
         });
+    }
+
+    class WoundedRowViewHolder extends GridLayoutRowViewHolder<UnitWithType> {
+
+        @BindView(R.id.unit_type_name_text_view) TextView unitTypeNameTextView;
+        @BindView(R.id.health_text_view) TextView healthTextView;
+        @BindView(R.id.admit_button) Button admitButton;
+
+        private WoundedRowViewHolder() {
+            super(HospitalDialogFragment.this.woundedGridLayout, R.layout.list_item_wounded_unit);
+        }
+
+        @Override
+        protected void populate(final UnitWithType unitWithType) {
+            String healthStr = getString(
+                    R.string.wounded_health,
+                    unitWithType.getUnit().getHealth(),
+                    unitWithType.getType().getHealth());
+
+            unitTypeNameTextView.setText(unitWithType.getType().getName());
+            healthTextView.setText(healthStr);
+
+            admitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onAdmitWoundedUnitClicked(unitWithType);
+                }
+            });
+        }
+    }
+
+    class HospitalizedGridLayoutRowViewHolder extends GridLayoutRowViewHolder<UnitWithType> {
+
+        private final MutableLong healingDurationSum;
+        @BindView(R.id.unit_type_name_text_view) TextView unitTypeNameTextView;
+        @BindView(R.id.health_text_view) TextView healthTextView;
+        @BindView(R.id.estimated_time_text_view) TextView estimatedTimeTextView;
+
+        private HospitalizedGridLayoutRowViewHolder(MutableLong healingDurationSum) {
+            super(HospitalDialogFragment.this.hospitalizedGridLayout, R.layout.list_item_hospitalized_unit);
+            this.healingDurationSum = healingDurationSum;
+        }
+
+        @Override
+        protected void populate(UnitWithType unitWithType) {
+            // @BindView is not working because ButterKnife can't bind the same view twice.
+//                    unitTypeNameTextView =
+//                            hospitalizedGridLayout.findViewById(R.id.unit_type_name_text_view);
+//                    healthTextView = hospitalizedGridLayout.findViewById(R.id.health_text_view);
+//                    estimatedTimeTextView =
+//                            hospitalizedGridLayout.findViewById(R.id.estimated_time_text_view);
+
+            String healthStr = getString(
+                    R.string.wounded_health,
+                    unitWithType.getUnit().getHealth(),
+                    unitWithType.getType().getHealth());
+
+            long healingDuration = HospitalService.computeHealingDuration(
+                    unitWithType,
+                    peasantCountInBuilding);
+            healingDurationSum.add(healingDuration);
+            long durationMin = healingDurationSum.getValue() / 60 / 1_000;
+            String estimateStr =
+                    getString(R.string.healing_estimate, durationMin);
+
+            unitTypeNameTextView.setText(unitWithType.getType().getName());
+            healthTextView.setText(healthStr);
+            estimatedTimeTextView.setText(estimateStr);
+        }
+    }
+
+    class RecoveredRowViewHolder extends GridLayoutRowViewHolder<UnitWithType> {
+
+        @BindView(R.id.unit_type_name_text_view) TextView unitTypeNameTextView;
+        @BindView(R.id.pick_up_button) Button pickUpButton;
+
+        private RecoveredRowViewHolder() {
+            super(HospitalDialogFragment.this.recoveredGridLayout, R.layout.list_item_recovered_unit);
+        }
+
+        @Override
+        protected void populate(final UnitWithType unitWithType) {
+            // @BindView is not working because ButterKnife can't bind the same view twice.
+//                    unitTypeNameTextView =
+//                            recoveredGridLayout.findViewById(R.id.unit_type_name_text_view);
+//                    pickUpButton = recoveredGridLayout.findViewById(R.id.pick_up_button);
+            Log.d(LOG_TAG, "populate: g");
+
+            unitTypeNameTextView.setText(unitWithType.getType().getName());
+
+            pickUpButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onPickUpRecoveredUnitClicked(unitWithType);
+                }
+            });
+            Log.d(LOG_TAG, "populate: h");
+        }
     }
 }
