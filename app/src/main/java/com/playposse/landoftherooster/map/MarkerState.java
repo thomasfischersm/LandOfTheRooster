@@ -63,6 +63,8 @@ public class MarkerState {
         long start = System.currentTimeMillis();
 
         BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+        Log.d(LOG_TAG, "checkForChange: Starting to check "
+                + buildingWithType.getBuildingType().getName());
         Building building = buildingWithType.getBuilding();
         List<ProductionRule> productionRules =
                 dao.getProductionRulesByBuildingTypeId(building.getBuildingTypeId());
