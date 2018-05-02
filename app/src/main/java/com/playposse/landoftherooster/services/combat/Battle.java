@@ -12,6 +12,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
+import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -192,10 +193,10 @@ public class Battle {
             Unit unit = unitWithType.getUnit();
             if (unit.getHealth() <= 0) {
                 // Delete unit.
-                dao.delete(unit);
+                DaoEventRegistry.get(dao).delete(unit);
             } else {
                 // Save injury.
-                dao.update(unit);
+                DaoEventRegistry.get(dao).update(unit);
             }
         }
     }
@@ -203,7 +204,7 @@ public class Battle {
     private void saveBuilding() {
         Building building = buildingWithType.getBuilding();
         building.setLastConquest(new Date());
-        dao.update(building);
+        DaoEventRegistry.get(dao).update(building);
     }
 
     private void saveConquestPrize() {

@@ -23,7 +23,7 @@ import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 public class Resource {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "resource_type_id")
     @NonNull
@@ -49,11 +49,11 @@ public class Resource {
         this.locatedAtBuildingId = locatedAtBuildingId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

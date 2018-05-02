@@ -62,6 +62,7 @@ public class RoosterApplication extends Application {
 
             createUnits(6, 2);
             createUnits(1, 1);
+            Log.i(LOG_TAG, "doInBackground: Done creating debug test data.");
             return null;
         }
     }

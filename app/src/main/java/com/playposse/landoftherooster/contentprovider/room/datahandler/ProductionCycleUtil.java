@@ -6,6 +6,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithTy
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitCountByType;
+import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -222,6 +223,6 @@ public final class ProductionCycleUtil {
 
     private static void setBuildingProductionStart(RoosterDao dao, Building building) {
         building.setProductionStart(new Date());
-        dao.update(building);
+        DaoEventRegistry.get(dao).update(building);
     }
 }

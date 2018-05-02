@@ -9,6 +9,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithTy
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
+import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
 
 import java.util.Date;
 import java.util.List;
@@ -89,7 +90,7 @@ public class HospitalService extends SmartPeriodicService {
         UnitType firstSickUnitType = firstSickUnitWithType.getType();
 
         firstSickUnit.setHealth(firstSickUnitType.getHealth());
-        getDao().update(firstSickUnit);
+        DaoEventRegistry.get(getDao()).update(firstSickUnit);
 
         // Check for next sick unit.
         UnitWithType secondSickUnitWithType = getFirstSickUnit(unitWithTypes);
@@ -163,7 +164,7 @@ public class HospitalService extends SmartPeriodicService {
         // Update building.
         Building building = buildingWithType.getBuilding();
         building.setHealingStarted(healingStarted);
-        getDao().update(building);
+        DaoEventRegistry.get(getDao()).update(building);
 
         // Schedule timer.
         if (unitWithTypes != null) {

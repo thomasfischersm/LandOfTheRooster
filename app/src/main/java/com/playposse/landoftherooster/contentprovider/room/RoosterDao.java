@@ -48,7 +48,7 @@ public interface RoosterDao {
 
     // Buildings
     @Insert
-    long insertBuilding(Building building);
+    long insert(Building building);
 
     @Update
     void update(Building building);
@@ -71,6 +71,9 @@ public interface RoosterDao {
 
     @Query("select building.id as id, building.building_type_id, building.latitude, building.longitude, building.last_conquest, building.production_start, building.healing_started, building_type.id as type_id, building_type.name as type_name, building_type.icon as type_icon, building_type.min_distance_meters as type_min_distance_meters, building_type.max_distance_meters as type_max_distance_meters, building_type.enemy_unit_count as type_enemy_unit_count, building_type.enemy_unit_type_id as type_enemy_unit_type_id, building_type.conquest_prize_resource_type_id as type_conquest_prize_resource_type_id, building_type.heals_units as type_heals_units from building join building_type on (building.building_type_id = building_type.id) where building_type.heals_units = 1")
     List<BuildingWithType> getHealingBuildingsWithType();
+
+    @Query("delete from building")
+    void deleteBuildings();
 
 
     // Production rules
@@ -97,7 +100,7 @@ public interface RoosterDao {
 
     // Resources
     @Insert
-    void insert(Resource resource);
+    long insert(Resource resource);
 
     @Update
     void update(Resource resource);
@@ -129,6 +132,9 @@ public interface RoosterDao {
     @Delete
     void delete(Resource resource);
 
+    @Query("delete from resource")
+    void deleteResources();
+
 
     // Unit types
     @Insert
@@ -143,7 +149,7 @@ public interface RoosterDao {
 
     // Units
     @Insert
-    void insert(Unit unit);
+    long insert(Unit unit);
 
     @Update
     void update(Unit unit);

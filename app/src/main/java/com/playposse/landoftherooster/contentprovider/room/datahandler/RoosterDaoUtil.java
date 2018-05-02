@@ -12,6 +12,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithTy
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
+import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
 
 import java.util.List;
 
@@ -92,14 +93,14 @@ public final class RoosterDaoUtil {
 
         if (resource == null) {
             resource = new Resource(resourceTypeId, amount, buildingId);
-            dao.insert(resource);
+            DaoEventRegistry.get(dao).insert(resource);
         } else {
             int newTotal = resource.getAmount() + amount;
             if (newTotal > 0) {
                 resource.setAmount(newTotal);
-                dao.update(resource);
+                DaoEventRegistry.get(dao).update(resource);
             } else {
-                dao.delete(resource);
+                DaoEventRegistry.get(dao).delete(resource);
             }
         }
 
@@ -135,7 +136,7 @@ public final class RoosterDaoUtil {
                 unit.setHealth(unitType.getHealth());
                 unit.setLocatedAtBuildingId(buildingId);
 
-                dao.insert(unit);
+                DaoEventRegistry.get(dao).insert(unit);
             }
         } else {
             // Remove units.
@@ -151,7 +152,7 @@ public final class RoosterDaoUtil {
                     throw new IllegalStateException(
                             "Trying to delete more units than the player has!");
                 }
-                dao.delete(units.get(0));
+                DaoEventRegistry.get(dao).delete(units.get(0));
             }
         }
 
@@ -238,9 +239,8 @@ public final class RoosterDaoUtil {
             throw new IllegalStateException("The unit is already at a building! " + unit.getId());
         }
 
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
         unit.setLocatedAtBuildingId(buildingId);
-        dao.update(unit);
+        DaoEventRegistry.get(context).updateLocation(unit, null, buildingId);
     }
 
     public static void transferUnitFromBuilding(Context context, long unitTypeId, long buildingId) {
@@ -258,15 +258,13 @@ public final class RoosterDaoUtil {
     }
 
     public static void transferUnitFromBuilding(Context context, Unit unit, long buildingId) {
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-
         if (unit.getLocatedAtBuildingId() == null) {
             throw new IllegalStateException(
                     "The unit is already joining the user! " + unit.getId());
         }
 
         unit.setLocatedAtBuildingId(null);
-        dao.update(unit);
+        DaoEventRegistry.get(context).updateLocation(unit, buildingId, null);
     }
 
     public static int getProductionSpeedInMinutes(int peasantCount) {

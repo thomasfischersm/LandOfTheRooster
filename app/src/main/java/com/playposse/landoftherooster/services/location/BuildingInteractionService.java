@@ -10,6 +10,7 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
 import com.playposse.landoftherooster.services.broadcastintent.HospitalAvailableBroadcastIntent;
@@ -87,7 +88,7 @@ public class BuildingInteractionService implements ILocationAwareService {
                 // Respawn building.
                 building.setLastConquest(null);
                 RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-                dao.update(building);
+                DaoEventRegistry.get(dao).update(building);
             }
         }
 

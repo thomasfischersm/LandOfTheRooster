@@ -11,6 +11,7 @@ import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDa
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
+import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
 
 import java.util.Date;
 import java.util.List;
@@ -197,12 +198,12 @@ public class BuildingProductionService extends PeriodicService {
 
     private void setProductionDate(Building building) {
         building.setProductionStart(new Date());
-        dao.update(building);
+        DaoEventRegistry.get(dao).update(building);
     }
 
     private void clearProductionStart(Building building) {
         building.setProductionStart(null);
-        dao.update(building);
+        DaoEventRegistry.get(dao).update(building);
     }
 
     private boolean isProductionTimeFinished(

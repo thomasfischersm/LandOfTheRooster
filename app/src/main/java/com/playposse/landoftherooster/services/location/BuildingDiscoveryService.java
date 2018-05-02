@@ -13,6 +13,7 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
+import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
 
 import java.util.List;
 import java.util.Random;
@@ -103,7 +104,7 @@ public class BuildingDiscoveryService implements ILocationAwareService {
                 nextBuildingType.getId(),
                 currentLatLng.latitude,
                 currentLatLng.longitude);
-        long buildingId = dao.insertBuilding(building);
+        long buildingId = DaoEventRegistry.get(dao).insert(building);
         building.setId(buildingId);
         Log.d(LOG_TAG, "placeNextBuilding: Placed building: " + nextBuildingType.getName());
 
