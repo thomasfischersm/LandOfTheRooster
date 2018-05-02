@@ -116,4 +116,29 @@ public class RoosterDaoTest {
         assertEquals(2, unitCountList.get(1).getUnitTypeId());
         assertEquals(2, unitCountList.get(1).getCount());
     }
+
+    @Test
+    public void getCarryingCapacity() throws InterruptedException {
+        // Wait for the test data to be finished creating. Then delete the test units.
+        Thread.sleep(1_000);
+        dao.deleteUnits();
+
+        assertEquals(0, dao.getCarryingCapacity());
+
+        // Add peasant.
+        dao.insert(new Unit(1, 10, null));
+        assertEquals(1, dao.getCarryingCapacity());
+
+        // Add soldier.
+        dao.insert(new Unit(2, 10, null));
+        assertEquals(1, dao.getCarryingCapacity());
+
+        // Add peasant to building.
+        dao.insert(new Unit(1, 10, 1L));
+        assertEquals(1, dao.getCarryingCapacity());
+
+        // Add second peasant.
+        dao.insert(new Unit(1, 10, null));
+        assertEquals(2, dao.getCarryingCapacity());
+    }
 }
