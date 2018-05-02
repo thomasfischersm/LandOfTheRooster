@@ -11,6 +11,7 @@ import com.playposse.landoftherooster.contentprovider.room.event.DaoEventObserve
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -93,6 +94,11 @@ public final class DaoEventRegistry {
             @Nullable Long beforeBuildingId,
             @Nullable Long afterBuildingId) {
 
+        if (!Objects.equals(resource.getLocatedAtBuildingId(), afterBuildingId)) {
+            throw new IllegalArgumentException("The building ids should match: "
+                    + resource.getLocatedAtBuildingId() + " != " + afterBuildingId);
+        }
+
         // TODO: Think about if this should do the actual updating work.
         dao.update(resource);
 
@@ -133,6 +139,11 @@ public final class DaoEventRegistry {
             @Nullable Long beforeBuildingId,
             @Nullable Long afterBuildingId) {
 
+        if (!Objects.equals(unit.getLocatedAtBuildingId(), afterBuildingId)) {
+            throw new IllegalArgumentException("The building ids should match: "
+                    + unit.getLocatedAtBuildingId() + " != " + afterBuildingId);
+        }
+
         // TODO: THink about if this should call the location setters.
         dao.update(unit);
 
@@ -149,11 +160,11 @@ public final class DaoEventRegistry {
         }
     }
 
-    public void addObserver(DaoEventObserver observer) {
+    public void registerObserver(DaoEventObserver observer) {
         observers.add(observer);
     }
 
-    public void removeObserver(DaoEventObserver observer) {
+    public void unregisterObserver(DaoEventObserver observer) {
         observers.remove(observer);
     }
 }

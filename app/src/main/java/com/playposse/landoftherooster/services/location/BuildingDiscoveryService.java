@@ -75,7 +75,7 @@ public class BuildingDiscoveryService implements ILocationAwareService {
     }
 
     @Nullable
-    private static BuildingType getNextBuildingType(Context context, int lastBuildingTypeId) {
+    private static BuildingType getNextBuildingType(Context context, long lastBuildingTypeId) {
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
         return dao.getNextBuildingType(lastBuildingTypeId);
     }

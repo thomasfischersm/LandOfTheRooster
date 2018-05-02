@@ -6,7 +6,6 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.Date;
@@ -29,8 +28,7 @@ public class Building {
     private long id;
 
     @ColumnInfo(name = "building_type_id")
-    @NonNull
-    private int buildingTypeId;
+    private long buildingTypeId;
 
     private double latitude;
     private double longitude;
@@ -51,7 +49,7 @@ public class Building {
     }
 
     @Ignore
-    public Building(@NonNull int buildingTypeId, double latitude, double longitude) {
+    public Building(long buildingTypeId, double latitude, double longitude) {
         this.buildingTypeId = buildingTypeId;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -65,12 +63,11 @@ public class Building {
         this.id = id;
     }
 
-    @NonNull
-    public int getBuildingTypeId() {
+    public long getBuildingTypeId() {
         return buildingTypeId;
     }
 
-    public void setBuildingTypeId(@NonNull int buildingTypeId) {
+    public void setBuildingTypeId(long buildingTypeId) {
         this.buildingTypeId = buildingTypeId;
     }
 

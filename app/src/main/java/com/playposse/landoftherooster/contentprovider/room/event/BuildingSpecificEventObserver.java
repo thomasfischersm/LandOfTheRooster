@@ -4,6 +4,8 @@ import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 
+import java.util.Objects;
+
 import javax.annotation.Nullable;
 
 /**
@@ -28,7 +30,7 @@ public abstract class BuildingSpecificEventObserver implements DaoEventObserver 
     @Override
     public void onResourceModified(Resource resource, EventType eventType) {
         if ((eventType == EventType.INSERT)
-                && (specifiedBuildingId == resource.getLocatedAtBuildingId())) {
+                && Objects.equals(specifiedBuildingId, resource.getLocatedAtBuildingId())) {
             onRelevantBuildingUpdate(specifiedBuildingId);
         }
     }
@@ -49,7 +51,7 @@ public abstract class BuildingSpecificEventObserver implements DaoEventObserver 
     @Override
     public void onUnitModified(Unit unit, EventType eventType) {
         if ((eventType == EventType.INSERT)
-                && (specifiedBuildingId == unit.getLocatedAtBuildingId())) {
+                && Objects.equals(specifiedBuildingId, unit.getLocatedAtBuildingId())) {
             onRelevantBuildingUpdate(specifiedBuildingId);
         }
     }
