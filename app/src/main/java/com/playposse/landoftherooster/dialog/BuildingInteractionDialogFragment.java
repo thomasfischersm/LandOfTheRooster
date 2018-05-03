@@ -103,7 +103,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
         buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
 
         buildingType = buildingWithType.getBuildingType();
-        int buildingTypeId = buildingType.getId();
+        long buildingTypeId = buildingType.getId();
         productionRules = dao.getProductionRulesByBuildingTypeId(buildingTypeId);
         peasantCount = dao.getUnitCount(PEASANT_ID, buildingId) + IMPLIED_PEASANT_COUNT;
 

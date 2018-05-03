@@ -10,6 +10,8 @@ public abstract class TimedAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
+    private long totalDuration = 0; // TODO remove after debugging.
+
     @Override
     protected Void doInBackground(Void... voids) {
         Log.i(LOG_TAG, "doInBackground: Started");
@@ -18,7 +20,9 @@ public abstract class TimedAsyncTask extends AsyncTask<Void, Void, Void> {
         doInBackground();
 
         long end = System.currentTimeMillis();
+        totalDuration += (end - start);
         Log.i(LOG_TAG, "doInBackground: Ended " + (end - start) + "ms");
+        Log.i(LOG_TAG, "doInBackground: Total processing time: " + (totalDuration / 1_000));
 
         return null;
     }

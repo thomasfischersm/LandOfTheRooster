@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.contentprovider.room.datahandler;
 
+import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
@@ -63,6 +64,20 @@ public final class ProductionCycleUtil {
 
     @Nullable
     public static Long getRemainingProductionTimeMs(
+            Map<Long, Integer> unitMap,
+            BuildingWithType buildingWithType) {
+
+        int peasantCount = IMPLIED_PEASANT_COUNT;
+
+        if (unitMap.containsKey(GameConfig.PEASANT_ID)) {
+            peasantCount += unitMap.get(GameConfig.PEASANT_ID);
+        }
+
+        return getRemainingProductionTimeMs(peasantCount, buildingWithType);
+    }
+
+    @Nullable
+    public static Long getRemainingProductionTimeMs(
             RoosterDao dao,
             BuildingWithType buildingWithType) {
 
@@ -75,6 +90,21 @@ public final class ProductionCycleUtil {
 
         // Get peasants working in building.
         int peasantCount = dao.getUnitCount(PEASANT_ID, building.getId()) + IMPLIED_PEASANT_COUNT;
+
+        return getRemainingProductionTimeMs(peasantCount, buildingWithType);
+    }
+
+    @Nullable
+    private static Long getRemainingProductionTimeMs(
+            int peasantCount,
+            BuildingWithType buildingWithType) {
+
+        Building building = buildingWithType.getBuilding();
+
+        // Check if no production is running.
+        if (building.getProductionStart() == null) {
+            return null;
+        }
 
         long cycleMs = PRODUCTION_CYCLE_MS / peasantCount;
         long startMs = building.getProductionStart().getTime();

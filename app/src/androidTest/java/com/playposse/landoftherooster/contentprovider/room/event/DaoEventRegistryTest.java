@@ -82,6 +82,7 @@ public class DaoEventRegistryTest {
     private MutableLong registerBuildingObserver() {
         final MutableLong counter = new MutableLong(0);
 
+        // TODO: Could be nice and clean up the observer.
         DaoEventRegistry.get(dao).registerObserver(new BuildingSpecificEventObserver(BUILDING_ID) {
             @Override
             protected void onRelevantBuildingUpdate(long buildingId) {

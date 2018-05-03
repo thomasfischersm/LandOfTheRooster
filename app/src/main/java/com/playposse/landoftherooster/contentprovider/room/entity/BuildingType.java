@@ -9,8 +9,6 @@ import android.support.annotation.NonNull;
 
 import com.google.common.base.MoreObjects;
 
-import java.util.Date;
-
 import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 
 /**
@@ -34,7 +32,7 @@ import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 public class BuildingType {
 
     @PrimaryKey(autoGenerate = false)
-    private int id;
+    private long id;
 
     @NonNull
     private String name;
@@ -60,11 +58,11 @@ public class BuildingType {
     @ColumnInfo(name = "heals_units")
     private boolean healsUnits;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

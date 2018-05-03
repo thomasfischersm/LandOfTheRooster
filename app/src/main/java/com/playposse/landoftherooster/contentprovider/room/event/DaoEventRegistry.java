@@ -1,5 +1,9 @@
 package com.playposse.landoftherooster.contentprovider.room.event;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
@@ -164,7 +168,34 @@ public final class DaoEventRegistry {
         observers.add(observer);
     }
 
+    public void registerObserver(DaoEventObserver observer, LifecycleOwner lifecycleOwner) {
+        lifecycleOwner.getLifecycle().addObserver(new RegisterThroughLifecycleObserver(observer));
+    }
+
     public void unregisterObserver(DaoEventObserver observer) {
         observers.remove(observer);
+    }
+
+    /**
+     * A {@link LifecycleObserver} that registers (on resume) and unregisters (on pause) a
+     * {@link DaoEventObserver}.
+     */
+    class RegisterThroughLifecycleObserver implements LifecycleObserver {
+
+        private final DaoEventObserver observer;
+
+        private RegisterThroughLifecycleObserver(DaoEventObserver observer) {
+            this.observer = observer;
+        }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        public void connectListener() {
+            registerObserver(observer);
+        }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+        public void disconnectListener() {
+            unregisterObserver(observer);
+        }
     }
 }
