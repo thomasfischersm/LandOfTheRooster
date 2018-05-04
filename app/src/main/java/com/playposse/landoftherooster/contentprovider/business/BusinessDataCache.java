@@ -112,4 +112,12 @@ public class BusinessDataCache {
         }
         return unitMap;
     }
+
+    public void resetResourceMap() {
+        resourceMap = null;
+    }
+
+    public void resetUnitMap() {
+        unitMap = null;
+    }
 }

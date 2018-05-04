@@ -5,8 +5,11 @@ import android.util.Log;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.playposse.landoftherooster.contentprovider.business.action.EndItemProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.StartItemProductionAction;
+import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionEndedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.UserDropsOffItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.precondition.EndItemProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.StartItemProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
@@ -46,6 +49,13 @@ public class BusinessEngine {
                 UserDropsOffItemEvent.class,
                 new StartItemProductionPrecondition(),
                 new StartItemProductionAction());
+
+        registerAction(
+                ItemProductionEndedEvent.class,
+                new EndItemProductionPrecondition(),
+                new EndItemProductionAction());
+
+        // TODO schedule action for after item has been produced to check the next production start.
     }
 
     public static BusinessEngine get() {

@@ -5,9 +5,8 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
-import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionCompleteEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionEndedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionStartedEvent;
-import com.playposse.landoftherooster.contentprovider.business.precondition.StartItemProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.StartItemProductionPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
@@ -50,6 +49,6 @@ public class StartItemProductionAction extends BusinessAction {
         // Schedule production completed event.
         BusinessEngine.get().scheduleEvent(
                 ProductionCycleUtil.getRemainingProductionTimeMs(dataCache.getUnitMap(), dataCache.getBuildingWithType()),
-                new ItemProductionCompleteEvent(event.getBuildingId()));
+                new ItemProductionEndedEvent(event.getBuildingId()));
     }
 }

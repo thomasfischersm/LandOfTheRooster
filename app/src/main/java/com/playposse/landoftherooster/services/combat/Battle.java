@@ -212,7 +212,7 @@ public class Battle {
                 buildingWithType.getBuildingType().getConquestPrizeResourceTypeId();
         ResourceType conquestPrizeResourceType = dao.getResourceTypeById(conquestPrizeResourceTypeId);
         RoosterDaoUtil.creditResource(
-                context,
+                dao,
                 conquestPrizeResourceType.getId(),
                 DEFAULT_CONQUEST_PRIZE_RESOURCE_AMOUNT,
                 null);

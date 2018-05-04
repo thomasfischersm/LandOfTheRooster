@@ -95,7 +95,7 @@ public class ResourceActionData extends ActionData {
         switch (actionType) {
             case DROP_OFF:
                 RoosterDaoUtil.moveResourceToBuilding(
-                        getContext(),
+                        getDao(),
                         userResourceWithType,
                         buildingResourceWithType,
                         resourceTypeId,
@@ -104,7 +104,7 @@ public class ResourceActionData extends ActionData {
                 break;
             case PICKUP:
                 RoosterDaoUtil.moveResourceFromBuilding(
-                        getContext(),
+                        getDao(),
                         userResourceWithType,
                         buildingResourceWithType,
                         resourceTypeId,

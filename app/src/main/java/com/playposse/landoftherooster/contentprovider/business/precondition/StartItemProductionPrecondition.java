@@ -69,7 +69,7 @@ public class StartItemProductionPrecondition implements BusinessPrecondition {
         return false;
     }
 
-    private StartItemProductionPreconditionOutcome computePossibleProductionCount(
+    protected StartItemProductionPreconditionOutcome computePossibleProductionCount(
             BusinessDataCache dataCache) {
 
         int count = 0;

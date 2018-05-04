@@ -131,12 +131,12 @@ public class BuildingDiscoveryService implements ILocationAwareService {
 
             Long resourceTypeId = productionRule.getOutputResourceTypeId();
             if (resourceTypeId != null) {
-                RoosterDaoUtil.creditResource(context, resourceTypeId, 1, building.getId());
+                RoosterDaoUtil.creditResource(dao, resourceTypeId, 1, building.getId());
             }
 
             Long unitTypeId = productionRule.getOutputUnitTypeId();
             if (unitTypeId != null) {
-                RoosterDaoUtil.creditUnit(context, unitTypeId, 1, building.getId());
+                RoosterDaoUtil.creditUnit(dao, unitTypeId, 1, building.getId());
             }
         }
     }
