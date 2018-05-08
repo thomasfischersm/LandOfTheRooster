@@ -5,11 +5,18 @@ import android.util.Log;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import com.playposse.landoftherooster.contentprovider.business.action.EndItemProductionAction;
+import com.playposse.landoftherooster.contentprovider.business.action.FreeProductionAction;
+import com.playposse.landoftherooster.contentprovider.business.action.ProductionAction;
+import com.playposse.landoftherooster.contentprovider.business.action.StartFreeItemProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.StartItemProductionAction;
+import com.playposse.landoftherooster.contentprovider.business.event.BuildingCreatedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionEndedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionEndedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.UserDropsOffItemEvent;
-import com.playposse.landoftherooster.contentprovider.business.precondition.EndItemProductionPrecondition;
+import com.playposse.landoftherooster.contentprovider.business.event.UserPicksUpItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.precondition.FreeProductionPrecondition;
+import com.playposse.landoftherooster.contentprovider.business.precondition.ProductionPrecondition;
+import com.playposse.landoftherooster.contentprovider.business.precondition.StartFreeItemProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.StartItemProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
@@ -52,10 +59,25 @@ public class BusinessEngine {
 
         registerAction(
                 ItemProductionEndedEvent.class,
-                new EndItemProductionPrecondition(),
-                new EndItemProductionAction());
+                new ProductionPrecondition(),
+                new ProductionAction());
 
         // TODO schedule action for after item has been produced to check the next production start.
+
+        registerAction(
+                UserPicksUpItemEvent.class,
+                new StartFreeItemProductionPrecondition(),
+                new StartFreeItemProductionAction());
+
+        registerAction(
+                BuildingCreatedEvent.class,
+                new FreeProductionPrecondition(),
+                new FreeProductionAction());
+
+        registerAction(
+                FreeItemProductionEndedEvent.class,
+                new FreeProductionPrecondition(),
+                new FreeProductionAction());
     }
 
     public static BusinessEngine get() {
@@ -77,6 +99,8 @@ public class BusinessEngine {
     }
 
     public void triggerEvent(BusinessEvent event) {
+        Log.i(LOG_TAG, "triggerEvent: Triggered event: [" + event.getClass().getSimpleName()
+                + "]");
         BusinessDataCache dataCache = new BusinessDataCache(dao, event.getBuildingId());
 
         for (ActionContainer actionContainer : registry.get(event.getClass())) {
@@ -90,15 +114,25 @@ public class BusinessEngine {
             }
 
             // Execute action.
+            Log.i(LOG_TAG, "triggerEvent: Start action ["
+                    + actionContainer.getAction().getClass().getSimpleName() + "]");
             actionContainer.getAction().perform(event, preconditionOutcome, dataCache);
+            Log.i(LOG_TAG, "triggerEvent: Finished action ["
+                    + actionContainer.getAction().getClass().getSimpleName() + "]");
         }
+        Log.i(LOG_TAG, "triggerEvent: Completed event: [" + event.getClass().getSimpleName()
+                + "]");
     }
 
     public void scheduleEvent(long delayMs, final BusinessEvent event) {
+        Log.i(LOG_TAG, "scheduleEvent: Scheduled event [" + event.getClass().getSimpleName()
+                + "] for in " + delayMs + "ms.");
+
         // Cancel any previously scheduled event.
         if (eventToRunnableMap.containsKey(event)) {
             CancelableRunnable earlierRunnable = eventToRunnableMap.get(event);
             earlierRunnable.cancel();
+            Log.i(LOG_TAG, "scheduleEvent: Canceld previously scheduled event.");
         }
 
         CancelableRunnable runnable = new CancelableRunnable() {

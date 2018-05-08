@@ -9,7 +9,7 @@ import com.playposse.landoftherooster.contentprovider.business.PreconditionOutco
 import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
 import com.playposse.landoftherooster.contentprovider.business.UnitItem;
 import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionSucceededEvent;
-import com.playposse.landoftherooster.contentprovider.business.precondition.EndItemProductionPreconditionOutcome;
+import com.playposse.landoftherooster.contentprovider.business.precondition.ProductionPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
@@ -23,7 +23,7 @@ import java.util.Map;
  * A {@link BusinessAction} that is fired when the item production has reached its final time.
  * It consumes and produces the actual resources that the production rule specifies.
  */
-public class EndItemProductionAction extends BusinessAction {
+public class ProductionAction extends BusinessAction {
 
     @Override
     public void perform(
@@ -31,8 +31,8 @@ public class EndItemProductionAction extends BusinessAction {
             PreconditionOutcome preconditionOutcome,
             BusinessDataCache dataCache) {
 
-        EndItemProductionPreconditionOutcome outcome =
-                (EndItemProductionPreconditionOutcome) preconditionOutcome;
+        ProductionPreconditionOutcome outcome =
+                (ProductionPreconditionOutcome) preconditionOutcome;
         ProductionRule productionRule = outcome.getProductionRule();
         if (productionRule == null) {
             throw new NullPointerException("The precondition should have found a ProductionRule.");
@@ -44,7 +44,7 @@ public class EndItemProductionAction extends BusinessAction {
                 (new ItemProductionSucceededEvent(event.getBuildingId(), producedItem));
     }
 
-    private Item produce(ProductionRule productionRule, BusinessDataCache dataCache) {
+    protected Item produce(ProductionRule productionRule, BusinessDataCache dataCache) {
         RoosterDao dao = dataCache.getDao();
         BuildingWithType buildingWithType = dataCache.getBuildingWithType();
         Building building = buildingWithType.getBuilding();
@@ -54,15 +54,20 @@ public class EndItemProductionAction extends BusinessAction {
         Item producedItem = null;
 
         // Debit input resources.
-        List<Long> InputResourceTypeIds = productionRule.getSplitInputResourceTypeIds();
-        for (Long inputResourceTypeId : InputResourceTypeIds) {
-            RoosterDaoUtil.creditResource(dao, inputResourceTypeId, -1, buildingId);
+        List<Long> inputResourceTypeIds = productionRule.getSplitInputResourceTypeIds();
+        if (inputResourceTypeIds != null) {
+            for (Long inputResourceTypeId : inputResourceTypeIds) {
+                // TODO: Optimize by avoiding to have to load the Resourced again from the dao.
+                RoosterDaoUtil.creditResource(dao, inputResourceTypeId, -1, buildingId);
+            }
         }
 
         // Debit input units.
-        List<Long> InputUnitTypeIds = productionRule.getSplitInputUnitTypeIds();
-        for (Long inputUnitTypeId : InputUnitTypeIds) {
-            RoosterDaoUtil.creditUnit(dao, inputUnitTypeId, -1, buildingId);
+        List<Long> inputUnitTypeIds = productionRule.getSplitInputUnitTypeIds();
+        if (inputUnitTypeIds != null) {
+            for (Long inputUnitTypeId : inputUnitTypeIds) {
+                RoosterDaoUtil.creditUnit(dao, inputUnitTypeId, -1, buildingId);
+            }
         }
 
         // Credit output resource.

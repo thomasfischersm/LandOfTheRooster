@@ -22,9 +22,9 @@ import java.util.Map;
  * <p>It uses the {@link StartItemProductionPrecondition} for most of the checks. Additionally, it
  * checks if the time is ready.
  */
-public class EndItemProductionPrecondition extends StartItemProductionPrecondition {
+public class ProductionPrecondition extends StartItemProductionPrecondition {
 
-    private static final String LOG_TAG = EndItemProductionPrecondition.class.getSimpleName();
+    private static final String LOG_TAG = ProductionPrecondition.class.getSimpleName();
 
     @Override
     public PreconditionOutcome evaluate(BusinessEvent event, BusinessDataCache dataCache) {
@@ -69,11 +69,11 @@ public class EndItemProductionPrecondition extends StartItemProductionPreconditi
 
         // Everything checked out to start production.
         ProductionRule productionRule = startOutcome.getProductionRule();
-        return new EndItemProductionPreconditionOutcome(true, productionRule);
+        return new ProductionPreconditionOutcome(true, productionRule);
     }
 
     @NonNull
-    private EndItemProductionPreconditionOutcome fail() {
-        return new EndItemProductionPreconditionOutcome(false, null);
+    private ProductionPreconditionOutcome fail() {
+        return new ProductionPreconditionOutcome(false, null);
     }
 }
