@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.playposse.landoftherooster.contentprovider.business.action.CreateBuildingAction;
 import com.playposse.landoftherooster.contentprovider.business.action.FreeProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.ProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.StartFreeItemProductionAction;
@@ -12,8 +13,10 @@ import com.playposse.landoftherooster.contentprovider.business.action.StartItemP
 import com.playposse.landoftherooster.contentprovider.business.event.BuildingCreatedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionEndedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionEndedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.LocationUpdateEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.UserDropsOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.UserPicksUpItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.precondition.CreateBuildingPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.FreeProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.ProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.StartFreeItemProductionPrecondition;
@@ -22,7 +25,9 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.util.CancelableRunnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -34,11 +39,11 @@ import java.util.concurrent.TimeUnit;
 public class BusinessEngine {
 
     private static final String LOG_TAG = BusinessEngine.class.getSimpleName();
+    private static BusinessEngine instance;
 
     private final ListMultimap<Class<? extends BusinessEvent>, ActionContainer> registry =
             ArrayListMultimap.create();
-
-    private static BusinessEngine instance;
+    private final List<BusinessEvent> eventQueue = new ArrayList<>();
 
     private RoosterDao dao;
     private ScheduledExecutorService scheduledExecutorService;
@@ -52,6 +57,8 @@ public class BusinessEngine {
 
     private BusinessEngine() {
         // Initiate all the actions.
+
+        // item production for cost
         registerAction(
                 UserDropsOffItemEvent.class,
                 new StartItemProductionPrecondition(),
@@ -64,6 +71,7 @@ public class BusinessEngine {
 
         // TODO schedule action for after item has been produced to check the next production start.
 
+        // free item production
         registerAction(
                 UserPicksUpItemEvent.class,
                 new StartFreeItemProductionPrecondition(),
@@ -78,6 +86,12 @@ public class BusinessEngine {
                 FreeItemProductionEndedEvent.class,
                 new FreeProductionPrecondition(),
                 new FreeProductionAction());
+
+        // building creation
+        registerAction(
+                LocationUpdateEvent.class,
+                new CreateBuildingPrecondition(),
+                new CreateBuildingAction());
     }
 
     public static BusinessEngine get() {
@@ -98,7 +112,26 @@ public class BusinessEngine {
         scheduledExecutorService = null;
     }
 
+    /**
+     * Triggers a {@link BusinessEvent} to be executed immediately.
+     */
     public void triggerEvent(BusinessEvent event) {
+        eventQueue.add(event);
+
+        while (eventQueue.size() > 0) {
+            executeEvent(eventQueue.remove(0));
+        }
+    }
+
+    /**
+     * Triggers an event to be executed via a queue. If another event is currently executing, the
+     * specified event will be executed right after that.
+     */
+    public void triggerDelayedEvent(BusinessEvent event) {
+        eventQueue.add(event);
+    }
+
+    private void executeEvent(BusinessEvent event) {
         Log.i(LOG_TAG, "triggerEvent: Triggered event: [" + event.getClass().getSimpleName()
                 + "]");
         BusinessDataCache dataCache = new BusinessDataCache(dao, event.getBuildingId());

@@ -3,18 +3,38 @@ package com.playposse.landoftherooster.contentprovider.room.entity;
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.util.Date;
+
 import javax.annotation.Nullable;
+
+import static android.arch.persistence.room.ForeignKey.NO_ACTION;
 
 /**
  * A Room entity that represents a marker on the map. To make the processing of the map faster,
  * the map marker information is cached in the database. Changes to these tables will update the
  * map through {@link LiveData}.
  */
-@Entity(tableName = "map_marker")
+@Entity(tableName = "map_marker",
+        indices = {
+                @Index("building_id"),
+                @Index("building_type_id")},
+        foreignKeys = {
+                @ForeignKey(
+                        entity = Building.class,
+                        parentColumns = "id",
+                        childColumns = "building_id",
+                        onDelete = NO_ACTION),
+                @ForeignKey(
+                        entity = BuildingType.class,
+                        parentColumns = "id",
+                        childColumns = "building_type_id",
+                        onDelete = NO_ACTION)})
 public class MapMarker {
 
     public static final int BUILDING_MARKER_TYPE = 1;
@@ -41,8 +61,16 @@ public class MapMarker {
     private boolean isReady;
 
     @Nullable
+    @ColumnInfo(name = "building_id")
+    private Long buildingId;
+
+    @Nullable
     @ColumnInfo(name = "building_type_id")
     private Long buildingTypeId;
+
+    @NonNull
+    @ColumnInfo(name = "last_modified")
+    private Date lastModified;
 
     public MapMarker() {
     }
@@ -55,6 +83,7 @@ public class MapMarker {
             @NonNull Integer pendingProductionCount,
             @NonNull Integer completedProductionCount,
             boolean isReady,
+            @NonNull Long buildingId,
             @NonNull Long buildingTypeId) {
 
         this.markerType = markerType;
@@ -63,6 +92,7 @@ public class MapMarker {
         this.pendingProductionCount = pendingProductionCount;
         this.completedProductionCount = completedProductionCount;
         this.isReady = isReady;
+        this.buildingId = buildingId;
         this.buildingTypeId = buildingTypeId;
     }
 
@@ -125,11 +155,29 @@ public class MapMarker {
     }
 
     @Nullable
+    public Long getBuildingId() {
+        return buildingId;
+    }
+
+    public void setBuildingId(@Nullable Long buildingId) {
+        this.buildingId = buildingId;
+    }
+
+    @Nullable
     public Long getBuildingTypeId() {
         return buildingTypeId;
     }
 
     public void setBuildingTypeId(@Nullable Long buildingTypeId) {
         this.buildingTypeId = buildingTypeId;
+    }
+
+    @NonNull
+    public Date getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(@NonNull Date lastModified) {
+        this.lastModified = lastModified;
     }
 }

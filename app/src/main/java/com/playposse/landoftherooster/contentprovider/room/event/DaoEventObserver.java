@@ -1,6 +1,7 @@
 package com.playposse.landoftherooster.contentprovider.room.event;
 
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
+import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 
@@ -20,6 +21,8 @@ public interface DaoEventObserver {
     void onBuildingModified(Building building, EventType eventType);
 
     void onResourceModified(Resource resource, EventType eventType);
+
+    void onMapMarkerModified(MapMarker mapMarker, EventType eventType);
 
     void onResourceLocationUpdated(
             Resource resource,

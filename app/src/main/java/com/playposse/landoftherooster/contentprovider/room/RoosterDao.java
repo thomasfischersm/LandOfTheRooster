@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
@@ -32,6 +33,9 @@ public interface RoosterDao {
     // Building types
     @Insert
     void insertBuildingTypes(List<BuildingType> buildingTypes);
+
+    @Query("select * from building_type where id = :buildingTypeId")
+    BuildingType getBuildingType(long buildingTypeId);
 
     @Query("select * from building_type")
     List<BuildingType> getAllBuildingTypes();
@@ -195,4 +199,12 @@ public interface RoosterDao {
 
     @Query("delete from unit")
     void deleteUnits();
+
+
+    // Map markers
+    @Insert
+    long insert(MapMarker mapMarker);
+
+    @Query("delete from map_marker")
+    void deleteMapMarkers();
 }

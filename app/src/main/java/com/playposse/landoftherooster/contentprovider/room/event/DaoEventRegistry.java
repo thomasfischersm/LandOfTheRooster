@@ -9,11 +9,13 @@ import android.content.Context;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
+import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.event.DaoEventObserver.EventType;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -83,6 +85,18 @@ public final class DaoEventRegistry {
         }
 
         return resourceId;
+    }
+
+    public long insert(MapMarker mapMarker) {
+        mapMarker.setLastModified(new Date());
+        long id = dao.insert(mapMarker);
+        mapMarker.setId(id);
+
+        for (DaoEventObserver observer : observers) {
+            observer.onMapMarkerModified(mapMarker, EventType.INSERT);
+        }
+
+        return id;
     }
 
     public void update(Resource resource) {

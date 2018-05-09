@@ -34,7 +34,7 @@ public class FreeProductionAction extends ProductionAction {
             produce(productionRule, dataCache);
         }
 
-        BusinessEngine.get().triggerEvent(
+        BusinessEngine.get().triggerDelayedEvent(
                 new FreeItemProductionSucceededEvent(event.getBuildingId()));
     }
 }

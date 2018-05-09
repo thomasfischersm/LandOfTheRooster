@@ -40,7 +40,7 @@ public class ProductionAction extends BusinessAction {
 
         Item producedItem = produce(productionRule, dataCache);
 
-        BusinessEngine.get().triggerEvent
+        BusinessEngine.get().triggerDelayedEvent
                 (new ItemProductionSucceededEvent(event.getBuildingId(), producedItem));
     }
 

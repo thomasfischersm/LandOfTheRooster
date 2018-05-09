@@ -43,7 +43,7 @@ public class StartItemProductionAction extends BusinessAction {
         DaoEventRegistry.get(dataCache.getDao()).update(building);
 
         // Fire production started event.
-        BusinessEngine.get().triggerEvent(
+        BusinessEngine.get().triggerDelayedEvent(
                 new ItemProductionStartedEvent(event.getBuildingId(), possibleProductionCount));
 
         // Schedule production completed event.

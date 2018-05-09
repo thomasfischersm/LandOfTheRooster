@@ -1,6 +1,7 @@
 package com.playposse.landoftherooster.contentprovider.room.event;
 
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
+import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 
@@ -54,6 +55,11 @@ public abstract class BuildingSpecificEventObserver implements DaoEventObserver 
                 && Objects.equals(specifiedBuildingId, unit.getLocatedAtBuildingId())) {
             onRelevantBuildingUpdate(specifiedBuildingId);
         }
+    }
+
+    @Override
+    public void onMapMarkerModified(MapMarker mapMarker, EventType eventType) {
+        // Ignore.
     }
 
     @Override

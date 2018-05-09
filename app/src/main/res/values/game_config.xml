@@ -13,7 +13,7 @@
 
     <integer name="default_conquest_prize_resource_amount">1</integer>
 
-    <integer name="initial_building_type_id">0</integer>
+    <integer name="initial_building_type_id">1</integer>
 
     <integer name="max_grace_distance">100</integer>
 

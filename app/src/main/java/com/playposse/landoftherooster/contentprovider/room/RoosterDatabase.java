@@ -13,6 +13,7 @@ import com.playposse.landoftherooster.contentprovider.RoosterDatabaseHelper;
 import com.playposse.landoftherooster.contentprovider.parser.ConfigurationImport;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
+import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
@@ -29,6 +30,7 @@ import java.io.IOException;
         Building.class,
         BuildingType.class,
         ProductionRule.class,
+        MapMarker.class,
         Resource.class,
         ResourceType.class,
         Unit.class,

@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 public class BusinessDataCache {
 
     private final RoosterDao dao;
-    private final long buildingId;
+    @Nullable private final Long buildingId;
 
     @Nullable private BuildingWithType buildingWithType;
     @Nullable private Building building;
@@ -28,7 +28,7 @@ public class BusinessDataCache {
     @Nullable private Map<Long, Integer> resourceMap;
     @Nullable private Map<Long, Integer> unitMap;
 
-    public BusinessDataCache(RoosterDao dao, long buildingId) {
+    public BusinessDataCache(RoosterDao dao, @Nullable Long buildingId) {
         this.dao = dao;
         this.buildingId = buildingId;
     }
