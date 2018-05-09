@@ -1,9 +1,8 @@
-package com.playposse.landoftherooster.contentprovider.room.business;
+package com.playposse.landoftherooster.contentprovider.business;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
-import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepository;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;

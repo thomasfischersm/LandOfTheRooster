@@ -40,6 +40,7 @@ public class RoosterDaoTest {
         dao = RoosterDatabase.getInstance(targetContext).getDao();
 
         // Clear data that test may generate.
+        dao.deleteMapMarkers();
         dao.deleteBuildings();
         dao.deleteResources();
         dao.deleteUnits();

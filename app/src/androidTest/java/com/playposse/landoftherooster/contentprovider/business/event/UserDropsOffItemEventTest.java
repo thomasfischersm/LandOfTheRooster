@@ -1,10 +1,9 @@
-package com.playposse.landoftherooster.contentprovider.room.business.event;
+package com.playposse.landoftherooster.contentprovider.business.event;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.playposse.landoftherooster.contentprovider.business.event.UserDropsOffItemEvent;
-import com.playposse.landoftherooster.contentprovider.room.business.AbstractBusinessTest;
+import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;

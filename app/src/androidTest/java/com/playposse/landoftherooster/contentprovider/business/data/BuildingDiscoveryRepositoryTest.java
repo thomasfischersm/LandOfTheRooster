@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.room.business.data;
+package com.playposse.landoftherooster.contentprovider.business.data;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -6,7 +6,6 @@ import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.playposse.landoftherooster.GameConfig;
-import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepository;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;

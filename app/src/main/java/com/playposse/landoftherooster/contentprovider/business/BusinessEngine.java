@@ -1,6 +1,7 @@
 package com.playposse.landoftherooster.contentprovider.business;
 
 import android.content.Context;
+import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -116,10 +117,11 @@ public class BusinessEngine {
      * Triggers a {@link BusinessEvent} to be executed immediately.
      */
     public void triggerEvent(BusinessEvent event) {
-        eventQueue.add(event);
+        executeEvent(event);
 
         while (eventQueue.size() > 0) {
-            executeEvent(eventQueue.remove(0));
+            BusinessEvent currentEvent = eventQueue.remove(0);
+            executeEvent(currentEvent);
         }
     }
 
@@ -179,7 +181,8 @@ public class BusinessEngine {
         eventToRunnableMap.put(event, runnable);
     }
 
-    private void registerAction(
+    @VisibleForTesting
+    void registerAction(
             Class<? extends BusinessEvent> eventClass,
             BusinessPrecondition precondition,
             BusinessAction action) {

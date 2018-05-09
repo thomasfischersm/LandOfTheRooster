@@ -1,12 +1,11 @@
-package com.playposse.landoftherooster.contentprovider.room.business.event;
+package com.playposse.landoftherooster.contentprovider.business.event;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
-import com.playposse.landoftherooster.contentprovider.business.event.LocationUpdateEvent;
-import com.playposse.landoftherooster.contentprovider.room.business.BusinessEngineTest;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 
 import org.junit.Test;
@@ -21,7 +20,7 @@ import static junit.framework.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class LocationUpdateEventTest extends BusinessEngineTest {
+public class LocationUpdateEventTest extends AbstractBusinessTest {
 
     @Test
     public void triggerEvent_LocationUpdateEvent() {
