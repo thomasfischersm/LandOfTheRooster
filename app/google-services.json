@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "166009287034",
+    "firebase_url": "https://land-of-the-rooster.firebaseio.com",
+    "project_id": "land-of-the-rooster",
+    "storage_bucket": "land-of-the-rooster.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166009287034:android:1f1d3abe76f3ac16",
+        "android_client_info": {
+          "package_name": "com.playposse.landoftherooster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "166009287034-m12a21so8jne8h4o12kvd9lknijlk9of.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCstZ-IbXSXQQ2MClur1BfaLS0hjoxNh7s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

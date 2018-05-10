@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.playposse.landoftherooster.analytics.Analytics;
 import com.playposse.landoftherooster.contentprovider.business.action.CreateBuildingAction;
 import com.playposse.landoftherooster.contentprovider.business.action.FreeProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.ProductionAction;
@@ -136,6 +137,7 @@ public class BusinessEngine {
     private void executeEvent(BusinessEvent event) {
         Log.i(LOG_TAG, "triggerEvent: Triggered event: [" + event.getClass().getSimpleName()
                 + "]");
+        long start = System.currentTimeMillis();
         BusinessDataCache dataCache = new BusinessDataCache(dao, event.getBuildingId());
 
         for (ActionContainer actionContainer : registry.get(event.getClass())) {
@@ -155,6 +157,8 @@ public class BusinessEngine {
             Log.i(LOG_TAG, "triggerEvent: Finished action ["
                     + actionContainer.getAction().getClass().getSimpleName() + "]");
         }
+
+        Analytics.logBusinessEvent(event, start);
         Log.i(LOG_TAG, "triggerEvent: Completed event: [" + event.getClass().getSimpleName()
                 + "]");
     }
