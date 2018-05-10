@@ -13,7 +13,10 @@ public final class Analytics {
         BUSINESS_EVENT
     }
 
-    private static final String EVENT_NAME_ATTRIBUTE = "eventName";
+    public static final String EVENT_NAME_ATTRIBUTE = "eventName";
+    public static final String PRECONDITION_SUCCESS_ATTRIBUTE = "preconditionSuccess";
+    public static final String PRECONDITION_FAILURE_ATTRIBUTE = "preconditionFailure";
+
     private static final String DURATION_MS_ATTRIBUTE = "durationMs";
 
     private Analytics() {

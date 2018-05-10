@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.playposse.landoftherooster.analytics.Analytics;
 import com.playposse.landoftherooster.contentprovider.business.action.CreateBuildingAction;
 import com.playposse.landoftherooster.contentprovider.business.action.FreeProductionAction;
@@ -137,20 +139,30 @@ public class BusinessEngine {
     private void executeEvent(BusinessEvent event) {
         Log.i(LOG_TAG, "triggerEvent: Triggered event: [" + event.getClass().getSimpleName()
                 + "]");
+
+        // Trace method duration in analytics.
         long start = System.currentTimeMillis();
+        Trace trace = FirebasePerformance.getInstance().newTrace("BusinessEvent.executeTrace");
+        trace.putAttribute(Analytics.EVENT_NAME_ATTRIBUTE, event.getClass().getSimpleName());
+        trace.start();
+
         BusinessDataCache dataCache = new BusinessDataCache(dao, event.getBuildingId());
 
         for (ActionContainer actionContainer : registry.get(event.getClass())) {
             // Try precondition.
             PreconditionOutcome preconditionOutcome =
                     actionContainer.getPrecondition().evaluate(event, dataCache);
+
             if (!preconditionOutcome.getSuccess()) {
+                trace.incrementMetric(Analytics.PRECONDITION_FAILURE_ATTRIBUTE, 1);
                 Log.i(LOG_TAG, "triggerEvent: Precondition wasn't satisfied: "
                         + actionContainer.getPrecondition().getClass().getSimpleName());
                 continue;
             }
 
             // Execute action.
+            trace.incrementMetric(Analytics.PRECONDITION_SUCCESS_ATTRIBUTE, 1);
+
             Log.i(LOG_TAG, "triggerEvent: Start action ["
                     + actionContainer.getAction().getClass().getSimpleName() + "]");
             actionContainer.getAction().perform(event, preconditionOutcome, dataCache);
@@ -158,7 +170,10 @@ public class BusinessEngine {
                     + actionContainer.getAction().getClass().getSimpleName() + "]");
         }
 
+        // End trace.
+        trace.stop();
         Analytics.logBusinessEvent(event, start);
+
         Log.i(LOG_TAG, "triggerEvent: Completed event: [" + event.getClass().getSimpleName()
                 + "]");
     }

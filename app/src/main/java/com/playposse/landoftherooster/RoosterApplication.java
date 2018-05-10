@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.playposse.landoftherooster.contentprovider.RoosterDatabaseHelper;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.services.LocationScanningService;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Implementation of {@link Application}.
@@ -22,6 +25,8 @@ public class RoosterApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Fabric.with(this, new Crashlytics());
 
         GameConfig.init(this);
 
