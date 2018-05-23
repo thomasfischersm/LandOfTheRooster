@@ -5,7 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
-import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
@@ -31,7 +30,7 @@ public class ItemProductionEndedEventTest extends AbstractBusinessTest {
         GameConfig.PRODUCTION_CYCLE_MS = 10;
 
         // Create building.
-        long buildingId = dao.insert(new Building(MILL_BUILDING_TYPE_ID, LATITUDE, LONGITUDE));
+        long buildingId = createMillAndMarker(dao);
 
         // Drop off prerequisite.
         dao.insert(new Resource(WHEAT_RESOURCE_TYPE_ID, 1, buildingId));

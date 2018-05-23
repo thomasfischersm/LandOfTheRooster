@@ -3,6 +3,7 @@ package com.playposse.landoftherooster.contentprovider.business;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.playposse.landoftherooster.TestData;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepository;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
@@ -13,15 +14,7 @@ import org.junit.Before;
 /**
  * A base class that sets up a test environment for the {@link BusinessEngine}.
  */
-public abstract class AbstractBusinessTest {
-
-    protected static final long CASTLE_BUILDING_TYPE_ID = 1;
-    protected static final long WHEAT_FIELD_BUILDING_TYPE_ID = 2; // Mill: wheat (1) -> flour (2)
-    protected static final long MILL_BUILDING_TYPE_ID = 3; // Mill: wheat (1) -> flour (2)
-    protected static final long WHEAT_RESOURCE_TYPE_ID = 1;
-    protected static final long FLOUR_RESOURCE_TYPE_ID = 2;
-    protected static final long LATITUDE = 34;
-    protected static final long LONGITUDE = 118;
+public abstract class AbstractBusinessTest extends TestData {
 
     protected RoosterDao dao;
     protected BusinessEngine businessEngine;

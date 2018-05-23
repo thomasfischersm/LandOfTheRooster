@@ -73,6 +73,9 @@ public interface RoosterDao {
     @Query("select building.id as id, building.building_type_id, building.latitude, building.longitude, building.last_conquest, building.production_start, building.healing_started, building_type.id as type_id, building_type.name as type_name, building_type.icon as type_icon, building_type.min_distance_meters as type_min_distance_meters, building_type.max_distance_meters as type_max_distance_meters, building_type.enemy_unit_count as type_enemy_unit_count, building_type.enemy_unit_type_id as type_enemy_unit_type_id, building_type.conquest_prize_resource_type_id as type_conquest_prize_resource_type_id, building_type.heals_units as type_heals_units from building join building_type on (building.building_type_id = building_type.id) where building.id=:buildingId")
     BuildingWithType getBuildingWithTypeByBuildingId(long buildingId);
 
+    @Query("select building.id as id, building.building_type_id, building.latitude, building.longitude, building.last_conquest, building.production_start, building.healing_started, building_type.id as type_id, building_type.name as type_name, building_type.icon as type_icon, building_type.min_distance_meters as type_min_distance_meters, building_type.max_distance_meters as type_max_distance_meters, building_type.enemy_unit_count as type_enemy_unit_count, building_type.enemy_unit_type_id as type_enemy_unit_type_id, building_type.conquest_prize_resource_type_id as type_conquest_prize_resource_type_id, building_type.heals_units as type_heals_units from building join building_type on (building.building_type_id = building_type.id) where building_type.id in (:buildingTypeIds)")
+    List<BuildingWithType> getBuildingWithTypeByBuildingTypeIds(List<Long> buildingTypeIds);
+
     @Query("select building.id as id, building.building_type_id, building.latitude, building.longitude, building.last_conquest, building.production_start, building.healing_started, building_type.id as type_id, building_type.name as type_name, building_type.icon as type_icon, building_type.min_distance_meters as type_min_distance_meters, building_type.max_distance_meters as type_max_distance_meters, building_type.enemy_unit_count as type_enemy_unit_count, building_type.enemy_unit_type_id as type_enemy_unit_type_id, building_type.conquest_prize_resource_type_id as type_conquest_prize_resource_type_id, building_type.heals_units as type_heals_units from building join building_type on (building.building_type_id = building_type.id) where building_type.heals_units = 1")
     List<BuildingWithType> getHealingBuildingsWithType();
 
@@ -84,8 +87,11 @@ public interface RoosterDao {
     @Insert
     void insertProductionRules(List<ProductionRule> productionRules);
 
-    @Query("select * from production_rule where production_rule.building_id=:buildingTypeId")
+    @Query("select * from production_rule where production_rule.building_type_id=:buildingTypeId")
     List<ProductionRule> getProductionRulesByBuildingTypeId(long buildingTypeId);
+
+    @Query("select * from production_rule")
+    List<ProductionRule> getAllProductionRules();
 
 
     // Resource types
@@ -150,6 +156,9 @@ public interface RoosterDao {
     @Query("select * from unit_type where id in (:unitTypeIds)")
     List<UnitType> getUnitTypesById(List<Long> unitTypeIds);
 
+    @Query("select * from unit_type")
+    List<UnitType> getAllUnitTypes();
+
 
     // Units
     @Insert
@@ -204,6 +213,12 @@ public interface RoosterDao {
     // Map markers
     @Insert
     long insert(MapMarker mapMarker);
+
+    @Update
+    void update(MapMarker mapMarker);
+
+    @Query("select * from map_marker where building_id in (:buildingIds)")
+    List<MapMarker> getMapMarkerByBuildingIds(List<Long> buildingIds);
 
     @Query("delete from map_marker")
     void deleteMapMarkers();

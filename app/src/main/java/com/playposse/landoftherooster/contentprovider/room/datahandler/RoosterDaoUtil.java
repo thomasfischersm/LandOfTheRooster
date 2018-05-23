@@ -126,7 +126,7 @@ public final class RoosterDaoUtil {
             // Create new units.
             for (int i = 0; i < amount; i++) {
                 Unit unit = new Unit();
-                int unitTypeId = unitType.getId();
+                long unitTypeId = unitType.getId();
                 unit.setUnitTypeId(unitTypeId);
                 unit.setHealth(unitType.getHealth());
                 unit.setLocatedAtBuildingId(buildingId);

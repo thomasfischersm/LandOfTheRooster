@@ -1,11 +1,14 @@
 package com.playposse.landoftherooster;
 
-import com.playposse.landoftherooster.contentprovider.room.RoosterDaoTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngineTest;
+import com.playposse.landoftherooster.contentprovider.business.action.UpdateBuildingMarkerActionTest;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepositoryTest;
+import com.playposse.landoftherooster.contentprovider.business.data.ProductionRuleRepositoryTest;
+import com.playposse.landoftherooster.contentprovider.business.data.UnitTypeRepositoryTest;
 import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionEndedEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.LocationUpdateEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.UserDropsOffItemEventTest;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDaoTest;
 import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistryTest;
 
 import org.junit.runner.RunWith;
@@ -21,7 +24,10 @@ import org.junit.runners.Suite;
         DaoEventRegistryTest.class,
         ItemProductionEndedEventTest.class,
         LocationUpdateEventTest.class,
+        ProductionRuleRepositoryTest.class,
         RoosterDaoTest.class,
+        UnitTypeRepositoryTest.class,
+        UpdateBuildingMarkerActionTest.class,
         UserDropsOffItemEventTest.class
 })
 public class InstrumentedUnitTestSuite {

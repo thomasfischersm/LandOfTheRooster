@@ -50,7 +50,7 @@ public class BuildingDiscoveryService implements ILocationAwareService {
         Log.i(LOG_TAG, "initNextBuildingType: Last building is of type " + lastBuilding);
 
         if (lastBuilding == null) {
-            nextBuildingType = getNextBuildingType(context, INITIAL_BUILDING_TYPE_ID);
+            nextBuildingType = getNextBuildingType(context, INITIAL_BUILDING_TYPE_ID - 1);
             Log.i(LOG_TAG, "initNextBuildingType: Loaded initial building type "
                     + nextBuildingType);
         } else {

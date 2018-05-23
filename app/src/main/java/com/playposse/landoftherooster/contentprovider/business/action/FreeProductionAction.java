@@ -3,6 +3,7 @@ package com.playposse.landoftherooster.contentprovider.business.action;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
+import com.playposse.landoftherooster.contentprovider.business.Item;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionSucceededEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.FreeProductionPreconditionOutcome;
@@ -30,11 +31,13 @@ public class FreeProductionAction extends ProductionAction {
                     "FreeProductionAction encountered null production rules!");
         }
 
+        // TODO: Consider if only one rule should succeed.
+        Item producedItem = null;
         for (ProductionRule productionRule : productionRules) {
-            produce(productionRule, dataCache);
+            producedItem = produce(productionRule, dataCache);
         }
 
         BusinessEngine.get().triggerDelayedEvent(
-                new FreeItemProductionSucceededEvent(event.getBuildingId()));
+                new FreeItemProductionSucceededEvent(event.getBuildingId(), producedItem));
     }
 }

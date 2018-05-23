@@ -18,7 +18,7 @@ import static android.arch.persistence.room.ForeignKey.NO_ACTION;
  */
 @Entity(tableName = "production_rule",
         indices = {
-                @Index("building_id"),
+                @Index("building_type_id"),
                 @Index("output_resource_type_id"),
                 @Index("output_unit_type_id")},
         foreignKeys = {
@@ -37,9 +37,9 @@ public class ProductionRule {
     @PrimaryKey(autoGenerate = false)
     private int id;
 
-    @ColumnInfo(name = "building_id")
+    @ColumnInfo(name = "building_type_id")
     @NonNull
-    private int buildingId;
+    private long buildingTypeId;
 
     @ColumnInfo(name = "input_resource_type_ids")
     private String inputResourceTypeIds;
@@ -62,12 +62,12 @@ public class ProductionRule {
     }
 
     @NonNull
-    public int getBuildingId() {
-        return buildingId;
+    public long getBuildingTypeId() {
+        return buildingTypeId;
     }
 
-    public void setBuildingId(@NonNull int buildingId) {
-        this.buildingId = buildingId;
+    public void setBuildingTypeId(@NonNull long buildingTypeId) {
+        this.buildingTypeId = buildingTypeId;
     }
 
     public String getInputResourceTypeIds() {

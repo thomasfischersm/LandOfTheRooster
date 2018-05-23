@@ -7,7 +7,6 @@ import android.util.Log;
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.event.BuildingCreatedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.UserPicksUpItemEvent;
-import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
 
@@ -247,8 +246,7 @@ public class BusinessEngineTest extends AbstractBusinessTest {
         GameConfig.PRODUCTION_CYCLE_MS = 10;
 
         // Create building.
-        long buildingId =
-                dao.insert(new Building(WHEAT_FIELD_BUILDING_TYPE_ID, LATITUDE, LONGITUDE));
+        long buildingId = createWheatFieldAndMarker(dao);
 
         // Assert that input and output resources are 0.
         ResourceWithType outputResourceWithType =

@@ -2,7 +2,7 @@
   "productionRules": [
     {
       "id": 1,
-      "buildingId": 2,
+      "buildingTypeId": 2,
       "inputResourceTypeIds": null,
       "inputUnitTypeIds": null,
       "outputResourceTypeId": 1,
@@ -10,7 +10,7 @@
     },
     {
       "id": 2,
-      "buildingId": 3,
+      "buildingTypeId": 3,
       "inputResourceTypeIds": "1",
       "inputUnitTypeIds": null,
       "outputResourceTypeId": 2,
@@ -18,7 +18,7 @@
     },
     {
       "id": 3,
-      "buildingId": 4,
+      "buildingTypeId": 4,
       "inputResourceTypeIds": "2",
       "inputUnitTypeIds": null,
       "outputResourceTypeId": 3,
@@ -26,7 +26,7 @@
     },
     {
       "id": 4,
-      "buildingId": 5,
+      "buildingTypeId": 5,
       "inputResourceTypeIds": "3",
       "inputUnitTypeIds": null,
       "outputResourceTypeId": null,
@@ -34,7 +34,7 @@
     },
     {
       "id": 5,
-      "buildingId": 6,
+      "buildingTypeId": 6,
       "inputResourceTypeIds": null,
       "inputUnitTypeIds": "1",
       "outputResourceTypeId": null,

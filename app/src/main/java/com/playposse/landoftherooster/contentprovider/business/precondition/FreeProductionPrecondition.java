@@ -52,7 +52,12 @@ public class FreeProductionPrecondition implements BusinessPrecondition {
 
     private PreconditionOutcome evaluateAfterBuildingConstruction(BusinessDataCache dataCache) {
         List<ProductionRule> freeProductionRules = getFreeProductionRules(dataCache);
-        return new FreeProductionPreconditionOutcome(true, freeProductionRules);
+
+        if (freeProductionRules.size() > 0) {
+            return new FreeProductionPreconditionOutcome(true, freeProductionRules);
+        } else {
+            return new FreeProductionPreconditionOutcome(false, null);
+        }
     }
 
     private PreconditionOutcome evaluateAfterActualProduction(

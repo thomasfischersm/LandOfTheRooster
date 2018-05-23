@@ -6,7 +6,7 @@ package com.playposse.landoftherooster.contentprovider.parser;
 public class ProductionRule {
 
     private int id;
-    private int buildingId;
+    private int buildingTypeId;
     private String inputResourceTypeIds;
     private String inputUnitTypeIds;
     private Long outputResourceTypeId;
@@ -16,8 +16,8 @@ public class ProductionRule {
         return id;
     }
 
-    public int getBuildingId() {
-        return buildingId;
+    public int getBuildingTypeId() {
+        return buildingTypeId;
     }
 
     public String getInputResourceTypeIds() {

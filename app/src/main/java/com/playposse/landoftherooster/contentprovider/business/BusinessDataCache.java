@@ -27,6 +27,8 @@ public class BusinessDataCache {
     @Nullable private List<ProductionRule> productionRules;
     @Nullable private Map<Long, Integer> resourceMap;
     @Nullable private Map<Long, Integer> unitMap;
+    @Nullable private Map<Long, Integer> resourceMapJoiningUser;
+    @Nullable private Map<Long, Integer> unitMapJoiningUser;
 
     public BusinessDataCache(RoosterDao dao, @Nullable Long buildingId) {
         this.dao = dao;
@@ -113,6 +115,21 @@ public class BusinessDataCache {
         return unitMap;
     }
 
+    @Nullable
+    public Map<Long, Integer> getResourceMapJoiningUser() {
+        if (resourceMapJoiningUser == null) {
+            resourceMapJoiningUser = ProductionCycleUtil.getResourcesJoiningUser(dao);
+        }
+        return resourceMapJoiningUser;
+    }
+
+    @Nullable
+    public Map<Long, Integer> getUnitMapJoiningUser() {
+        if (unitMapJoiningUser == null) {
+            unitMapJoiningUser = ProductionCycleUtil.getResourcesJoiningUser(dao);
+        }
+        return unitMapJoiningUser;
+    }
     public void resetResourceMap() {
         resourceMap = null;
     }

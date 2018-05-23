@@ -99,6 +99,15 @@ public final class DaoEventRegistry {
         return id;
     }
 
+    public void update(MapMarker mapMarker) {
+        mapMarker.setLastModified(new Date());
+        dao.update(mapMarker);
+
+        for (DaoEventObserver observer : observers) {
+            observer.onMapMarkerModified(mapMarker, EventType.UPDATE);
+        }
+    }
+
     public void update(Resource resource) {
         dao.update(resource);
 

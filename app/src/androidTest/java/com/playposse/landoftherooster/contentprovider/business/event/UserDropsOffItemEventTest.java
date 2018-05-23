@@ -4,7 +4,6 @@ import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
-import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 
@@ -24,7 +23,7 @@ public class UserDropsOffItemEventTest extends AbstractBusinessTest {
     @Test
     public void triggerEvent_UserDropsOffItemEvent() {
         // Create building.
-        long buildingId = dao.insert(new Building(MILL_BUILDING_TYPE_ID, LATITUDE, LONGITUDE));
+        long buildingId = createMillAndMarker(dao);
 
         // Drop off an unrelated resource.
         businessEngine.triggerEvent(

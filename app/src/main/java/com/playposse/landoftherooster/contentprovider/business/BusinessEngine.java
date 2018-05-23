@@ -14,9 +14,12 @@ import com.playposse.landoftherooster.contentprovider.business.action.FreeProduc
 import com.playposse.landoftherooster.contentprovider.business.action.ProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.StartFreeItemProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.StartItemProductionAction;
+import com.playposse.landoftherooster.contentprovider.business.action.UpdateBuildingMarkerAction;
 import com.playposse.landoftherooster.contentprovider.business.event.BuildingCreatedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionEndedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionSucceededEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionEndedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionSucceededEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.LocationUpdateEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.UserDropsOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.UserPicksUpItemEvent;
@@ -25,6 +28,7 @@ import com.playposse.landoftherooster.contentprovider.business.precondition.Free
 import com.playposse.landoftherooster.contentprovider.business.precondition.ProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.StartFreeItemProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.StartItemProductionPrecondition;
+import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateBuildingMarkerPrecondition;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.util.CancelableRunnable;
@@ -96,6 +100,28 @@ public class BusinessEngine {
                 LocationUpdateEvent.class,
                 new CreateBuildingPrecondition(),
                 new CreateBuildingAction());
+
+        // MOST COME LAST!
+        // Update building markers.
+        registerAction(
+                UserPicksUpItemEvent.class,
+                new UpdateBuildingMarkerPrecondition(),
+                new UpdateBuildingMarkerAction());
+
+        registerAction(
+                UserDropsOffItemEvent.class,
+                new UpdateBuildingMarkerPrecondition(),
+                new UpdateBuildingMarkerAction());
+
+        registerAction(
+                ItemProductionSucceededEvent.class,
+                new UpdateBuildingMarkerPrecondition(),
+                new UpdateBuildingMarkerAction());
+
+        registerAction(
+                FreeItemProductionSucceededEvent.class,
+                new UpdateBuildingMarkerPrecondition(),
+                new UpdateBuildingMarkerAction());
     }
 
     public static BusinessEngine get() {

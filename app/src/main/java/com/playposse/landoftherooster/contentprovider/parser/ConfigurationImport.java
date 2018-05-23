@@ -153,7 +153,7 @@ public final class ConfigurationImport {
                     new com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule();
 
             roomProductionRule.setId(productionRule.getId());
-            roomProductionRule.setBuildingId(productionRule.getBuildingId());
+            roomProductionRule.setBuildingTypeId(productionRule.getBuildingTypeId());
             roomProductionRule.setInputResourceTypeIds(productionRule.getInputResourceTypeIds());
             roomProductionRule.setInputUnitTypeIds(productionRule.getInputUnitTypeIds());
             roomProductionRule.setOutputResourceTypeId(productionRule.getOutputResourceTypeId());

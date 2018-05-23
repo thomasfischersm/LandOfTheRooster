@@ -23,7 +23,7 @@ public class Unit {
     private long id;
 
     @ColumnInfo(name = "unit_type_id")
-    private int unitTypeId;
+    private long unitTypeId;
 
     private int health;
 
@@ -49,11 +49,11 @@ public class Unit {
         this.id = id;
     }
 
-    public int getUnitTypeId() {
+    public long getUnitTypeId() {
         return unitTypeId;
     }
 
-    public void setUnitTypeId(int unitTypeId) {
+    public void setUnitTypeId(long unitTypeId) {
         this.unitTypeId = unitTypeId;
     }
 

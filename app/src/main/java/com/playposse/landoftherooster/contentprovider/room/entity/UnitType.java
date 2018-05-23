@@ -11,7 +11,7 @@ import android.arch.persistence.room.PrimaryKey;
 public class UnitType {
 
     @PrimaryKey(autoGenerate = false)
-    private int id;
+    private long id;
     private String name;
 
     @ColumnInfo(name = "carrying_capacity")
@@ -23,11 +23,11 @@ public class UnitType {
     private int armor;
     private int health;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

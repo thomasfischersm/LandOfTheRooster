@@ -37,8 +37,8 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
     private long buildingId;
     private BuildingType buildingType;
     private UnitType enemyUnitType;
-    private Map<Integer, UnitType> friendlyUnitTypes = new HashMap<>();
-    private Map<Integer, Integer> friendlyUnitCountByType = new HashMap<>();
+    private Map<Long, UnitType> friendlyUnitTypes = new HashMap<>();
+    private Map<Long, Integer> friendlyUnitCountByType = new HashMap<>();
     private List<UnitWithType> friendlyUnitWithTypes;
 
     @BindView(R.id.unit_stats_table_layout) TableLayout unitStatsTableLayout;
@@ -109,7 +109,7 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
         // Get the player's unit types.
         friendlyUnitWithTypes = dao.getUnitsWithTypeJoiningUser();
         for (UnitWithType unitWithType : friendlyUnitWithTypes) {
-            int unitTypeId = unitWithType.getType().getId();
+            long unitTypeId = unitWithType.getType().getId();
             if (!friendlyUnitTypes.containsKey(unitTypeId)) {
                 friendlyUnitTypes.put(unitTypeId, unitWithType.getType());
 
