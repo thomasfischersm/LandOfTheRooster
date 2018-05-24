@@ -7,10 +7,12 @@ import com.playposse.landoftherooster.contentprovider.business.action.UpdateBuil
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepositoryTest;
 import com.playposse.landoftherooster.contentprovider.business.data.ProductionRuleRepositoryTest;
 import com.playposse.landoftherooster.contentprovider.business.data.UnitTypeRepositoryTest;
+import com.playposse.landoftherooster.contentprovider.business.event.AssignPeasantEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.InitiateBattleEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionEndedEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.LocationUpdateEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.UserDropsOffItemEventTest;
+import com.playposse.landoftherooster.contentprovider.business.precondition.AssignPeasantPreconditionTest;
 import com.playposse.landoftherooster.contentprovider.business.precondition.ExecuteBattlePreconditionTest;
 import com.playposse.landoftherooster.contentprovider.business.precondition.RespawnBattleBuildingPreconditionTest;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDaoTest;
@@ -24,6 +26,8 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        AssignPeasantEventTest.class,
+        AssignPeasantPreconditionTest.class,
         BuildingDiscoveryRepositoryTest.class,
         BusinessEngineTest.class,
         DaoEventRegistryTest.class,

@@ -37,6 +37,7 @@ public abstract class AbstractBusinessTest extends TestData {
 
     @After
     public void tearDown() {
+        BusinessEngine.get().stop();
         BuildingDiscoveryRepository.get(dao).reset();
     }
 }

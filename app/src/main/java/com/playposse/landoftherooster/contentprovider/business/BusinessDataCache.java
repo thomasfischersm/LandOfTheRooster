@@ -136,7 +136,7 @@ public class BusinessDataCache {
     @Nullable
     public Map<Long, Integer> getUnitMapJoiningUser() {
         if (unitMapJoiningUser == null) {
-            unitMapJoiningUser = ProductionCycleUtil.getResourcesJoiningUser(dao);
+            unitMapJoiningUser = ProductionCycleUtil.getUnitCountsJoiningUser(dao);
         }
         return unitMapJoiningUser;
     }

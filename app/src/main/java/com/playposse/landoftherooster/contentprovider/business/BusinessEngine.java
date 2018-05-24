@@ -9,6 +9,7 @@ import com.google.common.collect.ListMultimap;
 import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 import com.playposse.landoftherooster.analytics.Analytics;
+import com.playposse.landoftherooster.contentprovider.business.action.AssignPeasantAction;
 import com.playposse.landoftherooster.contentprovider.business.action.CreateBuildingAction;
 import com.playposse.landoftherooster.contentprovider.business.action.ExecuteBattleAction;
 import com.playposse.landoftherooster.contentprovider.business.action.FreeProductionAction;
@@ -17,6 +18,7 @@ import com.playposse.landoftherooster.contentprovider.business.action.RespawnBat
 import com.playposse.landoftherooster.contentprovider.business.action.StartFreeItemProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.StartItemProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateBuildingMarkerAction;
+import com.playposse.landoftherooster.contentprovider.business.event.AssignPeasantEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.BuildingCreatedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionEndedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionSucceededEvent;
@@ -27,6 +29,7 @@ import com.playposse.landoftherooster.contentprovider.business.event.LocationUpd
 import com.playposse.landoftherooster.contentprovider.business.event.RespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.UserDropsOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.UserPicksUpItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.precondition.AssignPeasantPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.CreateBuildingPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.ExecuteBattlePrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.FreeProductionPrecondition;
@@ -106,6 +109,12 @@ public class BusinessEngine {
                 LocationUpdateEvent.class,
                 new CreateBuildingPrecondition(),
                 new CreateBuildingAction());
+
+        // Assign peasant user action
+        registerAction(
+                AssignPeasantEvent.class,
+                new AssignPeasantPrecondition(),
+                new AssignPeasantAction());
 
         // building battle
         registerAction(

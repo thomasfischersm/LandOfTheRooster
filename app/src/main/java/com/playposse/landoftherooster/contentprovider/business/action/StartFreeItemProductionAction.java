@@ -36,7 +36,11 @@ public class StartFreeItemProductionAction extends BusinessAction {
         DaoEventRegistry.get(dataCache.getDao()).update(building);
 
         // Schedule the event for the building completion.
-        Long buildingId = event.getBuildingId();
+        scheduleFreeItemProductionEndedEvent(dataCache);
+    }
+
+    public static void scheduleFreeItemProductionEndedEvent(BusinessDataCache dataCache) {
+        Long buildingId = dataCache.getBuildingId();
         Map<Long, Integer> unitMap = dataCache.getUnitMap();
         BuildingWithType buildingWithType = dataCache.getBuildingWithType();
         Long delayMs = ProductionCycleUtil.getRemainingProductionTimeMs(unitMap, buildingWithType);

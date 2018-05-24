@@ -1,5 +1,7 @@
 package com.playposse.landoftherooster.contentprovider.business.action;
 
+import android.util.Log;
+
 import com.playposse.landoftherooster.contentprovider.business.BusinessAction;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
@@ -18,6 +20,8 @@ import java.util.Date;
  * An {@link BusinessAction} that starts the production at a building.
  */
 public class StartItemProductionAction extends BusinessAction {
+
+    private static final String LOG_TAG = StartItemProductionAction.class.getSimpleName();
 
     @Override
     public void perform(
@@ -47,8 +51,17 @@ public class StartItemProductionAction extends BusinessAction {
                 new ItemProductionStartedEvent(event.getBuildingId(), possibleProductionCount));
 
         // Schedule production completed event.
+        scheduleItemProductionEndedEvent(dataCache);
+    }
+
+    public static void scheduleItemProductionEndedEvent(BusinessDataCache dataCache) {
+        Long remainingMs = ProductionCycleUtil.getRemainingProductionTimeMs(
+                dataCache.getUnitMap(),
+                dataCache.getBuildingWithType());
         BusinessEngine.get().scheduleEvent(
-                ProductionCycleUtil.getRemainingProductionTimeMs(dataCache.getUnitMap(), dataCache.getBuildingWithType()),
-                new ItemProductionEndedEvent(event.getBuildingId()));
+                remainingMs,
+                new ItemProductionEndedEvent(dataCache.getBuildingId()));
+        Log.i(LOG_TAG, "scheduleItemProductionEndedEvent: Scheduled production to finish in "
+                + remainingMs + "ms.");
     }
 }

@@ -101,7 +101,8 @@ public final class RoosterDaoUtil {
             }
         }
 
-        Log.d(LOG_TAG, "creditUnit: Credited resourceWithType " + resourceTypeId);
+        Log.d(LOG_TAG, "creditResource: Credited resourceWithType " + resourceTypeId
+                + " and amount " + amount);
     }
 
     public static void creditUnit(
