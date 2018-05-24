@@ -29,12 +29,14 @@ public class CreateBuildingAction extends BusinessAction {
         CreateBuildingPreconditionOutcome outcome =
                 (CreateBuildingPreconditionOutcome) preconditionOutcome;
         LocationUpdateEvent locationEvent = (LocationUpdateEvent) event;
-        BuildingType buildingType =
-                BuildingDiscoveryRepository.get(dataCache.getDao()).getNextBuildingType();
+        BuildingDiscoveryRepository buildingDiscoveryRepository =
+                BuildingDiscoveryRepository.get(dataCache.getDao());
+        BuildingType buildingType = buildingDiscoveryRepository.getNextBuildingType();
 
         // Create building.
         Building building =
                 createBuilding(dataCache, outcome.getBuildingId(), locationEvent.getLatLng());
+        buildingDiscoveryRepository.moveToNextBuildingType();
 
         // Create MapMarker.
         createMapMarker(dataCache, buildingType, building);
@@ -55,14 +57,21 @@ public class CreateBuildingAction extends BusinessAction {
         return building;
     }
 
-    private void createMapMarker(BusinessDataCache dataCache, BuildingType buildingType, Building building) {
+    private void createMapMarker(
+            BusinessDataCache dataCache,
+            BuildingType buildingType,
+            Building building) {
+
+        // Check for battle building.
+        boolean isReady = buildingType.isBattleBuilding();
+
         MapMarker mapMarker = new MapMarker(
                 MapMarker.BUILDING_MARKER_TYPE,
                 buildingType.getIcon(),
                 buildingType.getName(),
                 0,
                 0,
-                false,
+                isReady,
                 building.getId(),
                 buildingType.getId());
         DaoEventRegistry.get(dataCache.getDao()).insert(mapMarker);

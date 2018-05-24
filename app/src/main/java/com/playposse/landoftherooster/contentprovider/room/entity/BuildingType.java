@@ -3,6 +3,7 @@ package com.playposse.landoftherooster.contentprovider.room.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
@@ -128,6 +129,11 @@ public class BuildingType {
 
     public void setHealsUnits(boolean healsUnits) {
         this.healsUnits = healsUnits;
+    }
+
+    @Ignore
+    public boolean isBattleBuilding() {
+        return (enemyUnitCount != null) && (enemyUnitCount > 0) && (enemyUnitTypeId != null);
     }
 
     @Override

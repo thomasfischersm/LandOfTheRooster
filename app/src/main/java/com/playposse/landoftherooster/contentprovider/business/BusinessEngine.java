@@ -10,22 +10,28 @@ import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 import com.playposse.landoftherooster.analytics.Analytics;
 import com.playposse.landoftherooster.contentprovider.business.action.CreateBuildingAction;
+import com.playposse.landoftherooster.contentprovider.business.action.ExecuteBattleAction;
 import com.playposse.landoftherooster.contentprovider.business.action.FreeProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.ProductionAction;
+import com.playposse.landoftherooster.contentprovider.business.action.RespawnBattleBuildingAction;
 import com.playposse.landoftherooster.contentprovider.business.action.StartFreeItemProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.StartItemProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateBuildingMarkerAction;
 import com.playposse.landoftherooster.contentprovider.business.event.BuildingCreatedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionEndedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.InitiateBattleEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionEndedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionSucceededEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.LocationUpdateEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.RespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.UserDropsOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.UserPicksUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.CreateBuildingPrecondition;
+import com.playposse.landoftherooster.contentprovider.business.precondition.ExecuteBattlePrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.FreeProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.ProductionPrecondition;
+import com.playposse.landoftherooster.contentprovider.business.precondition.RespawnBattleBuildingPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.StartFreeItemProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.StartItemProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateBuildingMarkerPrecondition;
@@ -100,6 +106,17 @@ public class BusinessEngine {
                 LocationUpdateEvent.class,
                 new CreateBuildingPrecondition(),
                 new CreateBuildingAction());
+
+        // building battle
+        registerAction(
+                InitiateBattleEvent.class,
+                new ExecuteBattlePrecondition(),
+                new ExecuteBattleAction());
+
+        registerAction(
+                RespawnBattleBuildingEvent.class,
+                new RespawnBattleBuildingPrecondition(),
+                new RespawnBattleBuildingAction());
 
         // MOST COME LAST!
         // Update building markers.

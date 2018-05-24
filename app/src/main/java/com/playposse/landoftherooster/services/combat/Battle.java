@@ -1,11 +1,9 @@
 package com.playposse.landoftherooster.services.combat;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
-import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
@@ -28,7 +26,6 @@ public class Battle {
 
     private static final String LOG_TAG = Battle.class.getSimpleName();
 
-    private final Context context;
     private final BuildingWithType buildingWithType;
     private final RoosterDao dao;
 
@@ -39,11 +36,9 @@ public class Battle {
 
     private static final Random random = new Random();
 
-    public Battle(Context context, BuildingWithType buildingWithType) {
-        this.context = context;
+    public Battle(RoosterDao dao, BuildingWithType buildingWithType) {
         this.buildingWithType = buildingWithType;
-
-        dao = RoosterDatabase.getInstance(context).getDao();
+        this.dao = dao;
 
         loadData();
     }
@@ -141,10 +136,10 @@ public class Battle {
 
         List<UnitWithType> startingAliveFriendUnits = getAliveFriendUnits();
         int startingFriendUnitCount = startingAliveFriendUnits.size();
-        int startingFriendHealth = getComulativeHealth(startingAliveFriendUnits);
+        int startingFriendHealth = getCumulativeHealth(startingAliveFriendUnits);
         List<UnitWithType> startingAliveEnemyUnits = getAliveEnemyUnits();
         int startingEnemyUnitCount = startingAliveEnemyUnits.size();
-        int startingEnemyHealth = getComulativeHealth(startingAliveEnemyUnits);
+        int startingEnemyHealth = getCumulativeHealth(startingAliveEnemyUnits);
 
         do {
             fightRound();
@@ -162,8 +157,8 @@ public class Battle {
             saveConquestPrize();
         }
 
-        int endingFriendHealth = getComulativeHealth(aliveFriendUnits);
-        int endingEnemyHealth = getComulativeHealth(aliveEnemyUnits);
+        int endingFriendHealth = getCumulativeHealth(aliveFriendUnits);
+        int endingEnemyHealth = getCumulativeHealth(aliveEnemyUnits);
 
         return new BattleSummaryParcelable(
                 hasFriendWon,
@@ -218,7 +213,7 @@ public class Battle {
                 null);
     }
 
-    private int getComulativeHealth(List<UnitWithType> unitWithTypes) {
+    private int getCumulativeHealth(List<UnitWithType> unitWithTypes) {
         int health = 0;
 
         if (unitWithTypes != null) {

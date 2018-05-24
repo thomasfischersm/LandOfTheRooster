@@ -5,6 +5,7 @@ import com.playposse.landoftherooster.contentprovider.room.datahandler.Productio
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class BusinessDataCache {
     @Nullable private Building building;
     @Nullable private Long buildingTypeId;
     @Nullable private BuildingType buildingType;
+    @Nullable private MapMarker mapMarker;
     @Nullable private List<ProductionRule> productionRules;
     @Nullable private Map<Long, Integer> resourceMap;
     @Nullable private Map<Long, Integer> unitMap;
@@ -85,6 +87,14 @@ public class BusinessDataCache {
             }
         }
         return buildingTypeId;
+    }
+
+    @Nullable
+    public MapMarker getMapMarker() {
+        if (mapMarker == null) {
+            mapMarker = dao.getMapMarkerByBuildingId(getBuildingId());
+        }
+        return mapMarker;
     }
 
     @Nullable

@@ -29,32 +29,34 @@ public class ItemProductionEndedEventTest extends AbstractBusinessTest {
         int savedProductionCycleMs = GameConfig.PRODUCTION_CYCLE_MS;
         GameConfig.PRODUCTION_CYCLE_MS = 10;
 
-        // Create building.
-        long buildingId = createMillAndMarker(dao);
+        try {
+            // Create building.
+            long buildingId = createMillAndMarker(dao);
 
-        // Drop off prerequisite.
-        dao.insert(new Resource(WHEAT_RESOURCE_TYPE_ID, 1, buildingId));
-        BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
-        businessEngine.triggerEvent(
-                UserDropsOffItemEvent.createForResource(buildingId, WHEAT_RESOURCE_TYPE_ID));
-        buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
-        assertNotNull(buildingWithType.getBuilding().getProductionStart());
+            // Drop off prerequisite.
+            dao.insert(new Resource(WHEAT_RESOURCE_TYPE_ID, 1, buildingId));
+            BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+            businessEngine.triggerEvent(
+                    UserDropsOffItemEvent.createForResource(buildingId, WHEAT_RESOURCE_TYPE_ID));
+            buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+            assertNotNull(buildingWithType.getBuilding().getProductionStart());
 
-        // Wait for the production to complete.
-        Thread.sleep(500);
+            // Wait for the production to complete.
+            Thread.sleep(500);
 
-        // Check that the prerequisite (wheat) is consumed.
-        ResourceWithType inputResourceWithType =
-                dao.getResourceWithType(WHEAT_RESOURCE_TYPE_ID, buildingId);
-        assertNull(inputResourceWithType);
+            // Check that the prerequisite (wheat) is consumed.
+            ResourceWithType inputResourceWithType =
+                    dao.getResourceWithType(WHEAT_RESOURCE_TYPE_ID, buildingId);
+            assertNull(inputResourceWithType);
 
-        // Check that the output (flour) has been created.
-        ResourceWithType outputResourceWithType =
-                dao.getResourceWithType(FLOUR_RESOURCE_TYPE_ID, buildingId);
-        assertNotNull(outputResourceWithType);
-        assertEquals(1, outputResourceWithType.getResource().getAmount());
-
-        // Reset the production cycle constant.
-        GameConfig.PRODUCTION_CYCLE_MS = savedProductionCycleMs;
+            // Check that the output (flour) has been created.
+            ResourceWithType outputResourceWithType =
+                    dao.getResourceWithType(FLOUR_RESOURCE_TYPE_ID, buildingId);
+            assertNotNull(outputResourceWithType);
+            assertEquals(1, outputResourceWithType.getResource().getAmount());
+        } finally {
+            // Reset the production cycle constant.
+            GameConfig.PRODUCTION_CYCLE_MS = savedProductionCycleMs;
+        }
     }
 }

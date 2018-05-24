@@ -220,6 +220,9 @@ public interface RoosterDao {
     @Query("select * from map_marker where building_id in (:buildingIds)")
     List<MapMarker> getMapMarkerByBuildingIds(List<Long> buildingIds);
 
+    @Query("select * from map_marker where building_id =:buildingId")
+    MapMarker getMapMarkerByBuildingId(Long buildingId);
+
     @Query("delete from map_marker")
     void deleteMapMarkers();
 }

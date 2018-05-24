@@ -4,6 +4,8 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
+import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -24,8 +26,13 @@ public class TestData {
     protected static final long BAKERY_BUILDING_TYPE_ID = 4; // Mill: flour (2) -> bread (3)
     protected static final long VILLAGE_BUILDING_TYPE_ID = 5; // Village: bread (3) -> peasant (1)
     protected static final long BARRACKS_BUILDING_TYPE_ID = 6; // Barracks: peasant (1) -> soldier (2)
+    protected static final long GOBLIN_CAVE_TYPE_ID = 7;
+
     protected static final long WHEAT_RESOURCE_TYPE_ID = 1;
     protected static final long FLOUR_RESOURCE_TYPE_ID = 2;
+
+    protected static final long SOLIDER_UNIT_TYPE_ID = 2;
+
     protected static final long LATITUDE = 34;
     protected static final long LONGITUDE = 118;
 
@@ -74,9 +81,33 @@ public class TestData {
 
         return millId;
     }
+
     protected static long createBakery(RoosterDao dao) {
         Building building = new Building(BAKERY_BUILDING_TYPE_ID, LATITUDE, LONGITUDE);
         return dao.insert(building);
+    }
+
+    protected static long createGoblinCave(RoosterDao dao) {
+        Building building = new Building(GOBLIN_CAVE_TYPE_ID, LATITUDE, LONGITUDE);
+        return dao.insert(building);
+    }
+
+    protected static long createGoblinCaveAndMarker(RoosterDao dao) {
+        long goblinCaveId = createGoblinCave(dao);
+
+        MapMarker mapMarker = new MapMarker(
+                MapMarker.BUILDING_MARKER_TYPE,
+                "",
+                "",
+                0,
+                0,
+                false,
+                goblinCaveId,
+                GOBLIN_CAVE_TYPE_ID);
+        mapMarker.setLastModified(new Date());
+        dao.insert(mapMarker);
+
+        return goblinCaveId;
     }
 
     protected void assertBuildingIds(
@@ -132,5 +163,16 @@ public class TestData {
     protected Date getLastModifiedForMarker(RoosterDao dao, long buildingId) {
         List<MapMarker> marker = dao.getMapMarkerByBuildingIds(Arrays.asList(buildingId));
         return marker.get(0).getLastModified();
+    }
+
+    protected void createUnits(RoosterDao dao, int amount, long unitTypeId) {
+        UnitType unitType = dao.getUnitTypeById(unitTypeId);
+
+        for (int i = 0; i < amount; i++) {
+            Unit unit = new Unit();
+            unit.setUnitTypeId(unitTypeId);
+            unit.setHealth(unitType.getHealth());
+            dao.insert(unit);
+        }
     }
 }

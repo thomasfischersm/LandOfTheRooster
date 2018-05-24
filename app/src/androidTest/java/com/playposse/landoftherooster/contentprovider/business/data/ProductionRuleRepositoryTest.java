@@ -67,8 +67,7 @@ public class ProductionRuleRepositoryTest extends AbstractBusinessTest {
         long wheatFieldId = createWheatField(dao);
 
         // Create mill.
-        Building mill = new Building(MILL_BUILDING_TYPE_ID, LATITUDE, LONGITUDE);
-        long millId = dao.insert(mill);
+        long millId = createMill(dao);
 
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
         List<BuildingWithType> buildingWithTypes =

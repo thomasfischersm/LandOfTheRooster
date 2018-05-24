@@ -85,7 +85,7 @@ public class BattleDialogFragment extends BaseDialogFragment {
         RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
         BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
 
-        Battle battle = new Battle(context, buildingWithType);
+        Battle battle = new Battle(dao, buildingWithType);
         battleSummary = battle.fight();
     }
 

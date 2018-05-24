@@ -255,4 +255,15 @@ public final class ProductionCycleUtil {
         building.setProductionStart(new Date());
         DaoEventRegistry.get(dao).update(building);
     }
+
+    public static boolean hasFreeProductionRule(@Nullable List<ProductionRule> productionRules) {
+        if (productionRules != null) {
+            for (ProductionRule productionRule : productionRules) {
+                if (productionRule.isFree()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

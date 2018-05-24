@@ -44,7 +44,7 @@ public class RoosterApplication extends Application {
         startService(new Intent(this, LocationScanningService.class));
     }
 
-    private void createUnits(int amount, int unitTypeId) {
+    private void createUnits(int amount, long unitTypeId) {
         RoosterDao dao = RoosterDatabase.getInstance(this).getDao();
         UnitType unitType = dao.getUnitTypeById(unitTypeId);
 
