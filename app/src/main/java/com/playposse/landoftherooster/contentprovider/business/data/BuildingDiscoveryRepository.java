@@ -52,7 +52,7 @@ public class BuildingDiscoveryRepository {
         if (lastBuilding == null) {
             // This is a new game install.
             long nextBuildingTypeId = GameConfig.INITIAL_BUILDING_TYPE_ID;
-            nextBuildingType = dao.getBuildingType(nextBuildingTypeId);
+            nextBuildingType = BuildingTypeRepository.get(dao).getBuildingType(nextBuildingTypeId);
             nextDistance = 0;
         } else {
             // This is an app restart.
