@@ -7,8 +7,8 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
-import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionEndedEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionStartedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.ItemProductionEndedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.ItemProductionStartedEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.StartItemProductionPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;

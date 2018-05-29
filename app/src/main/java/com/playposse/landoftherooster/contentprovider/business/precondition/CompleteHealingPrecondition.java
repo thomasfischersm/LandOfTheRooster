@@ -8,8 +8,8 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.BusinessPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.action.InitiateHealingAction;
-import com.playposse.landoftherooster.contentprovider.business.event.CompleteHealingEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.InitiateHealingEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteHealingEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.InitiateHealingEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
@@ -22,6 +22,9 @@ import java.util.List;
 public class CompleteHealingPrecondition implements BusinessPrecondition {
 
     private static final String LOG_TAG = CompleteHealingPrecondition.class.getSimpleName();
+
+    private long start;
+    private long counter;
 
     @Override
     public PreconditionOutcome evaluate(BusinessEvent event, BusinessDataCache dataCache) {
@@ -54,7 +57,7 @@ public class CompleteHealingPrecondition implements BusinessPrecondition {
 
         // Check if the healing time has been used up.
         long healingTimeMs = System.currentTimeMillis() - building.getHealingStarted().getTime();
-        int peasantCount = dataCache.getPeasantCount();
+        int peasantCount = dataCache.getPeasantCount();Log.i(LOG_TAG, "evaluate: getPeasantCount");
         long neededHealingMs = unitWithType.getHealingTimeMs(peasantCount);
         long extraTimeMs = healingTimeMs - neededHealingMs;
         if (extraTimeMs < 0) {

@@ -5,8 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.playposse.landoftherooster.GameConfig;
-import com.playposse.landoftherooster.contentprovider.business.event.BuildingCreatedEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.UserPicksUpItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.BuildingCreatedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserPicksUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
 

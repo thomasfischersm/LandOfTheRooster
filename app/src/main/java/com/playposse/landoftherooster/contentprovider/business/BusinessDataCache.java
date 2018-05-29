@@ -1,6 +1,8 @@
 package com.playposse.landoftherooster.contentprovider.business;
 
 import com.playposse.landoftherooster.GameConfig;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingTypeRepository;
+import com.playposse.landoftherooster.contentprovider.business.data.ProductionRuleRepository;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
@@ -55,7 +57,7 @@ public class BusinessDataCache {
     @Nullable
     public BuildingWithType getBuildingWithType() {
         if (buildingWithType == null) {
-            buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+            buildingWithType = BuildingTypeRepository.get(dao).queryBuildingWithType(buildingId);
         }
 
         return buildingWithType;
@@ -109,7 +111,8 @@ public class BusinessDataCache {
         if (productionRules == null) {
             Long buildingTypeId = getBuildingTypeId();
             if (buildingTypeId != null) {
-                productionRules = dao.getProductionRulesByBuildingTypeId(buildingTypeId);
+                productionRules = ProductionRuleRepository.get(dao)
+                        .getProductionRulesByBuildingTypeId(buildingTypeId);
             }
         }
 

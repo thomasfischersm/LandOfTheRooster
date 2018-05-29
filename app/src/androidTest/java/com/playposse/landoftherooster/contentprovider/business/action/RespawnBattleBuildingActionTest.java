@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
-import com.playposse.landoftherooster.contentprovider.business.event.RespawnBattleBuildingEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.RespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.RespawnBattleBuildingPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;

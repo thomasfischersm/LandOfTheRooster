@@ -22,23 +22,23 @@ import com.playposse.landoftherooster.contentprovider.business.action.StartFreeI
 import com.playposse.landoftherooster.contentprovider.business.action.StartItemProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateHospitalBuildingMarkerAction;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateProductionBuildingMarkerAction;
-import com.playposse.landoftherooster.contentprovider.business.event.AdmitUnitToHospitalEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.AssignPeasantEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.BuildingCreatedEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.CompleteHealingEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionEndedEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionSucceededEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.InitiateBattleEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.InitiateHealingEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionEndedEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionSucceededEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.LocationUpdateEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.PostAdmitUnitToHospitalEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.PostCompleteHealingEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.RespawnBattleBuildingEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.UnitInjuredEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.UserDropsOffItemEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.UserPicksUpItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AdmitUnitToHospitalEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AssignPeasantEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.BuildingCreatedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteHealingEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.FreeItemProductionEndedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.FreeItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.InitiateBattleEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.InitiateHealingEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.ItemProductionEndedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.ItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.other.LocationUpdateEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAdmitUnitToHospitalEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteHealingEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.RespawnBattleBuildingEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.UnitInjuredEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserDropsOffItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserPicksUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AdmitUnitToHospitalPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AssignPeasantPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.CompleteHealingPrecondition;
@@ -209,8 +209,10 @@ public class BusinessEngine {
     }
 
     public void stop() {
-        scheduledExecutorService.shutdownNow();
-        scheduledExecutorService = null;
+        if (scheduledExecutorService != null) {
+            scheduledExecutorService.shutdownNow();
+            scheduledExecutorService = null;
+        }
     }
 
     /**
@@ -238,7 +240,7 @@ public class BusinessEngine {
                 + "]");
 
         // Trace method duration in analytics.
-        long start = System.currentTimeMillis();
+        long eventStart = System.currentTimeMillis();
         Trace trace = FirebasePerformance.getInstance().newTrace("BusinessEvent.executeTrace");
         trace.putAttribute(Analytics.EVENT_NAME_ATTRIBUTE, event.getClass().getSimpleName());
         trace.start();
@@ -247,8 +249,13 @@ public class BusinessEngine {
 
         for (ActionContainer actionContainer : registry.get(event.getClass())) {
             // Try precondition.
+            long preconditionStart = System.currentTimeMillis();
             PreconditionOutcome preconditionOutcome =
                     actionContainer.getPrecondition().evaluate(event, dataCache);
+            long preconditionEnd = System.currentTimeMillis();
+            Log.i(LOG_TAG, "executeEvent: Evaluated precondition ["
+                    + actionContainer.getPrecondition().getClass().getSimpleName() + "] in "
+                    + (preconditionEnd - preconditionStart) + " ms");
 
             if (!preconditionOutcome.getSuccess()) {
                 trace.incrementMetric(Analytics.PRECONDITION_FAILURE_ATTRIBUTE, 1);
@@ -262,17 +269,21 @@ public class BusinessEngine {
 
             Log.i(LOG_TAG, "triggerEvent: Start action ["
                     + actionContainer.getAction().getClass().getSimpleName() + "]");
+            long actionStart = System.currentTimeMillis();
             actionContainer.getAction().perform(event, preconditionOutcome, dataCache);
+            long actionEnd = System.currentTimeMillis();
             Log.i(LOG_TAG, "triggerEvent: Finished action ["
-                    + actionContainer.getAction().getClass().getSimpleName() + "]");
+                    + actionContainer.getAction().getClass().getSimpleName() + "] in "
+                    + (actionEnd - actionStart) + " ms");
         }
 
         // End trace.
         trace.stop();
-        Analytics.logBusinessEvent(event, start);
+        Analytics.logBusinessEvent(event, eventStart);
 
+        long eventEnd = System.currentTimeMillis();
         Log.i(LOG_TAG, "triggerEvent: Completed event: [" + event.getClass().getSimpleName()
-                + "]");
+                + "] in " + (eventEnd - eventStart) + "ms");
     }
 
     public void scheduleEvent(long delayMs, final BusinessEvent event) {

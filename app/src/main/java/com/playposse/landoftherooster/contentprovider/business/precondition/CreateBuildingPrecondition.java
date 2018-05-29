@@ -7,7 +7,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.BusinessPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepository;
-import com.playposse.landoftherooster.contentprovider.business.event.LocationUpdateEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.other.LocationUpdateEvent;
 
 /**
  * A {@link BusinessPrecondition} that checks if the user indeed walked the right distance to

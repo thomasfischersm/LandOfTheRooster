@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.business.event;
+package com.playposse.landoftherooster.contentprovider.business.event.userTriggered;
 
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.Item;

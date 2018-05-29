@@ -57,6 +57,12 @@ public interface RoosterDao {
     @Update
     void update(Building building);
 
+    @Query("select * from building where id = :buildingId")
+    Building getBuildingById(long buildingId);
+
+    @Query("select id,building_type_id, latitude, longitude, last_conquest, production_start, healing_started  from building where id = :buildingId")
+    Building getBuildingByIdDDD(long buildingId);
+
     @Query("select * from building order by id desc limit 1")
     @Nullable
     Building getLastBuilding();

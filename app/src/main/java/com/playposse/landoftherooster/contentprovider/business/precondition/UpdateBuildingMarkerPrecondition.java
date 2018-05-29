@@ -6,10 +6,10 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessPrecondit
 import com.playposse.landoftherooster.contentprovider.business.Item;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.data.ProductionRuleRepository;
-import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionSucceededEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionSucceededEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.UserDropsOffItemEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.UserPicksUpItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.FreeItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.ItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserDropsOffItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserPicksUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 
 import java.util.List;

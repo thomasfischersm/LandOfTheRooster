@@ -12,6 +12,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitCountByType;
+import com.playposse.landoftherooster.util.SqliteUtil;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -171,5 +172,19 @@ public class RoosterDaoTest {
             buildingIds.add(mapMarker.getBuildingId());
         }
         assertThat(buildingIds, hasItems(hospitalId0, hospitalId1));
+    }
+
+    @Test
+    public void explain_getUnitsWithTypeJoiningUser() {
+        Context targetContext = InstrumentationRegistry.getTargetContext();
+        String sql = "explain select unit.id as id, unit.unit_type_id as unit_type_id, unit.health as health, unit.located_at_building_id as located_at_building_id, unit_type.id as type_id, unit_type.name as type_name, unit_type.carrying_capacity as type_carrying_capacity, unit_type.attack as type_attack, unit_type.defense as type_defense, unit_type.damage as type_damage, unit_type.armor as type_armor, unit_type.health as type_health from unit join unit_type on (unit.unit_type_id = unit_type.id) where located_at_building_id is null order by unit_type.attack desc, unit.unit_type_id asc, unit.health desc, unit.id asc";
+        SqliteUtil.explain(targetContext, sql);
+    }
+
+    @Test
+    public void explain_getWoundedUnitsWithTypeJoiningUser() {
+        Context targetContext = InstrumentationRegistry.getTargetContext();
+        String sql = "explain select unit.id as id, unit.unit_type_id as unit_type_id, unit.health as health, unit.located_at_building_id as located_at_building_id, unit_type.id as type_id, unit_type.name as type_name, unit_type.carrying_capacity as type_carrying_capacity, unit_type.attack as type_attack, unit_type.defense as type_defense, unit_type.damage as type_damage, unit_type.armor as type_armor, unit_type.health as type_health from unit join unit_type on (unit.unit_type_id = unit_type.id) where located_at_building_id is null and unit.health < unit_type.health order by unit_type.attack desc, unit.unit_type_id asc, unit.health desc, unit.id asc";
+        SqliteUtil.explain(targetContext, sql);
     }
 }

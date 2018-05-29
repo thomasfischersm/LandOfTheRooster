@@ -8,10 +8,10 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
-import com.playposse.landoftherooster.contentprovider.business.event.FreeItemProductionSucceededEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.ItemProductionSucceededEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.UserDropsOffItemEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.UserPicksUpItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.FreeItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.ItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserDropsOffItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserPicksUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 
 import org.junit.Test;

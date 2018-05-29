@@ -7,7 +7,7 @@ import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
-import com.playposse.landoftherooster.contentprovider.business.event.AssignPeasantEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AssignPeasantEvent;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 
 import org.junit.Test;

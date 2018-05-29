@@ -1,10 +1,11 @@
-package com.playposse.landoftherooster.contentprovider.business.event;
+package com.playposse.landoftherooster.contentprovider.business.event.timeTriggered;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserDropsOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
@@ -27,31 +28,30 @@ public class ItemProductionEndedEventTest extends AbstractBusinessTest {
     public void triggerEvent_ItemProductionEndedEvent() throws InterruptedException {
         // Temporarily set production cycle to near instantaneous.
         int savedProductionCycleMs = GameConfig.PRODUCTION_CYCLE_MS;
-        GameConfig.PRODUCTION_CYCLE_MS = 10;
+        GameConfig.PRODUCTION_CYCLE_MS = 50;
 
         try {
             // Create building.
-            long buildingId = createMillAndMarker(dao);
+            long millId = createMillAndMarker(dao);
 
             // Drop off prerequisite.
-            dao.insert(new Resource(WHEAT_RESOURCE_TYPE_ID, 1, buildingId));
-            BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+            dao.insert(new Resource(WHEAT_RESOURCE_TYPE_ID, 1, millId));
             businessEngine.triggerEvent(
-                    UserDropsOffItemEvent.createForResource(buildingId, WHEAT_RESOURCE_TYPE_ID));
-            buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+                    UserDropsOffItemEvent.createForResource(millId, WHEAT_RESOURCE_TYPE_ID));
+            BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(millId);
             assertNotNull(buildingWithType.getBuilding().getProductionStart());
 
             // Wait for the production to complete.
-            Thread.sleep(500);
+            Thread.sleep(200);
 
             // Check that the prerequisite (wheat) is consumed.
             ResourceWithType inputResourceWithType =
-                    dao.getResourceWithType(WHEAT_RESOURCE_TYPE_ID, buildingId);
+                    dao.getResourceWithType(WHEAT_RESOURCE_TYPE_ID, millId);
             assertNull(inputResourceWithType);
 
             // Check that the output (flour) has been created.
             ResourceWithType outputResourceWithType =
-                    dao.getResourceWithType(FLOUR_RESOURCE_TYPE_ID, buildingId);
+                    dao.getResourceWithType(FLOUR_RESOURCE_TYPE_ID, millId);
             assertNotNull(outputResourceWithType);
             assertEquals(1, outputResourceWithType.getResource().getAmount());
         } finally {

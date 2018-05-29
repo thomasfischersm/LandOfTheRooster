@@ -16,7 +16,9 @@ import javax.annotation.Nullable;
         entity = UnitType.class,
         parentColumns = "id",
         childColumns = "unit_type_id"),
-        indices = @Index("unit_type_id"))
+        indices = {
+                @Index("unit_type_id"),
+                @Index("located_at_building_id")})
 public class Unit {
 
     @PrimaryKey(autoGenerate = true)

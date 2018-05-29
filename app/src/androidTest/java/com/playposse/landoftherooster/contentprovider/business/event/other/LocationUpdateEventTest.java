@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.business.event;
+package com.playposse.landoftherooster.contentprovider.business.event.other;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;

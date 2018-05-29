@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.business.event;
+package com.playposse.landoftherooster.contentprovider.business.event.userTriggered;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
@@ -53,7 +53,7 @@ public class InitiateBattleEventTest extends AbstractBusinessTest {
             assertFalse(mapMarker.isReady());
 
             // Wait for the building to respawn.
-            Thread.sleep(200);
+            Thread.sleep(210);
 
             // Verify that the building respawned.
             buildingWithType = dao.getBuildingWithTypeByBuildingId(goblinCaveId);

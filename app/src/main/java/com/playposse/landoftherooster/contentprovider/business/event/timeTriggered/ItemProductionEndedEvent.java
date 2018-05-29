@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.business.event;
+package com.playposse.landoftherooster.contentprovider.business.event.timeTriggered;
 
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 

@@ -3,7 +3,7 @@ package com.playposse.landoftherooster.services.combat;
 import android.util.Log;
 
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
-import com.playposse.landoftherooster.contentprovider.business.event.UnitInjuredEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.UnitInjuredEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;

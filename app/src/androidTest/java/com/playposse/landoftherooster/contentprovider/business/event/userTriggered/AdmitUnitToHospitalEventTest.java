@@ -1,8 +1,11 @@
-package com.playposse.landoftherooster.contentprovider.business.event;
+package com.playposse.landoftherooster.contentprovider.business.event.userTriggered;
+
+import android.util.Log;
 
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.UnitInjuredEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
@@ -20,6 +23,8 @@ import static junit.framework.Assert.assertTrue;
  * A test for {@link AdmitUnitToHospitalEvent}.
  */
 public class AdmitUnitToHospitalEventTest extends AbstractBusinessTest {
+
+    private static final String LOG_TAG = AdmitUnitToHospitalEventTest.class.getSimpleName();
 
     private static final int REMAINING_HEALTH = 1;
 
@@ -193,13 +198,17 @@ public class AdmitUnitToHospitalEventTest extends AbstractBusinessTest {
                     0);
 
             // TRIGGER EVENT to admit first soldier.
+            long start = System.currentTimeMillis();
             AdmitUnitToHospitalEvent event =
                     new AdmitUnitToHospitalEvent(hospitalId, soldier0.getId());
             BusinessEngine.get()
                     .triggerEvent(event);
+            long middle = System.currentTimeMillis();
+            Log.i(LOG_TAG, "triggerEvent_completeCycleTwoUnits: YOUDURATION " + (middle - start));
 
             // Assert result.
             List<Unit> units = dao.getUnits(SOLDIER_UNIT_TYPE_ID, hospitalId);
+            Log.i(LOG_TAG, "triggerEvent_completeCycleTwoUnits: TWO " + (System.currentTimeMillis() - middle));
             assertEquals(1, units.size());
 
             Unit resultSoldier0 = units.get(0);
@@ -221,8 +230,7 @@ public class AdmitUnitToHospitalEventTest extends AbstractBusinessTest {
                     0);
 
             // TRIGGER EVENT to admit second soldier.
-            event =
-                    new AdmitUnitToHospitalEvent(hospitalId, soldier1.getId());
+            event = new AdmitUnitToHospitalEvent(hospitalId, soldier1.getId());
             BusinessEngine.get()
                     .triggerEvent(event);
 
@@ -232,6 +240,8 @@ public class AdmitUnitToHospitalEventTest extends AbstractBusinessTest {
 
             resultSoldier0 = getUnitById(units, soldier0.getId());
             resultSoldierWithType0 = new UnitWithType(resultSoldier0, soldierType);
+            long end = System.currentTimeMillis();
+            Log.i(LOG_TAG, "triggerEvent_completeCycleTwoUnits: MYDURATION: " + (end - start)); if (1== 1) return;
             assertEquals(soldier0.getId(), resultSoldier0.getId());
             assertTrue(resultSoldierWithType0.isInjured());
             assertEquals((Long) hospitalId, resultSoldier0.getLocatedAtBuildingId());

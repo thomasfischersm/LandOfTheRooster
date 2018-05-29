@@ -1,17 +1,16 @@
-package com.playposse.landoftherooster.contentprovider.business.event;
+package com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered;
 
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.Item;
 
 /**
- * A {@link BusinessEvent} that fires when the building production rule has finished producing an
- * item.
+ * A {@link BusinessEvent} that is fired when a free item has been fully produced.
  */
-public class ItemProductionSucceededEvent extends BusinessEvent {
+public class FreeItemProductionSucceededEvent extends BusinessEvent {
 
     private final Item producedItem;
 
-    public ItemProductionSucceededEvent(Long buildingId, Item producedItem) {
+    public FreeItemProductionSucceededEvent(Long buildingId, Item producedItem) {
         super(buildingId);
 
         this.producedItem = producedItem;
