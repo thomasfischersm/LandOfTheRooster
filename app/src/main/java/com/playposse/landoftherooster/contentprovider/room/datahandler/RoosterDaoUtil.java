@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.playposse.landoftherooster.contentprovider.business.data.UnitTypeRepository;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
@@ -111,7 +112,7 @@ public final class RoosterDaoUtil {
             int amount,
             @javax.annotation.Nullable Long buildingId) {
 
-        UnitType unitType = dao.getUnitTypeById(unitTypeId);
+        UnitType unitType = UnitTypeRepository.get(dao).getUnitType(unitTypeId);
 
         creditUnit(dao, unitType, amount, buildingId);
     }

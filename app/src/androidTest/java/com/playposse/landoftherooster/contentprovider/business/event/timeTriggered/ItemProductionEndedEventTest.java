@@ -28,7 +28,7 @@ public class ItemProductionEndedEventTest extends AbstractBusinessTest {
     public void triggerEvent_ItemProductionEndedEvent() throws InterruptedException {
         // Temporarily set production cycle to near instantaneous.
         int savedProductionCycleMs = GameConfig.PRODUCTION_CYCLE_MS;
-        GameConfig.PRODUCTION_CYCLE_MS = 50;
+        GameConfig.PRODUCTION_CYCLE_MS = 60;
 
         try {
             // Create building.

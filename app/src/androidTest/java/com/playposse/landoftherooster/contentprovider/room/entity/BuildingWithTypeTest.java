@@ -65,19 +65,6 @@ public class BuildingWithTypeTest extends TestData {
     }
 
     @Test
-    public void load_Building_explicitColumns() {
-        trace(
-                "Load Building through dao with explicit columns",
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        dao.getBuildingByIdDDD(wheatFieldId);
-                    }
-                }
-        );
-    }
-
-    @Test
     public void load_BuildingWithType() {
         trace(
                 "Load BuildingWithType through dao",
