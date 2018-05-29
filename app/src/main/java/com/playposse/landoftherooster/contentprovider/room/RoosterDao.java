@@ -6,7 +6,6 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
-import android.database.Cursor;
 import android.support.annotation.Nullable;
 
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
@@ -43,8 +42,8 @@ public interface RoosterDao {
     @Query("select * from building_type where id > :lastBuildingTypeId order by id asc limit 1")
     BuildingType getNextBuildingType(long lastBuildingTypeId);
 
-    @Query("select id from building_type")
-    Cursor getCursorForBuildingTypeCount();
+    @Query("select count(id) from building_type")
+    int getBuildingTypeCount();
 
     @Query("delete from building_type")
     void deleteBuildingTypes();
@@ -59,9 +58,6 @@ public interface RoosterDao {
 
     @Query("select * from building where id = :buildingId")
     Building getBuildingById(long buildingId);
-
-    @Query("select id,building_type_id, latitude, longitude, last_conquest, production_start, healing_started  from building where id = :buildingId")
-    Building getBuildingByIdDDD(long buildingId);
 
     @Query("select * from building order by id desc limit 1")
     @Nullable

@@ -1,7 +1,6 @@
 package com.playposse.landoftherooster.contentprovider.parser;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.util.Log;
 
 import com.playposse.landoftherooster.BuildConfig;
@@ -33,7 +32,7 @@ public final class ConfigurationImport {
         // Gather information.
         List<BuildingType> buildingTypes = ConfigurationParser.readBuildingTypes(context);
         int jsonBuildingTypeCount = buildingTypes.size();
-        int dbBuildingTypeCount = readDbBuildingTypeCount(dao);
+        int dbBuildingTypeCount = dao.getBuildingTypeCount();
 
         // Skip if already imported.
         if (jsonBuildingTypeCount == dbBuildingTypeCount) {
@@ -163,15 +162,5 @@ public final class ConfigurationImport {
         }
 
         dao.insertProductionRules(rows);
-    }
-
-    private static int readDbBuildingTypeCount(RoosterDao dao) throws IOException {
-        Cursor cursor = dao.getCursorForBuildingTypeCount();
-
-        try {
-            return cursor.getCount();
-        } finally {
-            cursor.close();
-        }
     }
 }
