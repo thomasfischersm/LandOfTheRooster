@@ -138,14 +138,8 @@ public class HospitalService extends SmartPeriodicService {
             UnitWithType firstSickUnitWithType,
             int peasantCount) {
 
-        // Compute needed health recovery.
-        Unit unit = firstSickUnitWithType.getUnit();
-        UnitType unitType = firstSickUnitWithType.getType();
-        int neededHealth = unitType.getHealth() - unit.getHealth();
-
         // Calculate healing time.
-        int healingRate = GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MINUTES;
-        return (long) (neededHealth * healingRate * 60 * 1_000 / peasantCount);
+        return firstSickUnitWithType.getHealingTimeMs(peasantCount);
     }
 
     private void clearHealingStart(BuildingWithType buildingWithType) {

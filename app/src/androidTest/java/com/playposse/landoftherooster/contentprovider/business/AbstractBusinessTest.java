@@ -3,6 +3,7 @@ package com.playposse.landoftherooster.contentprovider.business;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.playposse.landoftherooster.RoosterApplication;
 import com.playposse.landoftherooster.TestData;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepository;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
@@ -20,13 +21,18 @@ public abstract class AbstractBusinessTest extends TestData {
     protected BusinessEngine businessEngine;
 
     @Before
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         Context targetContext = InstrumentationRegistry.getTargetContext();
         dao = RoosterDatabase.getInstance(targetContext).getDao();
 
         // Start business engine.
         businessEngine = BusinessEngine.get();
         businessEngine.start(targetContext);
+
+        // Wait for debug data to be complete.
+        while (!RoosterApplication.isDebugDataComplete()) {
+            Thread.sleep(10);
+        }
 
         // Clear data that test may generate.
         dao.deleteMapMarkers();

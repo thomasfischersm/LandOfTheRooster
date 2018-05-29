@@ -22,6 +22,8 @@ public class RoosterApplication extends Application {
 
     private static final String LOG_TAG = RoosterApplication.class.getSimpleName();
 
+    private static boolean debugDataComplete = false;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -56,10 +58,15 @@ public class RoosterApplication extends Application {
         }
     }
 
+    public static boolean isDebugDataComplete() {
+        return debugDataComplete;
+    }
+
     /**
      * An {@link AsyncTask} that creates data in the database for debugging.
      */
     class CreateDebugDataAsyncTask extends AsyncTask<Void, Void, Void> {
+
         @Override
         protected Void doInBackground(Void... voids) {
             RoosterDao dao = RoosterDatabase.getInstance(RoosterApplication.this).getDao();
@@ -67,6 +74,8 @@ public class RoosterApplication extends Application {
 
             createUnits(6, 2);
             createUnits(1, 1);
+
+            debugDataComplete = true;
             Log.i(LOG_TAG, "doInBackground: Done creating debug test data.");
             return null;
         }

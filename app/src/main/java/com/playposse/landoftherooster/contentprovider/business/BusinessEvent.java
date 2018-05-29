@@ -2,17 +2,20 @@ package com.playposse.landoftherooster.contentprovider.business;
 
 import java.util.Objects;
 
+import javax.annotation.Nullable;
+
 /**
  * Base class for events that can trigger business actions.
  */
 public class BusinessEvent {
 
-    private final Long buildingId;
+    @Nullable private final Long buildingId;
 
-    public BusinessEvent(Long buildingId) {
+    public BusinessEvent(@Nullable Long buildingId) {
         this.buildingId = buildingId;
     }
 
+    @Nullable
     public Long getBuildingId() {
         return buildingId;
     }

@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.contentprovider.business;
 
+import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
@@ -7,7 +8,11 @@ import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +36,8 @@ public class BusinessDataCache {
     @Nullable private Map<Long, Integer> unitMap;
     @Nullable private Map<Long, Integer> resourceMapJoiningUser;
     @Nullable private Map<Long, Integer> unitMapJoiningUser;
+    @Nullable private List<UnitWithType> unitsWithType;
+    @Nullable private List<UnitWithType> unitsWithTypeJoiningUser;
 
     public BusinessDataCache(RoosterDao dao, @Nullable Long buildingId) {
         this.dao = dao;
@@ -140,11 +147,128 @@ public class BusinessDataCache {
         }
         return unitMapJoiningUser;
     }
+
+    public int getPeasantCount() {
+        Integer count = getUnitMap().get(GameConfig.PEASANT_ID);
+        if (count != null) {
+            return count + GameConfig.IMPLIED_PEASANT_COUNT;
+        } else {
+            return GameConfig.IMPLIED_PEASANT_COUNT;
+        }
+    }
+
     public void resetResourceMap() {
         resourceMap = null;
     }
 
     public void resetUnitMap() {
         unitMap = null;
+    }
+
+    @Nullable
+    public List<UnitWithType> getUnitsWithTypeJoiningUser() {
+        if (unitsWithTypeJoiningUser == null) {
+            unitsWithTypeJoiningUser = dao.getUnitsWithTypeJoiningUser();
+        }
+        return unitsWithTypeJoiningUser;
+    }
+
+    @Nullable
+    public UnitWithType getUnitWithTypeJoiningUser(long unitId) {
+        List<UnitWithType> unitWithTypes = getUnitsWithTypeJoiningUser();
+        for (UnitWithType unitWithType : unitWithTypes) {
+            if (unitWithType.getUnit().getId() == unitId) {
+                return unitWithType;
+            }
+        }
+        return null;
+    }
+
+    public boolean hasInjuredUnitJoiningUser() {
+        List<UnitWithType> unitsWithType = getUnitsWithTypeJoiningUser();
+        if (unitsWithType != null) {
+            for (UnitWithType unitWithType : unitsWithType) {
+                if (unitWithType.isInjured()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<UnitWithType> getUnitsWithType() {
+        if (unitsWithType == null) {
+            unitsWithType = dao.getUnitsWithTypeByBuildingId(getBuildingId());
+        }
+        return unitsWithType;
+    }
+
+    public void resetUnitsWithType() {
+        unitsWithType = null;
+    }
+
+    public List<UnitWithType> getInjuredUnitsWithType() {
+        List<UnitWithType> unitsWithType = getUnitsWithType();
+
+        List<UnitWithType> result = new ArrayList<>();
+        for (UnitWithType unitWithType : unitsWithType) {
+            if (unitWithType.isInjured()) {
+                result.add(unitWithType);
+            }
+        }
+
+        // Sort by least injured unit first.
+        Collections.sort(
+                result,
+                new Comparator<UnitWithType>() {
+                    @Override
+                    public int compare(UnitWithType u0, UnitWithType u1) {
+                        return Integer.compare(u0.getInjury(), u1.getInjury());
+                    }
+                });
+        return result;
+    }
+
+    public List<UnitWithType> getInjuredUnitsWithTypeJoiningUser() {
+        List<UnitWithType> unitsWithType = getUnitsWithTypeJoiningUser();
+
+        List<UnitWithType> result = new ArrayList<>();
+        for (UnitWithType unitWithType : unitsWithType) {
+            if (unitWithType.isInjured()) {
+                result.add(unitWithType);
+            }
+        }
+
+        // Sort by least injured unit first.
+        Collections.sort(
+                result,
+                new Comparator<UnitWithType>() {
+                    @Override
+                    public int compare(UnitWithType u0, UnitWithType u1) {
+                        return Integer.compare(u0.getInjury(), u1.getInjury());
+                    }
+                });
+        return result;
+    }
+
+    public int getHealingUnitCount() {
+        int count = 0;
+        for (UnitWithType unitWithType : getUnitsWithType()) {
+            if (unitWithType.isInjured()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getRecoveredUnitCount() {
+        int count = 0;
+        for (UnitWithType unitWithType : getUnitsWithType()) {
+            boolean isPeasant = unitWithType.getType().getId() != GameConfig.PEASANT_ID;
+            if (isPeasant && !unitWithType.isInjured()) {
+                count++;
+            }
+        }
+        return count;
     }
 }

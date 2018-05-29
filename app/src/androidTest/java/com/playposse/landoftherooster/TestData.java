@@ -6,13 +6,18 @@ import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithTy
 import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
 
 /**
@@ -20,28 +25,31 @@ import static junit.framework.Assert.fail;
  */
 public class TestData {
 
-    protected static final long CASTLE_BUILDING_TYPE_ID = 1;
-    protected static final long WHEAT_FIELD_BUILDING_TYPE_ID = 2; // Mill: wheat (1) -> flour (2)
-    protected static final long MILL_BUILDING_TYPE_ID = 3; // Mill: wheat (1) -> flour (2)
-    protected static final long BAKERY_BUILDING_TYPE_ID = 4; // Mill: flour (2) -> bread (3)
-    protected static final long VILLAGE_BUILDING_TYPE_ID = 5; // Village: bread (3) -> peasant (1)
-    protected static final long BARRACKS_BUILDING_TYPE_ID = 6; // Barracks: peasant (1) -> soldier (2)
-    protected static final long GOBLIN_CAVE_TYPE_ID = 7;
+    public static final long CASTLE_BUILDING_TYPE_ID = 1;
+    public static final long WHEAT_FIELD_BUILDING_TYPE_ID = 2; // Mill: wheat (1) -> flour (2)
+    public static final long MILL_BUILDING_TYPE_ID = 3; // Mill: wheat (1) -> flour (2)
+    public static final long BAKERY_BUILDING_TYPE_ID = 4; // Mill: flour (2) -> bread (3)
+    public static final long VILLAGE_BUILDING_TYPE_ID = 5; // Village: bread (3) -> peasant (1)
+    public static final long BARRACKS_BUILDING_TYPE_ID = 6; // Barracks: peasant (1) -> soldier (2)
+    public static final long GOBLIN_CAVE_BUILDING_TYPE_ID = 7;
+    public static final long HOSPITAL_BUILDING_TYPE_ID = 8;
 
-    protected static final long WHEAT_RESOURCE_TYPE_ID = 1;
-    protected static final long FLOUR_RESOURCE_TYPE_ID = 2;
+    public static final long WHEAT_RESOURCE_TYPE_ID = 1;
+    public static final long FLOUR_RESOURCE_TYPE_ID = 2;
 
-    protected static final long SOLIDER_UNIT_TYPE_ID = 2;
+    public static final long SOLDIER_UNIT_TYPE_ID = 2;
 
-    protected static final long LATITUDE = 34;
-    protected static final long LONGITUDE = 118;
+    public static final long LATITUDE = 34;
+    public static final long LONGITUDE = 118;
 
-    protected static long createWheatField(RoosterDao dao) {
+    public static final int REMAINING_HEALTH = 1;
+
+    public static long createWheatField(RoosterDao dao) {
         Building building = new Building(WHEAT_FIELD_BUILDING_TYPE_ID, LATITUDE, LONGITUDE);
         return dao.insert(building);
     }
 
-    protected static long createWheatFieldAndMarker(RoosterDao dao) {
+    public static long createWheatFieldAndMarker(RoosterDao dao) {
         long wheatFieldId = createWheatField(dao);
 
         MapMarker mapMarker = new MapMarker(
@@ -59,12 +67,12 @@ public class TestData {
         return wheatFieldId;
     }
 
-    protected static long createMill(RoosterDao dao) {
+    public static long createMill(RoosterDao dao) {
         Building building = new Building(MILL_BUILDING_TYPE_ID, LATITUDE, LONGITUDE);
         return dao.insert(building);
     }
 
-    protected static long createMillAndMarker(RoosterDao dao) {
+    public static long createMillAndMarker(RoosterDao dao) {
         long millId = createMill(dao);
 
         MapMarker mapMarker = new MapMarker(
@@ -82,17 +90,35 @@ public class TestData {
         return millId;
     }
 
-    protected static long createBakery(RoosterDao dao) {
+    public static long createBakery(RoosterDao dao) {
         Building building = new Building(BAKERY_BUILDING_TYPE_ID, LATITUDE, LONGITUDE);
         return dao.insert(building);
     }
 
-    protected static long createGoblinCave(RoosterDao dao) {
-        Building building = new Building(GOBLIN_CAVE_TYPE_ID, LATITUDE, LONGITUDE);
+    public static long createBakeryAndMarker(RoosterDao dao) {
+        long bakerId = createBakery(dao);
+
+        MapMarker mapMarker = new MapMarker(
+                MapMarker.BUILDING_MARKER_TYPE,
+                "",
+                "",
+                0,
+                0,
+                false,
+                bakerId,
+                BAKERY_BUILDING_TYPE_ID);
+        mapMarker.setLastModified(new Date());
+        dao.insert(mapMarker);
+
+        return bakerId;
+    }
+
+    public static long createGoblinCave(RoosterDao dao) {
+        Building building = new Building(GOBLIN_CAVE_BUILDING_TYPE_ID, LATITUDE, LONGITUDE);
         return dao.insert(building);
     }
 
-    protected static long createGoblinCaveAndMarker(RoosterDao dao) {
+    public static long createGoblinCaveAndMarker(RoosterDao dao) {
         long goblinCaveId = createGoblinCave(dao);
 
         MapMarker mapMarker = new MapMarker(
@@ -103,14 +129,37 @@ public class TestData {
                 0,
                 false,
                 goblinCaveId,
-                GOBLIN_CAVE_TYPE_ID);
+                GOBLIN_CAVE_BUILDING_TYPE_ID);
         mapMarker.setLastModified(new Date());
         dao.insert(mapMarker);
 
         return goblinCaveId;
     }
 
-    protected void assertBuildingIds(
+    public static long createHospital(RoosterDao dao) {
+        Building building = new Building(HOSPITAL_BUILDING_TYPE_ID, LATITUDE, LONGITUDE);
+        return dao.insert(building);
+    }
+
+    public static long createHospitalAndMarker(RoosterDao dao) {
+        long hospitalId = createHospital(dao);
+
+        MapMarker mapMarker = new MapMarker(
+                MapMarker.BUILDING_MARKER_TYPE,
+                "",
+                "",
+                0,
+                0,
+                false,
+                hospitalId,
+                HOSPITAL_BUILDING_TYPE_ID);
+        mapMarker.setLastModified(new Date());
+        dao.insert(mapMarker);
+
+        return hospitalId;
+    }
+
+    public void assertBuildingIds(
             List<BuildingWithType> buildingWithTypes,
             Long... buildingIds) {
 
@@ -135,7 +184,7 @@ public class TestData {
         }
     }
 
-    protected void assertBuildingTypeIds(
+    public void assertBuildingTypeIds(
             List<BuildingWithType> buildingWithTypes,
             Long... buildingTypeIds) {
 
@@ -160,12 +209,12 @@ public class TestData {
         }
     }
 
-    protected Date getLastModifiedForMarker(RoosterDao dao, long buildingId) {
+    public Date getLastModifiedForMarker(RoosterDao dao, long buildingId) {
         List<MapMarker> marker = dao.getMapMarkerByBuildingIds(Arrays.asList(buildingId));
         return marker.get(0).getLastModified();
     }
 
-    protected void createUnits(RoosterDao dao, int amount, long unitTypeId) {
+    public void createUnitsJoiningUser(RoosterDao dao, int amount, long unitTypeId) {
         UnitType unitType = dao.getUnitTypeById(unitTypeId);
 
         for (int i = 0; i < amount; i++) {
@@ -174,5 +223,58 @@ public class TestData {
             unit.setHealth(unitType.getHealth());
             dao.insert(unit);
         }
+    }
+
+    public void createUnits(RoosterDao dao, int amount, long unitTypeId, long buildingId) {
+        UnitType unitType = dao.getUnitTypeById(unitTypeId);
+
+        for (int i = 0; i < amount; i++) {
+            Unit unit = new Unit();
+            unit.setUnitTypeId(unitTypeId);
+            unit.setHealth(unitType.getHealth());
+            unit.setLocatedAtBuildingId(buildingId);
+            dao.insert(unit);
+        }
+    }
+
+    @Nullable
+    protected UnitWithType getUnitWithTypeById(List<UnitWithType> unitsWithType, long id) {
+        for (UnitWithType unitWithType : unitsWithType) {
+            if (unitWithType.getUnit().getId() == id) {
+                return unitWithType;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    protected Unit getUnitById(List<Unit> units, long id) {
+        for (Unit unit : units) {
+            if (unit.getId() == id) {
+                return unit;
+            }
+        }
+        return null;
+    }
+
+    protected Unit createWoundedSoldier(RoosterDao dao) {
+        return createWoundedSoldier(dao, 1).get(0);
+    }
+
+    protected List<Unit> createWoundedSoldier(RoosterDao dao, int amount) {
+        // Create soldier.
+        createUnitsJoiningUser(dao, amount, SOLDIER_UNIT_TYPE_ID);
+
+        // Injure soldier.
+        List<UnitWithType> unitsWithType = dao.getUnitsWithTypeJoiningUser();
+        List<Unit> result = new ArrayList<>();
+        assertEquals(amount, unitsWithType.size());
+        for (int i = 0; i < amount; i++) {
+            Unit soldier = unitsWithType.get(i).getUnit();
+            soldier.setHealth(REMAINING_HEALTH);
+            dao.update(soldier);
+            result.add(soldier);
+        }
+        return result;
     }
 }

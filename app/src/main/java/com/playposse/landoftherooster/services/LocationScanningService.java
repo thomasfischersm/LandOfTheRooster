@@ -17,8 +17,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.activity.KingdomActivity;
 import com.playposse.landoftherooster.activity.StopActivity;
-import com.playposse.landoftherooster.services.location.BuildingDiscoveryService;
-import com.playposse.landoftherooster.services.location.BuildingInteractionService;
 import com.playposse.landoftherooster.services.location.ILocationAwareService;
 import com.playposse.landoftherooster.services.time.BuildingProductionService;
 import com.playposse.landoftherooster.services.time.HospitalService;
@@ -157,15 +155,16 @@ public class LocationScanningService extends Service {
             Log.e(LOG_TAG, "BuildingDiscoveryService: Failed to wait for permissions.", ex);
         }
 
-        dependentServices.add(new BuildingDiscoveryService(getApplicationContext()));
-        dependentServices.add(new BuildingInteractionService(getApplicationContext()));
-
-
-        buildingProductionService = new BuildingProductionService(getApplicationContext());
-        buildingProductionService.start();
-
-        hospitalService = new HospitalService(getApplicationContext());
-        hospitalService.start();
+        // TODO: Remove this properly later. The BusinessEngine replaces all of this.
+//        dependentServices.add(new BuildingDiscoveryService(getApplicationContext()));
+//        dependentServices.add(new BuildingInteractionService(getApplicationContext()));
+//
+//
+//        buildingProductionService = new BuildingProductionService(getApplicationContext());
+//        buildingProductionService.start();
+//
+//        hospitalService = new HospitalService(getApplicationContext());
+//        hospitalService.start();
     }
 
     @Override

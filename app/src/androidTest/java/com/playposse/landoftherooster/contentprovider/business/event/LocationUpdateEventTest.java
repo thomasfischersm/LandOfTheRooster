@@ -83,7 +83,7 @@ public class LocationUpdateEventTest extends AbstractBusinessTest {
         assertEquals(7, buildings.size());
 
         Building goblinCave = buildings.get(6);
-        assertEquals(GOBLIN_CAVE_TYPE_ID, goblinCave.getBuildingTypeId());
+        assertEquals(GOBLIN_CAVE_BUILDING_TYPE_ID, goblinCave.getBuildingTypeId());
 
         MapMarker mapMarker = dao.getMapMarkerByBuildingId(goblinCave.getId());
         assertTrue(mapMarker.isReady());

@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * A {@link BusinessAction} that updates {@link MapMarker}s.
  */
-public class UpdateBuildingMarkerAction extends BusinessAction {
+public class UpdateProductionBuildingMarkerAction extends BusinessAction {
 
     @Override
     public void perform(
@@ -45,7 +45,7 @@ public class UpdateBuildingMarkerAction extends BusinessAction {
         Map<Long, Integer> unitMapJoiningUser = dataCache.getUnitMapJoiningUser();
 
         for (int i = 0; i < affectedBuildingWithTypes.size(); i++) {
-            updateBuildingMarker(
+            updateBuildingMarker( // updateProductionBuildingMarker & updateHospitalBuildingMarker
                     mapMarkers.get(i),
                     affectedBuildingWithTypes.get(i),
                     productionRuleRepository,

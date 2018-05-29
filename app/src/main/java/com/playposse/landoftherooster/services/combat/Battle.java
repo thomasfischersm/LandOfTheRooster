@@ -2,6 +2,8 @@ package com.playposse.landoftherooster.services.combat;
 
 import android.util.Log;
 
+import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.event.UnitInjuredEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
@@ -159,11 +161,17 @@ public class Battle {
 
         int endingFriendHealth = getCumulativeHealth(aliveFriendUnits);
         int endingEnemyHealth = getCumulativeHealth(aliveEnemyUnits);
+        int friendlyHealthLost = startingFriendHealth - endingFriendHealth;
+
+        if (friendlyHealthLost > 0) {
+            BusinessEngine.get()
+                    .triggerEvent(new UnitInjuredEvent());
+        }
 
         return new BattleSummaryParcelable(
                 hasFriendWon,
                 startingFriendUnitCount - aliveFriendUnits.size(),
-                startingFriendHealth - endingFriendHealth,
+                friendlyHealthLost,
                 startingEnemyUnitCount - aliveEnemyUnits.size(),
                 startingEnemyHealth - endingEnemyHealth,
                 events);
@@ -208,8 +216,7 @@ public class Battle {
         ResourceType conquestPrizeResourceType = dao.getResourceTypeById(conquestPrizeResourceTypeId);
         RoosterDaoUtil.creditResource(
                 dao,
-                conquestPrizeResourceType.getId(),
-                DEFAULT_CONQUEST_PRIZE_RESOURCE_AMOUNT,
+                conquestPrizeResourceType.getId(),                DEFAULT_CONQUEST_PRIZE_RESOURCE_AMOUNT,
                 null);
     }
 

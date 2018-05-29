@@ -25,13 +25,13 @@ import static junit.framework.Assert.assertNotSame;
 import static junit.framework.Assert.assertTrue;
 
 /**
- * A test for {@link UpdateBuildingMarkerAction}.
+ * A test for {@link UpdateProductionBuildingMarkerAction}.
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class UpdateBuildingMarkerActionTest extends AbstractBusinessTest {
+public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTest {
 
-    private final UpdateBuildingMarkerAction action = new UpdateBuildingMarkerAction();
+    private final UpdateProductionBuildingMarkerAction action = new UpdateProductionBuildingMarkerAction();
 
     @Test
     public void perform_noBuildings() {

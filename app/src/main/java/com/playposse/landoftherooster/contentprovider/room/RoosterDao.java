@@ -176,6 +176,9 @@ public interface RoosterDao {
     @Query("select unit.id as id, unit.unit_type_id as unit_type_id, unit.health as health, unit.located_at_building_id as located_at_building_id, unit_type.id as type_id, unit_type.name as type_name, unit_type.carrying_capacity as type_carrying_capacity, unit_type.attack as type_attack, unit_type.defense as type_defense, unit_type.damage as type_damage, unit_type.armor as type_armor, unit_type.health as type_health from unit join unit_type on (unit.unit_type_id = unit_type.id) where located_at_building_id is null order by unit_type.attack desc, unit.unit_type_id asc, unit.health desc, unit.id asc")
     List<UnitWithType> getUnitsWithTypeJoiningUser();
 
+    @Query("select unit.id as id, unit.unit_type_id as unit_type_id, unit.health as health, unit.located_at_building_id as located_at_building_id, unit_type.id as type_id, unit_type.name as type_name, unit_type.carrying_capacity as type_carrying_capacity, unit_type.attack as type_attack, unit_type.defense as type_defense, unit_type.damage as type_damage, unit_type.armor as type_armor, unit_type.health as type_health from unit join unit_type on (unit.unit_type_id = unit_type.id) where located_at_building_id is null and unit.id = :unitId")
+    UnitWithType getUnitWithTypeJoiningUser(long unitId);
+
     @Query("select unit.id as id, unit.unit_type_id as unit_type_id, unit.health as health, unit.located_at_building_id as located_at_building_id, unit_type.id as type_id, unit_type.name as type_name, unit_type.carrying_capacity as type_carrying_capacity, unit_type.attack as type_attack, unit_type.defense as type_defense, unit_type.damage as type_damage, unit_type.armor as type_armor, unit_type.health as type_health from unit join unit_type on (unit.unit_type_id = unit_type.id) where located_at_building_id is null and unit.health < unit_type.health order by unit_type.attack desc, unit.unit_type_id asc, unit.health desc, unit.id asc")
     List<UnitWithType> getWoundedUnitsWithTypeJoiningUser();
 
@@ -222,6 +225,9 @@ public interface RoosterDao {
 
     @Query("select * from map_marker where building_id =:buildingId")
     MapMarker getMapMarkerByBuildingId(Long buildingId);
+
+    @Query("select map_marker.* from map_marker join building_type on (building_type.id = map_marker.building_type_id) where building_type.heals_units = 1")
+    List<MapMarker> getMapMarkersOfHealingBuildings();
 
     @Query("delete from map_marker")
     void deleteMapMarkers();

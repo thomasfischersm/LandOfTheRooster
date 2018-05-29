@@ -6,6 +6,8 @@ import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
+import com.playposse.landoftherooster.TestData;
+import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
@@ -15,10 +17,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.hamcrest.Matchers.hasItems;
 
 /**
  * A test for {@link RoosterDao}.
@@ -141,5 +146,30 @@ public class RoosterDaoTest {
         // Add second peasant.
         dao.insert(new Unit(1, 10, null));
         assertEquals(2, dao.getCarryingCapacity());
+    }
+
+    @Test
+    public void getMapMarkersOfHealingBuildings() {
+        // Create 3 non-hospital buildings.
+        TestData.createWheatFieldAndMarker(dao);
+        TestData.createMillAndMarker(dao);
+        TestData.createBakeryAndMarker(dao);
+
+        // Create 2 hospitals.
+        long hospitalId0 = TestData.createHospitalAndMarker(dao);
+        long hospitalId1 = TestData.createHospitalAndMarker(dao);
+
+        // Query dao.
+        List<MapMarker> mapMarkers = dao.getMapMarkersOfHealingBuildings();
+
+        // Assert result.
+        assertEquals(2, mapMarkers.size());
+
+        // Assert building ids.
+        List<Long> buildingIds = new ArrayList<>();
+        for (MapMarker mapMarker : mapMarkers) {
+            buildingIds.add(mapMarker.getBuildingId());
+        }
+        assertThat(buildingIds, hasItems(hospitalId0, hospitalId1));
     }
 }

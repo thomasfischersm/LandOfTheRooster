@@ -37,7 +37,7 @@ public class InitiateBattleEventTest extends AbstractBusinessTest {
             long goblinCaveId = createGoblinCaveAndMarker(dao);
 
             // Create enough soldiers to be sure to win.
-            createUnits(dao, 10, SOLIDER_UNIT_TYPE_ID);
+            createUnitsJoiningUser(dao, 10, SOLDIER_UNIT_TYPE_ID);
 
             // Trigger event.
             InitiateBattleEvent event = new InitiateBattleEvent(goblinCaveId);

@@ -271,4 +271,15 @@ public final class RoosterDaoUtil {
                     + peasantCount);
         }
     }
+
+    public static boolean hasInjuredUnit(List<UnitWithType> unitsWithType) {
+        if (unitsWithType != null) {
+            for (UnitWithType unitWithType : unitsWithType) {
+                if (unitWithType.isInjured()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

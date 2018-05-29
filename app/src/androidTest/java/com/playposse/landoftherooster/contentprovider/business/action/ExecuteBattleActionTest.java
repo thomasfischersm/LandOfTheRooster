@@ -33,7 +33,7 @@ public class ExecuteBattleActionTest extends AbstractBusinessTest {
         long goblinCaveId = createGoblinCaveAndMarker(dao);
 
         // Create enough units to be sure to win.
-        createUnits(dao, 10, SOLIDER_UNIT_TYPE_ID);
+        createUnitsJoiningUser(dao, 10, SOLDIER_UNIT_TYPE_ID);
 
         // Execute action.
         InitiateBattleEvent event = new InitiateBattleEvent(goblinCaveId);
