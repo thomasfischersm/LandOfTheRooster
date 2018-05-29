@@ -119,8 +119,8 @@ public class AdmitUnitToHospitalEventTest extends AbstractBusinessTest {
     @Test
     public void triggerEvent_ensureProductionCompletes() throws InterruptedException {
         // Set healing speed to instant.
-        int originalHealingRate = GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MINUTES;
-        GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MINUTES = 0;
+        int originalHealingRate = GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MS;
+        GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MS = 0;
 
         try {
             // Create hospital.
@@ -148,23 +148,20 @@ public class AdmitUnitToHospitalEventTest extends AbstractBusinessTest {
             assertEquals((Long) hospitalId, resultSoldier.getLocatedAtBuildingId());
         } finally {
             // Restore original healing rate.
-            GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MINUTES = originalHealingRate;
+            GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MS = originalHealingRate;
         }
     }
 
     @Test
     public void triggerEvent_completeCycleTwoUnits() throws InterruptedException {
         // Set healing speed to instant.
-        int originalHealingRate = GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MINUTES;
-        GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MINUTES = 1;
+        int originalHealingRate = GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MS;
+        GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MS = 500;
 
         try {
             // Create 2 hospitals.
             long hospitalId = createHospitalAndMarker(dao);
             long otherHospitalId = createHospitalAndMarker(dao);
-
-            // Assign 119 peasants to the building to create a healing time of 500ms.
-            createUnits(dao, 119, GameConfig.PEASANT_ID, hospitalId); // TODO: Change the GameConfig constant to ms instead of this silliness.
 
             // Create wounded soldier.
             List<Unit> woundedSoldiers = createWoundedSoldier(dao, 2);
@@ -322,7 +319,7 @@ public class AdmitUnitToHospitalEventTest extends AbstractBusinessTest {
             // TODO: Pickup both units. (Add barracks to see them turn green.)
         } finally {
             // Restore original healing rate.
-            GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MINUTES = originalHealingRate;
+            GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MS = originalHealingRate;
         }
     }
 

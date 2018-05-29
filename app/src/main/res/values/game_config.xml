@@ -35,5 +35,5 @@
 
     <dimen name="production_circle_radius">3dp</dimen>
 
-    <integer name="healing_per_health_point_duration_minutes">1</integer>
+    <integer name="healing_per_health_point_duration_ms">60000</integer>
 </resources>

@@ -106,9 +106,9 @@ public final class GameConfig {
     public static float PRODUCTION_CIRCLE_RADIUS;
 
     /**
-     * Minutes that it takes to heal one health point for unit.
+     * Milliseconds that it takes to heal one health point for unit.
      */
-    public static int HEALING_PER_HEALTH_POINT_DURATION_MINUTES;
+    public static int HEALING_PER_HEALTH_POINT_DURATION_MS;
 
     private GameConfig() {
     }
@@ -131,8 +131,8 @@ public final class GameConfig {
         MAX_PRODUCTION_CIRCLE_COUNT = get(context, R.integer.max_production_circle_count);
         PRODUCTION_CIRCLE_MARGIN = getDimension(context, R.dimen.production_circle_margin);
         PRODUCTION_CIRCLE_RADIUS = getDimension(context, R.dimen.production_circle_radius);
-        HEALING_PER_HEALTH_POINT_DURATION_MINUTES =
-                get(context, R.integer.healing_per_health_point_duration_minutes);
+        HEALING_PER_HEALTH_POINT_DURATION_MS =
+                get(context, R.integer.healing_per_health_point_duration_ms);
     }
 
     private static int get(Context context, @IntegerRes int resId) {

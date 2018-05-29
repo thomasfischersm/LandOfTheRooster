@@ -51,9 +51,7 @@ public class UnitWithType {
 
     public long getHealingTimeMs(int peasantCount) {
         return ((long) getInjury())
-                * GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MINUTES
-                * 60
-                * 1_000
+                * GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MS
                 / peasantCount;
     }
 }
