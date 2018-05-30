@@ -11,7 +11,7 @@ import com.playposse.landoftherooster.contentprovider.business.data.ProductionRu
 import com.playposse.landoftherooster.contentprovider.business.data.UnitTypeRepositoryTest;
 import com.playposse.landoftherooster.contentprovider.business.event.other.LocationUpdateEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteHealingEventTest;
-import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.ItemProductionEndedEventTest;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteProductionEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AdmitUnitToHospitalEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AssignPeasantEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.InitiateBattleEventTest;
@@ -47,7 +47,7 @@ import org.junit.runners.Suite;
         ExecuteBattlePreconditionTest.class,
         InitiateBattleEventTest.class,
         InitiateHealingPreconditionTest.class,
-        ItemProductionEndedEventTest.class,
+        CompleteProductionEventTest.class,
         LocationUpdateEventTest.class,
         PickUpUnitFromHospitalActionTest.class,
         PickUpUnitFromHospitalEventTest.class,

@@ -33,8 +33,8 @@ import com.playposse.landoftherooster.contentprovider.business.event.consequence
 import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.InitiateHealingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.other.LocationUpdateEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteHealingEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.FreeItemProductionEndedEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.ItemProductionEndedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteFreeItemProduction;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.RespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AdmitUnitToHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AssignPeasantEvent;
@@ -101,7 +101,7 @@ public class BusinessEngine {
                 new StartItemProductionAction());
 
         registerAction(
-                ItemProductionEndedEvent.class,
+                CompleteProductionEvent.class,
                 new ProductionPrecondition(),
                 new ProductionAction());
 
@@ -119,7 +119,7 @@ public class BusinessEngine {
                 new FreeProductionAction());
 
         registerAction(
-                FreeItemProductionEndedEvent.class,
+                CompleteFreeItemProduction.class,
                 new FreeProductionPrecondition(),
                 new FreeProductionAction());
 

@@ -8,7 +8,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.BusinessPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
-import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.ItemProductionEndedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
@@ -61,8 +61,8 @@ public class ProductionPrecondition extends StartItemProductionPrecondition {
             // The production is not yet complete. Let's reschedule it.
             Log.i(LOG_TAG, "evaluate: Production for building " + dataCache.getBuildingId()
                     + " should have been complete, but it isn't!");
-            ItemProductionEndedEvent completeEvent =
-                    new ItemProductionEndedEvent(event.getBuildingId());
+            CompleteProductionEvent completeEvent =
+                    new CompleteProductionEvent(event.getBuildingId());
             BusinessEngine.get().scheduleEvent(duration, completeEvent);
             return fail();
         }

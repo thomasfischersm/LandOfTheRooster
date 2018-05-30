@@ -7,7 +7,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
-import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.ItemProductionEndedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.ItemProductionStartedEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.StartItemProductionPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
@@ -60,7 +60,7 @@ public class StartItemProductionAction extends BusinessAction {
                 dataCache.getBuildingWithType());
         BusinessEngine.get().scheduleEvent(
                 remainingMs,
-                new ItemProductionEndedEvent(dataCache.getBuildingId()));
+                new CompleteProductionEvent(dataCache.getBuildingId()));
         Log.i(LOG_TAG, "scheduleItemProductionEndedEvent: Scheduled production to finish in "
                 + remainingMs + "ms.");
     }

@@ -5,7 +5,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
-import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.FreeItemProductionEndedEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteFreeItemProduction;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
@@ -44,7 +44,7 @@ public class StartFreeItemProductionAction extends BusinessAction {
         Map<Long, Integer> unitMap = dataCache.getUnitMap();
         BuildingWithType buildingWithType = dataCache.getBuildingWithType();
         Long delayMs = ProductionCycleUtil.getRemainingProductionTimeMs(unitMap, buildingWithType);
-        FreeItemProductionEndedEvent endEvent =  new FreeItemProductionEndedEvent(buildingId);
+        CompleteFreeItemProduction endEvent =  new CompleteFreeItemProduction(buildingId);
         BusinessEngine.get().scheduleEvent(delayMs, endEvent);
     }
 }

@@ -18,13 +18,13 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 
 /**
- * An instrumented test for scenarios that are started by {@link ItemProductionEndedEvent}.
+ * An instrumented test for scenarios that are started by {@link CompleteProductionEvent}.
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ItemProductionEndedEventTest extends AbstractBusinessTest {
+public class CompleteProductionEventTest extends AbstractBusinessTest {
 
-    private static final String LOG_TAG = ItemProductionEndedEventTest.class.getSimpleName();
+    private static final String LOG_TAG = CompleteProductionEventTest.class.getSimpleName();
 
     @Test
     public void triggerEvent_ItemProductionEndedEvent() throws InterruptedException {
