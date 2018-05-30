@@ -24,8 +24,8 @@ import com.playposse.landoftherooster.contentprovider.business.action.StartItemP
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateHospitalBuildingMarkerAction;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateProductionBuildingMarkerAction;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.BuildingCreatedEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.FreeItemProductionSucceededEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.ItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteFreeProductionEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAdmitUnitToHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteHealingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpUnitFromHospitalEvent;
@@ -205,12 +205,12 @@ public class BusinessEngine {
                 new UpdateProductionBuildingMarkerAction());
 
         registerAction(
-                ItemProductionSucceededEvent.class,
+                PostCompleteProductionEvent.class,
                 new UpdateProductionBuildingMarkerPrecondition(),
                 new UpdateProductionBuildingMarkerAction());
 
         registerAction(
-                FreeItemProductionSucceededEvent.class,
+                PostCompleteFreeProductionEvent.class,
                 new UpdateProductionBuildingMarkerPrecondition(),
                 new UpdateProductionBuildingMarkerAction());
     }

@@ -6,11 +6,11 @@ import com.playposse.landoftherooster.contentprovider.business.Item;
 /**
  * A {@link BusinessEvent} that is fired when a free item has been fully produced.
  */
-public class FreeItemProductionSucceededEvent extends BusinessEvent {
+public class PostCompleteFreeProductionEvent extends BusinessEvent {
 
     private final Item producedItem;
 
-    public FreeItemProductionSucceededEvent(Long buildingId, Item producedItem) {
+    public PostCompleteFreeProductionEvent(Long buildingId, Item producedItem) {
         super(buildingId);
 
         this.producedItem = producedItem;

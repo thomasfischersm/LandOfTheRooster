@@ -6,8 +6,8 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessPrecondit
 import com.playposse.landoftherooster.contentprovider.business.Item;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.data.ProductionRuleRepository;
-import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.FreeItemProductionSucceededEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.ItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteFreeProductionEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpUnitFromHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserDropsOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserPicksUpItemEvent;
@@ -28,10 +28,10 @@ public class UpdateProductionBuildingMarkerPrecondition implements BusinessPreco
             item = ((UserPicksUpItemEvent) event).getItem();
         } else if (event instanceof UserDropsOffItemEvent) {
             item = ((UserDropsOffItemEvent) event).getItem();
-        } else if (event instanceof ItemProductionSucceededEvent) {
-            item = ((ItemProductionSucceededEvent) event).getProducedItem();
-        } else if (event instanceof FreeItemProductionSucceededEvent) {
-            item = ((FreeItemProductionSucceededEvent) event).getProducedItem();
+        } else if (event instanceof PostCompleteProductionEvent) {
+            item = ((PostCompleteProductionEvent) event).getProducedItem();
+        } else if (event instanceof PostCompleteFreeProductionEvent) {
+            item = ((PostCompleteFreeProductionEvent) event).getProducedItem();
         } else if (event instanceof PostPickUpUnitFromHospitalEvent) {
             item = ((PostPickUpUnitFromHospitalEvent) event).getPickedUpUnitItem();
         } else {

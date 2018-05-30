@@ -8,8 +8,8 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
-import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.FreeItemProductionSucceededEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.ItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteFreeProductionEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserDropsOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserPicksUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
@@ -77,8 +77,8 @@ public class UpdateProductionBuildingMarkerPreconditionTest extends AbstractBusi
     @Test
     public void evaluate_ItemProductionSucceededEvent() {
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
-        ItemProductionSucceededEvent event =
-                new ItemProductionSucceededEvent(1L, wheatItem);
+        PostCompleteProductionEvent event =
+                new PostCompleteProductionEvent(1L, wheatItem);
 
         evaluate_wheatFieldAndMill(event);
     }
@@ -86,8 +86,8 @@ public class UpdateProductionBuildingMarkerPreconditionTest extends AbstractBusi
     @Test
     public void evaluate_FreeItemProductionSucceededEvent() {
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
-        FreeItemProductionSucceededEvent event =
-                new FreeItemProductionSucceededEvent(1L, wheatItem);
+        PostCompleteFreeProductionEvent event =
+                new PostCompleteFreeProductionEvent(1L, wheatItem);
 
         evaluate_wheatFieldAndMill(event);
     }

@@ -8,7 +8,7 @@ import com.playposse.landoftherooster.contentprovider.business.Item;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
 import com.playposse.landoftherooster.contentprovider.business.UnitItem;
-import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.ItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.ProductionPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
@@ -41,7 +41,7 @@ public class ProductionAction extends BusinessAction {
         Item producedItem = produce(productionRule, dataCache);
 
         BusinessEngine.get().triggerDelayedEvent
-                (new ItemProductionSucceededEvent(event.getBuildingId(), producedItem));
+                (new PostCompleteProductionEvent(event.getBuildingId(), producedItem));
     }
 
     protected Item produce(ProductionRule productionRule, BusinessDataCache dataCache) {

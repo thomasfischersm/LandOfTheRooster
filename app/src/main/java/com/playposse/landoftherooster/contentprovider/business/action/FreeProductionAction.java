@@ -5,7 +5,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.Item;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
-import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.FreeItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteFreeProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.FreeProductionPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
 
@@ -38,6 +38,6 @@ public class FreeProductionAction extends ProductionAction {
         }
 
         BusinessEngine.get().triggerDelayedEvent(
-                new FreeItemProductionSucceededEvent(event.getBuildingId(), producedItem));
+                new PostCompleteFreeProductionEvent(event.getBuildingId(), producedItem));
     }
 }
