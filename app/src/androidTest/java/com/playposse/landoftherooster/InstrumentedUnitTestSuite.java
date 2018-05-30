@@ -16,7 +16,7 @@ import com.playposse.landoftherooster.contentprovider.business.event.userTrigger
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AssignPeasantEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.InitiateBattleEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpUnitFromHospitalEventTest;
-import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserDropsOffItemEventTest;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostDropOffItemEventTest;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AdmitUnitToHospitalPreconditionTest;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AssignPeasantPreconditionTest;
 import com.playposse.landoftherooster.contentprovider.business.precondition.ExecuteBattlePreconditionTest;
@@ -58,7 +58,7 @@ import org.junit.runners.Suite;
         RoosterDaoTest.class,
         UnitTypeRepositoryTest.class,
         UpdateProductionBuildingMarkerActionTest.class,
-        UserDropsOffItemEventTest.class
+        PostDropOffItemEventTest.class
 })
 public class InstrumentedUnitTestSuite {
 }

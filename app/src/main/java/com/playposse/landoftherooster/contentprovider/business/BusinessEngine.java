@@ -40,8 +40,8 @@ import com.playposse.landoftherooster.contentprovider.business.event.userTrigger
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AssignPeasantEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.InitiateBattleEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpUnitFromHospitalEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserDropsOffItemEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserPicksUpItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostDropOffItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AdmitUnitToHospitalPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AssignPeasantPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.CompleteHealingPrecondition;
@@ -96,7 +96,7 @@ public class BusinessEngine {
 
         // item production for cost
         registerAction(
-                UserDropsOffItemEvent.class,
+                PostDropOffItemEvent.class,
                 new StartItemProductionPrecondition(),
                 new StartItemProductionAction());
 
@@ -109,7 +109,7 @@ public class BusinessEngine {
 
         // free item production
         registerAction(
-                UserPicksUpItemEvent.class,
+                PostPickUpItemEvent.class,
                 new StartFreeItemProductionPrecondition(),
                 new StartFreeItemProductionAction());
 
@@ -195,12 +195,12 @@ public class BusinessEngine {
         // MOST COME LAST!
         // Update building markers.
         registerAction(
-                UserPicksUpItemEvent.class,
+                PostPickUpItemEvent.class,
                 new UpdateProductionBuildingMarkerPrecondition(),
                 new UpdateProductionBuildingMarkerAction());
 
         registerAction(
-                UserDropsOffItemEvent.class,
+                PostDropOffItemEvent.class,
                 new UpdateProductionBuildingMarkerPrecondition(),
                 new UpdateProductionBuildingMarkerAction());
 

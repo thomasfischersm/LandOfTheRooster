@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.BuildingCreatedEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserPicksUpItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
 
@@ -274,7 +274,7 @@ public class BusinessEngineTest extends AbstractBusinessTest {
 
         // Fire item picked up event.
         ResourceItem item = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
-        BusinessEngine.get().triggerEvent(new UserPicksUpItemEvent(buildingId, item));
+        BusinessEngine.get().triggerEvent(new PostPickUpItemEvent(buildingId, item));
 
         // Wait for the production to complete.
         waitForExecutedEventCount(6);
@@ -293,14 +293,14 @@ public class BusinessEngineTest extends AbstractBusinessTest {
         GameConfig.PRODUCTION_CYCLE_MS = savedProductionCycleMs;
 
         // Fire item picked up event when the item has NOT been picked up.
-        BusinessEngine.get().triggerEvent(new UserPicksUpItemEvent(buildingId, item));
+        BusinessEngine.get().triggerEvent(new PostPickUpItemEvent(buildingId, item));
         buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
         assertNull(buildingWithType.getBuilding().getProductionStart());
 
         // Pick up item and fire the relevant event.
         outputResourceWithType.getResource().setAmount(0);
         dao.update(outputResourceWithType.getResource());
-        BusinessEngine.get().triggerEvent(new UserPicksUpItemEvent(buildingId, item));
+        BusinessEngine.get().triggerEvent(new PostPickUpItemEvent(buildingId, item));
 
         // Verify that the production has started but no resource has been produced.
         buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);

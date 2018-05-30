@@ -9,8 +9,8 @@ import com.playposse.landoftherooster.contentprovider.business.data.ProductionRu
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteFreeProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpUnitFromHospitalEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserDropsOffItemEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserPicksUpItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostDropOffItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 
 import java.util.List;
@@ -24,10 +24,10 @@ public class UpdateProductionBuildingMarkerPrecondition implements BusinessPreco
     @Override
     public PreconditionOutcome evaluate(BusinessEvent event, BusinessDataCache dataCache) {
         final Item item;
-        if (event instanceof UserPicksUpItemEvent) {
-            item = ((UserPicksUpItemEvent) event).getItem();
-        } else if (event instanceof UserDropsOffItemEvent) {
-            item = ((UserDropsOffItemEvent) event).getItem();
+        if (event instanceof PostPickUpItemEvent) {
+            item = ((PostPickUpItemEvent) event).getItem();
+        } else if (event instanceof PostDropOffItemEvent) {
+            item = ((PostDropOffItemEvent) event).getItem();
         } else if (event instanceof PostCompleteProductionEvent) {
             item = ((PostCompleteProductionEvent) event).getProducedItem();
         } else if (event instanceof PostCompleteFreeProductionEvent) {

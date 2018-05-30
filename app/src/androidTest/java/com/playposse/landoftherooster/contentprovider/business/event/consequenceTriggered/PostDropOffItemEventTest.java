@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.business.event.userTriggered;
+package com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
@@ -14,11 +14,11 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 
 /**
- * An instrumented test for scenarios that are started by {@link UserDropsOffItemEvent}.
+ * An instrumented test for scenarios that are started by {@link PostDropOffItemEvent}.
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class UserDropsOffItemEventTest extends AbstractBusinessTest {
+public class PostDropOffItemEventTest extends AbstractBusinessTest {
 
     @Test
     public void triggerEvent_UserDropsOffItemEvent() {
@@ -27,14 +27,14 @@ public class UserDropsOffItemEventTest extends AbstractBusinessTest {
 
         // Drop off an unrelated resource.
         businessEngine.triggerEvent(
-                UserDropsOffItemEvent.createForResource(buildingId, 1));
+                PostDropOffItemEvent.createForResource(buildingId, 1));
         BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
         assertNull(buildingWithType.getBuilding().getProductionStart());
 
         // Drop off prerequisite.
         dao.insert(new Resource(WHEAT_RESOURCE_TYPE_ID, 1, buildingId));
         businessEngine.triggerEvent(
-                UserDropsOffItemEvent.createForResource(buildingId, WHEAT_RESOURCE_TYPE_ID));
+                PostDropOffItemEvent.createForResource(buildingId, WHEAT_RESOURCE_TYPE_ID));
         buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
         assertNotNull(buildingWithType.getBuilding().getProductionStart());
     }

@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
-import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserDropsOffItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostDropOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
@@ -39,7 +39,7 @@ public class CompleteProductionEventTest extends AbstractBusinessTest {
             // Drop off prerequisite.
             dao.insert(new Resource(WHEAT_RESOURCE_TYPE_ID, 1, millId));
             businessEngine.triggerEvent(
-                    UserDropsOffItemEvent.createForResource(millId, WHEAT_RESOURCE_TYPE_ID));
+                    PostDropOffItemEvent.createForResource(millId, WHEAT_RESOURCE_TYPE_ID));
             BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(millId);
             assertNotNull(buildingWithType.getBuilding().getProductionStart());
 

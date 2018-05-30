@@ -7,6 +7,8 @@ import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostDropOffItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 
@@ -70,10 +72,10 @@ public class AssignPeasantEventTest extends AbstractBusinessTest {
             // Start production.
             RoosterDaoUtil.creditResource(dao, WHEAT_RESOURCE_TYPE_ID, 1, millId);
 
-            UserDropsOffItemEvent userDropsOffItemEvent =
-                    UserDropsOffItemEvent.createForResource(millId, WHEAT_RESOURCE_TYPE_ID);
+            PostDropOffItemEvent postDropOffItemEvent =
+                    PostDropOffItemEvent.createForResource(millId, WHEAT_RESOURCE_TYPE_ID);
             BusinessEngine.get()
-                    .triggerEvent(userDropsOffItemEvent);
+                    .triggerEvent(postDropOffItemEvent);
 
             // Assign peasant.
             RoosterDaoUtil.creditUnit(dao, GameConfig.PEASANT_ID, 1, null);
@@ -110,10 +112,10 @@ public class AssignPeasantEventTest extends AbstractBusinessTest {
 
             // Start production.
             ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
-            UserPicksUpItemEvent userPicksUpItemEvent =
-                    new UserPicksUpItemEvent(wheatFieldId, wheatItem);
+            PostPickUpItemEvent postPickUpItemEvent =
+                    new PostPickUpItemEvent(wheatFieldId, wheatItem);
             BusinessEngine.get()
-                    .triggerEvent(userPicksUpItemEvent);
+                    .triggerEvent(postPickUpItemEvent);
 
             // Assign peasant.
             RoosterDaoUtil.creditUnit(dao, GameConfig.PEASANT_ID, 1, null);

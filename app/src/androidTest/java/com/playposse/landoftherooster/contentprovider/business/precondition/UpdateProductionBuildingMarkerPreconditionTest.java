@@ -10,8 +10,8 @@ import com.playposse.landoftherooster.contentprovider.business.PreconditionOutco
 import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteFreeProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteProductionEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserDropsOffItemEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserPicksUpItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostDropOffItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class UpdateProductionBuildingMarkerPreconditionTest extends AbstractBusi
     @Test
     public void evaluate_UserPicksUpItemEvent_noBuildings() {
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
-        UserPicksUpItemEvent event = new UserPicksUpItemEvent(1L, wheatItem);
+        PostPickUpItemEvent event = new PostPickUpItemEvent(1L, wheatItem);
 
         evaluate_noBuildings(event);
     }
@@ -45,7 +45,7 @@ public class UpdateProductionBuildingMarkerPreconditionTest extends AbstractBusi
     @Test
     public void evaluate_UserPicksUpItemEvent_oneWheatField() {
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
-        UserPicksUpItemEvent event = new UserPicksUpItemEvent(1L, wheatItem);
+        PostPickUpItemEvent event = new PostPickUpItemEvent(1L, wheatItem);
 
         evaluate_oneWheatField(event);
     }
@@ -53,7 +53,7 @@ public class UpdateProductionBuildingMarkerPreconditionTest extends AbstractBusi
     @Test
     public void evaluate_UserPicksUpItemEvent_twoWheatFields() {
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
-        UserPicksUpItemEvent event = new UserPicksUpItemEvent(1L, wheatItem);
+        PostPickUpItemEvent event = new PostPickUpItemEvent(1L, wheatItem);
 
         evaluate_twoWheatFields(event);
     }
@@ -61,15 +61,15 @@ public class UpdateProductionBuildingMarkerPreconditionTest extends AbstractBusi
     @Test
     public void evaluate_UserPicksUpItemEvent_wheatFieldAndMill() {
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
-        UserPicksUpItemEvent event = new UserPicksUpItemEvent(1L, wheatItem);
+        PostPickUpItemEvent event = new PostPickUpItemEvent(1L, wheatItem);
 
         evaluate_wheatFieldAndMill(event);
     }
 
     @Test
     public void evaluate_UserDropsOffItemEvent() {
-        UserDropsOffItemEvent event =
-                UserDropsOffItemEvent.createForResource(1L, WHEAT_RESOURCE_TYPE_ID);
+        PostDropOffItemEvent event =
+                PostDropOffItemEvent.createForResource(1L, WHEAT_RESOURCE_TYPE_ID);
 
         evaluate_wheatFieldAndMill(event);
     }
