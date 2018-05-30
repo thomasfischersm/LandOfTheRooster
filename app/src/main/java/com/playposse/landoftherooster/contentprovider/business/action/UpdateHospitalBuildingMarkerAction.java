@@ -6,6 +6,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAdmitUnitToHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteHealingEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpUnitFromHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.UnitInjuredEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
@@ -19,6 +20,8 @@ import javax.annotation.Nullable;
  * A {@link BusinessAction} that updates the {@link MapMarker}s of healing buildings.
  */
 public class UpdateHospitalBuildingMarkerAction extends BusinessAction {
+
+    private static final String LOG_TAG = UpdateHospitalBuildingMarkerAction.class.getSimpleName();
 
     @Override
     public void perform(
@@ -46,6 +49,10 @@ public class UpdateHospitalBuildingMarkerAction extends BusinessAction {
             }
         } else if (event instanceof PostCompleteHealingEvent) {
             updateHospitalBuilding(dataCache);
+        } else if (event instanceof PostPickUpUnitFromHospitalEvent) {
+            updateHospitalBuilding(dataCache);
+
+            // Update
         }
     }
 

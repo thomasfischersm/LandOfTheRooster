@@ -25,14 +25,14 @@ import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 
 /**
- * A test for {@link UpdateBuildingMarkerPrecondition}.
+ * A test for {@link UpdateProductionBuildingMarkerPrecondition}.
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class UpdateBuildingMarkerPreconditionTest extends AbstractBusinessTest {
+public class UpdateProductionBuildingMarkerPreconditionTest extends AbstractBusinessTest {
 
-    private final UpdateBuildingMarkerPrecondition precondition =
-            new UpdateBuildingMarkerPrecondition();
+    private final UpdateProductionBuildingMarkerPrecondition precondition =
+            new UpdateProductionBuildingMarkerPrecondition();
 
     @Test
     public void evaluate_UserPicksUpItemEvent_noBuildings() {
@@ -98,10 +98,10 @@ public class UpdateBuildingMarkerPreconditionTest extends AbstractBusinessTest {
         PreconditionOutcome outcome = precondition.evaluate(event, cache);
 
         assertFalse(outcome.getSuccess());
-        assertTrue(outcome instanceof UpdateBuildingMarkerPreconditionOutcome);
+        assertTrue(outcome instanceof UpdateProductionBuildingMarkerPreconditionOutcome);
 
-        UpdateBuildingMarkerPreconditionOutcome castOutcome =
-                (UpdateBuildingMarkerPreconditionOutcome) outcome;
+        UpdateProductionBuildingMarkerPreconditionOutcome castOutcome =
+                (UpdateProductionBuildingMarkerPreconditionOutcome) outcome;
         assertNull(castOutcome.getAffectedBuildingWithTypes());
     }
 
@@ -113,10 +113,10 @@ public class UpdateBuildingMarkerPreconditionTest extends AbstractBusinessTest {
         PreconditionOutcome outcome = precondition.evaluate(event, cache);
 
         assertTrue(outcome.getSuccess());
-        assertTrue(outcome instanceof UpdateBuildingMarkerPreconditionOutcome);
+        assertTrue(outcome instanceof UpdateProductionBuildingMarkerPreconditionOutcome);
 
-        UpdateBuildingMarkerPreconditionOutcome castOutcome =
-                (UpdateBuildingMarkerPreconditionOutcome) outcome;
+        UpdateProductionBuildingMarkerPreconditionOutcome castOutcome =
+                (UpdateProductionBuildingMarkerPreconditionOutcome) outcome;
         List<BuildingWithType> buildingWithTypes = castOutcome.getAffectedBuildingWithTypes();
         assertEquals(1, buildingWithTypes.size());
         assertEquals(wheatFieldId, buildingWithTypes.get(0).getBuilding().getId());
@@ -134,10 +134,10 @@ public class UpdateBuildingMarkerPreconditionTest extends AbstractBusinessTest {
         PreconditionOutcome outcome = precondition.evaluate(event, cache);
 
         assertTrue(outcome.getSuccess());
-        assertTrue(outcome instanceof UpdateBuildingMarkerPreconditionOutcome);
+        assertTrue(outcome instanceof UpdateProductionBuildingMarkerPreconditionOutcome);
 
-        UpdateBuildingMarkerPreconditionOutcome castOutcome =
-                (UpdateBuildingMarkerPreconditionOutcome) outcome;
+        UpdateProductionBuildingMarkerPreconditionOutcome castOutcome =
+                (UpdateProductionBuildingMarkerPreconditionOutcome) outcome;
         List<BuildingWithType> buildingWithTypes = castOutcome.getAffectedBuildingWithTypes();
         assertEquals(2, buildingWithTypes.size());
         assertEquals(
@@ -158,10 +158,10 @@ public class UpdateBuildingMarkerPreconditionTest extends AbstractBusinessTest {
         PreconditionOutcome outcome = precondition.evaluate(event, cache);
 
         assertTrue(outcome.getSuccess());
-        assertTrue(outcome instanceof UpdateBuildingMarkerPreconditionOutcome);
+        assertTrue(outcome instanceof UpdateProductionBuildingMarkerPreconditionOutcome);
 
-        UpdateBuildingMarkerPreconditionOutcome castOutcome =
-                (UpdateBuildingMarkerPreconditionOutcome) outcome;
+        UpdateProductionBuildingMarkerPreconditionOutcome castOutcome =
+                (UpdateProductionBuildingMarkerPreconditionOutcome) outcome;
         List<BuildingWithType> buildingWithTypes = castOutcome.getAffectedBuildingWithTypes();
         assertEquals(2, buildingWithTypes.size());
         assertBuildingIds(buildingWithTypes, wheatFieldId, millId);

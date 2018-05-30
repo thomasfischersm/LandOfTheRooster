@@ -8,6 +8,7 @@ import com.playposse.landoftherooster.contentprovider.business.PreconditionOutco
 import com.playposse.landoftherooster.contentprovider.business.data.ProductionRuleRepository;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.FreeItemProductionSucceededEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.ItemProductionSucceededEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpUnitFromHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserDropsOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserPicksUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
@@ -18,7 +19,7 @@ import java.util.List;
  * A {@link BusinessPrecondition} that is triggered when an event might have affected the state
  * of a building. The precondition will determine which building markers have to be updated.
  */
-public class UpdateBuildingMarkerPrecondition implements BusinessPrecondition {
+public class UpdateProductionBuildingMarkerPrecondition implements BusinessPrecondition {
 
     @Override
     public PreconditionOutcome evaluate(BusinessEvent event, BusinessDataCache dataCache) {
@@ -31,6 +32,8 @@ public class UpdateBuildingMarkerPrecondition implements BusinessPrecondition {
             item = ((ItemProductionSucceededEvent) event).getProducedItem();
         } else if (event instanceof FreeItemProductionSucceededEvent) {
             item = ((FreeItemProductionSucceededEvent) event).getProducedItem();
+        } else if (event instanceof PostPickUpUnitFromHospitalEvent) {
+            item = ((PostPickUpUnitFromHospitalEvent) event).getPickedUpUnitItem();
         } else {
             throw new IllegalArgumentException("The event is of an unexpected type: "
                     + event.getClass().getName());
@@ -42,12 +45,12 @@ public class UpdateBuildingMarkerPrecondition implements BusinessPrecondition {
                 productionRuleRepository.getBuildingsWithAffectedProductionRules(item);
 
         if (affectedBuildings.size() > 0) {
-            return new UpdateBuildingMarkerPreconditionOutcome(
+            return new UpdateProductionBuildingMarkerPreconditionOutcome(
                     true,
                     item,
                     affectedBuildings);
         } else {
-            return new UpdateBuildingMarkerPreconditionOutcome(
+            return new UpdateProductionBuildingMarkerPreconditionOutcome(
                     false,
                     null,
                     null);

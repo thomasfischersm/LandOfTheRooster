@@ -225,16 +225,21 @@ public class TestData {
         }
     }
 
-    public void createUnits(RoosterDao dao, int amount, long unitTypeId, long buildingId) {
+    public List<Unit> createUnits(RoosterDao dao, int amount, long unitTypeId, long buildingId) {
         UnitType unitType = dao.getUnitTypeById(unitTypeId);
 
+        List<Unit> result = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             Unit unit = new Unit();
             unit.setUnitTypeId(unitTypeId);
             unit.setHealth(unitType.getHealth());
             unit.setLocatedAtBuildingId(buildingId);
-            dao.insert(unit);
+            long unitId = dao.insert(unit);
+
+            unit.setId(unitId);
+            result.add(unit);
         }
+        return result;
     }
 
     @Nullable

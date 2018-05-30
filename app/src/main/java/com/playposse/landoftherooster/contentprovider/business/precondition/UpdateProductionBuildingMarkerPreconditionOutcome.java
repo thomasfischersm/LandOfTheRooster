@@ -7,14 +7,14 @@ import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithTy
 import java.util.List;
 
 /**
- * An {@link PreconditionOutcome} for {@link UpdateBuildingMarkerPrecondition}.
+ * An {@link PreconditionOutcome} for {@link UpdateProductionBuildingMarkerPrecondition}.
  */
-public class UpdateBuildingMarkerPreconditionOutcome extends PreconditionOutcome {
+public class UpdateProductionBuildingMarkerPreconditionOutcome extends PreconditionOutcome {
 
     private final Item item;
     private final List<BuildingWithType> affectedBuildings;
 
-    public UpdateBuildingMarkerPreconditionOutcome(
+    public UpdateProductionBuildingMarkerPreconditionOutcome(
             Boolean isSuccess,
             Item item,
             List<BuildingWithType> affectedBuildings) {

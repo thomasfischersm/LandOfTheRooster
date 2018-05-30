@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
-import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateBuildingMarkerPreconditionOutcome;
+import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateProductionBuildingMarkerPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
@@ -38,8 +38,8 @@ public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTe
         BusinessDataCache cache = new BusinessDataCache(dao, null);
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
 
-        UpdateBuildingMarkerPreconditionOutcome outcome =
-                new UpdateBuildingMarkerPreconditionOutcome(
+        UpdateProductionBuildingMarkerPreconditionOutcome outcome =
+                new UpdateProductionBuildingMarkerPreconditionOutcome(
                         true,
                         wheatItem,
                         new ArrayList<BuildingWithType>());
@@ -57,8 +57,8 @@ public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTe
         Date lastModified = getLastModifiedForMarker(dao, wheatFieldId);
 
         // Execute test.
-        UpdateBuildingMarkerPreconditionOutcome outcome =
-                new UpdateBuildingMarkerPreconditionOutcome(
+        UpdateProductionBuildingMarkerPreconditionOutcome outcome =
+                new UpdateProductionBuildingMarkerPreconditionOutcome(
                         true,
                         wheatItem,
                         Collections.singletonList(wheatField));
@@ -98,8 +98,8 @@ public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTe
         dao.update(originalMarker);
 
         // Execute test.
-        UpdateBuildingMarkerPreconditionOutcome outcome =
-                new UpdateBuildingMarkerPreconditionOutcome(
+        UpdateProductionBuildingMarkerPreconditionOutcome outcome =
+                new UpdateProductionBuildingMarkerPreconditionOutcome(
                         true,
                         wheatItem,
                         Collections.singletonList(wheatField));
@@ -130,8 +130,8 @@ public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTe
         Date lastModified = getLastModifiedForMarker(dao, millId);
 
         // Execute test.
-        UpdateBuildingMarkerPreconditionOutcome outcome =
-                new UpdateBuildingMarkerPreconditionOutcome(
+        UpdateProductionBuildingMarkerPreconditionOutcome outcome =
+                new UpdateProductionBuildingMarkerPreconditionOutcome(
                         true,
                         wheatItem,
                         Collections.singletonList(mill));
@@ -161,8 +161,8 @@ public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTe
         Date lastModified = getLastModifiedForMarker(dao, millId);
 
         // Execute test.
-        UpdateBuildingMarkerPreconditionOutcome outcome =
-                new UpdateBuildingMarkerPreconditionOutcome(
+        UpdateProductionBuildingMarkerPreconditionOutcome outcome =
+                new UpdateProductionBuildingMarkerPreconditionOutcome(
                         true,
                         wheatItem,
                         Collections.singletonList(mill));
@@ -192,8 +192,8 @@ public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTe
         Date lastModified = getLastModifiedForMarker(dao, millId);
 
         // Execute test.
-        UpdateBuildingMarkerPreconditionOutcome outcome =
-                new UpdateBuildingMarkerPreconditionOutcome(
+        UpdateProductionBuildingMarkerPreconditionOutcome outcome =
+                new UpdateProductionBuildingMarkerPreconditionOutcome(
                         true,
                         wheatItem,
                         Collections.singletonList(mill));

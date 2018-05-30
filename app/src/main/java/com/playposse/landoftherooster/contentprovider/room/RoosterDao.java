@@ -169,6 +169,9 @@ public interface RoosterDao {
     @Update
     void update(Unit unit);
 
+    @Query("select * from unit where id = :unitId")
+    Unit getUnitById(long unitId);
+
     @Query("select * from unit where unit_type_id=:unitTypeId and located_at_building_id is null")
     List<Unit> getUnitsJoiningUserByTypeId(long unitTypeId);
 

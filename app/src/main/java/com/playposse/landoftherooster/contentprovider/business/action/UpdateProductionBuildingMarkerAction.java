@@ -7,7 +7,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.data.ProductionRuleRepository;
 import com.playposse.landoftherooster.contentprovider.business.data.UnitTypeRepository;
-import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateBuildingMarkerPreconditionOutcome;
+import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateProductionBuildingMarkerPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
@@ -37,8 +37,8 @@ public class UpdateProductionBuildingMarkerAction extends BusinessAction {
         RoosterDao dao = dataCache.getDao();
         ProductionRuleRepository productionRuleRepository =
                 ProductionRuleRepository.get(dao);
-        UpdateBuildingMarkerPreconditionOutcome outcome =
-                (UpdateBuildingMarkerPreconditionOutcome) preconditionOutcome;
+        UpdateProductionBuildingMarkerPreconditionOutcome outcome =
+                (UpdateProductionBuildingMarkerPreconditionOutcome) preconditionOutcome;
         List<BuildingWithType> affectedBuildingWithTypes = outcome.getAffectedBuildingWithTypes();
         List<MapMarker> mapMarkers = queryMapMarkers(affectedBuildingWithTypes, dao);
         Map<Long, Integer> resourceMapJoiningUser = dataCache.getResourceMapJoiningUser();

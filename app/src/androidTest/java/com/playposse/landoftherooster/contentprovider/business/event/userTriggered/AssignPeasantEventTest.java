@@ -24,7 +24,7 @@ import static junit.framework.Assert.assertEquals;
 @LargeTest
 public class AssignPeasantEventTest extends AbstractBusinessTest {
 
-    private static final int ACCELERATED_PRODUCTION_CYCLE_MS = 400;
+    private static final int ACCELERATED_PRODUCTION_CYCLE_MS = 450;
 
     @Test
     public void triggerEvent_noProduction() throws InterruptedException {

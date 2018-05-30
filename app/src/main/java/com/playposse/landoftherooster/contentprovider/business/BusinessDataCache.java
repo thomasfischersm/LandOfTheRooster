@@ -264,6 +264,18 @@ public class BusinessDataCache {
         return count;
     }
 
+    public List<UnitWithType> getRecoveredUnitsWithType() {
+        List<UnitWithType> unitsWithType = getUnitsWithType();
+
+        List<UnitWithType> result = new ArrayList<>();
+        for (UnitWithType unitWithType : unitsWithType) {
+            boolean isPeasant = unitWithType.getType().getId() == GameConfig.IMPLIED_PEASANT_COUNT;
+            if (!isPeasant && !unitWithType.isInjured()) {
+                result.add(unitWithType);
+            }
+        }
+        return result;
+    }
     public int getRecoveredUnitCount() {
         int count = 0;
         for (UnitWithType unitWithType : getUnitsWithType()) {

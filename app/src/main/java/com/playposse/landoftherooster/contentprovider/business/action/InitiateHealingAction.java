@@ -58,5 +58,6 @@ public class InitiateHealingAction extends BusinessAction {
         long buildingId = dataCache.getBuildingId();
         BusinessEngine.get()
                 .scheduleEvent(remainingMs, new CompleteHealingEvent(buildingId));
+        // TODO: If there is extra healing time left unused, pass it on to the next event.
     }
 }

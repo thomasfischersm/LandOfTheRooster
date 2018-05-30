@@ -1,7 +1,9 @@
 package com.playposse.landoftherooster.contentprovider.business.data;
 
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
+import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
+import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,5 +41,20 @@ public final class UnitTypeRepository {
 
     public UnitType getUnitType(long unitTypeId) {
         return idToUnitTypeMap.get(unitTypeId);
+    }
+
+    public UnitWithType getUnitWithType(Unit unit) {
+        if (unit == null) {
+            return null;
+        }
+
+        UnitType unitType = idToUnitTypeMap.get(unit.getUnitTypeId());
+        return new UnitWithType(unit, unitType);
+    }
+
+    public UnitWithType queryUnitWithTypeById(long unitId) {
+        Unit unit = dao.getUnitById(unitId);
+        UnitType unitType = idToUnitTypeMap.get(unit.getUnitTypeId());
+        return new UnitWithType(unit, unitType);
     }
 }
