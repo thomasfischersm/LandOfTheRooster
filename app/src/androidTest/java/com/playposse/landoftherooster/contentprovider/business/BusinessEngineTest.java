@@ -277,7 +277,7 @@ public class BusinessEngineTest extends AbstractBusinessTest {
         BusinessEngine.get().triggerEvent(new UserPicksUpItemEvent(buildingId, item));
 
         // Wait for the production to complete.
-        Thread.sleep(500);
+        waitForExecutedEventCount(6);
 
         // Check that the resource was produced.
         outputResourceWithType =

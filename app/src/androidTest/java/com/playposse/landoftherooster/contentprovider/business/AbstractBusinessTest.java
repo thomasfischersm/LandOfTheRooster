@@ -46,4 +46,15 @@ public abstract class AbstractBusinessTest extends TestData {
         BusinessEngine.get().stop();
         BuildingDiscoveryRepository.get(dao).reset();
     }
+
+    /**
+     * Waits for the specified number of events to be executed by the {@link BusinessEngine}. Tests
+     * have to sometimes wait for a scheduled event to execute. This method avoids having to use
+     * Thread.sleep statements with guessed delays.
+     */
+    protected void waitForExecutedEventCount(int eventCount) throws InterruptedException {
+        while (eventCount > BusinessEngine.get().getExecutedEventCounter()) {
+            Thread.sleep(10);
+        }
+    }
 }

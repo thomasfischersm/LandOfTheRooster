@@ -82,6 +82,7 @@ public class BusinessEngine {
 
     private RoosterDao dao;
     private ScheduledExecutorService scheduledExecutorService;
+    private int executedEventCounter = 0;
 
     /**
      * Map for {@link BusinessEvent} to its {@link Runnable}. The purpose is to be able to
@@ -232,6 +233,7 @@ public class BusinessEngine {
             scheduledExecutorService.shutdownNow();
             scheduledExecutorService = null;
             eventQueue.clear();
+            executedEventCounter = 0;
         }
     }
 
@@ -291,6 +293,7 @@ public class BusinessEngine {
                     + actionContainer.getAction().getClass().getSimpleName() + "]");
             long actionStart = System.currentTimeMillis();
             actionContainer.getAction().perform(event, preconditionOutcome, dataCache);
+            executedEventCounter++;
             long actionEnd = System.currentTimeMillis();
             Log.i(LOG_TAG, "triggerEvent: Finished action ["
                     + actionContainer.getAction().getClass().getSimpleName() + "] in "
@@ -335,6 +338,11 @@ public class BusinessEngine {
             BusinessAction action) {
 
         registry.put(eventClass, new ActionContainer(eventClass, precondition, action));
+    }
+
+    @VisibleForTesting
+    public int getExecutedEventCounter() {
+        return executedEventCounter;
     }
 
     /**

@@ -24,6 +24,8 @@ import static junit.framework.Assert.assertEquals;
 @LargeTest
 public class AssignPeasantEventTest extends AbstractBusinessTest {
 
+    private static final String LOG_TAG = AssignPeasantEventTest.class.getSimpleName();
+
     private static final int ACCELERATED_PRODUCTION_CYCLE_MS = 450;
 
     @Test
@@ -47,7 +49,7 @@ public class AssignPeasantEventTest extends AbstractBusinessTest {
             assertEquals(1, peasantCount);
 
             // Check that nothing was produced.
-            Thread.sleep(GameConfig.PRODUCTION_CYCLE_MS);
+            waitForExecutedEventCount(1);
             List<Resource> resources = dao.getResourcesByBuildingId(millId);
             assertEquals(0, resources.size());
         } finally {
@@ -84,7 +86,7 @@ public class AssignPeasantEventTest extends AbstractBusinessTest {
             assertEquals(1, peasantCount);
 
             // Check that production was restarted.
-            Thread.sleep(GameConfig.PRODUCTION_CYCLE_MS * 3 / 4);
+            waitForExecutedEventCount(5);
             List<Resource> resources = dao.getResourcesByBuildingId(millId);
             assertEquals(1, resources.size());
             Resource resource = resources.get(0);
@@ -125,7 +127,8 @@ public class AssignPeasantEventTest extends AbstractBusinessTest {
 
             // Check that production was restarted.
             assertEquals(0, dao.getResourcesByBuildingId(wheatFieldId).size());
-            Thread.sleep(GameConfig.PRODUCTION_CYCLE_MS * 3 / 4);
+            waitForExecutedEventCount(5);
+
             List<Resource> resources = dao.getResourcesByBuildingId(wheatFieldId);
             assertEquals(1, resources.size());
             Resource resource = resources.get(0);

@@ -133,12 +133,13 @@ public class AdmitUnitToHospitalEventTest extends AbstractBusinessTest {
             Unit soldier = createWoundedSoldier(dao);
 
             // Trigger event.
-            AdmitUnitToHospitalEvent event = new AdmitUnitToHospitalEvent(hospitalId, soldier.getId());
+            AdmitUnitToHospitalEvent event =
+                    new AdmitUnitToHospitalEvent(hospitalId, soldier.getId());
             BusinessEngine.get()
                     .triggerEvent(event);
 
             // Wait for healing to complete.
-            Thread.sleep(60);
+            waitForExecutedEventCount(5);
 
             // Assert result.
             List<UnitWithType> unitsWithType = dao.getUnitsWithTypeByBuildingId(hospitalId);
@@ -258,7 +259,7 @@ public class AdmitUnitToHospitalEventTest extends AbstractBusinessTest {
                     0);
 
             // Wait for healing to occur of the first soldier.
-            Thread.sleep(550);
+            waitForExecutedEventCount(9);
 
             // Assert result.
             units = dao.getUnits(SOLDIER_UNIT_TYPE_ID, hospitalId);
@@ -289,7 +290,7 @@ public class AdmitUnitToHospitalEventTest extends AbstractBusinessTest {
                     0);
 
             // Wait for healing to occur of the second soldier.
-            Thread.sleep(1_020);
+            waitForExecutedEventCount(11);
 
             // Assert result.
             units = dao.getUnits(SOLDIER_UNIT_TYPE_ID, hospitalId);

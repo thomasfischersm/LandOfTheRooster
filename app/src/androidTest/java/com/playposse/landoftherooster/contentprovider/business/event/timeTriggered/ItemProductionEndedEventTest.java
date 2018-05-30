@@ -24,6 +24,8 @@ import static junit.framework.Assert.assertNull;
 @LargeTest
 public class ItemProductionEndedEventTest extends AbstractBusinessTest {
 
+    private static final String LOG_TAG = ItemProductionEndedEventTest.class.getSimpleName();
+
     @Test
     public void triggerEvent_ItemProductionEndedEvent() throws InterruptedException {
         // Temporarily set production cycle to near instantaneous.
@@ -42,7 +44,7 @@ public class ItemProductionEndedEventTest extends AbstractBusinessTest {
             assertNotNull(buildingWithType.getBuilding().getProductionStart());
 
             // Wait for the production to complete.
-            Thread.sleep(200);
+            waitForExecutedEventCount(4);
 
             // Check that the prerequisite (wheat) is consumed.
             ResourceWithType inputResourceWithType =

@@ -25,6 +25,8 @@ import static junit.framework.Assert.assertTrue;
 @LargeTest
 public class InitiateBattleEventTest extends AbstractBusinessTest {
 
+    private static final String LOG_TAG = InitiateBattleEventTest.class.getSimpleName();
+
     @Test
     public void triggerEvent() throws InterruptedException {
         // Temporarily set the respawn time to 100ms.
@@ -53,7 +55,7 @@ public class InitiateBattleEventTest extends AbstractBusinessTest {
             assertFalse(mapMarker.isReady());
 
             // Wait for the building to respawn.
-            Thread.sleep(210);
+            waitForExecutedEventCount(3);
 
             // Verify that the building respawned.
             buildingWithType = dao.getBuildingWithTypeByBuildingId(goblinCaveId);
