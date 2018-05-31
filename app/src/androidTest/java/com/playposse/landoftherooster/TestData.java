@@ -45,104 +45,49 @@ public class TestData {
     public static final int REMAINING_HEALTH = 1;
 
     public static long createWheatField(RoosterDao dao) {
-        Building building = new Building(WHEAT_FIELD_BUILDING_TYPE_ID, LATITUDE, LONGITUDE);
-        return dao.insert(building);
+        return createBuilding(dao, WHEAT_FIELD_BUILDING_TYPE_ID);
     }
 
     public static long createWheatFieldAndMarker(RoosterDao dao) {
-        long wheatFieldId = createWheatField(dao);
-
-        MapMarker mapMarker = new MapMarker(
-                MapMarker.BUILDING_MARKER_TYPE,
-                "",
-                "",
-                0,
-                0,
-                false,
-                wheatFieldId,
-                WHEAT_FIELD_BUILDING_TYPE_ID);
-        mapMarker.setLastModified(new Date());
-        dao.insert(mapMarker);
-
-        return wheatFieldId;
+        return createBuildingAndMarker(dao, WHEAT_FIELD_BUILDING_TYPE_ID);
     }
 
     public static long createMill(RoosterDao dao) {
-        Building building = new Building(MILL_BUILDING_TYPE_ID, LATITUDE, LONGITUDE);
-        return dao.insert(building);
+        return createBuilding(dao, MILL_BUILDING_TYPE_ID);
     }
 
     public static long createMillAndMarker(RoosterDao dao) {
-        long millId = createMill(dao);
-
-        MapMarker mapMarker = new MapMarker(
-                MapMarker.BUILDING_MARKER_TYPE,
-                "",
-                "",
-                0,
-                0,
-                false,
-                millId,
-                MILL_BUILDING_TYPE_ID);
-        mapMarker.setLastModified(new Date());
-        dao.insert(mapMarker);
-
-        return millId;
+        return createBuildingAndMarker(dao, MILL_BUILDING_TYPE_ID);
     }
 
     public static long createBakery(RoosterDao dao) {
-        Building building = new Building(BAKERY_BUILDING_TYPE_ID, LATITUDE, LONGITUDE);
-        return dao.insert(building);
+        return createBuilding(dao, BAKERY_BUILDING_TYPE_ID);
     }
 
     public static long createBakeryAndMarker(RoosterDao dao) {
-        long bakerId = createBakery(dao);
-
-        MapMarker mapMarker = new MapMarker(
-                MapMarker.BUILDING_MARKER_TYPE,
-                "",
-                "",
-                0,
-                0,
-                false,
-                bakerId,
-                BAKERY_BUILDING_TYPE_ID);
-        mapMarker.setLastModified(new Date());
-        dao.insert(mapMarker);
-
-        return bakerId;
+        return createBuildingAndMarker(dao, BAKERY_BUILDING_TYPE_ID);
     }
 
-    public static long createGoblinCave(RoosterDao dao) {
-        Building building = new Building(GOBLIN_CAVE_BUILDING_TYPE_ID, LATITUDE, LONGITUDE);
-        return dao.insert(building);
-    }
 
     public static long createGoblinCaveAndMarker(RoosterDao dao) {
-        long goblinCaveId = createGoblinCave(dao);
-
-        MapMarker mapMarker = new MapMarker(
-                MapMarker.BUILDING_MARKER_TYPE,
-                "",
-                "",
-                0,
-                0,
-                false,
-                goblinCaveId,
-                GOBLIN_CAVE_BUILDING_TYPE_ID);
-        mapMarker.setLastModified(new Date());
-        dao.insert(mapMarker);
-
-        return goblinCaveId;
-    }
-
-    public static long createHospital(RoosterDao dao) {
-        Building building = new Building(HOSPITAL_BUILDING_TYPE_ID, LATITUDE, LONGITUDE);
-        return dao.insert(building);
+        return createBuildingAndMarker(dao, GOBLIN_CAVE_BUILDING_TYPE_ID);
     }
 
     public static long createHospitalAndMarker(RoosterDao dao) {
-        long hospitalId = createHospital(dao);
+        return createBuildingAndMarker(dao, HOSPITAL_BUILDING_TYPE_ID);
+    }
+
+    public static long createBarracksAndMarker(RoosterDao dao) {
+        return createBuildingAndMarker(dao, BARRACKS_BUILDING_TYPE_ID);
+    }
+
+    private static long createBuilding(RoosterDao dao, long buildingTypeId) {
+        Building building = new Building(buildingTypeId, LATITUDE, LONGITUDE);
+        return dao.insert(building);
+    }
+
+    private static long createBuildingAndMarker(RoosterDao dao, long buildingTypeId) {
+        long buildingId = createBuilding(dao, buildingTypeId);
 
         MapMarker mapMarker = new MapMarker(
                 MapMarker.BUILDING_MARKER_TYPE,
@@ -151,12 +96,12 @@ public class TestData {
                 0,
                 0,
                 false,
-                hospitalId,
-                HOSPITAL_BUILDING_TYPE_ID);
+                buildingId,
+                buildingTypeId);
         mapMarker.setLastModified(new Date());
         dao.insert(mapMarker);
 
-        return hospitalId;
+        return buildingId;
     }
 
     public void assertBuildingIds(

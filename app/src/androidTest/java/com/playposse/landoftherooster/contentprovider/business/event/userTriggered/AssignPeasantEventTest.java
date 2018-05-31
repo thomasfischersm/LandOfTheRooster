@@ -73,7 +73,7 @@ public class AssignPeasantEventTest extends AbstractBusinessTest {
             RoosterDaoUtil.creditResource(dao, WHEAT_RESOURCE_TYPE_ID, 1, millId);
 
             PostDropOffItemEvent postDropOffItemEvent =
-                    PostDropOffItemEvent.createForResource(millId, WHEAT_RESOURCE_TYPE_ID);
+                    new PostDropOffItemEvent(millId, new ResourceItem(WHEAT_RESOURCE_TYPE_ID));
             BusinessEngine.get()
                     .triggerEvent(postDropOffItemEvent);
 

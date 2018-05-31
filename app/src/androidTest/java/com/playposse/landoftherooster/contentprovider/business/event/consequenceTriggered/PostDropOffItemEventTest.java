@@ -4,6 +4,7 @@ import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
+import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 
@@ -27,14 +28,14 @@ public class PostDropOffItemEventTest extends AbstractBusinessTest {
 
         // Drop off an unrelated resource.
         businessEngine.triggerEvent(
-                PostDropOffItemEvent.createForResource(buildingId, 1));
+                new PostDropOffItemEvent(buildingId, new ResourceItem(1)));
         BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
         assertNull(buildingWithType.getBuilding().getProductionStart());
 
         // Drop off prerequisite.
         dao.insert(new Resource(WHEAT_RESOURCE_TYPE_ID, 1, buildingId));
         businessEngine.triggerEvent(
-                PostDropOffItemEvent.createForResource(buildingId, WHEAT_RESOURCE_TYPE_ID));
+                new PostDropOffItemEvent(buildingId, new ResourceItem(WHEAT_RESOURCE_TYPE_ID)));
         buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
         assertNotNull(buildingWithType.getBuilding().getProductionStart());
     }

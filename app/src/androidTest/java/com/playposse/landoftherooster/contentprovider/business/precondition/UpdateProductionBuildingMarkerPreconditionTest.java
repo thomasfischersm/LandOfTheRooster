@@ -69,7 +69,7 @@ public class UpdateProductionBuildingMarkerPreconditionTest extends AbstractBusi
     @Test
     public void evaluate_UserDropsOffItemEvent() {
         PostDropOffItemEvent event =
-                PostDropOffItemEvent.createForResource(1L, WHEAT_RESOURCE_TYPE_ID);
+                new PostDropOffItemEvent(1L, new ResourceItem(WHEAT_RESOURCE_TYPE_ID));
 
         evaluate_wheatFieldAndMill(event);
     }

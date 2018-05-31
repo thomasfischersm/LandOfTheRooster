@@ -13,6 +13,7 @@ import com.playposse.landoftherooster.contentprovider.business.action.AdmitUnitT
 import com.playposse.landoftherooster.contentprovider.business.action.AssignPeasantAction;
 import com.playposse.landoftherooster.contentprovider.business.action.CompleteHealingAction;
 import com.playposse.landoftherooster.contentprovider.business.action.CreateBuildingAction;
+import com.playposse.landoftherooster.contentprovider.business.action.DropOffItemAction;
 import com.playposse.landoftherooster.contentprovider.business.action.ExecuteBattleAction;
 import com.playposse.landoftherooster.contentprovider.business.action.FreeProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.InitiateHealingAction;
@@ -38,6 +39,7 @@ import com.playposse.landoftherooster.contentprovider.business.event.timeTrigger
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.RespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AdmitUnitToHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AssignPeasantEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.DropOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.InitiateBattleEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpUnitFromHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostDropOffItemEvent;
@@ -46,6 +48,7 @@ import com.playposse.landoftherooster.contentprovider.business.precondition.Admi
 import com.playposse.landoftherooster.contentprovider.business.precondition.AssignPeasantPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.CompleteHealingPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.CreateBuildingPrecondition;
+import com.playposse.landoftherooster.contentprovider.business.precondition.DropOffItemPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.ExecuteBattlePrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.FreeProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.InitiateHealingPrecondition;
@@ -96,8 +99,13 @@ public class BusinessEngine {
 
         // item production for cost
         registerAction(
-                PostDropOffItemEvent.class,
-                new StartItemProductionPrecondition(),
+                DropOffItemEvent.class,
+                new DropOffItemPrecondition(),
+                new DropOffItemAction());
+
+        registerAction(
+                PostDropOffItemEvent.class, // TODO: Rename to InitiateProduction?
+                new StartItemProductionPrecondition(), // TODO: Rename to InitaiteProductionPrecondition
                 new StartItemProductionAction());
 
         registerAction(

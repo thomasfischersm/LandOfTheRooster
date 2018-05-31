@@ -8,7 +8,6 @@ import com.playposse.landoftherooster.contentprovider.business.data.UnitTypeRepo
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
-import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
@@ -29,25 +28,59 @@ public final class RoosterDaoUtil {
     private RoosterDaoUtil() {
     }
 
-    public static int getResourceAmount(Context context, @Nullable ResourceType resourceType) {
-        if (resourceType == null) {
-            return 0;
+    public static int getResourceAmount(
+            RoosterDao dao,
+            long resourceTypeId,
+            @Nullable Long buildingId) {
+
+        if (buildingId == null) {
+            return getResourceAmountJoiningUser(dao, resourceTypeId);
+        } else {
+            return getResourceAmountAtBuilding(dao, resourceTypeId, buildingId);
         }
+    }
 
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-        Resource resource = dao.getResourceJoiningUserByTypeId(resourceType.getId());
-
+    private static int getResourceAmountJoiningUser(RoosterDao dao, long resourceTypeId) {
+        Resource resource = dao.getResourceJoiningUserByTypeId(resourceTypeId);
         return (resource != null) ? resource.getAmount() : 0;
     }
 
-    public static int getUnitAmount(Context context, @Nullable UnitType unitType) {
-        if (unitType == null) {
-            return 0;
+    private static int getResourceAmountAtBuilding(
+            RoosterDao dao,
+            long resourceTypeId,
+            long buildingId) {
+
+        List<Resource> resources = dao.getResourcesByBuildingId(buildingId);
+        if (resources != null) {
+            for (Resource resource : resources) {
+                if (resource.getResourceTypeId() == resourceTypeId) {
+                    return resource.getAmount();
+                }
+            }
         }
+        return 0;
+    }
 
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-        List<Unit> units = dao.getUnitsJoiningUserByTypeId(unitType.getId());
+    public static int getUnitAmount(RoosterDao dao, long unitTypeId, @Nullable Long buildingId) {
+        if (buildingId == null) {
+            return getUnitAmountJoiningUser(dao, unitTypeId);
+        } else {
+            return getUnitAmountAtBuilding(dao, unitTypeId, buildingId);
+        }
+    }
 
+    private static int getUnitAmountJoiningUser(RoosterDao dao, long unitTypeId) {
+        List<Unit> units = dao.getUnitsJoiningUserByTypeId(unitTypeId);
+
+        return (units != null) ? units.size() : 0;
+    }
+
+    private static int getUnitAmountAtBuilding(
+            RoosterDao dao,
+            long unitTypeId,
+            long buildingTypeId) {
+
+        List<Unit> units = dao.getUnits(unitTypeId, buildingTypeId);
         return (units != null) ? units.size() : 0;
     }
 
@@ -282,5 +315,24 @@ public final class RoosterDaoUtil {
             }
         }
         return false;
+    }
+
+    @Nullable
+    public static UnitWithType transferFirstUnitOfType(
+            RoosterDao dao,
+            List<UnitWithType> unitsWithType,
+            long unitTypeId,
+            @Nullable Long buildingId) {
+
+        for (UnitWithType unitWithType : unitsWithType) {
+            if (unitWithType.getType().getId() == unitTypeId) {
+                Unit unit = unitWithType.getUnit();
+                unit.setLocatedAtBuildingId(buildingId);
+                DaoEventRegistry.get(dao)
+                        .update(unit);
+                return unitWithType;
+            }
+        }
+        return null;
     }
 }

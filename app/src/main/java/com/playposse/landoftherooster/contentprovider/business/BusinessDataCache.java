@@ -119,6 +119,30 @@ public class BusinessDataCache {
         return productionRules;
     }
 
+    public boolean usesResourceTypeAsInput(long resourceTypeId) {
+        List<ProductionRule> productionRules = getProductionRules();
+        if (productionRules != null) {
+            for (ProductionRule productionRule : productionRules) {
+                if (productionRule.getSplitInputResourceTypeIds().contains(resourceTypeId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean usesUnitTypeAsInput(long unitTypeId) {
+        List<ProductionRule> productionRules = getProductionRules();
+        if (productionRules != null) {
+            for (ProductionRule productionRule : productionRules) {
+                if (productionRule.getSplitInputUnitTypeIds().contains(unitTypeId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Nullable
     public Map<Long, Integer> getResourceMap() {
         if ((resourceMap == null) && (getBuilding() != null)) {
