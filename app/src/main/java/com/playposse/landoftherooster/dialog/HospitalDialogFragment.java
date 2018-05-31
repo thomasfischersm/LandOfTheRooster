@@ -243,8 +243,9 @@ public class HospitalDialogFragment extends BaseDialogFragment {
         reload(new Runnable() {
             @Override
             public void run() {
+                RoosterDao dao = RoosterDatabase.getInstance(getActivity()).getDao();
                 RoosterDaoUtil.transferUnitFromBuilding(
-                        getActivity(),
+                        dao,
                         unitWithType.getUnit(),
                         buildingId);
             }

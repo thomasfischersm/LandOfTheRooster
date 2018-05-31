@@ -273,9 +273,7 @@ public final class RoosterDaoUtil {
         DaoEventRegistry.get(context).updateLocation(unit, null, buildingId);
     }
 
-    public static void transferUnitFromBuilding(Context context, long unitTypeId, long buildingId) {
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-
+    public static void transferUnitFromBuilding(RoosterDao dao, long unitTypeId, long buildingId) {
         List<Unit> units = dao.getUnits(unitTypeId, buildingId);
 
         if ((units == null) || (units.size() < 1)) {
@@ -284,17 +282,17 @@ public final class RoosterDaoUtil {
         }
 
         Unit unit = units.get(0);
-        transferUnitFromBuilding(context, unit, buildingId);
+        transferUnitFromBuilding(dao, unit, buildingId);
     }
 
-    public static void transferUnitFromBuilding(Context context, Unit unit, long buildingId) {
+    public static void transferUnitFromBuilding(RoosterDao dao, Unit unit, long buildingId) {
         if (unit.getLocatedAtBuildingId() == null) {
             throw new IllegalStateException(
                     "The unit is already joining the user! " + unit.getId());
         }
 
         unit.setLocatedAtBuildingId(null);
-        DaoEventRegistry.get(context).updateLocation(unit, buildingId, null);
+        DaoEventRegistry.get(dao).updateLocation(unit, buildingId, null);
     }
 
     public static int getProductionSpeedInMinutes(int peasantCount) {

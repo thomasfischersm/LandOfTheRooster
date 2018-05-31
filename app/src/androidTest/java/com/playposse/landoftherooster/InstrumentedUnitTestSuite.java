@@ -4,6 +4,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngineTest;
 import com.playposse.landoftherooster.contentprovider.business.action.DropOffItemActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.ExecuteBattleActionTest;
+import com.playposse.landoftherooster.contentprovider.business.action.PickUpItemActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.PickUpUnitFromHospitalActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.RespawnBattleBuildingActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateProductionBuildingMarkerActionTest;
@@ -24,6 +25,7 @@ import com.playposse.landoftherooster.contentprovider.business.precondition.Assi
 import com.playposse.landoftherooster.contentprovider.business.precondition.DropOffItemPreconditionTest;
 import com.playposse.landoftherooster.contentprovider.business.precondition.ExecuteBattlePreconditionTest;
 import com.playposse.landoftherooster.contentprovider.business.precondition.InitiateHealingPreconditionTest;
+import com.playposse.landoftherooster.contentprovider.business.precondition.PickUpItemPreconditionTest;
 import com.playposse.landoftherooster.contentprovider.business.precondition.PickUpUnitFromHospitalPreconditionTest;
 import com.playposse.landoftherooster.contentprovider.business.precondition.RespawnBattleBuildingPreconditionTest;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDaoTest;
@@ -55,6 +57,8 @@ import org.junit.runners.Suite;
         InitiateBattleEventTest.class,
         InitiateHealingPreconditionTest.class,
         LocationUpdateEventTest.class,
+        PickUpItemActionTest.class,
+        PickUpItemPreconditionTest.class,
         PickUpUnitFromHospitalActionTest.class,
         PickUpUnitFromHospitalEventTest.class,
         PickUpUnitFromHospitalPreconditionTest.class,

@@ -80,7 +80,7 @@ public class UnitActionData extends ActionData {
                 break;
             case PICKUP:
                 RoosterDaoUtil.transferUnitFromBuilding(
-                        getContext(),
+                        getDao(),
                         unitTypeId,
                         buildingId);
                 ProductionCycleUtil.setProductionStartOnPickup(getDao(), buildingWithType);
