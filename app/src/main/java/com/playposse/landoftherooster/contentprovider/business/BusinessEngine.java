@@ -230,7 +230,6 @@ public class BusinessEngine {
                 new UpdateProductionBuildingMarkerAction());
 
 
-        // MOST COME LAST!
         // Update building markers.
         registerAction(
                 PostPickUpItemEvent.class,
