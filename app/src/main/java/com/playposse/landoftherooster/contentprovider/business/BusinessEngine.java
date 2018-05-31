@@ -116,6 +116,11 @@ public class BusinessEngine {
                 new ProductionPrecondition(),
                 new ProductionAction());
 
+        registerAction(
+                PostCompleteProductionEvent.class,
+                new InitiateProductionPrecondition(),
+                new InitiateProductionAction());
+
         // TODO schedule action for after item has been produced to check the next production start.
 
         // free item production
