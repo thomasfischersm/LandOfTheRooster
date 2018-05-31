@@ -17,7 +17,6 @@ import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithTy
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * A {@link BusinessAction} that is fired when the item production has reached its final time.
@@ -49,8 +48,6 @@ public class ProductionAction extends BusinessAction {
         BuildingWithType buildingWithType = dataCache.getBuildingWithType();
         Building building = buildingWithType.getBuilding();
         long buildingId = building.getId();
-        Map<Long, Integer> resourceMap = dataCache.getResourceMap();
-        Map<Long, Integer> unitMap = dataCache.getUnitMap();
         Item producedItem = null;
 
         // Debit input resources.
