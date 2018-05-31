@@ -1,6 +1,5 @@
 package com.playposse.landoftherooster.contentprovider.business.action;
 
-import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.BusinessAction;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
@@ -40,9 +39,6 @@ public class ExecuteBattleAction extends BusinessAction {
                 .triggerDelayedEvent(postBattleEvent);
 
         // Schedule event to respawn the building.
-        int delayMs = GameConfig.BATTLE_RESPAWN_DURATION;
-        RespawnBattleBuildingEvent respawnEvent = new RespawnBattleBuildingEvent(buildingId);
-        BusinessEngine.get()
-                .scheduleEvent(delayMs, respawnEvent);
+        RespawnBattleBuildingEvent.schedule(buildingId);
     }
 }

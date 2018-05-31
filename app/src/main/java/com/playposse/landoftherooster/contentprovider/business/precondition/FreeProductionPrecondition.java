@@ -8,7 +8,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.BusinessPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.BuildingCreatedEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteFreeItemProduction;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteFreeProductionEvent;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
@@ -40,7 +40,7 @@ public class FreeProductionPrecondition implements BusinessPrecondition {
     public PreconditionOutcome evaluate(BusinessEvent event, BusinessDataCache dataCache) {
         if (event instanceof BuildingCreatedEvent) {
             return evaluateAfterBuildingConstruction(dataCache);
-        } else if (event instanceof CompleteFreeItemProduction) {
+        } else if (event instanceof CompleteFreeProductionEvent) {
             return evaluateAfterActualProduction(event, dataCache);
         } else {
             throw new IllegalStateException(

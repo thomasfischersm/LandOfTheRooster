@@ -5,6 +5,8 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessAction;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteFreeProductionEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
@@ -41,9 +43,9 @@ public class AssignPeasantAction extends BusinessAction {
         List<ProductionRule> productionRules = dataCache.getProductionRules();
         if (building.getProductionStart() != null) {
             if (ProductionCycleUtil.hasFreeProductionRule(productionRules)) {
-                InitiateFreeProductionAction.scheduleFreeItemProductionEndedEvent(dataCache);
+                CompleteFreeProductionEvent.schedule(dataCache);
             } else if ((productionRules != null) && (productionRules.size() > 0)) {
-                InitiateProductionAction.scheduleItemProductionEndedEvent(dataCache);
+                CompleteProductionEvent.schedule(dataCache);
             }
         }
     }

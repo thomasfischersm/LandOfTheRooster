@@ -1,5 +1,7 @@
 package com.playposse.landoftherooster.contentprovider.business.event.timeTriggered;
 
+import com.playposse.landoftherooster.GameConfig;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 
 /**
@@ -10,5 +12,12 @@ public class RespawnBattleBuildingEvent extends BusinessEvent {
 
     public RespawnBattleBuildingEvent(Long buildingId) {
         super(buildingId);
+    }
+
+    public static void schedule(long buildingId) {
+        int delayMs = GameConfig.BATTLE_RESPAWN_DURATION;
+        RespawnBattleBuildingEvent respawnEvent = new RespawnBattleBuildingEvent(buildingId);
+        BusinessEngine.get()
+                .scheduleEvent(delayMs, respawnEvent);
     }
 }

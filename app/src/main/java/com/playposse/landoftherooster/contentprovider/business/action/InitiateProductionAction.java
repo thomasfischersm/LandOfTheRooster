@@ -1,15 +1,11 @@
 package com.playposse.landoftherooster.contentprovider.business.action;
 
-import android.util.Log;
-
 import com.playposse.landoftherooster.contentprovider.business.BusinessAction;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
-import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.InitiateProductionPreconditionOutcome;
-import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
 
@@ -46,17 +42,6 @@ public class InitiateProductionAction extends BusinessAction {
         DaoEventRegistry.get(dataCache.getDao()).update(building);
 
         // Schedule production completed event.
-        scheduleItemProductionEndedEvent(dataCache);
-    }
-
-    public static void scheduleItemProductionEndedEvent(BusinessDataCache dataCache) {
-        Long remainingMs = ProductionCycleUtil.getRemainingProductionTimeMs(
-                dataCache.getUnitMap(),
-                dataCache.getBuildingWithType());
-        BusinessEngine.get().scheduleEvent(
-                remainingMs,
-                new CompleteProductionEvent(dataCache.getBuildingId()));
-        Log.i(LOG_TAG, "scheduleItemProductionEndedEvent: Scheduled production to finish in "
-                + remainingMs + "ms.");
+        CompleteProductionEvent.schedule(dataCache);
     }
 }

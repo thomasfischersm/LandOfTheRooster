@@ -7,9 +7,8 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.BusinessPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
-import com.playposse.landoftherooster.contentprovider.business.action.InitiateHealingAction;
-import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteHealingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.InitiateHealingEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteHealingEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
@@ -63,7 +62,7 @@ public class CompleteHealingPrecondition implements BusinessPrecondition {
         if (extraTimeMs < 0) {
             Log.i(LOG_TAG, "evaluate: The healing time hasn't completed yet for building: "
                     + buildingId);
-            InitiateHealingAction.scheduleCompleteHealingEvent(dataCache);
+            CompleteHealingEvent.schedule(dataCache);
             return new PreconditionOutcome(false);
         }
 
