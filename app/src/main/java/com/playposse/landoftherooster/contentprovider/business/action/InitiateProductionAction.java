@@ -8,7 +8,6 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteProductionEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.ItemProductionStartedEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.InitiateProductionPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
@@ -45,10 +44,6 @@ public class InitiateProductionAction extends BusinessAction {
         // Update building to start production.
         building.setProductionStart(new Date());
         DaoEventRegistry.get(dataCache.getDao()).update(building);
-
-        // Fire production started event.
-        BusinessEngine.get().triggerDelayedEvent(
-                new ItemProductionStartedEvent(event.getBuildingId(), possibleProductionCount));
 
         // Schedule production completed event.
         scheduleItemProductionEndedEvent(dataCache);
