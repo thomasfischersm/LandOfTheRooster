@@ -15,9 +15,9 @@ import java.util.Map;
 /**
  * A {@link BusinessPrecondition} that checks if the building can execute a production rule.
  */
-public class StartItemProductionPrecondition implements BusinessPrecondition {
+public class InitiateProductionPrecondition implements BusinessPrecondition {
 
-    private static final String LOG_TAG = StartItemProductionPrecondition.class.getSimpleName();
+    private static final String LOG_TAG = InitiateProductionPrecondition.class.getSimpleName();
 
     @Override
     public PreconditionOutcome evaluate(BusinessEvent event, BusinessDataCache dataCache) {
@@ -30,7 +30,7 @@ public class StartItemProductionPrecondition implements BusinessPrecondition {
         if (building.getProductionStart() != null) {
             Log.i(LOG_TAG, "evaluate: Won't start new building production because it is " +
                     "already started.");
-            return new StartItemProductionPreconditionOutcome(
+            return new InitiateProductionPreconditionOutcome(
                     false,
                     null,
                     null);
@@ -40,14 +40,14 @@ public class StartItemProductionPrecondition implements BusinessPrecondition {
         if (!hasNonFreeProductionRule(dataCache)) {
             Log.i(LOG_TAG, "evaluate: The building " + dataCache.getBuildingId()
                     + " doesn't have a non-free production rule. Won't start production!");
-            return new StartItemProductionPreconditionOutcome(
+            return new InitiateProductionPreconditionOutcome(
                     false,
                     null,
                     null);
         }
 
         // Check inputs.
-        StartItemProductionPreconditionOutcome outcome = computePossibleProductionCount(dataCache);
+        InitiateProductionPreconditionOutcome outcome = computePossibleProductionCount(dataCache);
         if (!outcome.getSuccess()) {
             Log.i(LOG_TAG, "evaluate: Won't start building production because the " +
                     "prerequisites are incomplete.");
@@ -69,7 +69,7 @@ public class StartItemProductionPrecondition implements BusinessPrecondition {
         return false;
     }
 
-    protected StartItemProductionPreconditionOutcome computePossibleProductionCount(
+    protected InitiateProductionPreconditionOutcome computePossibleProductionCount(
             BusinessDataCache dataCache) {
 
         int count = 0;
@@ -89,12 +89,12 @@ public class StartItemProductionPrecondition implements BusinessPrecondition {
         }
 
         if (count > 0) {
-            return new StartItemProductionPreconditionOutcome(
+            return new InitiateProductionPreconditionOutcome(
                     true,
                     chosenProductionRule,
                     count);
         } else {
-            return new StartItemProductionPreconditionOutcome(
+            return new InitiateProductionPreconditionOutcome(
                     false,
                     null,
                     null);

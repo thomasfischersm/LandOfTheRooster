@@ -41,9 +41,9 @@ public class AssignPeasantAction extends BusinessAction {
         List<ProductionRule> productionRules = dataCache.getProductionRules();
         if (building.getProductionStart() != null) {
             if (ProductionCycleUtil.hasFreeProductionRule(productionRules)) {
-                StartFreeItemProductionAction.scheduleFreeItemProductionEndedEvent(dataCache);
+                InitiateFreeProductionAction.scheduleFreeItemProductionEndedEvent(dataCache);
             } else if ((productionRules != null) && (productionRules.size() > 0)) {
-                StartItemProductionAction.scheduleItemProductionEndedEvent(dataCache);
+                InitiateProductionAction.scheduleItemProductionEndedEvent(dataCache);
             }
         }
     }

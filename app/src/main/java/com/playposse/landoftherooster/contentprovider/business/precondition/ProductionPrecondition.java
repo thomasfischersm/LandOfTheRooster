@@ -19,10 +19,10 @@ import java.util.Map;
 /**
  * A {@link BusinessPrecondition} that checks if the production of an item can be completed.
  *
- * <p>It uses the {@link StartItemProductionPrecondition} for most of the checks. Additionally, it
+ * <p>It uses the {@link InitiateProductionPrecondition} for most of the checks. Additionally, it
  * checks if the time is ready.
  */
-public class ProductionPrecondition extends StartItemProductionPrecondition {
+public class ProductionPrecondition extends InitiateProductionPrecondition {
 
     private static final String LOG_TAG = ProductionPrecondition.class.getSimpleName();
 
@@ -30,7 +30,7 @@ public class ProductionPrecondition extends StartItemProductionPrecondition {
     public PreconditionOutcome evaluate(BusinessEvent event, BusinessDataCache dataCache) {
 
         // Check inputs.
-        StartItemProductionPreconditionOutcome startOutcome =
+        InitiateProductionPreconditionOutcome startOutcome =
                 computePossibleProductionCount(dataCache);
         if (!startOutcome.getSuccess()) {
             Log.i(LOG_TAG, "evaluate: Won't start building production because the " +

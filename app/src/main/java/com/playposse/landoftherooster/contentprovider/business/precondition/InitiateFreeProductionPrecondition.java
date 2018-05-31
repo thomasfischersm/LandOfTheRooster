@@ -12,7 +12,7 @@ import java.util.List;
  * A {@link BusinessPrecondition} that checks if the production of a free item can be started at a
  * certain building.
  */
-public class StartFreeItemProductionPrecondition extends FreeProductionPrecondition {
+public class InitiateFreeProductionPrecondition extends FreeProductionPrecondition {
 
     @Override
     public PreconditionOutcome evaluate(BusinessEvent event, BusinessDataCache dataCache) {
@@ -20,11 +20,11 @@ public class StartFreeItemProductionPrecondition extends FreeProductionPrecondit
                 getUnblockedFreeProductionRules(dataCache);
 
         if (unblockedFreeProductionRules.size() > 0) {
-            return new StartFreeItemProductionPreconditionOutcome(
+            return new InitiateFreeProductionPreconditionOutcome(
                     true,
                     unblockedFreeProductionRules);
         } else {
-            return new StartFreeItemProductionPreconditionOutcome(false, null);
+            return new InitiateFreeProductionPreconditionOutcome(false, null);
         }
     }
 }

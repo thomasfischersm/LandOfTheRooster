@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * A {@link BusinessAction} that starts the production cycle for a free item.
  */
-public class StartFreeItemProductionAction extends BusinessAction {
+public class InitiateFreeProductionAction extends BusinessAction {
 
     @Override
     public void perform(

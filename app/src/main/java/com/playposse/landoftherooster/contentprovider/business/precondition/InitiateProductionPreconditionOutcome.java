@@ -8,14 +8,14 @@ import javax.annotation.Nullable;
 /**
  * Created by thoma on 5/2/2018.
  */
-public class StartItemProductionPreconditionOutcome extends PreconditionOutcome {
+public class InitiateProductionPreconditionOutcome extends PreconditionOutcome {
 
     @Nullable
     private final ProductionRule productionRule;
     @Nullable
     private final Integer possibleProductionCount;
 
-    StartItemProductionPreconditionOutcome(
+    InitiateProductionPreconditionOutcome(
             Boolean isSuccess,
             @Nullable ProductionRule productionRule,
             @Nullable Integer possibleProductionCount) {

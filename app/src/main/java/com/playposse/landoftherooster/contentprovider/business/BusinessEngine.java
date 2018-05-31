@@ -21,8 +21,8 @@ import com.playposse.landoftherooster.contentprovider.business.action.PickUpItem
 import com.playposse.landoftherooster.contentprovider.business.action.PickUpUnitFromHospitalAction;
 import com.playposse.landoftherooster.contentprovider.business.action.ProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.RespawnBattleBuildingAction;
-import com.playposse.landoftherooster.contentprovider.business.action.StartFreeItemProductionAction;
-import com.playposse.landoftherooster.contentprovider.business.action.StartItemProductionAction;
+import com.playposse.landoftherooster.contentprovider.business.action.InitiateFreeProductionAction;
+import com.playposse.landoftherooster.contentprovider.business.action.InitiateProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateHospitalBuildingMarkerAction;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateProductionBuildingMarkerAction;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.BuildingCreatedEvent;
@@ -58,8 +58,8 @@ import com.playposse.landoftherooster.contentprovider.business.precondition.Pick
 import com.playposse.landoftherooster.contentprovider.business.precondition.PickUpUnitFromHospitalPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.ProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.RespawnBattleBuildingPrecondition;
-import com.playposse.landoftherooster.contentprovider.business.precondition.StartFreeItemProductionPrecondition;
-import com.playposse.landoftherooster.contentprovider.business.precondition.StartItemProductionPrecondition;
+import com.playposse.landoftherooster.contentprovider.business.precondition.InitiateFreeProductionPrecondition;
+import com.playposse.landoftherooster.contentprovider.business.precondition.InitiateProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateHospitalBuildingMarkerPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateProductionBuildingMarkerPrecondition;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
@@ -107,9 +107,9 @@ public class BusinessEngine {
                 new DropOffItemAction());
 
         registerAction(
-                PostDropOffItemEvent.class, // TODO: Rename to InitiateProduction?
-                new StartItemProductionPrecondition(), // TODO: Rename to InitaiteProductionPrecondition
-                new StartItemProductionAction());
+                PostDropOffItemEvent.class,
+                new InitiateProductionPrecondition(),
+                new InitiateProductionAction());
 
         registerAction(
                 CompleteProductionEvent.class,
@@ -126,8 +126,8 @@ public class BusinessEngine {
 
         registerAction(
                 PostPickUpItemEvent.class,
-                new StartFreeItemProductionPrecondition(),
-                new StartFreeItemProductionAction());
+                new InitiateFreeProductionPrecondition(),
+                new InitiateFreeProductionAction());
 
         registerAction(
                 BuildingCreatedEvent.class,

@@ -10,11 +10,11 @@ import javax.annotation.Nullable;
 /**
  * A {@link PreconditionOutcome} to start the production cycle for a free item.
  */
-public class StartFreeItemProductionPreconditionOutcome extends PreconditionOutcome {
+public class InitiateFreeProductionPreconditionOutcome extends PreconditionOutcome {
 
     @Nullable private final List<ProductionRule> productionRules;
 
-    StartFreeItemProductionPreconditionOutcome(
+    InitiateFreeProductionPreconditionOutcome(
             Boolean isSuccess,
             @Nullable List<ProductionRule> productionRules) {
 
