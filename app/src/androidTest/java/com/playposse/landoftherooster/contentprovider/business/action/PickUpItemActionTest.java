@@ -5,10 +5,10 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
+import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
 import com.playposse.landoftherooster.contentprovider.business.UnitItem;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpItemEvent;
-import com.playposse.landoftherooster.contentprovider.business.precondition.PickUpItemPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class PickUpItemActionTest extends AbstractBusinessTest {
         PickUpItemEvent event =
                 new PickUpItemEvent(wheatFieldId, new ResourceItem(WHEAT_RESOURCE_TYPE_ID));
         BusinessDataCache cache = new BusinessDataCache(dao, wheatFieldId);
-        PickUpItemPreconditionOutcome outcome = new PickUpItemPreconditionOutcome(true);
+        PreconditionOutcome outcome = new PreconditionOutcome(true);
         PickUpItemAction action = new PickUpItemAction();
         action.perform(event, outcome, cache);
 
@@ -60,7 +60,7 @@ public class PickUpItemActionTest extends AbstractBusinessTest {
         PickUpItemEvent event =
                 new PickUpItemEvent(barracksId, new UnitItem(SOLDIER_UNIT_TYPE_ID));
         BusinessDataCache cache = new BusinessDataCache(dao, barracksId);
-        PickUpItemPreconditionOutcome outcome = new PickUpItemPreconditionOutcome(true);
+        PreconditionOutcome outcome = new PreconditionOutcome(true);
         PickUpItemAction action = new PickUpItemAction();
         action.perform(event, outcome, cache);
 

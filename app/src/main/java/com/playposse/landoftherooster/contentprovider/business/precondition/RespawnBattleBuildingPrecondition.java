@@ -19,14 +19,14 @@ public class RespawnBattleBuildingPrecondition implements BusinessPrecondition {
 
         // Exit early if the building has already respawned.
         if (buildingWithType.getBuilding().getLastConquest() == null) {
-            return new RespawnBattleBuildingPreconditionOutcome(false);
+            return new PreconditionOutcome(false);
         }
 
         // Exit early if the building doesn't support battles.
         Integer enemyUnitCount = buildingWithType.getBuildingType().getEnemyUnitCount();
         Integer enemyUnitTypeId = buildingWithType.getBuildingType().getEnemyUnitTypeId();
         if ((enemyUnitCount == null) || (enemyUnitCount == 0) || (enemyUnitTypeId == null)) {
-            return new RespawnBattleBuildingPreconditionOutcome(false);
+            return new PreconditionOutcome(false);
         }
 
         // Check if the respawn time has elapsed.
@@ -41,6 +41,6 @@ public class RespawnBattleBuildingPrecondition implements BusinessPrecondition {
                     .scheduleEvent(delayMs, event);
         }
 
-        return new RespawnBattleBuildingPreconditionOutcome(hasRespawned);
+        return new PreconditionOutcome(hasRespawned);
     }
 }

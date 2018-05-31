@@ -43,6 +43,6 @@ public class InitiateHealingPrecondition implements BusinessPrecondition {
         }
 
         // Start the healing process.
-        return new InitiateHealingPreconditionOutcome(true);
+        return new PreconditionOutcome(true);
     }
 }

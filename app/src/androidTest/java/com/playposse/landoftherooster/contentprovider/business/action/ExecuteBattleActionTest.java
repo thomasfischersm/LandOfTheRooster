@@ -6,8 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
+import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.InitiateBattleEvent;
-import com.playposse.landoftherooster.contentprovider.business.precondition.ExecuteBattlePreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
@@ -38,8 +38,7 @@ public class ExecuteBattleActionTest extends AbstractBusinessTest {
         // Execute action.
         InitiateBattleEvent event = new InitiateBattleEvent(goblinCaveId);
         BusinessDataCache cache = new BusinessDataCache(dao, goblinCaveId);
-        ExecuteBattlePreconditionOutcome outcome =
-                new ExecuteBattlePreconditionOutcome(true);
+        PreconditionOutcome outcome = new PreconditionOutcome(true);
         ExecuteBattleAction action = new ExecuteBattleAction();
         action.perform(event, outcome, cache);
 
@@ -71,8 +70,7 @@ public class ExecuteBattleActionTest extends AbstractBusinessTest {
         // Execute action.
         InitiateBattleEvent event = new InitiateBattleEvent(goblinCaveId);
         BusinessDataCache cache = new BusinessDataCache(dao, goblinCaveId);
-        ExecuteBattlePreconditionOutcome outcome =
-                new ExecuteBattlePreconditionOutcome(true);
+        PreconditionOutcome outcome = new PreconditionOutcome(true);
         ExecuteBattleAction action = new ExecuteBattleAction();
         action.perform(event, outcome, cache);
 

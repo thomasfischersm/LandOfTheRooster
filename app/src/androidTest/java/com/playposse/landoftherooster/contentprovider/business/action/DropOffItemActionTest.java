@@ -6,10 +6,10 @@ import android.support.test.runner.AndroidJUnit4;
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
+import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
 import com.playposse.landoftherooster.contentprovider.business.UnitItem;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.DropOffItemEvent;
-import com.playposse.landoftherooster.contentprovider.business.precondition.DropOffItemPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 
 import org.junit.Test;
@@ -44,8 +44,7 @@ public class DropOffItemActionTest extends AbstractBusinessTest {
         DropOffItemEvent event =
                 new DropOffItemEvent(millId, new ResourceItem(WHEAT_RESOURCE_TYPE_ID));
         BusinessDataCache cache = new BusinessDataCache(dao, millId);
-        DropOffItemPreconditionOutcome outcome =
-                new DropOffItemPreconditionOutcome(true);
+        PreconditionOutcome outcome = new PreconditionOutcome(true);
         DropOffItemAction action = new DropOffItemAction();
         action.perform(event, outcome, cache);
 
@@ -80,8 +79,7 @@ public class DropOffItemActionTest extends AbstractBusinessTest {
         DropOffItemEvent event =
                 new DropOffItemEvent(barracksId, new UnitItem(peasantId));
         BusinessDataCache cache = new BusinessDataCache(dao, barracksId);
-        DropOffItemPreconditionOutcome outcome =
-                new DropOffItemPreconditionOutcome(true);
+        PreconditionOutcome outcome = new PreconditionOutcome(true);
         DropOffItemAction action = new DropOffItemAction();
         action.perform(event, outcome, cache);
 

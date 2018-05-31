@@ -59,6 +59,6 @@ public class PickUpItemPrecondition implements BusinessPrecondition {
             }
         }
 
-        return new PickUpItemPreconditionOutcome(true);
+        return new PreconditionOutcome(true);
     }
 }

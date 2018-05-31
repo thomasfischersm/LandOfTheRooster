@@ -5,8 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
+import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.RespawnBattleBuildingEvent;
-import com.playposse.landoftherooster.contentprovider.business.precondition.RespawnBattleBuildingPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
@@ -43,8 +43,7 @@ public class RespawnBattleBuildingActionTest extends AbstractBusinessTest {
 
         // Execute the action
         RespawnBattleBuildingEvent event = new RespawnBattleBuildingEvent(goblinCaveId);
-        RespawnBattleBuildingPreconditionOutcome outcome =
-                new RespawnBattleBuildingPreconditionOutcome(true);
+        PreconditionOutcome outcome = new PreconditionOutcome(true);
         BusinessDataCache cache = new BusinessDataCache(dao, goblinCaveId);
         RespawnBattleBuildingAction action = new RespawnBattleBuildingAction();
         action.perform(event, outcome, cache);

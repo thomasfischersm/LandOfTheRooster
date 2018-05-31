@@ -26,7 +26,7 @@ public class AssignPeasantPrecondition implements BusinessPrecondition {
         if ((unitPeasantCount == null) || (unitPeasantCount < 1)) {
             Log.i(LOG_TAG, "evaluate: Can't assign peasant because the user doesn't have any " +
                     "peasants joining him/her.");
-            return new AssignPeasantPreconditionOutcome(false);
+            return new PreconditionOutcome(false);
         }
 
         // Does the building have a free peasant slot?
@@ -38,9 +38,9 @@ public class AssignPeasantPrecondition implements BusinessPrecondition {
                 (buildingPeasantCount + impliedPeasantCount >= maxPeasantCount)) {
             Log.i(LOG_TAG, "evaluate: Can't assign peasant because the building is already " +
                     "at capacity.");
-            return new AssignPeasantPreconditionOutcome(false);
+            return new PreconditionOutcome(false);
         }
 
-        return new AssignPeasantPreconditionOutcome(true);
+        return new PreconditionOutcome(true);
     }
 }

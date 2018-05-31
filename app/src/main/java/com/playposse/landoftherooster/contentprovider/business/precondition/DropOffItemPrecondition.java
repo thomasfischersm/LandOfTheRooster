@@ -53,7 +53,7 @@ public class DropOffItemPrecondition implements BusinessPrecondition {
             return new PreconditionOutcome(false);
         }
 
-        return new DropOffItemPreconditionOutcome(true);
+        return new PreconditionOutcome(true);
     }
 
     private PreconditionOutcome evaluate(BusinessDataCache dataCache, UnitItem unitItem) {
@@ -74,6 +74,6 @@ public class DropOffItemPrecondition implements BusinessPrecondition {
             return new PreconditionOutcome(false);
         }
 
-        return new DropOffItemPreconditionOutcome(true);
+        return new PreconditionOutcome(true);
     }
 }

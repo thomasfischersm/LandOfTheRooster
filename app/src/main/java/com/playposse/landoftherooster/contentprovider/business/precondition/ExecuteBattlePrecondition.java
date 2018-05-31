@@ -21,12 +21,12 @@ public class ExecuteBattlePrecondition implements BusinessPrecondition {
         Integer enemyUnitCount = buildingWithType.getBuildingType().getEnemyUnitCount();
         Integer enemyUnitTypeId = buildingWithType.getBuildingType().getEnemyUnitTypeId();
         if ((enemyUnitCount == null) || (enemyUnitCount == 0) || (enemyUnitTypeId == null)) {
-            return new RespawnBattleBuildingPreconditionOutcome(false);
+            return new PreconditionOutcome(false);
         }
 
         // Exit early if the building has already respawned.
         if (buildingWithType.getBuilding().getLastConquest() == null) {
-            return new RespawnBattleBuildingPreconditionOutcome(true);
+            return new PreconditionOutcome(true);
         }
 
         // Check if the building has respawned.
@@ -34,6 +34,6 @@ public class ExecuteBattlePrecondition implements BusinessPrecondition {
         boolean hasRespawned =
                 (lastConquest + GameConfig.BATTLE_RESPAWN_DURATION < System.currentTimeMillis());
 
-        return new ExecuteBattlePreconditionOutcome(hasRespawned);
+        return new PreconditionOutcome(hasRespawned);
     }
 }

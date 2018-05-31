@@ -64,7 +64,6 @@ import com.playposse.landoftherooster.contentprovider.business.precondition.Pick
 import com.playposse.landoftherooster.contentprovider.business.precondition.PickUpUnitFromHospitalPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.ProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.RespawnBattleBuildingPrecondition;
-import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateHospitalBuildingMarkerPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateProductionBuildingMarkerPrecondition;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
@@ -192,12 +191,12 @@ public class BusinessEngine {
 
         registerAction(
                 PostAdmitUnitToHospitalEvent.class,
-                new UpdateHospitalBuildingMarkerPrecondition(),
+                new AlwaysSuccessfulPrecondition(),
                 new UpdateHospitalBuildingMarkerAction());
 
         registerAction(
                 UnitInjuredEvent.class,
-                new UpdateHospitalBuildingMarkerPrecondition(),
+                new AlwaysSuccessfulPrecondition(),
                 new UpdateHospitalBuildingMarkerAction());
 
         registerAction(
@@ -212,7 +211,7 @@ public class BusinessEngine {
 
         registerAction(
                 PostCompleteHealingEvent.class,
-                new UpdateHospitalBuildingMarkerPrecondition(),
+                new AlwaysSuccessfulPrecondition(),
                 new UpdateHospitalBuildingMarkerAction());
 
         registerAction(
@@ -222,7 +221,7 @@ public class BusinessEngine {
 
         registerAction(
                 PostPickUpUnitFromHospitalEvent.class,
-                new UpdateHospitalBuildingMarkerPrecondition(),
+                new AlwaysSuccessfulPrecondition(),
                 new UpdateHospitalBuildingMarkerAction());
 
         registerAction(
