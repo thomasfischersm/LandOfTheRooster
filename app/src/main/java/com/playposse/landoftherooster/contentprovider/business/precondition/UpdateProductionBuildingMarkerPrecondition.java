@@ -50,10 +50,7 @@ public class UpdateProductionBuildingMarkerPrecondition implements BusinessPreco
                     item,
                     affectedBuildings);
         } else {
-            return new UpdateProductionBuildingMarkerPreconditionOutcome(
-                    false,
-                    null,
-                    null);
+            return new PreconditionOutcome(false);
         }
     }
 }

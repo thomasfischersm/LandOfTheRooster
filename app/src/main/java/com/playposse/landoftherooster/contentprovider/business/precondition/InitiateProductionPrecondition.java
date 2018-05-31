@@ -30,20 +30,14 @@ public class InitiateProductionPrecondition implements BusinessPrecondition {
         if (building.getProductionStart() != null) {
             Log.i(LOG_TAG, "evaluate: Won't start new building production because it is " +
                     "already started.");
-            return new InitiateProductionPreconditionOutcome(
-                    false,
-                    null,
-                    null);
+            return new PreconditionOutcome(false);
         }
 
         // Skip if no non-free production rule.
         if (!hasNonFreeProductionRule(dataCache)) {
             Log.i(LOG_TAG, "evaluate: The building " + dataCache.getBuildingId()
                     + " doesn't have a non-free production rule. Won't start production!");
-            return new InitiateProductionPreconditionOutcome(
-                    false,
-                    null,
-                    null);
+            return new PreconditionOutcome(false);
         }
 
         // Check inputs.

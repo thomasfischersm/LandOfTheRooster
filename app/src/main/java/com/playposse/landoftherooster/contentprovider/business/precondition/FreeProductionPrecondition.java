@@ -1,6 +1,5 @@
 package com.playposse.landoftherooster.contentprovider.business.precondition;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
@@ -56,7 +55,7 @@ public class FreeProductionPrecondition implements BusinessPrecondition {
         if (freeProductionRules.size() > 0) {
             return new FreeProductionPreconditionOutcome(true, freeProductionRules);
         } else {
-            return new FreeProductionPreconditionOutcome(false, null);
+            return new PreconditionOutcome(false);
         }
     }
 
@@ -72,7 +71,7 @@ public class FreeProductionPrecondition implements BusinessPrecondition {
         if ((building.getProductionStart() == null)) {
             Log.i(LOG_TAG, "evaluateAfterActualProduction: Canceling production. The " +
                     "production start hasn't been set!");
-            return fail();
+            return new PreconditionOutcome(false);
         }
         Map<Long, Integer> unitMap = dataCache.getUnitMap();
         BuildingWithType buildingWithType = dataCache.getBuildingWithType();
@@ -81,18 +80,13 @@ public class FreeProductionPrecondition implements BusinessPrecondition {
             Log.i(LOG_TAG, "evaluateAfterActualProduction: Free production is not ready yet, " +
                     "scheduling it for later: " + delayMs);
             BusinessEngine.get().scheduleEvent(delayMs, event);
-            return fail();
+            return new PreconditionOutcome(false);
         }
 
         // Find unblocked free production rules.
         List<ProductionRule> unblockedFreeProductionRules =
                 getUnblockedFreeProductionRules(dataCache);
         return new FreeProductionPreconditionOutcome(true, unblockedFreeProductionRules);
-    }
-
-    @NonNull
-    private FreeProductionPreconditionOutcome fail() {
-        return new FreeProductionPreconditionOutcome(false, null);
     }
 
     private List<ProductionRule> getFreeProductionRules(BusinessDataCache dataCache) {

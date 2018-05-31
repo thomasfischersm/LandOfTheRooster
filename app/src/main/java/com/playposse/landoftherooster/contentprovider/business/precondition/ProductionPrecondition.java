@@ -1,6 +1,5 @@
 package com.playposse.landoftherooster.contentprovider.business.precondition;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
@@ -35,14 +34,14 @@ public class ProductionPrecondition extends InitiateProductionPrecondition {
         if (!startOutcome.getSuccess()) {
             Log.i(LOG_TAG, "evaluate: Won't start building production because the " +
                     "prerequisites are incomplete.");
-            return fail();
+            return new PreconditionOutcome(false);
         }
 
         // Check that production has started.
         Building building = dataCache.getBuilding();
         if ((building == null) || (building.getProductionStart() == null)) {
             Log.i(LOG_TAG, "evaluate: Cannot produce because there is no production start!");
-            return fail();
+            return new PreconditionOutcome(false);
         }
 
         // Check that the production time has completed.
@@ -64,16 +63,11 @@ public class ProductionPrecondition extends InitiateProductionPrecondition {
             CompleteProductionEvent completeEvent =
                     new CompleteProductionEvent(event.getBuildingId());
             BusinessEngine.get().scheduleEvent(duration, completeEvent);
-            return fail();
+            return new PreconditionOutcome(false);
         }
 
         // Everything checked out to start production.
         ProductionRule productionRule = startOutcome.getProductionRule();
         return new ProductionPreconditionOutcome(true, productionRule);
-    }
-
-    @NonNull
-    private ProductionPreconditionOutcome fail() {
-        return new ProductionPreconditionOutcome(false, null);
     }
 }

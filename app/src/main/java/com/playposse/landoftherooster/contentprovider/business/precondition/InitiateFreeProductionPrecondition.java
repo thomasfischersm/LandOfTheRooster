@@ -24,7 +24,7 @@ public class InitiateFreeProductionPrecondition extends FreeProductionPreconditi
                     true,
                     unblockedFreeProductionRules);
         } else {
-            return new InitiateFreeProductionPreconditionOutcome(false, null);
+            return new PreconditionOutcome(false);
         }
     }
 }

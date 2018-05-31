@@ -25,7 +25,7 @@ public class AdmitUnitToHospitalPrecondition implements BusinessPrecondition{
         if (!buildingType.isHealsUnits()) {
             Log.i(LOG_TAG, "evaluate: Can't admit unit because the building doesn't heal: "
                     + dataCache.getBuildingId());
-            return new AdmitUnitToHospitalPreconditionOutcome(false, null);
+            return new PreconditionOutcome(false);
         }
 
         // Check if unit is injured.
@@ -38,7 +38,7 @@ public class AdmitUnitToHospitalPrecondition implements BusinessPrecondition{
         if (unitWithType.getUnit().getHealth() >= unitWithType.getType().getHealth()) {
             Log.i(LOG_TAG, "evaluate: Can't admit unit because it is already healthy: "
                     + unitId);
-            return new AdmitUnitToHospitalPreconditionOutcome(false, null);
+            return new PreconditionOutcome(false);
         }
 
         return new AdmitUnitToHospitalPreconditionOutcome(true, unitWithType);

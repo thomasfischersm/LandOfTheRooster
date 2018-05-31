@@ -83,11 +83,9 @@ public class AdmitUnitToHospitalPreconditionTest extends AbstractBusinessTest {
         BusinessDataCache dataCache = new BusinessDataCache(dao, wheatFieldId);
         AdmitUnitToHospitalPrecondition precondition = new AdmitUnitToHospitalPrecondition();
         PreconditionOutcome outcome = precondition.evaluate(event, dataCache);
-        AdmitUnitToHospitalPreconditionOutcome castOutcome =
-                (AdmitUnitToHospitalPreconditionOutcome) outcome;
 
         // Assert result.
-        assertFalse(castOutcome.getSuccess());
+        assertFalse(outcome.getSuccess());
     }
 
     @Test
@@ -106,10 +104,8 @@ public class AdmitUnitToHospitalPreconditionTest extends AbstractBusinessTest {
         BusinessDataCache dataCache = new BusinessDataCache(dao, hospitalId);
         AdmitUnitToHospitalPrecondition precondition = new AdmitUnitToHospitalPrecondition();
         PreconditionOutcome outcome = precondition.evaluate(event, dataCache);
-        AdmitUnitToHospitalPreconditionOutcome castOutcome =
-                (AdmitUnitToHospitalPreconditionOutcome) outcome;
 
         // Assert result.
-        assertFalse(castOutcome.getSuccess());
+        assertFalse(outcome.getSuccess());
     }
 }

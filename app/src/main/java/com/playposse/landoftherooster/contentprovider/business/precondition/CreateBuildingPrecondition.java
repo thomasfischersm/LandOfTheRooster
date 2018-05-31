@@ -24,7 +24,7 @@ public class CreateBuildingPrecondition implements BusinessPrecondition {
 
         // Early exit if all buildings have been discovered.
         if (!buildingDiscoveryRepository.isHasMoreBuildingTypesToDiscover()) {
-            return new CreateBuildingPreconditionOutcome(false, null);
+            return new PreconditionOutcome(false);
         }
 
         // Check if the right distance for a new building has been reached.
@@ -40,7 +40,7 @@ public class CreateBuildingPrecondition implements BusinessPrecondition {
             return new CreateBuildingPreconditionOutcome(true, buildingTypeId);
         } else {
             // Out of range for new building.
-            return new CreateBuildingPreconditionOutcome(false, null);
+            return new PreconditionOutcome(false);
         }
     }
 }
