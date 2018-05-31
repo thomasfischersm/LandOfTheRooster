@@ -14,6 +14,7 @@ import com.playposse.landoftherooster.contentprovider.business.action.AssignPeas
 import com.playposse.landoftherooster.contentprovider.business.action.CompleteHealingAction;
 import com.playposse.landoftherooster.contentprovider.business.action.CreateBuildingAction;
 import com.playposse.landoftherooster.contentprovider.business.action.DropOffItemAction;
+import com.playposse.landoftherooster.contentprovider.business.action.EvaluateBuildingZoneAction;
 import com.playposse.landoftherooster.contentprovider.business.action.ExecuteBattleAction;
 import com.playposse.landoftherooster.contentprovider.business.action.FreeProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.InitiateFreeProductionAction;
@@ -38,7 +39,7 @@ import com.playposse.landoftherooster.contentprovider.business.event.consequence
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostRespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.UnitInjuredEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.InitiateHealingEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.other.LocationUpdateEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.LocationUpdateEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteFreeItemProduction;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteHealingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteProductionEvent;
@@ -152,6 +153,18 @@ public class BusinessEngine {
                 LocationUpdateEvent.class,
                 new CreateBuildingPrecondition(),
                 new CreateBuildingAction());
+
+
+        // Check building zones.
+        registerAction(
+                LocationUpdateEvent.class,
+                new AlwaysSuccessfulPrecondition(),
+                new EvaluateBuildingZoneAction());
+
+        registerAction(
+                BuildingCreatedEvent.class,
+                new AlwaysSuccessfulPrecondition(),
+                new EvaluateBuildingZoneAction());
 
 
         // Assign peasant user action

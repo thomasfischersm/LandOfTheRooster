@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.business.event.other;
+package com.playposse.landoftherooster.contentprovider.business.event.locationTriggered;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;

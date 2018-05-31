@@ -10,10 +10,11 @@ import com.playposse.landoftherooster.contentprovider.business.action.RespawnBat
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateBattleBuildingMarkerActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateProductionBuildingMarkerActionTest;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepositoryTest;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingZoneRepositoryTest;
 import com.playposse.landoftherooster.contentprovider.business.data.ProductionRuleRepositoryTest;
 import com.playposse.landoftherooster.contentprovider.business.data.UnitTypeRepositoryTest;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostDropOffItemEventTest;
-import com.playposse.landoftherooster.contentprovider.business.event.other.LocationUpdateEventTest;
+import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.LocationUpdateEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteHealingEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteProductionEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AdmitUnitToHospitalEventTest;
@@ -45,6 +46,7 @@ import org.junit.runners.Suite;
         AssignPeasantEventTest.class,
         AssignPeasantPreconditionTest.class,
         BuildingDiscoveryRepositoryTest.class,
+        BuildingZoneRepositoryTest.class,
         BusinessDataCacheTest.class,
         BusinessEngineTest.class,
         CompleteHealingEventTest.class,

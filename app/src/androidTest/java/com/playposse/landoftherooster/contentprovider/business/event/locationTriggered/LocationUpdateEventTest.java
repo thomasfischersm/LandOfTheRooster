@@ -1,4 +1,4 @@
-package com.playposse.landoftherooster.contentprovider.business.event.other;
+package com.playposse.landoftherooster.contentprovider.business.event.locationTriggered;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;

@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
@@ -41,6 +42,8 @@ public class TestData {
 
     public static final long LATITUDE = 34;
     public static final long LONGITUDE = 118;
+    public static final LatLng NOWHERE_LATLNG = new LatLng(1, 1);
+    public static final LatLng DEFAULT_BUILDING_LATLNG = new LatLng(LATITUDE, LONGITUDE);
 
     public static final int REMAINING_HEALTH = 1;
 

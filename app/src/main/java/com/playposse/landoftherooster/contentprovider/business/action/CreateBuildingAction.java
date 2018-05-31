@@ -8,7 +8,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepository;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.BuildingCreatedEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.other.LocationUpdateEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.LocationUpdateEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.CreateBuildingPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
