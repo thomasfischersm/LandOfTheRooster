@@ -55,7 +55,7 @@ public class InitiateBattleEventTest extends AbstractBusinessTest {
             assertFalse(mapMarker.isReady());
 
             // Wait for the building to respawn.
-            waitForExecutedEventCount(3);
+            waitForExecutedEventCount(5);
 
             // Verify that the building respawned.
             buildingWithType = dao.getBuildingWithTypeByBuildingId(goblinCaveId);

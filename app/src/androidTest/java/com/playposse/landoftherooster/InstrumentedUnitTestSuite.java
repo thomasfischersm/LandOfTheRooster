@@ -7,6 +7,7 @@ import com.playposse.landoftherooster.contentprovider.business.action.ExecuteBat
 import com.playposse.landoftherooster.contentprovider.business.action.PickUpItemActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.PickUpUnitFromHospitalActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.RespawnBattleBuildingActionTest;
+import com.playposse.landoftherooster.contentprovider.business.action.UpdateBattleBuildingMarkerActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateProductionBuildingMarkerActionTest;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepositoryTest;
 import com.playposse.landoftherooster.contentprovider.business.data.ProductionRuleRepositoryTest;
@@ -68,6 +69,7 @@ import org.junit.runners.Suite;
         RespawnBattleBuildingPreconditionTest.class,
         RoosterDaoTest.class,
         UnitTypeRepositoryTest.class,
+        UpdateBattleBuildingMarkerActionTest.class,
         UpdateProductionBuildingMarkerActionTest.class
 })
 public class InstrumentedUnitTestSuite {

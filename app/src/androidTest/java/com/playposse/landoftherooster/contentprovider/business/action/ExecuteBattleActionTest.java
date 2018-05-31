@@ -44,7 +44,7 @@ public class ExecuteBattleActionTest extends AbstractBusinessTest {
         action.perform(event, outcome, cache);
 
         // Verify outcome.
-        // TODO: Attach to CompleteBattleEvent to see the outcome.
+        // TODO: Attach to PostBattleEvent to see the outcome.
 
         // Verify building.
         BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(goblinCaveId);
@@ -77,15 +77,11 @@ public class ExecuteBattleActionTest extends AbstractBusinessTest {
         action.perform(event, outcome, cache);
 
         // Verify outcome.
-        // TODO: Attach to CompleteBattleEvent to see the outcome.
+        // TODO: Attach to PostBattleEvent to see the outcome.
 
         // Verify building.
         BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(goblinCaveId);
         Building building = buildingWithType.getBuilding();
         assertNull(building.getLastConquest());
-
-        // Verify marker.
-        MapMarker resultMapMarker = dao.getMapMarkerByBuildingId(goblinCaveId);
-        assertTrue(resultMapMarker.isReady());
     }
 }

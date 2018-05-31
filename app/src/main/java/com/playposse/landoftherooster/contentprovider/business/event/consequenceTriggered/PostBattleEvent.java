@@ -7,12 +7,12 @@ import com.playposse.landoftherooster.services.combat.BattleSummaryParcelable;
 /**
  * A {@link BusinessEvent} that is fired when a battle ends.
  */
-public class CompleteBattleEvent extends BusinessEvent {
+public class PostBattleEvent extends BusinessEvent {
 
     private final BuildingWithType buildingWithType;
     private final BattleSummaryParcelable battleSummary;
 
-    public CompleteBattleEvent(
+    public PostBattleEvent(
             BuildingWithType buildingWithType,
             BattleSummaryParcelable battleSummary) {
 

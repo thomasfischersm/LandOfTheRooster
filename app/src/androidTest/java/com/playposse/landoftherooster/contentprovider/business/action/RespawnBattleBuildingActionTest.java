@@ -17,7 +17,6 @@ import org.junit.runner.RunWith;
 import java.util.Date;
 
 import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * A test for {@link RespawnBattleBuildingAction}.
@@ -54,12 +53,5 @@ public class RespawnBattleBuildingActionTest extends AbstractBusinessTest {
         BuildingWithType resultBuildingWithType = dao.getBuildingWithTypeByBuildingId(goblinCaveId);
         Building resultBuilding = resultBuildingWithType.getBuilding();
         assertNull(resultBuilding.getLastConquest());
-
-        // Assert marker.
-        MapMarker resultMapMarker = dao.getMapMarkerByBuildingId(goblinCaveId);
-        assertTrue(resultMapMarker.isReady());
-        long originalLastModified = mapMarker.getLastModified().getTime();
-        long resultLastModified = resultMapMarker.getLastModified().getTime();
-        assertTrue(resultLastModified > originalLastModified);
     }
 }

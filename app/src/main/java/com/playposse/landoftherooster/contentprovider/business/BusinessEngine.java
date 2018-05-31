@@ -16,23 +16,26 @@ import com.playposse.landoftherooster.contentprovider.business.action.CreateBuil
 import com.playposse.landoftherooster.contentprovider.business.action.DropOffItemAction;
 import com.playposse.landoftherooster.contentprovider.business.action.ExecuteBattleAction;
 import com.playposse.landoftherooster.contentprovider.business.action.FreeProductionAction;
+import com.playposse.landoftherooster.contentprovider.business.action.InitiateFreeProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.InitiateHealingAction;
+import com.playposse.landoftherooster.contentprovider.business.action.InitiateProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.PickUpItemAction;
 import com.playposse.landoftherooster.contentprovider.business.action.PickUpUnitFromHospitalAction;
 import com.playposse.landoftherooster.contentprovider.business.action.ProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.RespawnBattleBuildingAction;
-import com.playposse.landoftherooster.contentprovider.business.action.InitiateFreeProductionAction;
-import com.playposse.landoftherooster.contentprovider.business.action.InitiateProductionAction;
+import com.playposse.landoftherooster.contentprovider.business.action.UpdateBattleBuildingMarkerAction;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateHospitalBuildingMarkerAction;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateProductionBuildingMarkerAction;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.BuildingCreatedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAdmitUnitToHospitalEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostBattleEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteFreeProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteHealingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostDropOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpUnitFromHospitalEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostRespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.UnitInjuredEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.InitiateHealingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.other.LocationUpdateEvent;
@@ -47,19 +50,20 @@ import com.playposse.landoftherooster.contentprovider.business.event.userTrigger
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpUnitFromHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AdmitUnitToHospitalPrecondition;
+import com.playposse.landoftherooster.contentprovider.business.precondition.AlwaysSuccessfulPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AssignPeasantPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.CompleteHealingPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.CreateBuildingPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.DropOffItemPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.ExecuteBattlePrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.FreeProductionPrecondition;
+import com.playposse.landoftherooster.contentprovider.business.precondition.InitiateFreeProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.InitiateHealingPrecondition;
+import com.playposse.landoftherooster.contentprovider.business.precondition.InitiateProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.PickUpItemPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.PickUpUnitFromHospitalPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.ProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.RespawnBattleBuildingPrecondition;
-import com.playposse.landoftherooster.contentprovider.business.precondition.InitiateFreeProductionPrecondition;
-import com.playposse.landoftherooster.contentprovider.business.precondition.InitiateProductionPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateHospitalBuildingMarkerPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateProductionBuildingMarkerPrecondition;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
@@ -121,7 +125,6 @@ public class BusinessEngine {
                 new InitiateProductionPrecondition(),
                 new InitiateProductionAction());
 
-        // TODO schedule action for after item has been produced to check the next production start.
 
         // free item production
         registerAction(
@@ -144,17 +147,20 @@ public class BusinessEngine {
                 new FreeProductionPrecondition(),
                 new FreeProductionAction());
 
+
         // building creation
         registerAction(
                 LocationUpdateEvent.class,
                 new CreateBuildingPrecondition(),
                 new CreateBuildingAction());
 
+
         // Assign peasant user action
         registerAction(
                 AssignPeasantEvent.class,
                 new AssignPeasantPrecondition(),
                 new AssignPeasantAction());
+
 
         // building battle
         registerAction(
@@ -163,9 +169,20 @@ public class BusinessEngine {
                 new ExecuteBattleAction());
 
         registerAction(
+                PostBattleEvent.class,
+                new AlwaysSuccessfulPrecondition(),
+                new UpdateBattleBuildingMarkerAction());
+
+        registerAction(
                 RespawnBattleBuildingEvent.class,
                 new RespawnBattleBuildingPrecondition(),
                 new RespawnBattleBuildingAction());
+
+        registerAction(
+                PostRespawnBattleBuildingEvent.class,
+                new AlwaysSuccessfulPrecondition(),
+                new UpdateBattleBuildingMarkerAction());
+
 
         // hospital events
         registerAction(
@@ -212,6 +229,7 @@ public class BusinessEngine {
                 PostPickUpUnitFromHospitalEvent.class,
                 new UpdateProductionBuildingMarkerPrecondition(),
                 new UpdateProductionBuildingMarkerAction());
+
 
         // MOST COME LAST!
         // Update building markers.

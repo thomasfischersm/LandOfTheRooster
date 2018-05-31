@@ -2,18 +2,17 @@ package com.playposse.landoftherooster.contentprovider.business.action;
 
 import com.playposse.landoftherooster.contentprovider.business.BusinessAction;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
-import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
-import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostRespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
+import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
 
 /**
- * A {@link BusinessAction} that makes a building ready for another battle again.
+ * A {@link BusinessAction} that handles updating a {@link MapMarker} for a battle building.
  */
-public class RespawnBattleBuildingAction extends BusinessAction {
+public class UpdateBattleBuildingMarkerAction extends BusinessAction {
 
     @Override
     public void perform(
@@ -21,17 +20,14 @@ public class RespawnBattleBuildingAction extends BusinessAction {
             PreconditionOutcome preconditionOutcome,
             BusinessDataCache dataCache) {
 
-        // Respawn the building.
-        Building building = dataCache.getBuilding();
-        building.setLastConquest(null);
         RoosterDao dao = dataCache.getDao();
-        DaoEventRegistry.get(dao)
-                .update(building);
 
-        // Trigger post event
-        PostRespawnBattleBuildingEvent postEvent =
-                new PostRespawnBattleBuildingEvent(dataCache.getBuildingId());
-        BusinessEngine.get()
-                .triggerDelayedEvent(postEvent);
+        // Update MapMarker.
+        Building building = dataCache.getBuilding();
+        MapMarker mapMarker = dataCache.getMapMarker();
+        boolean isReadyForBattle = building.getLastConquest() == null;
+        mapMarker.setReady(isReadyForBattle);
+        DaoEventRegistry.get(dao)
+                .update(mapMarker);
     }
 }

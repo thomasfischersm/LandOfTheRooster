@@ -6,18 +6,16 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
-import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.CompleteBattleEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostBattleEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.RespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
-import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
-import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
 import com.playposse.landoftherooster.services.combat.Battle;
 import com.playposse.landoftherooster.services.combat.BattleSummaryParcelable;
 
 /**
  * A {@link BusinessAction} that executes a Battle. After it completes, it fires a
- * {@link CompleteBattleEvent}.
+ * {@link PostBattleEvent}.
  */
 public class ExecuteBattleAction extends BusinessAction {
 
@@ -35,17 +33,11 @@ public class ExecuteBattleAction extends BusinessAction {
         Battle battle = new Battle(dao, buildingWithType);
         BattleSummaryParcelable battleSummary = battle.fight();
 
-        // Update building marker.
-        MapMarker mapMarker = dao.getMapMarkerByBuildingId(buildingId);
-        mapMarker.setReady(!battleSummary.isDidFriendsWin());
-        DaoEventRegistry.get(dao)
-                .update(mapMarker);
-
         // Fire post event.
-        CompleteBattleEvent completeBattleEvent =
-                new CompleteBattleEvent(buildingWithType, battleSummary);
+        PostBattleEvent postBattleEvent =
+                new PostBattleEvent(buildingWithType, battleSummary);
         BusinessEngine.get()
-                .triggerDelayedEvent(completeBattleEvent);
+                .triggerDelayedEvent(postBattleEvent);
 
         // Schedule event to respawn the building.
         int delayMs = GameConfig.BATTLE_RESPAWN_DURATION;
