@@ -16,7 +16,7 @@ import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDa
 /**
  * A {@link BusinessAction} that handles a user trying to pick up an item from a building.
  */
-public class PickUpItemAction extends BusinessAction {
+public class PickUpItemAction implements BusinessAction {
 
     @Override
     public void perform(

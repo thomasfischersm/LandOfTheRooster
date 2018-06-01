@@ -12,7 +12,7 @@ import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistr
 /**
  * A {@link BusinessAction} that handles updating a {@link MapMarker} for a battle building.
  */
-public class UpdateBattleBuildingMarkerAction extends BusinessAction {
+public class UpdateBattleBuildingMarkerAction implements BusinessAction {
 
     @Override
     public void perform(

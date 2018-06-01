@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 /**
  * A {@link BusinessAction} that updates the {@link MapMarker}s of healing buildings.
  */
-public class UpdateHospitalBuildingMarkerAction extends BusinessAction {
+public class UpdateHospitalBuildingMarkerAction implements BusinessAction {
 
     private static final String LOG_TAG = UpdateHospitalBuildingMarkerAction.class.getSimpleName();
 

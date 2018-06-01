@@ -16,7 +16,7 @@ import com.playposse.landoftherooster.services.combat.BattleSummaryParcelable;
  * A {@link BusinessAction} that executes a Battle. After it completes, it fires a
  * {@link PostBattleEvent}.
  */
-public class ExecuteBattleAction extends BusinessAction {
+public class ExecuteBattleAction implements BusinessAction {
 
     @Override
     public void perform(

@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * A {@link BusinessAction} that starts the production cycle for a free item.
  */
-public class InitiateFreeProductionAction extends BusinessAction {
+public class InitiateFreeProductionAction implements BusinessAction {
 
     @Override
     public void perform(

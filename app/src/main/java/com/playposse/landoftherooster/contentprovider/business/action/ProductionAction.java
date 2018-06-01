@@ -22,7 +22,7 @@ import java.util.List;
  * A {@link BusinessAction} that is fired when the item production has reached its final time.
  * It consumes and produces the actual resources that the production rule specifies.
  */
-public class ProductionAction extends BusinessAction {
+public class ProductionAction implements BusinessAction {
 
     @Override
     public void perform(

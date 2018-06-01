@@ -15,7 +15,7 @@ import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistr
 /**
  * A {@link BusinessAction} that picks up a recovered unit from a healing building.
  */
-public class PickUpUnitFromHospitalAction extends BusinessAction {
+public class PickUpUnitFromHospitalAction implements BusinessAction {
 
     @Override
     public void perform(

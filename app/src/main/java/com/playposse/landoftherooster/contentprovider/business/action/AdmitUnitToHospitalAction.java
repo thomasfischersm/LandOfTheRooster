@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * A {@link BusinessAction} that handles admitting an injured unit to a building for the user.
  */
-public class AdmitUnitToHospitalAction extends BusinessAction {
+public class AdmitUnitToHospitalAction implements BusinessAction {
 
     @Override
     public void perform(

@@ -13,7 +13,7 @@ import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistr
 /**
  * A {@link BusinessAction} that makes a building ready for another battle again.
  */
-public class RespawnBattleBuildingAction extends BusinessAction {
+public class RespawnBattleBuildingAction implements BusinessAction {
 
     @Override
     public void perform(

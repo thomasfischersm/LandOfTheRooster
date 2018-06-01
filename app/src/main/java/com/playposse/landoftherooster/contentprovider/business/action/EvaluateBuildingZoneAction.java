@@ -20,7 +20,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithTy
  * A {@link BusinessAction} that analyzes a location update to fire events depending on if a user
  * moved into or out of a building zone.
  */
-public class EvaluateBuildingZoneAction extends BusinessAction {
+public class EvaluateBuildingZoneAction implements BusinessAction {
 
     private static final String LOG_TAG = EvaluateBuildingZoneAction.class.getSimpleName();
 

@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * An {@link BusinessAction} that starts the production at a building.
  */
-public class InitiateProductionAction extends BusinessAction {
+public class InitiateProductionAction implements BusinessAction {
 
     private static final String LOG_TAG = InitiateProductionAction.class.getSimpleName();
 

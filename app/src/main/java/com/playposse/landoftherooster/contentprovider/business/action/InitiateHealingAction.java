@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * A {@link BusinessAction} that starts the healing process at a building.
  */
-public class InitiateHealingAction extends BusinessAction {
+public class InitiateHealingAction implements BusinessAction {
 
     @Override
     public void perform(

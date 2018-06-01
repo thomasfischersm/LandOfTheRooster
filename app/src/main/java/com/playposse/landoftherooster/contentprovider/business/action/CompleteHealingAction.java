@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * A {@link BusinessAction} to complete the healing process at a building.
  */
-public class CompleteHealingAction extends BusinessAction {
+public class CompleteHealingAction implements BusinessAction {
 
     private static final String LOG_TAG = CompleteHealingAction.class.getSimpleName();
 

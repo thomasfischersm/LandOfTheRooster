@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * A {@link BusinessAction} that updates {@link MapMarker}s.
  */
-public class UpdateProductionBuildingMarkerAction extends BusinessAction {
+public class UpdateProductionBuildingMarkerAction implements BusinessAction {
 
     @Override
     public void perform(

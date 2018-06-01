@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * A {@link BusinessAction} that handles dropping off an item at a building for the user.
  */
-public class DropOffItemAction extends BusinessAction{
+public class DropOffItemAction implements BusinessAction {
 
     @Override
     public void perform(

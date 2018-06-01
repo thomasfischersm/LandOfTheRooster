@@ -3,9 +3,9 @@ package com.playposse.landoftherooster.contentprovider.business;
 /**
  * An action that updates the database in some way because something should occur.
  */
-public abstract class BusinessAction {
+public interface BusinessAction {
 
-    public abstract void perform(
+    void perform(
             BusinessEvent event,
             PreconditionOutcome preconditionOutcome,
             BusinessDataCache dataCache);

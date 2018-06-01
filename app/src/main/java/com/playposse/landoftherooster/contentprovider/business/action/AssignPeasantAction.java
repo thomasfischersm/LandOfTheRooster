@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * A {@link BusinessAction} that assigns a peasant to work at a building.
  */
-public class AssignPeasantAction extends BusinessAction {
+public class AssignPeasantAction implements BusinessAction {
 
     private static final String LOG_TAG = AssignPeasantAction.class.getSimpleName();
 

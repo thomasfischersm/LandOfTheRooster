@@ -18,7 +18,7 @@ import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistr
 /**
  * A {@link BusinessAction} that creates a new building.
  */
-public class CreateBuildingAction extends BusinessAction {
+public class CreateBuildingAction implements BusinessAction {
 
     @Override
     public void perform(
