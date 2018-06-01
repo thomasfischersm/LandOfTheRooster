@@ -1,6 +1,7 @@
 package com.playposse.landoftherooster;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
@@ -229,5 +230,16 @@ public class TestData {
             result.add(soldier);
         }
         return result;
+    }
+
+    /**
+     * Waits for the specified number of events to be executed by the {@link BusinessEngine}. Tests
+     * have to sometimes wait for a scheduled event to execute. This method avoids having to use
+     * Thread.sleep statements with guessed delays.
+     */
+    protected static void waitForExecutedEventCount(int eventCount) throws InterruptedException {
+        while (eventCount > BusinessEngine.get().getExecutedEventCounter()) {
+            Thread.sleep(10);
+        }
     }
 }

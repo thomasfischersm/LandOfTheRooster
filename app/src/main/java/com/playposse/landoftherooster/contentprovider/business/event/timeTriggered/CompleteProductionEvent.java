@@ -6,6 +6,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 
 /**
  * A {@link BusinessEvent} that occurs when the timer for the production of a building has run out.
@@ -19,12 +20,17 @@ public class CompleteProductionEvent extends BusinessEvent {
     }
 
     public static void schedule(BusinessDataCache dataCache) {
+        schedule(dataCache.getBuildingWithType(), dataCache.getPeasantCount());
+    }
+
+    public static void schedule(BuildingWithType buildingWithType, int buildingPeasantCount) {
         Long remainingMs = ProductionCycleUtil.getRemainingProductionTimeMs(
-                dataCache.getUnitMap(),
-                dataCache.getBuildingWithType());
+                buildingPeasantCount,
+                buildingWithType);
+        long buildingId = buildingWithType.getBuilding().getId();
         BusinessEngine.get().scheduleEvent(
                 remainingMs,
-                new CompleteProductionEvent(dataCache.getBuildingId()));
-        Log.i(LOG_TAG, "schedule: Scheduled production to finish in " + remainingMs + "ms.");
+                new CompleteProductionEvent(buildingId));
+        Log.i(LOG_TAG, "scheduleWithDefaultDelay: Scheduled production to finish in " + remainingMs + "ms.");
     }
 }

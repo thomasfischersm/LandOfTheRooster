@@ -46,6 +46,23 @@ public class BusinessDataCache {
         this.buildingId = buildingId;
     }
 
+    public BusinessDataCache(RoosterDao dao, @Nullable BuildingWithType buildingWithType) {
+        this.dao = dao;
+        this.buildingWithType = buildingWithType;
+
+        if ((buildingWithType != null) && (buildingWithType.getBuilding() != null)) {
+            buildingId = buildingWithType.getBuilding().getId();
+        } else {
+            buildingId = null;
+        }
+    }
+
+    public BusinessDataCache(RoosterDao dao) {
+        this.dao = dao;
+
+        buildingId = null;
+    }
+
     public RoosterDao getDao() {
         return dao;
     }

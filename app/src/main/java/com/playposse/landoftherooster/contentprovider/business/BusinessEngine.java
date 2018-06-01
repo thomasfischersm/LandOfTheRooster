@@ -38,8 +38,8 @@ import com.playposse.landoftherooster.contentprovider.business.event.consequence
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpUnitFromHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostRespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.UnitInjuredEvent;
-import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.InitiateHealingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.LocationUpdateEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.InitiateHealingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteFreeProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteHealingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteProductionEvent;
@@ -50,6 +50,10 @@ import com.playposse.landoftherooster.contentprovider.business.event.userTrigger
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.InitiateBattleEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpUnitFromHospitalEvent;
+import com.playposse.landoftherooster.contentprovider.business.initializer.FreeProductionStartupInitializer;
+import com.playposse.landoftherooster.contentprovider.business.initializer.HealingStartupInitializer;
+import com.playposse.landoftherooster.contentprovider.business.initializer.ProductionStartupInitializer;
+import com.playposse.landoftherooster.contentprovider.business.initializer.RespawnBattleStartupInitializer;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AdmitUnitToHospitalPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AlwaysSuccessfulPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AssignPeasantPrecondition;
@@ -68,6 +72,7 @@ import com.playposse.landoftherooster.contentprovider.business.precondition.Resp
 import com.playposse.landoftherooster.contentprovider.business.precondition.UpdateProductionBuildingMarkerPrecondition;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.util.CancelableRunnable;
 
 import java.util.ArrayList;
@@ -102,8 +107,10 @@ public class BusinessEngine {
     private Map<BusinessEvent, CancelableRunnable> eventToRunnableMap = new HashMap<>();
 
     private BusinessEngine() {
-        // Initiate all the actions.
+        registerActions();
+    }
 
+    private void registerActions() {
         // item production for cost
         registerAction(
                 DropOffItemEvent.class,
@@ -265,6 +272,36 @@ public class BusinessEngine {
                 new UpdateProductionBuildingMarkerAction());
     }
 
+    private void runStartupInitializers() {
+        long start = System.currentTimeMillis();
+
+        runStartupInitializer(new ProductionStartupInitializer());
+        runStartupInitializer(new FreeProductionStartupInitializer());
+        runStartupInitializer(new RespawnBattleStartupInitializer());
+        runStartupInitializer(new HealingStartupInitializer());
+
+        long end = System.currentTimeMillis();
+        Log.i(LOG_TAG, "runStartupInitializers: Ran all initializers in " + (end - start)
+                + "ms.");
+    }
+
+    private void runStartupInitializer(BusinessStartupInitializer initializer) {
+        long start = System.currentTimeMillis();
+
+        // Get new buildings for each initializer in case they were changed.
+        List<BuildingWithType> buildingsWithType = dao.getAllBuildingsWithType();
+
+        if (buildingsWithType != null) {
+            for (BuildingWithType buildingWithType : buildingsWithType) {
+                initializer.scheduleIfNecessary(dao, buildingWithType);
+            }
+        }
+
+        long end = System.currentTimeMillis();
+        Log.i(LOG_TAG, "runStartupInitializer: Ran " + initializer.getClass().getSimpleName()
+                + " in " + (end - start) + "ms.");
+    }
+
     public static BusinessEngine get() {
         if (instance == null) {
             instance = new BusinessEngine();
@@ -276,6 +313,7 @@ public class BusinessEngine {
         dao = RoosterDatabase.getInstance(context).getDao();
 
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        runStartupInitializers();
     }
 
     public void stop() {
@@ -284,6 +322,7 @@ public class BusinessEngine {
             scheduledExecutorService = null;
             eventQueue.clear();
             executedEventCounter = 0;
+            instance = null;
         }
     }
 

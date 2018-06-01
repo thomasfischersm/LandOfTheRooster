@@ -10,7 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * A base class for services that run on a periodic schedule.
+ * A base class for services that run on a periodic scheduleWithDefaultDelay.
  */
 public abstract class PeriodicService {
 

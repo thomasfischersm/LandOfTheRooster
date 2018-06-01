@@ -22,6 +22,10 @@ import com.playposse.landoftherooster.contentprovider.business.event.userTrigger
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.DropOffItemEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.InitiateBattleEventTest;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpUnitFromHospitalEventTest;
+import com.playposse.landoftherooster.contentprovider.business.initializer.FreeProductionStartupInitializerTest;
+import com.playposse.landoftherooster.contentprovider.business.initializer.HealingStartupInitializerTest;
+import com.playposse.landoftherooster.contentprovider.business.initializer.ProductionStartupInitializerTest;
+import com.playposse.landoftherooster.contentprovider.business.initializer.RespawnBattleStartupInitializerTest;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AdmitUnitToHospitalPreconditionTest;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AssignPeasantPreconditionTest;
 import com.playposse.landoftherooster.contentprovider.business.precondition.DropOffItemPreconditionTest;
@@ -57,6 +61,8 @@ import org.junit.runners.Suite;
         DropOffItemPreconditionTest.class,
         ExecuteBattleActionTest.class,
         ExecuteBattlePreconditionTest.class,
+        FreeProductionStartupInitializerTest.class,
+        HealingStartupInitializerTest.class,
         InitiateBattleEventTest.class,
         InitiateHealingPreconditionTest.class,
         LocationUpdateEventTest.class,
@@ -67,8 +73,10 @@ import org.junit.runners.Suite;
         PickUpUnitFromHospitalPreconditionTest.class,
         PostDropOffItemEventTest.class,
         ProductionRuleRepositoryTest.class,
+        ProductionStartupInitializerTest.class,
         RespawnBattleBuildingActionTest.class,
         RespawnBattleBuildingPreconditionTest.class,
+        RespawnBattleStartupInitializerTest.class,
         RoosterDaoTest.class,
         UnitTypeRepositoryTest.class,
         UpdateBattleBuildingMarkerActionTest.class,

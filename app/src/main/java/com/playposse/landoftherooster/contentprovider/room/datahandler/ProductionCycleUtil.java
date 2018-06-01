@@ -95,7 +95,7 @@ public final class ProductionCycleUtil {
     }
 
     @Nullable
-    private static Long getRemainingProductionTimeMs(
+    public static Long getRemainingProductionTimeMs(
             int peasantCount,
             BuildingWithType buildingWithType) {
 

@@ -39,6 +39,6 @@ public class ExecuteBattleAction extends BusinessAction {
                 .triggerDelayedEvent(postBattleEvent);
 
         // Schedule event to respawn the building.
-        RespawnBattleBuildingEvent.schedule(buildingId);
+        RespawnBattleBuildingEvent.scheduleWithDefaultDelay(buildingId);
     }
 }

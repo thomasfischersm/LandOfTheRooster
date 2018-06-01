@@ -35,7 +35,7 @@ public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTe
 
     @Test
     public void perform_noBuildings() {
-        BusinessDataCache cache = new BusinessDataCache(dao, null);
+        BusinessDataCache cache = new BusinessDataCache(dao);
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
 
         UpdateProductionBuildingMarkerPreconditionOutcome outcome =
@@ -49,7 +49,7 @@ public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTe
     @Test
     public void perform_wheatReadyForPickup_change() {
         // Create test data: 1 wheat field with mark and 1 wheat.
-        BusinessDataCache cache = new BusinessDataCache(dao, null);
+        BusinessDataCache cache = new BusinessDataCache(dao);
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
         long wheatFieldId = createWheatFieldAndMarker(dao);
         BuildingWithType wheatField = dao.getBuildingWithTypeByBuildingId(wheatFieldId);
@@ -81,7 +81,7 @@ public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTe
     @Test
     public void perform_wheatReadyForPickup_noChange() {
         // Create test data: 1 wheat field with mark and 1 wheat.
-        BusinessDataCache cache = new BusinessDataCache(dao, null);
+        BusinessDataCache cache = new BusinessDataCache(dao);
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
         long wheatFieldId = createWheatFieldAndMarker(dao);
         BuildingWithType wheatField = dao.getBuildingWithTypeByBuildingId(wheatFieldId);
@@ -122,7 +122,7 @@ public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTe
     @Test
     public void perform_wheatReadyForProduction_singleItemPending() {
         // Create test data: 1 mill with mark and 1 wheat.
-        BusinessDataCache cache = new BusinessDataCache(dao, null);
+        BusinessDataCache cache = new BusinessDataCache(dao);
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
         long millId = createMillAndMarker(dao);
         BuildingWithType mill = dao.getBuildingWithTypeByBuildingId(millId);
@@ -153,7 +153,7 @@ public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTe
     @Test
     public void perform_wheatReadyForProduction_threeItemsPending() {
         // Create test data: 1 mill with mark and 3 wheat.
-        BusinessDataCache cache = new BusinessDataCache(dao, null);
+        BusinessDataCache cache = new BusinessDataCache(dao);
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
         long millId = createMillAndMarker(dao);
         BuildingWithType mill = dao.getBuildingWithTypeByBuildingId(millId);
@@ -184,7 +184,7 @@ public class UpdateProductionBuildingMarkerActionTest extends AbstractBusinessTe
     @Test
     public void perform_wheatReadyForDropOff() {
         // Create test data: 1 mill with mark and add 3 wheat to the user.
-        BusinessDataCache cache = new BusinessDataCache(dao, null);
+        BusinessDataCache cache = new BusinessDataCache(dao);
         ResourceItem wheatItem = new ResourceItem(WHEAT_RESOURCE_TYPE_ID);
         long millId = createMillAndMarker(dao);
         BuildingWithType mill = dao.getBuildingWithTypeByBuildingId(millId);

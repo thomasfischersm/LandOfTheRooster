@@ -25,10 +25,6 @@ public abstract class AbstractBusinessTest extends TestData {
         Context targetContext = InstrumentationRegistry.getTargetContext();
         dao = RoosterDatabase.getInstance(targetContext).getDao();
 
-        // Start business engine.
-        businessEngine = BusinessEngine.get();
-        businessEngine.start(targetContext);
-
         // Wait for debug data to be complete.
         while (!RoosterApplication.isDebugDataComplete()) {
             Thread.sleep(10);
@@ -39,22 +35,15 @@ public abstract class AbstractBusinessTest extends TestData {
         dao.deleteBuildings();
         dao.deleteResources();
         dao.deleteUnits();
+
+        // Start business engine.
+        businessEngine = BusinessEngine.get();
+        businessEngine.start(targetContext);
     }
 
     @After
     public void tearDown() {
         BusinessEngine.get().stop();
         BuildingDiscoveryRepository.get(dao).reset();
-    }
-
-    /**
-     * Waits for the specified number of events to be executed by the {@link BusinessEngine}. Tests
-     * have to sometimes wait for a scheduled event to execute. This method avoids having to use
-     * Thread.sleep statements with guessed delays.
-     */
-    protected void waitForExecutedEventCount(int eventCount) throws InterruptedException {
-        while (eventCount > BusinessEngine.get().getExecutedEventCounter()) {
-            Thread.sleep(10);
-        }
     }
 }

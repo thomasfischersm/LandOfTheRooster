@@ -1,5 +1,7 @@
 package com.playposse.landoftherooster.contentprovider.business.precondition;
 
+import android.util.Log;
+
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
@@ -12,6 +14,8 @@ import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithTy
  * A {@link BusinessPrecondition} that respawns a building to be ready for battle.
  */
 public class RespawnBattleBuildingPrecondition implements BusinessPrecondition {
+
+    private static final String LOG_TAG = RespawnBattleBuildingPrecondition.class.getSimpleName();
 
     @Override
     public PreconditionOutcome evaluate(BusinessEvent event, BusinessDataCache dataCache) {
@@ -31,14 +35,15 @@ public class RespawnBattleBuildingPrecondition implements BusinessPrecondition {
 
         // Check if the respawn time has elapsed.
         long lastConquest = buildingWithType.getBuilding().getLastConquest().getTime();
-        long delayMs =
+        long missingMs =
                 (lastConquest + GameConfig.BATTLE_RESPAWN_DURATION - System.currentTimeMillis());
-        boolean hasRespawned = (delayMs <= 0);
+        boolean hasRespawned = (missingMs < 0);
 
         if (!hasRespawned) {
-            // schedule for later.
+            // scheduleWithDefaultDelay for later.
+            Log.i(LOG_TAG, "evaluate: ");
             BusinessEngine.get()
-                    .scheduleEvent(delayMs, event);
+                    .scheduleEvent(missingMs, event);
         }
 
         return new PreconditionOutcome(hasRespawned);
