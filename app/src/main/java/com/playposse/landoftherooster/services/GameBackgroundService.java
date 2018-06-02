@@ -27,9 +27,9 @@ import java.util.concurrent.ExecutionException;
  * A service that monitors the location and calls child services to handle events around the
  * users movement through the physical world.
  */
-public class LocationScanningService extends Service {
+public class GameBackgroundService extends Service {
 
-    private static final String LOG_TAG = LocationScanningService.class.getSimpleName();
+    private static final String LOG_TAG = GameBackgroundService.class.getSimpleName();
 
     private static final int LOCATION_CHECK_INTERVAL = 1_000;
     private static final int SERVICE_NOTIFICATION_ID = 1;

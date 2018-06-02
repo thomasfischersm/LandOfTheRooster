@@ -37,7 +37,7 @@
             android:exported="false"/>
 
         <service
-            android:name=".services.LocationScanningService"
+            android:name=".services.GameBackgroundService"
             android:exported="false"/>
 
         <activity

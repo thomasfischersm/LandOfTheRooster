@@ -11,7 +11,7 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
-import com.playposse.landoftherooster.services.LocationScanningService;
+import com.playposse.landoftherooster.services.GameBackgroundService;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -43,7 +43,7 @@ public class RoosterApplication extends Application {
 
         new CreateDebugDataAsyncTask().execute();
 
-        startService(new Intent(this, LocationScanningService.class));
+        startService(new Intent(this, GameBackgroundService.class));
     }
 
     private void createUnits(int amount, long unitTypeId) {
