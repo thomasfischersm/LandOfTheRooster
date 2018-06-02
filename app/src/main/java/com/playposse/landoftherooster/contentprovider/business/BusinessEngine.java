@@ -21,6 +21,7 @@ import com.playposse.landoftherooster.contentprovider.business.action.FreeProduc
 import com.playposse.landoftherooster.contentprovider.business.action.InitiateFreeProductionAction;
 import com.playposse.landoftherooster.contentprovider.business.action.InitiateHealingAction;
 import com.playposse.landoftherooster.contentprovider.business.action.InitiateProductionAction;
+import com.playposse.landoftherooster.contentprovider.business.action.OpenBuildingDialogsAction;
 import com.playposse.landoftherooster.contentprovider.business.action.PickUpItemAction;
 import com.playposse.landoftherooster.contentprovider.business.action.PickUpUnitFromHospitalAction;
 import com.playposse.landoftherooster.contentprovider.business.action.ProductionAction;
@@ -39,6 +40,7 @@ import com.playposse.landoftherooster.contentprovider.business.event.consequence
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpUnitFromHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostRespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.UnitInjuredEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.BuildingZoneEnteredEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.LocationUpdateEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.InitiateHealingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteFreeProductionEvent;
@@ -274,6 +276,12 @@ public class BusinessEngine {
                 PostCompleteFreeProductionEvent.class,
                 new UpdateProductionBuildingMarkerPrecondition(),
                 new UpdateProductionBuildingMarkerAction());
+
+        // Open dialogs.
+        registerAction(
+                BuildingZoneEnteredEvent.class,
+                new AlwaysSuccessfulPrecondition(),
+                new OpenBuildingDialogsAction());
     }
 
     private void runStartupInitializers() {

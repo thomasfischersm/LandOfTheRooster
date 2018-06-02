@@ -4,6 +4,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngineTest;
 import com.playposse.landoftherooster.contentprovider.business.action.DropOffItemActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.ExecuteBattleActionTest;
+import com.playposse.landoftherooster.contentprovider.business.action.OpenBuildingDialogsActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.PickUpItemActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.PickUpUnitFromHospitalActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.RespawnBattleBuildingActionTest;
@@ -66,6 +67,7 @@ import org.junit.runners.Suite;
         InitiateBattleEventTest.class,
         InitiateHealingPreconditionTest.class,
         LocationUpdateEventTest.class,
+        OpenBuildingDialogsActionTest.class,
         PickUpItemActionTest.class,
         PickUpItemPreconditionTest.class,
         PickUpUnitFromHospitalActionTest.class,
