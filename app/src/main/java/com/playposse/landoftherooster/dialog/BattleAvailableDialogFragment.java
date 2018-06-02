@@ -15,8 +15,6 @@ import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
-import com.playposse.landoftherooster.services.broadcastintent.BattleAvailableBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,12 +69,6 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
                                 .show(getFragmentManager(), null);
                     }
                 });
-    }
-
-    public static BattleAvailableDialogFragment newInstance(RoosterBroadcastIntent roosterIntent) {
-        BattleAvailableBroadcastIntent intent = (BattleAvailableBroadcastIntent) roosterIntent;
-        long buildingId = intent.getBuildingId();
-        return newInstance(buildingId);
     }
 
     public static BattleAvailableDialogFragment newInstance(long buildingId) {

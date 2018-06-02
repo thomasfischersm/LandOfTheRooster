@@ -15,8 +15,6 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
-import com.playposse.landoftherooster.services.broadcastintent.HospitalAvailableBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
 import com.playposse.landoftherooster.services.time.HospitalService;
 import com.playposse.landoftherooster.util.GlideUtil;
 import com.playposse.landoftherooster.util.GridLayoutRowViewHolder;
@@ -64,11 +62,10 @@ public class HospitalDialogFragment extends BaseDialogFragment {
         setShowReturnToMapButton(true);
     }
 
-    public static HospitalDialogFragment newInstance(RoosterBroadcastIntent roosterIntent) {
+    public static HospitalDialogFragment newInstance(long buildingId) {
         Log.d(LOG_TAG, "newInstance: Start newInstance");
-        HospitalAvailableBroadcastIntent intent = (HospitalAvailableBroadcastIntent) roosterIntent;
         Bundle args = new Bundle();
-        args.putLong(BUILDING_ID_ARG, intent.getBuildingId());
+        args.putLong(BUILDING_ID_ARG, buildingId);
 
         HospitalDialogFragment fragment = new HospitalDialogFragment();
         fragment.setArguments(args);

@@ -36,6 +36,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEventListener;
+import com.playposse.landoftherooster.contentprovider.business.event.special.ShowDialogEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
@@ -47,12 +52,6 @@ import com.playposse.landoftherooster.dialog.BuildingInteractionDialogFragment;
 import com.playposse.landoftherooster.dialog.BuildingNeedsToRespawnDialogFragment;
 import com.playposse.landoftherooster.dialog.HospitalDialogFragment;
 import com.playposse.landoftherooster.map.MarkerStateRegistry;
-import com.playposse.landoftherooster.services.broadcastintent.BattleAvailableBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.HospitalAvailableBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
 import com.playposse.landoftherooster.util.RecyclerViewLiveDataAdapter;
 
 import java.util.List;
@@ -80,7 +79,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     private boolean isUserCentered = false;
 
     private LocationCallback locationCallback = new ThisLocationCallback();
-    private KingdomActivityBroadcastReceiver broadcastReceiver;
+    private DialogOpenerBusinessEventListener dialogListener;
     private MarkerStateRegistry markerStateRegistry;
 
     @Override
@@ -109,9 +108,9 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     protected void onResume() {
         super.onResume();
 
-        broadcastReceiver = new KingdomActivityBroadcastReceiver();
-        RoosterBroadcastManager.getInstance(this)
-                .register(broadcastReceiver);
+        dialogListener = new DialogOpenerBusinessEventListener();
+        BusinessEngine.get()
+                .addEventListener(ShowDialogEvent.class, dialogListener);
     }
 
     @Override
@@ -120,9 +119,9 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
         fusedLocationClient.removeLocationUpdates(locationCallback);
 
-        RoosterBroadcastManager.getInstance(this)
-                .unregister(broadcastReceiver);
-        broadcastReceiver = null;
+        BusinessEngine.get()
+                .removeEventListener(ShowDialogEvent.class, dialogListener);
+        dialogListener = null;
     }
 
     @Override
@@ -356,30 +355,36 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     }
 
     /**
-     * A {@link RoosterBroadcastManager.RoosterBroadcastReceiver} that listens for events from
-     * the location aware services to interact with the user about them.
+     * A {@link BusinessEventListener} that listens for {@link ShowDialogEvent}s and shows the
+     * specified dialog.
      */
-    class KingdomActivityBroadcastReceiver
-            implements RoosterBroadcastManager.RoosterBroadcastReceiver {
+    private class DialogOpenerBusinessEventListener implements BusinessEventListener {
 
         @Override
-        public void onReceive(RoosterBroadcastIntent roosterIntent) {
-            if (roosterIntent instanceof BattleAvailableBroadcastIntent) {
-                BattleAvailableDialogFragment.newInstance(roosterIntent)
-                        .show(getFragmentManager(), null);
-            } else if (roosterIntent instanceof BuildingNeedsToRespawnBroadcastIntent) {
-                BuildingNeedsToRespawnDialogFragment.newInstance(roosterIntent)
-                        .show(getFragmentManager(), null);
-            } else if (roosterIntent instanceof BuildingAvailableBroadcastIntent) {
-                BuildingInteractionDialogFragment.newInstance(roosterIntent)
-                        .show(getFragmentManager(), null);
-            } else if (roosterIntent instanceof HospitalAvailableBroadcastIntent) {
-//                HospitalDialogFragment.newInstance(roosterIntent)
-//                        .show(getFragmentManager(), null);
-                Log.d(LOG_TAG, " \n\n\n\n\n\nonReceive: Start opening hospital dialog");
-                HospitalDialogFragment fragment = HospitalDialogFragment.newInstance(roosterIntent);
-                fragment.show(getFragmentManager(), null);
-                Log.d(LOG_TAG, "onReceive: Done opening hospital dialog.");
+        public void onEvent(BusinessEvent event, BusinessDataCache cache) {
+            ShowDialogEvent dialogEvent = (ShowDialogEvent) event;
+            Long buildingId = dialogEvent.getBuildingId();
+
+            switch (dialogEvent.getDialogType()) {
+                case BUILDING_PRODUCTION_DIALOG:
+                    BuildingInteractionDialogFragment.newInstance(buildingId)
+                            .show(getFragmentManager(), null);
+                    break;
+                case BATTLE_BUILDING_DIALOG:
+                    BattleAvailableDialogFragment.newInstance(buildingId)
+                            .show(getFragmentManager(), null);
+                    break;
+                case BATTLE_RESPAWN_DIALOG:
+                    BuildingNeedsToRespawnDialogFragment.newInstance(buildingId)
+                            .show(getFragmentManager(), null);
+                    break;
+                case HEALING_BUILDING_DIALOG:
+                    HospitalDialogFragment.newInstance(buildingId)
+                            .show(getFragmentManager(), null);
+                    break;
+                default:
+                    throw new IllegalArgumentException(
+                            "Received unexpected dialogType " + dialogEvent.getDialogType());
             }
         }
     }

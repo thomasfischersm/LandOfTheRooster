@@ -25,8 +25,6 @@ import com.playposse.landoftherooster.dialog.support.ActionData;
 import com.playposse.landoftherooster.dialog.support.PeasantActionData;
 import com.playposse.landoftherooster.dialog.support.ResourceActionData;
 import com.playposse.landoftherooster.dialog.support.UnitActionData;
-import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
 import com.playposse.landoftherooster.util.GlideUtil;
 import com.playposse.landoftherooster.util.SimpleStringJoiner;
 import com.playposse.landoftherooster.util.StringUtil;
@@ -79,12 +77,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
         setDisappearOnDistance(true);
     }
 
-    public static BuildingInteractionDialogFragment newInstance(
-            RoosterBroadcastIntent roosterIntent) {
-
-        BuildingAvailableBroadcastIntent intent = (BuildingAvailableBroadcastIntent) roosterIntent;
-        long buildingId = intent.getBuildingId();
-
+    public static BuildingInteractionDialogFragment newInstance(long buildingId) {
         BuildingInteractionDialogFragment fragment = new BuildingInteractionDialogFragment();
         Bundle args = new Bundle();
         args.putLong(BUILDING_ID_ARG, buildingId);

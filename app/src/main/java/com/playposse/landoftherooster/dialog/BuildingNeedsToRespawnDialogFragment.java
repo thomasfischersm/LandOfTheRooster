@@ -7,8 +7,6 @@ import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
-import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastIntent;
 
 import butterknife.BindView;
 
@@ -36,13 +34,7 @@ public class BuildingNeedsToRespawnDialogFragment extends BaseDialogFragment {
         setShowReturnToMapButton(true);
     }
 
-    public static BuildingNeedsToRespawnDialogFragment newInstance(
-            RoosterBroadcastIntent roosterIntent) {
-
-        BuildingNeedsToRespawnBroadcastIntent intent =
-                (BuildingNeedsToRespawnBroadcastIntent) roosterIntent;
-        long buildingId = intent.getBuildingId();
-
+    public static BuildingNeedsToRespawnDialogFragment newInstance(long buildingId) {
         BuildingNeedsToRespawnDialogFragment fragment = new BuildingNeedsToRespawnDialogFragment();
         Bundle args = new Bundle();
         args.putLong(BUILDING_ID_ARG, buildingId);
