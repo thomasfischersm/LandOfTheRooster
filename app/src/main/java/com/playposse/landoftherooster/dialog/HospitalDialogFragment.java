@@ -10,9 +10,12 @@ import android.widget.TextView;
 
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AdmitUnitToHospitalEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AssignPeasantEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpUnitFromHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
-import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 import com.playposse.landoftherooster.util.GlideUtil;
@@ -215,10 +218,8 @@ public class HospitalDialogFragment extends BaseDialogFragment {
         reload(new Runnable() {
             @Override
             public void run() {
-                RoosterDaoUtil.transferUnitToBuilding(
-                        getActivity(),
-                        GameConfig.PEASANT_ID,
-                        buildingId);
+                BusinessEngine.get()
+                        .triggerEvent(new AssignPeasantEvent(buildingId));
             }
         });
     }
@@ -227,10 +228,9 @@ public class HospitalDialogFragment extends BaseDialogFragment {
         reload(new Runnable() {
             @Override
             public void run() {
-                RoosterDaoUtil.transferUnitToBuilding(
-                        getActivity(),
-                        unitWithType.getUnit(),
-                        buildingId);
+                long unitId = unitWithType.getUnit().getId();
+                BusinessEngine.get()
+                        .triggerEvent(new AdmitUnitToHospitalEvent(buildingId, unitId));
             }
         });
     }
@@ -239,11 +239,8 @@ public class HospitalDialogFragment extends BaseDialogFragment {
         reload(new Runnable() {
             @Override
             public void run() {
-                RoosterDao dao = RoosterDatabase.getInstance(getActivity()).getDao();
-                RoosterDaoUtil.transferUnitFromBuilding(
-                        dao,
-                        unitWithType.getUnit(),
-                        buildingId);
+                BusinessEngine.get()
+                        .triggerEvent(new PickUpUnitFromHospitalEvent(buildingId));
             }
         });
     }

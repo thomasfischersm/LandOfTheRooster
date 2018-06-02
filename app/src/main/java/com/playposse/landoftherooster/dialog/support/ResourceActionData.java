@@ -3,9 +3,11 @@ package com.playposse.landoftherooster.dialog.support;
 import android.content.Context;
 
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.DropOffItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
-import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
-import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
@@ -94,22 +96,16 @@ public class ResourceActionData extends ActionData {
     protected void performAction() {
         switch (actionType) {
             case DROP_OFF:
-                RoosterDaoUtil.moveResourceToBuilding(
-                        getDao(),
-                        userResourceWithType,
-                        buildingResourceWithType,
-                        resourceTypeId,
-                        buildingId);
-                ProductionCycleUtil.setProductionStartOnDropOff(getDao(), buildingWithType);
+                DropOffItemEvent dropOffEvent =
+                        new DropOffItemEvent(buildingId, new ResourceItem(resourceTypeId));
+                BusinessEngine.get()
+                        .triggerEvent(dropOffEvent);
                 break;
             case PICKUP:
-                RoosterDaoUtil.moveResourceFromBuilding(
-                        getDao(),
-                        userResourceWithType,
-                        buildingResourceWithType,
-                        resourceTypeId,
-                        buildingId);
-                ProductionCycleUtil.setProductionStartOnPickup(getDao(), buildingWithType);
+                PickUpItemEvent pickUpEvent =
+                        new PickUpItemEvent(buildingId, new ResourceItem(resourceTypeId));
+                BusinessEngine.get()
+                        .triggerEvent(pickUpEvent);
                 break;
             default:
                 throw new IllegalStateException(

@@ -1,6 +1,5 @@
 package com.playposse.landoftherooster.dialog;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,11 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
-import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
-import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
-import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEventListener;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostBattleEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.InitiateBattleEvent;
 import com.playposse.landoftherooster.glide.GlideApp;
-import com.playposse.landoftherooster.services.combat.Battle;
 import com.playposse.landoftherooster.services.combat.BattleEventParcelable;
 import com.playposse.landoftherooster.services.combat.BattleSummaryParcelable;
 
@@ -28,6 +29,8 @@ import butterknife.ButterKnife;
 
 /**
  * A dialog that carries out the battle and shows the result.
+ *
+ * TODO: Show battle in progress state.
  */
 public class BattleDialogFragment extends BaseDialogFragment {
 
@@ -36,6 +39,7 @@ public class BattleDialogFragment extends BaseDialogFragment {
 
     private long buildingId;
     private BattleSummaryParcelable battleSummary;
+    private BattleCompleteListener battleCompleteListener;
 
     @BindView(R.id.battle_outcome_text_view) TextView battleOutcomeTextView;
     @BindView(R.id.battle_outcome_image_view) ImageView battleOutcomeImageView;
@@ -75,18 +79,32 @@ public class BattleDialogFragment extends BaseDialogFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        battleCompleteListener = new BattleCompleteListener();
+        BusinessEngine.get()
+                .addEventListener(PostBattleEvent.class, battleCompleteListener);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        BusinessEngine.get()
+                .removeEventListener(PostBattleEvent.class, battleCompleteListener);
+        battleCompleteListener = null;
+    }
+
+    @Override
     protected void doInBackground() {
         // Check if the battle has already completed. Avoid redoing the battle for screen rotations.
         if (battleSummary != null) {
             return;
         }
 
-        Context context = getActivity();
-        RoosterDao dao = RoosterDatabase.getInstance(context).getDao();
-        BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
-
-        Battle battle = new Battle(dao, buildingWithType);
-        battleSummary = battle.fight();
+        BusinessEngine.get()
+                .triggerEvent(new InitiateBattleEvent(buildingId));
     }
 
     @Override
@@ -208,6 +226,21 @@ public class BattleDialogFragment extends BaseDialogFragment {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+        }
+    }
+
+    /**
+     * A {@link BusinessEventListener} that listens to the {@link BusinessEngine} to find out when
+     * the battle is complete. Then this dialog can show the battle result.
+     */
+    private class BattleCompleteListener implements BusinessEventListener {
+
+        @Override
+        public void onEvent(BusinessEvent event, BusinessDataCache cache) {
+            PostBattleEvent postBattleEvent = (PostBattleEvent) event;
+            battleSummary = postBattleEvent.getBattleSummary();
+
+            reload(null);
         }
     }
 }

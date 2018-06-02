@@ -3,8 +3,9 @@ package com.playposse.landoftherooster.dialog.support;
 import android.content.Context;
 
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AssignPeasantEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
-import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 
 import static com.playposse.landoftherooster.GameConfig.IMPLIED_PEASANT_COUNT;
@@ -58,10 +59,9 @@ public class PeasantActionData extends ActionData {
 
     @Override
     protected void performAction() {
-        RoosterDaoUtil.transferUnitToBuilding(
-                getContext(),
-                unitTypeId,
-                buildingId);
+        AssignPeasantEvent event = new AssignPeasantEvent(buildingId);
+        BusinessEngine.get()
+                .triggerEvent(event);
     }
 
     @Override
