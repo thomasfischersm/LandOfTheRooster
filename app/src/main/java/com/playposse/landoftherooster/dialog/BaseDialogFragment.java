@@ -12,9 +12,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
-import com.playposse.landoftherooster.dialog.support.BuildingProximityDialogReceiver;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.BuildingZoneExitedEvent;
 import com.playposse.landoftherooster.dialog.support.CountdownUpdateRunnable;
-import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
+import com.playposse.landoftherooster.dialog.support.ExitBuildingZoneListener;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.Executors;
@@ -41,7 +42,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @Nullable private ButtonInfo negativeButtonInfo;
 
     private View rootView;
-    @Nullable private BuildingProximityDialogReceiver proximityReceiver;
+    @Nullable private ExitBuildingZoneListener exitBuildingZoneListener;
     @Nullable private ScheduledExecutorService scheduledExecutorService;
     @Nullable private CountdownUpdateRunnable countdownTask;
 
@@ -81,7 +82,9 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
         // Make the dialog disappear when the user walks away.
         if (disappearOnDistance) {
-            proximityReceiver = new BuildingProximityDialogReceiver(this);
+            exitBuildingZoneListener = new ExitBuildingZoneListener(this);
+            BusinessEngine.get()
+                    .addEventListener(BuildingZoneExitedEvent.class, exitBuildingZoneListener);
         }
 
         new LoadAsyncTask(this, null).execute();
@@ -93,10 +96,10 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        if (proximityReceiver != null) {
-            RoosterBroadcastManager.getInstance(getActivity())
-                    .unregister(proximityReceiver);
-            proximityReceiver = null;
+        if (exitBuildingZoneListener != null) {
+            BusinessEngine.get()
+                    .removeEventListener(BuildingZoneExitedEvent.class, exitBuildingZoneListener);
+            exitBuildingZoneListener = null;
         }
 
         closeCountdown();
