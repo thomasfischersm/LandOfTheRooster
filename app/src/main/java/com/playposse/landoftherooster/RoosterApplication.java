@@ -1,6 +1,7 @@
 package com.playposse.landoftherooster;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -43,7 +44,7 @@ public class RoosterApplication extends Application {
 
         new CreateDebugDataAsyncTask().execute();
 
-        startService(new Intent(this, GameBackgroundService.class));
+        startGameBackgroundService(this);
     }
 
     private void createUnits(int amount, long unitTypeId) {
@@ -56,6 +57,10 @@ public class RoosterApplication extends Application {
             unit.setHealth(unitType.getHealth());
             dao.insert(unit);
         }
+    }
+
+    public static void startGameBackgroundService(Context context) {
+        context.startService(new Intent(context, GameBackgroundService.class));
     }
 
     public static boolean isDebugDataComplete() {

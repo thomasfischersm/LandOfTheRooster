@@ -36,6 +36,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.RoosterApplication;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
@@ -102,6 +103,9 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         new LoadDataAsyncTask().execute();
+
+        // Try starting the background service in case it's not running.
+        RoosterApplication.startGameBackgroundService(this);
     }
 
     @Override
