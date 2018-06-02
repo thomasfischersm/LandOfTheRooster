@@ -11,12 +11,6 @@ import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
-import com.playposse.landoftherooster.services.broadcastintent.BuildingAvailableBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.BuildingNeedsToRespawnBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.HospitalAvailableBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.LeftBuildingBroadcastIntent;
-import com.playposse.landoftherooster.services.broadcastintent.RoosterBroadcastManager;
-import com.playposse.landoftherooster.services.combat.BattleExecutor;
 
 import java.util.Date;
 import java.util.List;
@@ -47,7 +41,7 @@ public class BuildingInteractionService implements ILocationAwareService {
         if (buildingWithType == null) {
             if (currentBuildingWithType != null) {
                 currentBuildingWithType = null;
-                RoosterBroadcastManager.send(context, new LeftBuildingBroadcastIntent());
+//                RoosterBroadcastManager.send(context, new LeftBuildingBroadcastIntent());
             }
         } else if (currentBuildingWithType == null) {
             currentBuildingWithType = buildingWithType;
@@ -59,14 +53,14 @@ public class BuildingInteractionService implements ILocationAwareService {
                 onFoundBattleBuilding(buildingWithType);
             } else if (buildingType.isHealsUnits()) {
                 // Show hospital dialog.
-                RoosterBroadcastManager.send(
-                        context,
-                        new HospitalAvailableBroadcastIntent(buildingWithType.getBuilding().getId()));
+//                RoosterBroadcastManager.send(
+//                        context,
+//                        new HospitalAvailableBroadcastIntent(buildingWithType.getBuilding().getId()));
             } else {
                 // Show user the building resources dialog.
-                RoosterBroadcastManager.send(
-                        context,
-                        new BuildingAvailableBroadcastIntent(buildingWithType.getBuilding().getId()));
+//                RoosterBroadcastManager.send(
+//                        context,
+//                        new BuildingAvailableBroadcastIntent(buildingWithType.getBuilding().getId()));
             }
         }
     }
@@ -80,9 +74,9 @@ public class BuildingInteractionService implements ILocationAwareService {
             if (lastConquestMs + BATTLE_RESPAWN_DURATION > System.currentTimeMillis()) {
                 // Building has not yet re-spawned.
                 long buildingId = buildingWithType.getBuilding().getId();
-                RoosterBroadcastManager.send(
-                        context,
-                        new BuildingNeedsToRespawnBroadcastIntent(buildingId));
+//                RoosterBroadcastManager.send(
+//                        context,
+//                        new BuildingNeedsToRespawnBroadcastIntent(buildingId));
                 return;
             } else {
                 // Respawn building.
@@ -92,7 +86,7 @@ public class BuildingInteractionService implements ILocationAwareService {
             }
         }
 
-        BattleExecutor.promptUser(context, buildingWithType);
+//        BattleExecutor.promptUser(context, buildingWithType);
     }
 
     @Nullable
