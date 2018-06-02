@@ -15,7 +15,6 @@ import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
-import com.playposse.landoftherooster.services.time.HospitalService;
 import com.playposse.landoftherooster.util.GlideUtil;
 import com.playposse.landoftherooster.util.GridLayoutRowViewHolder;
 import com.playposse.landoftherooster.util.MutableLong;
@@ -249,6 +248,14 @@ public class HospitalDialogFragment extends BaseDialogFragment {
         });
     }
 
+    private static long computeHealingDuration(
+            UnitWithType firstSickUnitWithType,
+            int peasantCount) {
+
+        // Calculate healing time.
+        return firstSickUnitWithType.getHealingTimeMs(peasantCount);
+    }
+
     class WoundedRowViewHolder extends GridLayoutRowViewHolder<UnitWithType> {
 
         @BindView(R.id.unit_type_name_text_view) TextView unitTypeNameTextView;
@@ -304,7 +311,7 @@ public class HospitalDialogFragment extends BaseDialogFragment {
                     unitWithType.getUnit().getHealth(),
                     unitWithType.getType().getHealth());
 
-            long healingDuration = HospitalService.computeHealingDuration(
+            long healingDuration = computeHealingDuration(
                     unitWithType,
                     peasantCountInBuilding);
             healingDurationSum.add(healingDuration);

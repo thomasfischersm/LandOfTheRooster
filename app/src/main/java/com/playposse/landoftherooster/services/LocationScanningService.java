@@ -17,13 +17,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.activity.KingdomActivity;
 import com.playposse.landoftherooster.activity.StopActivity;
-import com.playposse.landoftherooster.services.location.ILocationAwareService;
-import com.playposse.landoftherooster.services.time.BuildingProductionService;
-import com.playposse.landoftherooster.services.time.HospitalService;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.LocationUpdateEvent;
 import com.playposse.landoftherooster.util.ConvenientLocationProvider;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -39,11 +36,7 @@ public class LocationScanningService extends Service {
     private static final String NOTIFICATION_CHANNEL_ID = "com.playposse.landoftherooster.notificationchannel";
     private static final String NOTIFICATION_CHANNEL_NAME = "Land Of The Rooster";
 
-    private final List<ILocationAwareService> dependentServices = new ArrayList<>();
-
     private ConvenientLocationProvider convenientLocationProvider;
-    private BuildingProductionService buildingProductionService;
-    private HospitalService hospitalService;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -155,16 +148,8 @@ public class LocationScanningService extends Service {
             Log.e(LOG_TAG, "BuildingDiscoveryService: Failed to wait for permissions.", ex);
         }
 
-        // TODO: Remove this properly later. The BusinessEngine replaces all of this.
-//        dependentServices.add(new BuildingDiscoveryService(getApplicationContext()));
-//        dependentServices.add(new BuildingInteractionService(getApplicationContext()));
-//
-//
-//        buildingProductionService = new BuildingProductionService(getApplicationContext());
-//        buildingProductionService.start();
-//
-//        hospitalService = new HospitalService(getApplicationContext());
-//        hospitalService.start();
+        BusinessEngine.get()
+                .start(this);
     }
 
     @Override
@@ -172,15 +157,8 @@ public class LocationScanningService extends Service {
         convenientLocationProvider.close();
         convenientLocationProvider = null;
 
-        if (buildingProductionService != null) {
-            buildingProductionService.stop();
-            buildingProductionService = null;
-        }
-
-        if (hospitalService != null) {
-            hospitalService.stop();
-            hospitalService = null;
-        }
+        BusinessEngine.get()
+                .stop();
     }
 
     @Nullable
@@ -197,9 +175,8 @@ public class LocationScanningService extends Service {
 
         @Override
         public void onNewLocation(LatLng latLng) {
-            for (ILocationAwareService service : dependentServices) {
-                service.onLocationUpdate(latLng);
-            }
+            BusinessEngine.get()
+                    .triggerEvent(new LocationUpdateEvent(latLng));
         }
     }
 }
