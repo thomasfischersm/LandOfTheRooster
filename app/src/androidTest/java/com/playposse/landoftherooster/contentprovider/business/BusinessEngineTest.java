@@ -3,10 +3,12 @@ package com.playposse.landoftherooster.contentprovider.business;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
+import android.util.MutableLong;
 
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.BuildingCreatedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.BuildingZoneEnteredEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithType;
 
@@ -308,6 +310,32 @@ public class BusinessEngineTest extends AbstractBusinessTest {
                 dao.getResourceWithType(WHEAT_RESOURCE_TYPE_ID, buildingId);
         assertNotNull(buildingWithType.getBuilding().getProductionStart());
         assertNull(outputResourceWithType);
+    }
+
+    @Test
+    public void addEventListener() {
+        final MutableLong state = new MutableLong(0L);
+        long wheatFieldId = createWheatField(dao);
+        BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(wheatFieldId);
+
+        BusinessEventListener listener = new BusinessEventListener() {
+            @Override
+            public void onEvent(BusinessEvent event, BusinessDataCache cache) {
+                state.value = 1;
+            }
+        };
+        businessEngine.addEventListener(BuildingZoneEnteredEvent.class, listener);
+
+        // Fire event
+        assertEquals(0, state.value);
+        businessEngine.triggerEvent(new BuildingZoneEnteredEvent(buildingWithType));
+        assertEquals(1, state.value);
+
+        // Unregister  listener.
+        state.value = 2;
+        businessEngine.removeEventListener(BuildingZoneEnteredEvent.class, listener);
+        businessEngine.triggerEvent(new BuildingZoneEnteredEvent(buildingWithType));
+        assertEquals(2, state.value);
     }
 
     /**

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 import com.playposse.landoftherooster.analytics.Analytics;
@@ -76,6 +77,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithTy
 import com.playposse.landoftherooster.util.CancelableRunnable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,6 +94,8 @@ public class BusinessEngine {
     private static BusinessEngine instance;
 
     private final ListMultimap<Class<? extends BusinessEvent>, ActionContainer> registry =
+            ArrayListMultimap.create();
+    private final Multimap<Class<? extends BusinessEvent>, BusinessEventListener> eventListeners =
             ArrayListMultimap.create();
     private final List<BusinessEvent> eventQueue = new ArrayList<>();
 
@@ -389,6 +393,14 @@ public class BusinessEngine {
                     + (actionEnd - actionStart) + " ms");
         }
 
+        // Fire event listeners
+        Collection<BusinessEventListener> listeners = eventListeners.get(event.getClass());
+        if (listeners != null) {
+            for (BusinessEventListener listener : listeners) {
+                listener.onEvent(event, dataCache);
+            }
+        }
+
         // End trace.
         trace.stop();
         Analytics.logBusinessEvent(event, eventStart);
@@ -427,6 +439,20 @@ public class BusinessEngine {
             BusinessAction action) {
 
         registry.put(eventClass, new ActionContainer(eventClass, precondition, action));
+    }
+
+    public void addEventListener(
+            Class<? extends BusinessEvent> eventClass,
+            BusinessEventListener listener) {
+
+        eventListeners.put(eventClass, listener);
+    }
+
+    public void removeEventListener(
+            Class<? extends BusinessEvent> eventClass,
+            BusinessEventListener listener) {
+
+        eventListeners.remove(eventClass, listener);
     }
 
     @VisibleForTesting
