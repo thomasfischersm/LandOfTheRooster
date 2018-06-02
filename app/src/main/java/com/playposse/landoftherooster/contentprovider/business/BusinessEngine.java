@@ -406,7 +406,7 @@ public class BusinessEngine {
         if (eventToRunnableMap.containsKey(event)) {
             CancelableRunnable earlierRunnable = eventToRunnableMap.get(event);
             earlierRunnable.cancel();
-            Log.i(LOG_TAG, "scheduleEvent: Canceld previously scheduled event.");
+            Log.i(LOG_TAG, "scheduleEvent: Canceled previously scheduled event.");
         }
 
         CancelableRunnable runnable = new CancelableRunnable() {

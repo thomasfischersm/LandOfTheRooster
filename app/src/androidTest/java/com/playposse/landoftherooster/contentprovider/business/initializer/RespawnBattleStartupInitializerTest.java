@@ -4,14 +4,10 @@ import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.playposse.landoftherooster.GameConfig;
-import com.playposse.landoftherooster.TestDataWithDao;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
-import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepository;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -26,20 +22,7 @@ import static junit.framework.Assert.assertTrue;
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class RespawnBattleStartupInitializerTest extends TestDataWithDao {
-
-    @Before
-    public void setUp2() {
-        // Clear data that test may generate.
-        dao.deleteMapMarkers();
-        dao.deleteBuildings();
-        dao.deleteResources();
-        dao.deleteUnits();
-
-        // Ensure that BusinessEngine hasn't been initialized yet.
-        BusinessEngine.get()
-                .stop();
-    }
+public class RespawnBattleStartupInitializerTest extends AbstractStartupInitializerTest {
 
     @Test
     public void scheduleIfNecessary() throws InterruptedException {
@@ -68,11 +51,5 @@ public class RespawnBattleStartupInitializerTest extends TestDataWithDao {
         assertTrue(mapMarker.isReady());
         assertEquals((Integer) 0, mapMarker.getPendingProductionCount());
         assertEquals((Integer) 0, mapMarker.getCompletedProductionCount());
-    }
-
-    @After
-    public void tearDown() {
-        BusinessEngine.get().stop();
-        BuildingDiscoveryRepository.get(dao).reset();
     }
 }

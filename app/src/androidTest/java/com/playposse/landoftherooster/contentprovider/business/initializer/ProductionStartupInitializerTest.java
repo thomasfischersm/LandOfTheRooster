@@ -4,16 +4,12 @@ import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.playposse.landoftherooster.GameConfig;
-import com.playposse.landoftherooster.TestDataWithDao;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
-import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepository;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -28,17 +24,10 @@ import static junit.framework.Assert.assertTrue;
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ProductionStartupInitializerTest extends TestDataWithDao {
+public class ProductionStartupInitializerTest extends AbstractStartupInitializerTest {
 
     private static final String LOG_TAG =
             ProductionStartupInitializerTest.class.getSimpleName();
-
-    @Before
-    public void setUp2() {
-        // Ensure that BusinessEngine hasn't been initialized yet.
-        BusinessEngine.get()
-                .stop();
-    }
 
     @Test
     public void scheduleIfNecessary() throws InterruptedException {
@@ -73,11 +62,5 @@ public class ProductionStartupInitializerTest extends TestDataWithDao {
         assertTrue(mapMarker.isReady());
         assertEquals((Integer) 0, mapMarker.getPendingProductionCount());
         assertEquals((Integer) 1, mapMarker.getCompletedProductionCount());
-    }
-
-    @After
-    public void tearDown() {
-        BusinessEngine.get().stop();
-        BuildingDiscoveryRepository.get(dao).reset();
     }
 }
