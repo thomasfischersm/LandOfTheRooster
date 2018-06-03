@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -18,16 +17,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
-import com.playposse.landoftherooster.contentprovider.room.datahandler.ProductionCycleUtil;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
-import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
-import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
+import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 
 import java.lang.ref.WeakReference;
-import java.util.List;
-import java.util.Map;
 
 /**
  * A class that keeps track of a marker on the Google Map. It is intelligent about detecting
@@ -49,141 +44,48 @@ public class MarkerState {
     private boolean isReady;
     private int pendingProductionCount;
     private int completedProductionCount;
-    private boolean canUserDropItem;
     private Marker marker;
 
-    MarkerState(Context context, long buildingId) {
+    MarkerState(Context context, GoogleMap map, MapMarker mapMarker) {
         this.context = context;
-        this.buildingId = buildingId;
+        this.buildingId = mapMarker.getBuildingId();
+        this.isReady = mapMarker.isReady();
+
+        Integer pendingCount = mapMarker.getPendingProductionCount();
+        this.pendingProductionCount = (pendingCount != null) ? pendingCount : 0;
+
+        Integer completedCount = mapMarker.getCompletedProductionCount();
+        this.completedProductionCount = (completedCount != null) ? completedCount : 0;
 
         dao = RoosterDatabase.getInstance(context).getDao();
+
+        reapplyToMap(context, map);
     }
 
-    public void checkForChange(GoogleMap map) {
-        long start = System.currentTimeMillis();
-
-        BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
-        Log.d(LOG_TAG, "checkForChange: Starting to check "
-                + buildingWithType.getBuildingType().getName());
-        Building building = buildingWithType.getBuilding();
-        List<ProductionRule> productionRules =
-                dao.getProductionRulesByBuildingTypeId(building.getBuildingTypeId());
-        Map<Long, Integer> resourceMap = ProductionCycleUtil.getResourcesInBuilding(dao, building);
-        Map<Long, Integer> unitMap = ProductionCycleUtil.getUnitCountsInBuilding(dao, building);
-
-        int newPendingCount = computePendingProductionCount(productionRules, resourceMap, unitMap);
+    public void refresh(Context context, GoogleMap map, MapMarker mapMarker) {
+        int newPendingCount =
+                (mapMarker.getPendingProductionCount() != null)
+                        ? mapMarker.getPendingProductionCount() : 0;
         int newCompletedCount =
-                computeCompletedProductionCount(productionRules, resourceMap, unitMap);
-        boolean newCanUserDropItem = computeCanUserDropItem(productionRules);
-        boolean newIsReady = (newCompletedCount > 0) || newCanUserDropItem;
-
-        if ((pendingProductionCount == newPendingCount)
-                && (completedProductionCount == newCompletedCount)
-                && (isReady == newIsReady)
-                && (canUserDropItem == newCanUserDropItem)
-                && (marker != null)) {
-            // Nothing to do. There is no change.
+                (mapMarker.getCompletedProductionCount() != null)
+                        ? mapMarker.getCompletedProductionCount() : 0;
+        if ((mapMarker.isReady() == isReady)
+                && (newPendingCount == this.pendingProductionCount)
+                && (newCompletedCount == this.completedProductionCount)) {
+            // Nothing has changed.
             return;
         }
 
-        isReady = newIsReady;
+        isReady = mapMarker.isReady();
         pendingProductionCount = newPendingCount;
         completedProductionCount = newCompletedCount;
-        canUserDropItem = newCanUserDropItem;
 
         reapplyToMap(context, map);
-
-        long end = System.currentTimeMillis();
-        Log.i(LOG_TAG, "checkForChange: Checked building for change: "
-                + buildingWithType.getBuildingType().getName() + " "
-                + (end - start)
-                + "ms. isReady: " + isReady
-                + " pendingProductionCount: " + pendingProductionCount
-                + " completedProductionCount " + completedProductionCount);
-    }
-
-    private int computePendingProductionCount(
-            List<ProductionRule> productionRules,
-            Map<Long, Integer> resourceMap,
-            Map<Long, Integer> unitMap) {
-
-        int totalCount = 0;
-
-        for (ProductionRule productionRule : productionRules) {
-            Integer count = null;
-
-            // Get max possible production count with available resources.
-            for (long resourceTypeId : productionRule.getSplitInputResourceTypeIds()) {
-                if (resourceMap.containsKey(resourceTypeId)) {
-                    if (count == null) {
-                        count = resourceMap.get(resourceTypeId);
-                    } else {
-                        count = Math.max(count, resourceMap.get(resourceTypeId));
-                    }
-                } else {
-                    count = 0;
-                }
-            }
-
-            // Get max possible production count with available units.
-            for (long unitTypeId : productionRule.getSplitInputUnitTypeIds()) {
-                if (unitMap.containsKey(unitTypeId)) {
-                    if (count == null) {
-                        count = unitMap.get(unitTypeId);
-                    } else {
-                        count = Math.max(count, unitMap.get(unitTypeId));
-                    }
-                } else {
-                    count = 0;
-                }
-            }
-
-            if (count != null) {
-                totalCount += count;
-            } else {
-                // This is a free production rule.
-                boolean freeProductionRuleBlocked =
-                        ProductionCycleUtil.isFreeProductionRuleBlocked(
-                                resourceMap,
-                                unitMap,
-                                productionRule);
-                if (!freeProductionRuleBlocked) {
-                    totalCount++;
-                }
-            }
-        }
-
-        return totalCount;
-    }
-
-    private int computeCompletedProductionCount(
-            List<ProductionRule> productionRules,
-            Map<Long, Integer> resourceMap,
-            Map<Long, Integer> unitMap) {
-
-        int totalCount = 0;
-
-        for (ProductionRule productionRule : productionRules) {
-            Long resourceTypeId = productionRule.getOutputResourceTypeId();
-            if (resourceTypeId != null) {
-                if (resourceMap.containsKey(resourceTypeId)) {
-                    totalCount += resourceMap.get(resourceTypeId);
-                }
-            }
-
-            Long unitTypeId = productionRule.getOutputUnitTypeId();
-            if (unitTypeId != null) {
-                if (unitMap.containsKey(unitTypeId)) {
-                    totalCount += unitMap.get(unitTypeId);
-                }
-            }
-        }
-
-        return totalCount;
     }
 
     private void reapplyToMap(Context context, GoogleMap map) {
         // Read data.
+        // TODO: See if this database read can be avoided for performance.
         BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
         Building building = buildingWithType.getBuilding();
         BuildingType buildingType = buildingWithType.getBuildingType();
@@ -312,38 +214,5 @@ public class MarkerState {
                 markerState.marker.setIcon(buildingIcon);
             }
         }
-    }
-
-    /**
-     * Checks if the user carries a resource or unit that could be dropped off at the building.
-     * Units with carrying capacity are ignored because the user may want to keep those in the
-     * caravan.
-     */
-    private boolean computeCanUserDropItem(List<ProductionRule> productionRules) {
-        Map<Long, Integer> resourceMap = ProductionCycleUtil.getResourcesJoiningUser(dao);
-        Map<Long, Integer> unitMap = ProductionCycleUtil.getUnitCountsJoiningUser(dao);
-
-        for (ProductionRule productionRule : productionRules) {
-            for (long resourceTypeId : productionRule.getSplitInputResourceTypeIds()) {
-                if (resourceMap.containsKey(resourceTypeId)
-                        && (resourceMap.get(resourceTypeId) > 0)) {
-                    return true;
-                }
-            }
-
-            for (long unitTypeId : productionRule.getSplitInputUnitTypeIds()) {
-                if ((unitTypeId != GameConfig.PEASANT_ID)
-                        && unitMap.containsKey(unitTypeId)
-                        && (unitMap.get(unitTypeId) > 0)) {
-
-                    UnitType unitType = dao.getUnitTypeById(unitTypeId);
-                    if (unitType.getCarryingCapacity() == 0) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 }

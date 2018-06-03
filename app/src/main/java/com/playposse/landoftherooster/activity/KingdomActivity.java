@@ -129,6 +129,16 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (markerStateRegistry != null) {
+            markerStateRegistry.stop();
+            markerStateRegistry = null;
+        }
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
@@ -187,6 +197,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
         // Update buildings on the map.
         markerStateRegistry = new MarkerStateRegistry(this, map);
+        markerStateRegistry.start();
 
         map.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override

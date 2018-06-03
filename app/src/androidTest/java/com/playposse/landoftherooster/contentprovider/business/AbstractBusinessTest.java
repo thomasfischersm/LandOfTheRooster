@@ -1,6 +1,7 @@
 package com.playposse.landoftherooster.contentprovider.business;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -10,6 +11,7 @@ import com.playposse.landoftherooster.contentprovider.business.data.BuildingDisc
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingZoneRepository;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
+import com.playposse.landoftherooster.services.GameBackgroundService;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,6 +28,9 @@ public abstract class AbstractBusinessTest extends TestData {
     public void setUp() throws InterruptedException {
         Context targetContext = InstrumentationRegistry.getTargetContext();
         dao = RoosterDatabase.getInstance(targetContext).getDao();
+
+        // Stop GameBackgroundService, so that it can't interfere with tests.
+        targetContext.stopService(new Intent(targetContext, GameBackgroundService.class));
 
         // Set a default location.
         BuildingZoneRepository.get(dao)

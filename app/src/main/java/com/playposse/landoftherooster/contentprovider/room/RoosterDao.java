@@ -234,6 +234,9 @@ public interface RoosterDao {
     @Query("select map_marker.* from map_marker join building_type on (building_type.id = map_marker.building_type_id) where building_type.heals_units = 1")
     List<MapMarker> getMapMarkersOfHealingBuildings();
 
+    @Query("select * from map_marker")
+    List<MapMarker> getAllMapMarkers();
+
     @Query("delete from map_marker")
     void deleteMapMarkers();
 }

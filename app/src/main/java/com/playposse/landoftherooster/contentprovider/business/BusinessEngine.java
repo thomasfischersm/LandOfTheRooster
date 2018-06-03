@@ -322,13 +322,17 @@ public class BusinessEngine {
     }
 
     public void start(Context context) {
+        Log.i(LOG_TAG, "start: Starting BusinessEngine.");
         dao = RoosterDatabase.getInstance(context).getDao();
 
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         runStartupInitializers();
+        Log.i(LOG_TAG, "start: Started BusinessEngine.");
     }
 
     public void stop() {
+        Log.i(LOG_TAG, "stop: Stopping BusinessEngine");
+
         if (scheduledExecutorService != null) {
             scheduledExecutorService.shutdownNow();
             scheduledExecutorService = null;
@@ -336,6 +340,8 @@ public class BusinessEngine {
             executedEventCounter = 0;
             instance = null;
         }
+
+        Log.i(LOG_TAG, "stop: Stopped BusinessEngine");
     }
 
     /**

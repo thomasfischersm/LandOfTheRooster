@@ -154,8 +154,10 @@ public class GameBackgroundService extends Service {
 
     @Override
     public void onDestroy() {
-        convenientLocationProvider.close();
-        convenientLocationProvider = null;
+        if (convenientLocationProvider != null) {
+            convenientLocationProvider.close();
+            convenientLocationProvider = null;
+        }
 
         BusinessEngine.get()
                 .stop();
