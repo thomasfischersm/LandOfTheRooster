@@ -10,6 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAssignPeasantEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteFreeProductionEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteProductionEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostDropOffItemEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.InputResourceTypeIterator;
@@ -30,6 +35,7 @@ import com.playposse.landoftherooster.util.SimpleStringJoiner;
 import com.playposse.landoftherooster.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -75,6 +81,12 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
 
         setShowReturnToMapButton(true);
         setDisappearOnDistance(true);
+        setReloadBusinessEvents(Arrays.asList(
+                PostDropOffItemEvent.class,
+                PostPickUpItemEvent.class,
+                PostCompleteProductionEvent.class,
+                PostCompleteFreeProductionEvent.class,
+                PostAssignPeasantEvent.class));
     }
 
     public static BuildingInteractionDialogFragment newInstance(long buildingId) {
@@ -86,8 +98,9 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
     }
 
     @Override
-    protected void readArguments(Bundle savedInstanceState) {
+    protected Long readArguments(Bundle savedInstanceState) {
         buildingId = getArguments().getLong(BUILDING_ID_ARG);
+        return buildingId;
     }
 
     @Override

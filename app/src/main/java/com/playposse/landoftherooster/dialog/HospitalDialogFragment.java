@@ -11,6 +11,10 @@ import android.widget.TextView;
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAdmitUnitToHospitalEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAssignPeasantEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteHealingEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpUnitFromHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AdmitUnitToHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.AssignPeasantEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpUnitFromHospitalEvent;
@@ -24,6 +28,7 @@ import com.playposse.landoftherooster.util.MutableLong;
 import com.playposse.landoftherooster.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -62,6 +67,11 @@ public class HospitalDialogFragment extends BaseDialogFragment {
 
         setDisappearOnDistance(true);
         setShowReturnToMapButton(true);
+        setReloadBusinessEvents(Arrays.asList(
+                PostAdmitUnitToHospitalEvent.class,
+                PostPickUpUnitFromHospitalEvent.class,
+                PostAssignPeasantEvent.class,
+                PostCompleteHealingEvent.class));
     }
 
     public static HospitalDialogFragment newInstance(long buildingId) {
@@ -77,8 +87,9 @@ public class HospitalDialogFragment extends BaseDialogFragment {
     }
 
     @Override
-    protected void readArguments(Bundle savedInstanceState) {
+    protected Long readArguments(Bundle savedInstanceState) {
         buildingId = getArguments().getLong(BUILDING_ID_ARG);
+        return buildingId;
     }
 
     @Override

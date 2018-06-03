@@ -9,6 +9,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostBattleEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostRespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
@@ -17,6 +19,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +51,9 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
 
         setShowReturnToMapButton(true);
         setDisappearOnDistance(true);
+        setReloadBusinessEvents(Arrays.asList(
+                PostRespawnBattleBuildingEvent.class,
+                PostBattleEvent.class));
 
         setNegativeButton(
                 R.string.withdraw_button,
@@ -80,8 +86,9 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
     }
 
     @Override
-    protected void readArguments(Bundle savedInstanceState) {
+    protected Long readArguments(Bundle savedInstanceState) {
         buildingId = getArguments().getLong(BUILDING_ID_ARG);
+        return buildingId;
     }
 
     @Override

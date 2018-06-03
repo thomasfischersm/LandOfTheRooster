@@ -4,9 +4,13 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostRespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
+
+import java.util.Arrays;
 
 import butterknife.BindView;
 
@@ -32,6 +36,8 @@ public class BuildingNeedsToRespawnDialogFragment extends BaseDialogFragment {
 
         setDisappearOnDistance(true);
         setShowReturnToMapButton(true);
+        setReloadBusinessEvents(Arrays.<Class<? extends BusinessEvent>>asList(
+                PostRespawnBattleBuildingEvent.class));
     }
 
     public static BuildingNeedsToRespawnDialogFragment newInstance(long buildingId) {
@@ -43,8 +49,9 @@ public class BuildingNeedsToRespawnDialogFragment extends BaseDialogFragment {
     }
 
     @Override
-    protected void readArguments(Bundle savedInstanceState) {
+    protected Long readArguments(Bundle savedInstanceState) {
         buildingId = getArguments().getLong(BUILDING_ID_ARG);
+        return buildingId;
     }
 
     @Override

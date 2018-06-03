@@ -3,8 +3,10 @@ package com.playposse.landoftherooster.contentprovider.business.action;
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.BusinessAction;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAssignPeasantEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteFreeProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.timeTriggered.CompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
@@ -48,5 +50,9 @@ public class AssignPeasantAction implements BusinessAction {
                 CompleteProductionEvent.schedule(dataCache);
             }
         }
+
+        // Fire post event.
+        BusinessEngine.get()
+                .triggerDelayedEvent(new PostAssignPeasantEvent(building.getId()));
     }
 }

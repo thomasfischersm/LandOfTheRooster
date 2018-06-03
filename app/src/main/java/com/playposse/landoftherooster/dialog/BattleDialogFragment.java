@@ -61,7 +61,7 @@ public class BattleDialogFragment extends BaseDialogFragment {
     }
 
     @Override
-    protected void readArguments(Bundle savedInstanceState) {
+    protected Long readArguments(Bundle savedInstanceState) {
         if (getArguments() != null) {
             buildingId = getArguments().getLong(BUILDING_ID_KEY);
         }
@@ -69,6 +69,8 @@ public class BattleDialogFragment extends BaseDialogFragment {
         if ((savedInstanceState != null) && savedInstanceState.containsKey(BATTLE_SUMMARY_KEY)) {
             battleSummary = savedInstanceState.getParcelable(BATTLE_SUMMARY_KEY);
         }
+
+        return buildingId;
     }
 
     @Override

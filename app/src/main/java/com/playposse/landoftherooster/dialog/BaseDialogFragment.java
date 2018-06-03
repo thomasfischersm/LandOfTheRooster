@@ -12,12 +12,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEventListener;
 import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.BuildingZoneExitedEvent;
 import com.playposse.landoftherooster.dialog.support.CountdownUpdateRunnable;
 import com.playposse.landoftherooster.dialog.support.ExitBuildingZoneListener;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -37,14 +41,18 @@ public abstract class BaseDialogFragment extends DialogFragment {
     private final int layoutResId;
 
     private boolean isInitialized = false;
+    private Long buildingId;
     private boolean disappearOnDistance = false;
     @Nullable private ButtonInfo positiveButtonInfo;
     @Nullable private ButtonInfo negativeButtonInfo;
 
     private View rootView;
+
     @Nullable private ExitBuildingZoneListener exitBuildingZoneListener;
     @Nullable private ScheduledExecutorService scheduledExecutorService;
     @Nullable private CountdownUpdateRunnable countdownTask;
+    @Nullable private List<Class<? extends BusinessEvent>> reloadBusinessEvents;
+    @Nullable private ReloadBusinessEventListener reloadBusinessEventListener;
 
     protected BaseDialogFragment(int layoutResId) {
         this.layoutResId = layoutResId;
@@ -54,7 +62,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         isInitialized = true;
 
-        readArguments(savedInstanceState);
+        buildingId = readArguments(savedInstanceState);
 
         // Inflate custom layout
         LayoutInflater inflater = LayoutInflater.from(getActivity());
@@ -96,16 +104,31 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
 
+        // Unregister listener to exit building zone.
         if (exitBuildingZoneListener != null) {
             BusinessEngine.get()
                     .removeEventListener(BuildingZoneExitedEvent.class, exitBuildingZoneListener);
             exitBuildingZoneListener = null;
         }
 
+        // Unregister listener for reload events.
+        if (reloadBusinessEvents != null) {
+            for (Class<? extends BusinessEvent> eventClass : reloadBusinessEvents) {
+                BusinessEngine.get()
+                        .removeEventListener(eventClass, reloadBusinessEventListener);
+            }
+
+            reloadBusinessEvents = null;
+        }
+
         closeCountdown();
     }
 
-    protected abstract void readArguments(Bundle savedInstanceState);
+    /**
+     * Let's the implementing dialog read arguments. The method is expected to return the building
+     * id.
+     */
+    protected abstract Long readArguments(Bundle savedInstanceState);
 
     protected abstract void doInBackground();
 
@@ -156,6 +179,18 @@ public abstract class BaseDialogFragment extends DialogFragment {
             DialogInterface.OnClickListener clickListener) {
 
         negativeButtonInfo = new ButtonInfo(buttonLabelResId, clickListener);
+    }
+
+    protected void setReloadBusinessEvents(List<Class<? extends BusinessEvent>> businessEvents) {
+        reloadBusinessEvents = businessEvents;
+
+        reloadBusinessEventListener = new ReloadBusinessEventListener();
+        if (businessEvents != null) {
+            for (Class<? extends BusinessEvent> eventClass : businessEvents) {
+                BusinessEngine.get()
+                        .addEventListener(eventClass, reloadBusinessEventListener);
+            }
+        }
     }
 
     protected void startCountdown(
@@ -282,6 +317,19 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
         private DialogInterface.OnClickListener getOnClickListener() {
             return onClickListener;
+        }
+    }
+
+    /**
+     * A {@link BusinessEventListener} that reload the current dialog if the buildingId matches.
+     */
+    private class ReloadBusinessEventListener implements BusinessEventListener {
+
+        @Override
+        public void onEvent(BusinessEvent event, BusinessDataCache cache) {
+            if ((buildingId != null) && (buildingId.equals(event.getBuildingId()))) {
+                reload(null);
+            }
         }
     }
 }
