@@ -239,8 +239,9 @@ public class HospitalDialogFragment extends BaseDialogFragment {
         reload(new Runnable() {
             @Override
             public void run() {
+                long unitId = unitWithType.getUnit().getId();
                 BusinessEngine.get()
-                        .triggerEvent(new PickUpUnitFromHospitalEvent(buildingId));
+                        .triggerEvent(new PickUpUnitFromHospitalEvent(buildingId, unitId));
             }
         });
     }

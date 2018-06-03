@@ -1,6 +1,7 @@
 package com.playposse.landoftherooster.contentprovider.business.data;
 
 import android.location.Location;
+import android.support.annotation.VisibleForTesting;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.playposse.landoftherooster.GameConfig;
@@ -24,7 +25,8 @@ public class BuildingZoneRepository {
     private BuildingWithType currentBuildingWithType;
     private LatLng currentLatLng;
 
-    private BuildingZoneRepository(RoosterDao dao) {
+    @VisibleForTesting
+    BuildingZoneRepository(RoosterDao dao) {
         this.dao = dao;
     }
 

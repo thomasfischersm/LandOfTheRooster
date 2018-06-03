@@ -19,7 +19,9 @@ public class BuildingZoneRepositoryTest extends AbstractBusinessTest {
 
     @Before
     public void setUp2() {
-        repository = BuildingZoneRepository.get(dao);
+        // Create a new instance instead of getting the singleton. The background thread of the
+        // game may mess with the state of the singleton and could make the test flaky.
+        repository = new BuildingZoneRepository(dao);
     }
 
     @Test

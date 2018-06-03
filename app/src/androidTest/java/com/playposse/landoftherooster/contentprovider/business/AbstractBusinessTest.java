@@ -3,9 +3,11 @@ package com.playposse.landoftherooster.contentprovider.business;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.playposse.landoftherooster.RoosterApplication;
 import com.playposse.landoftherooster.TestData;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepository;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingZoneRepository;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 
@@ -24,6 +26,10 @@ public abstract class AbstractBusinessTest extends TestData {
     public void setUp() throws InterruptedException {
         Context targetContext = InstrumentationRegistry.getTargetContext();
         dao = RoosterDatabase.getInstance(targetContext).getDao();
+
+        // Set a default location.
+        BuildingZoneRepository.get(dao)
+                .updateLocation(new LatLng(LATITUDE, LONGITUDE));
 
         // Wait for debug data to be complete.
         while (!RoosterApplication.isDebugDataComplete()) {

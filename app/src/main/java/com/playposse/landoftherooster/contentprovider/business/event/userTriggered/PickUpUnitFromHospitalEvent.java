@@ -8,7 +8,14 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
  */
 public class PickUpUnitFromHospitalEvent extends BusinessEvent {
 
-    public PickUpUnitFromHospitalEvent(Long buildingId) {
+    private final long unitId;
+
+    public PickUpUnitFromHospitalEvent(long buildingId, long unitId) {
         super(buildingId);
+        this.unitId = unitId;
+    }
+
+    public long getUnitId() {
+        return unitId;
     }
 }

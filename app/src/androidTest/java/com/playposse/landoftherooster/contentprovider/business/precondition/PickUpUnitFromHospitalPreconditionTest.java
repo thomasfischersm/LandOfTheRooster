@@ -35,9 +35,10 @@ public class PickUpUnitFromHospitalPreconditionTest extends AbstractBusinessTest
         // Create recoveredUnit.
         List<Unit> units = createUnits(dao, 1, SOLDIER_UNIT_TYPE_ID, hospitalId);
         Unit unit = units.get(0);
+        long unitId = unit.getId();
 
         // Test precondition.
-        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(hospitalId);
+        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(hospitalId, unitId);
         BusinessDataCache cache = new BusinessDataCache(dao, hospitalId);
         PickUpUnitFromHospitalPrecondition precondition = new PickUpUnitFromHospitalPrecondition();
         PreconditionOutcome outcome = precondition.evaluate(event, cache);
@@ -47,7 +48,7 @@ public class PickUpUnitFromHospitalPreconditionTest extends AbstractBusinessTest
                 (PickUpUnitFromHospitalPreconditionOutcome) outcome;
         assertTrue(outcome.getSuccess());
         assertNotNull(castOutcome.getUnitWithType());
-        assertEquals(unit.getId(), castOutcome.getUnitWithType().getUnit().getId());
+        assertEquals(unitId, castOutcome.getUnitWithType().getUnit().getId());
         Long locatedAtBuildingId = castOutcome.getUnitWithType().getUnit().getLocatedAtBuildingId();
         assertEquals((Long) hospitalId, locatedAtBuildingId);
     }
@@ -60,9 +61,10 @@ public class PickUpUnitFromHospitalPreconditionTest extends AbstractBusinessTest
         // Create recoveredUnit.
         List<Unit> units = createUnits(dao, 1, SOLDIER_UNIT_TYPE_ID, wheatFieldId);
         Unit unit = units.get(0);
+        long unitId = unit.getId();
 
         // Test precondition.
-        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(wheatFieldId);
+        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(wheatFieldId, unitId);
         BusinessDataCache cache = new BusinessDataCache(dao, wheatFieldId);
         PickUpUnitFromHospitalPrecondition precondition = new PickUpUnitFromHospitalPrecondition();
         PreconditionOutcome outcome = precondition.evaluate(event, cache);
@@ -79,13 +81,14 @@ public class PickUpUnitFromHospitalPreconditionTest extends AbstractBusinessTest
         // Create recoveredUnit.
         List<Unit> units = createUnits(dao, 1, SOLDIER_UNIT_TYPE_ID, hospitalId);
         Unit unit = units.get(0);
+        long unitId = unit.getId();
 
         // Injure unit.
         unit.setHealth(1);
         dao.update(unit);
 
         // Test precondition.
-        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(hospitalId);
+        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(hospitalId, unitId);
         BusinessDataCache cache = new BusinessDataCache(dao, hospitalId);
         PickUpUnitFromHospitalPrecondition precondition = new PickUpUnitFromHospitalPrecondition();
         PreconditionOutcome outcome = precondition.evaluate(event, cache);
@@ -102,9 +105,10 @@ public class PickUpUnitFromHospitalPreconditionTest extends AbstractBusinessTest
         // Create recoveredUnit.
         List<Unit> units = createUnits(dao, 1, GameConfig.PEASANT_ID, hospitalId);
         Unit unit = units.get(0);
+        long unitId = unit.getId();
 
         // Test precondition.
-        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(hospitalId);
+        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(hospitalId, unitId);
         BusinessDataCache cache = new BusinessDataCache(dao, hospitalId);
         PickUpUnitFromHospitalPrecondition precondition = new PickUpUnitFromHospitalPrecondition();
         PreconditionOutcome outcome = precondition.evaluate(event, cache);

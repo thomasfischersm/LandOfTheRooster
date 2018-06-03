@@ -139,6 +139,9 @@ public class GameBackgroundService extends Service {
     }
 
     private void init() {
+        BusinessEngine.get()
+                .start(this);
+
         try {
             convenientLocationProvider = new ConvenientLocationProvider(
                     getApplicationContext(),
@@ -147,9 +150,6 @@ public class GameBackgroundService extends Service {
         } catch (ExecutionException | InterruptedException ex) {
             Log.e(LOG_TAG, "BuildingDiscoveryService: Failed to wait for permissions.", ex);
         }
-
-        BusinessEngine.get()
-                .start(this);
     }
 
     @Override

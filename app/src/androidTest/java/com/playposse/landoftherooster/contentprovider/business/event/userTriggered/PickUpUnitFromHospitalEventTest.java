@@ -37,15 +37,16 @@ public class PickUpUnitFromHospitalEventTest extends AbstractBusinessTest {
         // Create recoveredUnit.
         List<Unit> units = createUnits(dao, 1, SOLDIER_UNIT_TYPE_ID, hospitalId);
         Unit unit = units.get(0);
+        long unitId = unit.getId();
 
         // Test action.
-        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(hospitalId);
+        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(hospitalId, unitId);
         BusinessEngine.get()
                 .triggerEvent(event);
 
         // Assert that unit has joined the user.
         UnitTypeRepository unitTypeRepository = UnitTypeRepository.get(dao);
-        UnitWithType resultUnitWithType = unitTypeRepository.queryUnitWithTypeById(unit.getId());
+        UnitWithType resultUnitWithType = unitTypeRepository.queryUnitWithTypeById(unitId);
         assertNull(resultUnitWithType.getUnit().getLocatedAtBuildingId());
 
         // Assert hospital map marker.
@@ -66,10 +67,15 @@ public class PickUpUnitFromHospitalEventTest extends AbstractBusinessTest {
         // Create recoveredUnit.
         createUnits(dao, 2, SOLDIER_UNIT_TYPE_ID, hospitalId);
 
+        // Get unit references.
+        List<Unit> units = dao.getUnits(SOLDIER_UNIT_TYPE_ID, hospitalId);
+        long unitId0 = units.get(0).getId();
+        long unitId1 = units.get(1).getId();
+
         // Execute action for first unit.
-        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(hospitalId);
+        PickUpUnitFromHospitalEvent event0 = new PickUpUnitFromHospitalEvent(hospitalId, unitId0);
         BusinessEngine.get()
-                .triggerEvent(event);
+                .triggerEvent(event0);
 
         // Assert that unit has joined the user.
         assertEquals(1, dao.getUnitCountJoiningUser(SOLDIER_UNIT_TYPE_ID));
@@ -86,8 +92,9 @@ public class PickUpUnitFromHospitalEventTest extends AbstractBusinessTest {
 
 
         // Execute action for second unit.
+        PickUpUnitFromHospitalEvent event1 = new PickUpUnitFromHospitalEvent(hospitalId, unitId1);
         BusinessEngine.get()
-                .triggerEvent(event);
+                .triggerEvent(event1);
 
         // Assert that unit has joined the user.
         assertEquals(2, dao.getUnitCountJoiningUser(SOLDIER_UNIT_TYPE_ID));

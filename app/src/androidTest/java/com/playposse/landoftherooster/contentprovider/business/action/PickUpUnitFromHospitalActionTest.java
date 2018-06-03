@@ -37,7 +37,8 @@ public class PickUpUnitFromHospitalActionTest extends AbstractBusinessTest {
         UnitWithType unitWithType = unitTypeRepository.getUnitWithType(unit);
 
         // Test action.
-        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(hospitalId);
+        long unitId = unit.getId();
+        PickUpUnitFromHospitalEvent event = new PickUpUnitFromHospitalEvent(hospitalId, unitId);
         BusinessDataCache cache = new BusinessDataCache(dao, hospitalId);
         PickUpUnitFromHospitalPreconditionOutcome outcome =
                 new PickUpUnitFromHospitalPreconditionOutcome(true, unitWithType);
@@ -45,7 +46,7 @@ public class PickUpUnitFromHospitalActionTest extends AbstractBusinessTest {
         action.perform(event, outcome, cache);
 
         // Assert result.
-        UnitWithType resultUnitWithType = unitTypeRepository.queryUnitWithTypeById(unit.getId());
+        UnitWithType resultUnitWithType = unitTypeRepository.queryUnitWithTypeById(unitId);
         assertNull(resultUnitWithType.getUnit().getLocatedAtBuildingId());
     }
 }

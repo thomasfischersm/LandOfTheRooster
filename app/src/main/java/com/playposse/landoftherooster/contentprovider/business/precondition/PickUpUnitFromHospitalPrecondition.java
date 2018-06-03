@@ -1,12 +1,15 @@
 package com.playposse.landoftherooster.contentprovider.business.precondition;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.BusinessPrecondition;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpUnitFromHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
+import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 
 import java.util.List;
@@ -29,16 +32,41 @@ public class PickUpUnitFromHospitalPrecondition implements BusinessPrecondition 
             return new PreconditionOutcome(false);
         }
 
-        // Check if a recovered unit is available for pickup.
-        List<UnitWithType> recoveredUnitsWithType = dataCache.getRecoveredUnitsWithType();
-        if (recoveredUnitsWithType.size() <= 0) {
-            Log.i(LOG_TAG, "evaluate: Cannot pick up unit because there are no recovered " +
-                    "units at the building: " + dataCache.getBuildingId());
+        // Check if the unit has recovered
+        PickUpUnitFromHospitalEvent castEvent = (PickUpUnitFromHospitalEvent) event;
+        UnitWithType unitWithType = hasUnitRecovered(castEvent, dataCache);
+        if (unitWithType == null) {
+            Log.i(LOG_TAG, "evaluate: Cannot pick up unit because there are not recovered " +
+                    castEvent.getUnitId());
             return new PreconditionOutcome(false);
         }
 
-        return new PickUpUnitFromHospitalPreconditionOutcome(
-                true,
-                recoveredUnitsWithType.get(0));
+
+        return new PickUpUnitFromHospitalPreconditionOutcome(true, unitWithType);
+    }
+
+    @Nullable
+    private UnitWithType hasUnitRecovered(
+            PickUpUnitFromHospitalEvent event,
+            BusinessDataCache dataCache) {
+
+        long unitId = event.getUnitId();
+        List<UnitWithType> recoveredUnitsWithType = dataCache.getRecoveredUnitsWithType();
+        for (UnitWithType unitWithType : recoveredUnitsWithType) {
+            Unit unit = unitWithType.getUnit();
+            if (unit.getId() == unitId) {
+                if (!unitWithType.isInjured()) {
+                    return unitWithType;
+                } else {
+                    Log.i(LOG_TAG, "hasUnitRecovered: The unit has not yet fully recovered: "
+                            + unitId);
+                    return null;
+                }
+            }
+        }
+
+        Log.i(LOG_TAG, "hasUnitRecovered: Couldn't find unit " + unitId + " at the building "
+                + event.getBuildingId());
+        return null;
     }
 }
