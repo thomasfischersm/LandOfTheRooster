@@ -7,10 +7,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.support.v4.graphics.ColorUtils;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -27,7 +30,7 @@ import java.lang.ref.WeakReference;
 /**
  * A class that keeps track of a marker on the Google Map. It is intelligent about detecting
  * changes and updating itself.
- *
+ * <p>
  * <p>TODO: Consider that completed resources cannot be picked up if the player has no carrying
  * capacity!
  */
@@ -45,6 +48,7 @@ public class MarkerState {
     private int pendingProductionCount;
     private int completedProductionCount;
     private Marker marker;
+    private Circle buildingZoneCircle;
 
     MarkerState(Context context, GoogleMap map, MapMarker mapMarker) {
         this.context = context;
@@ -209,10 +213,34 @@ public class MarkerState {
                         .position(position)
                         .title(title)
                         .icon(buildingIcon));
-                ;
+
+                createCircle(markerState);
             } else {
                 markerState.marker.setIcon(buildingIcon);
+
+                // Re-create circle.
+                if (markerState.buildingZoneCircle != null) {
+                    markerState.buildingZoneCircle.remove();
+                    markerState.buildingZoneCircle = null;
+                }
+                createCircle(markerState);
             }
+        }
+
+        private void createCircle(MarkerState markerState) {
+            int circleFillColor = (markerState.isReady)
+                    ? GameConfig.BUILDING_READY_BG_COLOR
+                    : GameConfig.BUILDING_DEFAULT_BG_COLOR;
+
+            // Set the stroke color to half opacity to make it appear fuzzy. The location
+            // detection on phones is inaccurate by a few feet.
+            int circleStrokeColor = ColorUtils.setAlphaComponent(circleFillColor, 0xFF/2);
+
+            markerState.buildingZoneCircle = map.addCircle(new CircleOptions()
+                    .center(position)
+                    .radius(GameConfig.INTERACTION_RADIUS)
+                    .fillColor(circleFillColor)
+                    .strokeColor(circleStrokeColor));
         }
     }
 }

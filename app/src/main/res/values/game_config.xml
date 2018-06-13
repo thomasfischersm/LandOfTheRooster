@@ -25,6 +25,10 @@
 
     <drawable name="building_ready_bg">@drawable/ready_building_bg</drawable>
 
+    <color name="building_ready_bg_color">#66bb6a</color>
+
+    <color name="building_default_bg_color">#78909c</color>
+
     <color name="pending_production_color">#90a4ae</color>
 
     <color name="completed_production_color">#263238</color>

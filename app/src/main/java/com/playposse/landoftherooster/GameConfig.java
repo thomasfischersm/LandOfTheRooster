@@ -80,6 +80,16 @@ public final class GameConfig {
     public static Drawable BUILDING_READY_BG;
 
     /**
+     * Background color for buildings that are ready to be interacted with.
+     */
+    public static int BUILDING_READY_BG_COLOR;
+
+    /**
+     * Default background color for buildings.
+     */
+    public static int BUILDING_DEFAULT_BG_COLOR;
+
+    /**
      * Color for the circle on the building map marker to indicate a pending production run.
      */
     public static int PENDING_PRODUCTION_COLOR;
@@ -126,6 +136,8 @@ public final class GameConfig {
         PRODUCTION_CYCLE_MINUTES = get(context, R.integer.production_cycle_minutes);
         PRODUCTION_CYCLE_MS = PRODUCTION_CYCLE_MINUTES * 60 * 1_000;
         BUILDING_READY_BG = getDrawable(context, R.drawable.building_ready_bg);
+        BUILDING_READY_BG_COLOR = getColor(context, R.color.building_ready_bg_color);
+        BUILDING_DEFAULT_BG_COLOR = getColor(context, R.color.building_default_bg_color);
         PENDING_PRODUCTION_COLOR = getColor(context, R.color.pending_production_color);
         COMPLETED_PRODUCTION_COLOR = getColor(context, R.color.completed_production_color);
         MAX_PRODUCTION_CIRCLE_COUNT = get(context, R.integer.max_production_circle_count);
