@@ -87,6 +87,13 @@
       "icon": "stable",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
+    },
+    {
+      "id": 13,
+      "name": "jousting ground",
+      "icon": "jousting_ground",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     }
   ]
 }

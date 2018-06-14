@@ -71,6 +71,14 @@
       "inputUnitTypeIds": null,
       "outputResourceTypeId": 7,
       "outputUnitTypeId": null
+    },
+    {
+      "id": 10,
+      "buildingTypeId": 13,
+      "inputResourceTypeIds": "7",
+      "inputUnitTypeIds": "2",
+      "outputResourceTypeId": null,
+      "outputUnitTypeId": 5
     }
   ]
 }
