@@ -1,154 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/remote_message_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/remote_dialog_message"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-        android:id="@+id/building_name_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textColor="#000"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/remote_message_text_view"
-        tools:text="Bakery"/>
-
-    <ImageView
-        android:id="@+id/building_icon_image_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/building_icon_content_description"
-        app:layout_constraintEnd_toEndOf="@+id/right_guide_line"
-        app:layout_constraintStart_toStartOf="@+id/left_guide_line"
-        app:layout_constraintTop_toBottomOf="@+id/building_name_text_view"
-        tools:src="@drawable/bakery"/>
-
-    <TextView
-        android:id="@+id/action_heading_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:text="@string/actions_heading"
-        android:textAllCaps="true"
-        android:textColor="#000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/building_icon_image_view"/>
-
-    <android.support.v7.widget.GridLayout
-        android:id="@+id/action_grid_layout"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        app:columnCount="3"
-        app:layout_constraintTop_toBottomOf="@+id/action_heading_text_view"
-        tools:layout_height="100dp"/>
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/production_rules_heading_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:text="@string/production_rules_heading"
-        android:textAllCaps="true"
-        android:textColor="#000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/action_grid_layout"/>
+        <TextView
+            android:id="@+id/remote_message_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remote_dialog_message"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/production_rules_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/production_rules_heading_text_view"
-        tools:text="1 flour creates 1 bread."/>
+        <TextView
+            android:id="@+id/building_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textColor="#000"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/remote_message_text_view"
+            tools:text="Bakery"/>
 
-    <TextView
-        android:id="@+id/production_speed_heading_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:text="@string/production_speed_heading"
-        android:textAllCaps="true"
-        android:textColor="#000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/production_rules_text_view"/>
+        <ImageView
+            android:id="@+id/building_icon_image_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/building_icon_content_description"
+            app:layout_constraintEnd_toEndOf="@+id/right_guide_line"
+            app:layout_constraintStart_toStartOf="@+id/left_guide_line"
+            app:layout_constraintTop_toBottomOf="@+id/building_name_text_view"
+            tools:src="@drawable/bakery"/>
 
-    <TextView
-        android:id="@+id/production_speed_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/production_speed_heading_text_view"
-        tools:text="1 peasant produces 1 unit per 60 minutes.\n(Add a peasant to cut the time to 30 minutes.)"/>
+        <TextView
+            android:id="@+id/action_heading_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/actions_heading"
+            android:textAllCaps="true"
+            android:textColor="#000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/building_icon_image_view"/>
 
-    <TextView
-        android:id="@+id/countdown_heading_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:text="@string/next_unit_count_down_heading"
-        android:textAllCaps="true"
-        android:textColor="#000"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/production_speed_text_view"/>
+        <android.support.v7.widget.GridLayout
+            android:id="@+id/action_grid_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            app:columnCount="3"
+            app:layout_constraintTop_toBottomOf="@+id/action_heading_text_view"
+            tools:layout_height="100dp"/>
 
-    <TextView
-        android:id="@+id/countdown_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textColor="#000"
-        android:textSize="32sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countdown_heading_text_view"
-        tools:text="24 : 60 : 60"/>
+        <TextView
+            android:id="@+id/production_rules_heading_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/production_rules_heading"
+            android:textAllCaps="true"
+            android:textColor="#000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/action_grid_layout"/>
 
-    <android.support.constraint.Guideline
-        android:id="@+id/left_guide_line"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="10dp"
-        app:layout_constraintGuide_percent=".33"/>
+        <TextView
+            android:id="@+id/production_rules_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/production_rules_heading_text_view"
+            tools:text="1 flour creates 1 bread."/>
 
-    <android.support.constraint.Guideline
-        android:id="@+id/right_guide_line"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".66"/>
+        <TextView
+            android:id="@+id/production_speed_heading_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/production_speed_heading"
+            android:textAllCaps="true"
+            android:textColor="#000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/production_rules_text_view"/>
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/production_speed_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/production_speed_heading_text_view"
+            tools:text="1 peasant produces 1 unit per 60 minutes.\n(Add a peasant to cut the time to 30 minutes.)"/>
+
+        <TextView
+            android:id="@+id/countdown_heading_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/next_unit_count_down_heading"
+            android:textAllCaps="true"
+            android:textColor="#000"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/production_speed_text_view"/>
+
+        <TextView
+            android:id="@+id/countdown_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textColor="#000"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/countdown_heading_text_view"
+            tools:text="24 : 60 : 60"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/left_guide_line"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="10dp"
+            app:layout_constraintGuide_percent=".33"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/right_guide_line"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".66"/>
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>
