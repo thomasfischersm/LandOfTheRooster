@@ -115,6 +115,11 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         dialogListener = new DialogOpenerBusinessEventListener();
         BusinessEngine.get()
                 .addEventListener(ShowDialogEvent.class, dialogListener);
+
+        if ((map != null) && (markerStateRegistry == null)) {
+            markerStateRegistry = new MarkerStateRegistry(this, map);
+            markerStateRegistry.start();
+        }
     }
 
     @Override
@@ -126,16 +131,16 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         BusinessEngine.get()
                 .removeEventListener(ShowDialogEvent.class, dialogListener);
         dialogListener = null;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
 
         if (markerStateRegistry != null) {
             markerStateRegistry.stop();
             markerStateRegistry = null;
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override

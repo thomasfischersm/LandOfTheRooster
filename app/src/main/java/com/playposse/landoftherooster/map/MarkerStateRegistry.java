@@ -45,6 +45,9 @@ public class MarkerStateRegistry {
     }
 
     public void start() {
+        // Reset the map.
+        map.clear();
+
         new AddAllMapMarkersAsyncTask().execute();
 
         map.setOnMarkerClickListener(new ShowBuildingDialogListener());
