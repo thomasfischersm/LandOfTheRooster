@@ -43,6 +43,10 @@
     {
       "id": 11,
       "name": "gold"
+    },
+    {
+      "id": 12,
+      "name": "crate of jewels"
     }
   ]
 }

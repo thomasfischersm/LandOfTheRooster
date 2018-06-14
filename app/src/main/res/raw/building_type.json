@@ -132,6 +132,16 @@
       "icon": "tournament_ground",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
+    },
+    {
+      "id": 19,
+      "name": "dragon lair",
+      "icon": "dragon_lair",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160,
+      "enemyUnitCount": 1,
+      "enemyUnitTypeId": 8,
+      "conquestPrizeResourceTypeId": 12
     }
   ]
 }

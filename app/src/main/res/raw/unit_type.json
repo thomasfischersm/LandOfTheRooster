@@ -69,6 +69,16 @@
       "damage": 13,
       "armor": 6,
       "health": 22
+    },
+    {
+      "id": 8,
+      "name": "dragon",
+      "carryingCapacity": 0,
+      "attack": 42,
+      "defense": 42,
+      "damage": 22,
+      "armor": 9,
+      "health": 66
     }
   ]
 }
