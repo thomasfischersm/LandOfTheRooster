@@ -39,6 +39,10 @@
     {
       "id": 10,
       "name": "imperial crown"
+    },
+    {
+      "id": 11,
+      "name": "gold"
     }
   ]
 }

@@ -118,6 +118,13 @@
       "icon": "gold_mine",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
+    },
+    {
+      "id": 17,
+      "name": "gold smelter",
+      "icon": "gold_smelter",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     }
   ]
 }
