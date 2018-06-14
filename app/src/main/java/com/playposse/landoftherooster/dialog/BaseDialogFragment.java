@@ -397,8 +397,12 @@ public abstract class BaseDialogFragment extends DialogFragment {
             if (!isRemote && newIsRemote) {
                 // Reload the dialog in local mode.
                 isRemote = true;
-                updateRemoteIndications();
-                reload(null);
+                reload(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateRemoteIndications();
+                    }
+                });
             }
         }
     }
