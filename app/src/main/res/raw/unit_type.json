@@ -79,6 +79,16 @@
       "damage": 22,
       "armor": 9,
       "health": 66
+    },
+    {
+      "id": 9,
+      "name": "siren",
+      "carryingCapacity": 0,
+      "attack": 21,
+      "defense": 1,
+      "damage": 42,
+      "armor": 1,
+      "health": 5
     }
   ]
 }

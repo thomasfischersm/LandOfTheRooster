@@ -142,6 +142,16 @@
       "enemyUnitCount": 1,
       "enemyUnitTypeId": 8,
       "conquestPrizeResourceTypeId": 12
+    },
+    {
+      "id": 20,
+      "name": "island of deadly sirens",
+      "icon": "island_of_deadly_sirens",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160,
+      "enemyUnitCount": 6,
+      "enemyUnitTypeId": 9,
+      "conquestPrizeResourceTypeId": 13
     }
   ]
 }
