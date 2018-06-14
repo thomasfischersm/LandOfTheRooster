@@ -104,6 +104,13 @@
       "enemyUnitCount": 4,
       "enemyUnitTypeId": 6,
       "conquestPrizeResourceTypeId": 8
+    },
+    {
+      "id": 15,
+      "name": "gold mine",
+      "icon": "gold_mine",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     }
   ]
 }
