@@ -125,6 +125,13 @@
       "icon": "gold_smelter",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
+    },
+    {
+      "id": 18,
+      "name": "tournament ground",
+      "icon": "tournament_ground",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     }
   ]
 }

@@ -59,6 +59,16 @@
       "damage": 5,
       "armor": 2,
       "health": 20
+    },
+    {
+      "id": 7,
+      "name": "paladin",
+      "carryingCapacity": 0,
+      "attack": 21,
+      "defense": 11,
+      "damage": 13,
+      "armor": 6,
+      "health": 22
     }
   ]
 }
