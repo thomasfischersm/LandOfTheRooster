@@ -71,8 +71,11 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         dismiss();
 
-                        BattleDialogFragment.newInstance(buildingId)
-                                .show(getFragmentManager(), null);
+                        // TODO: If the user is remote, disable the button.
+                        if (!isRemote()) {
+                            BattleDialogFragment.newInstance(buildingId)
+                                    .show(getFragmentManager(), null);
+                        }
                     }
                 });
     }

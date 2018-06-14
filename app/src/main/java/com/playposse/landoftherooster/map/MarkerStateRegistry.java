@@ -5,6 +5,10 @@ import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.model.Marker;
+import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserTapsBuildingMarkerEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
@@ -17,6 +21,7 @@ import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistr
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -41,6 +46,8 @@ public class MarkerStateRegistry {
 
     public void start() {
         new AddAllMapMarkersAsyncTask().execute();
+
+        map.setOnMarkerClickListener(new ShowBuildingDialogListener());
     }
 
     public void stop() {
@@ -49,6 +56,18 @@ public class MarkerStateRegistry {
                     .unregisterObserver(mapMarkerObserver);
             mapMarkerObserver = null;
         }
+
+        map.setOnMarkerClickListener(null);
+    }
+
+    @Nullable
+    private MarkerState getMarkerStateByMarker(Marker marker) {
+        for (MarkerState markerState : markerStates.values()) {
+            if (Objects.equals(markerState.getMarker().getId(), marker.getId())) {
+                return markerState;
+            }
+        }
+        return null;
     }
 
     /**
@@ -118,6 +137,45 @@ public class MarkerStateRegistry {
                 Unit unit, @Nullable Long beforeBuildingId,
                 @Nullable Long afterBuildingId) {
             // Ignore.
+        }
+    }
+
+    /**
+     * A {@link OnMarkerClickListener} that opens dialogs for buildings.
+     */
+    private class ShowBuildingDialogListener implements OnMarkerClickListener {
+
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            MarkerState markerState = getMarkerStateByMarker(marker);
+
+            if (markerState != null) {
+                new ShowDialogAsyncTask(markerState).execute();
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * An {@link AsyncTask} that opens a building dialog.
+     */
+    private static class ShowDialogAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private final MarkerState markerState;
+
+        private ShowDialogAsyncTask(MarkerState markerState) {
+            this.markerState = markerState;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            long buildingId = markerState.getBuildingId();
+            BusinessEngine.get()
+                    .triggerEvent(new UserTapsBuildingMarkerEvent(buildingId));
+
+            return null;
         }
     }
 }

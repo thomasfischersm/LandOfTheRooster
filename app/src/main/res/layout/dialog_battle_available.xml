@@ -7,6 +7,16 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/remote_message_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remote_dialog_message"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
         android:id="@+id/heading_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +26,8 @@
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remote_message_text_view"/>
 
     <ImageView
         android:id="@+id/battle_symbol_image_view"
@@ -32,8 +43,9 @@
     <TextView
         android:id="@+id/unit_summary_text_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:textSize="18sp"
+        android:layout_height="wrap_content"
         android:textColor="#000"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/battle_symbol_image_view"

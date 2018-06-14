@@ -16,12 +16,17 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEventListener;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingZoneRepository;
+import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.BuildingZoneEnteredEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.BuildingZoneExitedEvent;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.dialog.support.CountdownUpdateRunnable;
 import com.playposse.landoftherooster.dialog.support.ExitBuildingZoneListener;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -42,13 +47,16 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     private boolean isInitialized = false;
     private Long buildingId;
+    private boolean isRemote;
     private boolean disappearOnDistance = false;
     @Nullable private ButtonInfo positiveButtonInfo;
     @Nullable private ButtonInfo negativeButtonInfo;
+    private RoosterDao dao;
 
     private View rootView;
 
     @Nullable private ExitBuildingZoneListener exitBuildingZoneListener;
+    @Nullable private EnterBuildingZoneListener enterBuildingZoneListener;
     @Nullable private ScheduledExecutorService scheduledExecutorService;
     @Nullable private CountdownUpdateRunnable countdownTask;
     @Nullable private List<Class<? extends BusinessEvent>> reloadBusinessEvents;
@@ -62,7 +70,10 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         isInitialized = true;
 
+        dao = RoosterDatabase.getInstance(getActivity()).getDao();
         buildingId = readArguments(savedInstanceState);
+        Long currentBuildingId = BuildingZoneRepository.get(dao).getCurrentBuildingId();
+        isRemote = !Objects.equals(buildingId, currentBuildingId);
 
         // Inflate custom layout
         LayoutInflater inflater = LayoutInflater.from(getActivity());
@@ -95,6 +106,13 @@ public abstract class BaseDialogFragment extends DialogFragment {
                     .addEventListener(BuildingZoneExitedEvent.class, exitBuildingZoneListener);
         }
 
+        // Add listener to switch dialog if the user walks into a building zone.
+        enterBuildingZoneListener = new EnterBuildingZoneListener();
+        BusinessEngine.get()
+                .addEventListener(BuildingZoneEnteredEvent.class, enterBuildingZoneListener);
+
+        updateRemoteIndications();
+
         new LoadAsyncTask(this, null).execute();
 
         return dialog;
@@ -109,6 +127,12 @@ public abstract class BaseDialogFragment extends DialogFragment {
             BusinessEngine.get()
                     .removeEventListener(BuildingZoneExitedEvent.class, exitBuildingZoneListener);
             exitBuildingZoneListener = null;
+        }
+
+        // Unregister listener to enter building zone.
+        if (enterBuildingZoneListener != null) {
+            BusinessEngine.get()
+                    .removeEventListener(BuildingZoneEnteredEvent.class, enterBuildingZoneListener);
         }
 
         // Unregister listener for reload events.
@@ -181,6 +205,28 @@ public abstract class BaseDialogFragment extends DialogFragment {
         negativeButtonInfo = new ButtonInfo(buttonLabelResId, clickListener);
     }
 
+    /**
+     * Updates visual indicators in the dialog, so that the user knows if the building is local
+     * and can be interacted with.
+     */
+    protected void updateRemoteIndications() {
+        TextView remoteMessageTextView = rootView.findViewById(R.id.remote_message_text_view);
+
+        if (isRemote) {
+            // Update for remote.
+            rootView.setBackgroundColor(getResources().getColor(R.color.remoteDialogBgColor));
+            if (remoteMessageTextView != null) {
+                remoteMessageTextView.setVisibility(View.VISIBLE);
+            }
+        } else {
+            // Update for local.
+            rootView.setBackgroundColor(getResources().getColor(R.color.localDialogBgColor));
+            if (remoteMessageTextView != null) {
+                remoteMessageTextView.setVisibility(View.GONE);
+            }
+        }
+    }
+
     protected void setReloadBusinessEvents(List<Class<? extends BusinessEvent>> businessEvents) {
         reloadBusinessEvents = businessEvents;
 
@@ -251,6 +297,10 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     protected void reload(@Nullable Runnable runnable) {
         new LoadAsyncTask(this, runnable).execute();
+    }
+
+    protected boolean isRemote() {
+        return isRemote;
     }
 
     /**
@@ -328,6 +378,26 @@ public abstract class BaseDialogFragment extends DialogFragment {
         @Override
         public void onEvent(BusinessEvent event, BusinessDataCache cache) {
             if ((buildingId != null) && (buildingId.equals(event.getBuildingId()))) {
+                reload(null);
+            }
+        }
+    }
+
+    /**
+     * A {@link BusinessEventListener} that listens to the user walking into a building zone. If the
+     * user does, it checks if the dialog should switch from remote to local mode.
+     */
+    private class EnterBuildingZoneListener implements  BusinessEventListener {
+
+        @Override
+        public void onEvent(BusinessEvent event, BusinessDataCache cache) {
+            Long currentBuildingId = BuildingZoneRepository.get(dao).getCurrentBuildingId();
+            boolean newIsRemote = !Objects.equals(buildingId, currentBuildingId);
+
+            if (!isRemote && newIsRemote) {
+                // Reload the dialog in local mode.
+                isRemote = true;
+                updateRemoteIndications();
                 reload(null);
             }
         }

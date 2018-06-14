@@ -301,7 +301,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
             Button button = rootView.findViewById(R.id.action_button);
             rootView.removeView(button);
             button.setText(action.getActionString());
-            button.setEnabled(action.isAvailable());
+            button.setEnabled(action.isAvailable() && !isRemote());
             actionGridLayout.addView(button);
 
             TextView buildingSideTextView = rootView.findViewById(R.id.building_side_text_view);

@@ -1,6 +1,7 @@
 package com.playposse.landoftherooster.contentprovider.business.data;
 
 import android.location.Location;
+import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -70,6 +71,15 @@ public class BuildingZoneRepository {
 
     public BuildingWithType getCurrentBuildingWithType() {
         return currentBuildingWithType;
+    }
+
+    @Nullable
+    public Long getCurrentBuildingId() {
+        if (currentBuildingWithType != null) {
+            return currentBuildingWithType.getBuilding().getId();
+        } else {
+            return null;
+        }
     }
 
     public LatLng getCurrentLatLng() {

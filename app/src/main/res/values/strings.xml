@@ -78,4 +78,5 @@
     <!-- Common -->
     <string name="dialog_yes_button">Yes</string>
     <string name="dialog_no_button">No</string>
+    <string name="remote_dialog_message">Too far from building to interact with it!</string>
 </resources>

@@ -87,6 +87,14 @@ public class MarkerState {
         reapplyToMap(context, map);
     }
 
+    public Marker getMarker() {
+        return marker;
+    }
+
+    public long getBuildingId() {
+        return buildingId;
+    }
+
     private void reapplyToMap(Context context, GoogleMap map) {
         // Read data.
         // TODO: See if this database read can be avoided for performance.
@@ -211,7 +219,7 @@ public class MarkerState {
             if (markerState.marker == null) {
                 markerState.marker = map.addMarker(new MarkerOptions()
                         .position(position)
-                        .title(title)
+//                        .title(title)
                         .icon(buildingIcon));
 
                 createCircle(markerState);

@@ -53,6 +53,7 @@ import com.playposse.landoftherooster.contentprovider.business.event.userTrigger
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.InitiateBattleEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpUnitFromHospitalEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.UserTapsBuildingMarkerEvent;
 import com.playposse.landoftherooster.contentprovider.business.initializer.FreeProductionStartupInitializer;
 import com.playposse.landoftherooster.contentprovider.business.initializer.HealingStartupInitializer;
 import com.playposse.landoftherooster.contentprovider.business.initializer.ProductionStartupInitializer;
@@ -280,6 +281,11 @@ public class BusinessEngine {
         // Open dialogs.
         registerAction(
                 BuildingZoneEnteredEvent.class,
+                new AlwaysSuccessfulPrecondition(),
+                new OpenBuildingDialogsAction());
+
+        registerAction(
+                UserTapsBuildingMarkerEvent.class,
                 new AlwaysSuccessfulPrecondition(),
                 new OpenBuildingDialogsAction());
     }

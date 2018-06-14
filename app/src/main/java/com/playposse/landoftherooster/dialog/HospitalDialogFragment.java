@@ -215,7 +215,7 @@ public class HospitalDialogFragment extends BaseDialogFragment {
                 || (peasantCountJoiningUser == 0)) {
             assignPeasantButton.setEnabled(false);
         } else {
-            assignPeasantButton.setEnabled(true);
+            assignPeasantButton.setEnabled(!isRemote());
             assignPeasantButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -285,6 +285,7 @@ public class HospitalDialogFragment extends BaseDialogFragment {
             unitTypeNameTextView.setText(unitWithType.getType().getName());
             healthTextView.setText(healthStr);
 
+            admitButton.setEnabled(!isRemote());
             admitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -302,7 +303,10 @@ public class HospitalDialogFragment extends BaseDialogFragment {
         @BindView(R.id.estimated_time_text_view) TextView estimatedTimeTextView;
 
         private HospitalizedGridLayoutRowViewHolder(MutableLong healingDurationSum) {
-            super(HospitalDialogFragment.this.hospitalizedGridLayout, R.layout.list_item_hospitalized_unit);
+            super(
+                    HospitalDialogFragment.this.hospitalizedGridLayout,
+                    R.layout.list_item_hospitalized_unit);
+
             this.healingDurationSum = healingDurationSum;
         }
 
@@ -353,6 +357,7 @@ public class HospitalDialogFragment extends BaseDialogFragment {
 
             unitTypeNameTextView.setText(unitWithType.getType().getName());
 
+            pickUpButton.setEnabled(!isRemote());
             pickUpButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
