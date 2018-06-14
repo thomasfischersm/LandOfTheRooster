@@ -62,41 +62,48 @@
     },
     {
       "id": 9,
+      "name": "court of nobility",
+      "icon": "court_of_nobility",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
+    },
+    {
+      "id": 10,
       "name": "carrot field",
       "icon": "carrot_field",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
     },
     {
-      "id": 10,
+      "id": 11,
       "name": "donkey wagon builder",
       "icon": "donkey_wagon_builder",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
     },
     {
-      "id": 11,
+      "id": 12,
       "name": "oat field",
       "icon": "oat_field",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
     },
     {
-      "id": 12,
+      "id": 13,
       "name": "stable",
       "icon": "stable",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
     },
     {
-      "id": 13,
+      "id": 14,
       "name": "jousting ground",
       "icon": "jousting_ground",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
     },
     {
-      "id": 14,
+      "id": 15,
       "name": "Count Dracula Castle",
       "icon": "count_dracula_castle",
       "minDistanceMeters": 110,
@@ -106,7 +113,7 @@
       "conquestPrizeResourceTypeId": 8
     },
     {
-      "id": 15,
+      "id": 16,
       "name": "gold mine",
       "icon": "gold_mine",
       "minDistanceMeters": 110,
