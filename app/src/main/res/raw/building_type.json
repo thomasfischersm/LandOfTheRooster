@@ -80,6 +80,13 @@
       "icon": "oat_field",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
+    },
+    {
+      "id": 12,
+      "name": "stable",
+      "icon": "stable",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     }
   ]
 }
