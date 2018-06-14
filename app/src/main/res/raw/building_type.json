@@ -73,6 +73,13 @@
       "icon": "donkey_wagon_builder",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
+    },
+    {
+      "id": 11,
+      "name": "oat field",
+      "icon": "oat_field",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     }
   ]
 }
