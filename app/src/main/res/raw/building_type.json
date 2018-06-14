@@ -152,6 +152,16 @@
       "enemyUnitCount": 6,
       "enemyUnitTypeId": 9,
       "conquestPrizeResourceTypeId": 13
+    },
+    {
+      "id": 21,
+      "name": "ork bridge",
+      "icon": "ork_bridge",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160,
+      "enemyUnitCount": 2,
+      "enemyUnitTypeId": 10,
+      "conquestPrizeResourceTypeId": 14
     }
   ]
 }

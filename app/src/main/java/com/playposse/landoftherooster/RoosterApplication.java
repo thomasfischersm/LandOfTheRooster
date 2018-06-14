@@ -78,7 +78,7 @@ public class RoosterApplication extends Application {
             dao.deleteUnits();
 
             createUnits(6, 2);
-            createUnits(1, 1);
+            createUnits(5, 1);
 
             debugDataComplete = true;
             Log.i(LOG_TAG, "doInBackground: Done creating debug test data.");

@@ -89,6 +89,16 @@
       "damage": 42,
       "armor": 1,
       "health": 5
+    },
+    {
+      "id": 10,
+      "name": "ork",
+      "carryingCapacity": 0,
+      "attack": 16,
+      "defense": 12,
+      "damage": 13,
+      "armor": 9,
+      "health": 25
     }
   ]
 }
