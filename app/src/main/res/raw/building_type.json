@@ -66,6 +66,13 @@
       "icon": "carrot_field",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
+    },
+    {
+      "id": 10,
+      "name": "donkey wagon builder",
+      "icon": "donkey_wagon_builder",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     }
   ]
 }
