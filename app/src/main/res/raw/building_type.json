@@ -94,6 +94,16 @@
       "icon": "jousting_ground",
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160
+    },
+    {
+      "id": 14,
+      "name": "Count Dracula Castle",
+      "icon": "count_dracula_castle",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160,
+      "enemyUnitCount": 4,
+      "enemyUnitTypeId": 6,
+      "conquestPrizeResourceTypeId": 8
     }
   ]
 }
