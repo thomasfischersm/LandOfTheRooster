@@ -59,6 +59,13 @@
       "minDistanceMeters": 110,
       "maxDistanceMeters": 160,
       "healsUnits": true
+    },
+    {
+      "id": 9,
+      "name": "carrot field",
+      "icon": "carrot_field",
+      "minDistanceMeters": 110,
+      "maxDistanceMeters": 160
     }
   ]
 }
