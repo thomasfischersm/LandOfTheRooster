@@ -6,6 +6,7 @@ import android.util.Log;
 import android.util.MutableLong;
 
 import com.playposse.landoftherooster.GameConfig;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingRepository;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.BuildingCreatedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.BuildingZoneEnteredEvent;
@@ -256,6 +257,7 @@ public class BusinessEngineTest extends AbstractBusinessTest {
         assertNull(outputResourceWithType);
 
         // Trigger building created event. The output resource should have been created instantly.
+        BuildingRepository.stop();
         BusinessEngine.get().triggerEvent(new BuildingCreatedEvent(buildingId));
         outputResourceWithType =
                 dao.getResourceWithType(WHEAT_RESOURCE_TYPE_ID, buildingId);
@@ -279,7 +281,7 @@ public class BusinessEngineTest extends AbstractBusinessTest {
         BusinessEngine.get().triggerEvent(new PostPickUpItemEvent(buildingId, item));
 
         // Wait for the production to complete.
-        waitForExecutedEventCount(6);
+        waitForExecutedEventCount(7);
 
         // Check that the resource was produced.
         outputResourceWithType =

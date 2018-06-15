@@ -11,6 +11,7 @@ import com.playposse.landoftherooster.contentprovider.business.action.RespawnBat
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateBattleBuildingMarkerActionTest;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateProductionBuildingMarkerActionTest;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepositoryTest;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingRepositoryTest;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingZoneRepositoryTest;
 import com.playposse.landoftherooster.contentprovider.business.data.ProductionRuleRepositoryTest;
 import com.playposse.landoftherooster.contentprovider.business.data.UnitTypeRepositoryTest;
@@ -54,6 +55,7 @@ import org.junit.runners.Suite;
         BuildingZoneRepositoryTest.class,
         BusinessDataCacheTest.class,
         BusinessEngineTest.class,
+        BuildingRepositoryTest.class,
         CompleteHealingEventTest.class,
         CompleteProductionEventTest.class,
         DaoEventRegistryTest.class,

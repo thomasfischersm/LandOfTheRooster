@@ -46,6 +46,7 @@ public class BuildingDiscoveryRepositoryTest {
     @After
     public void tearDown() {
         BuildingDiscoveryRepository.get(dao).reset();
+        BuildingRepository.stop();
     }
 
     @Test

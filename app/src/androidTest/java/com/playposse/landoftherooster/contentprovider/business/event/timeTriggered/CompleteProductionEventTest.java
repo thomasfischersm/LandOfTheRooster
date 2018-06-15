@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingRepository;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostDropOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
@@ -39,13 +40,14 @@ public class CompleteProductionEventTest extends AbstractBusinessTest {
 
             // Drop off prerequisite.
             dao.insert(new Resource(WHEAT_RESOURCE_TYPE_ID, 1, millId));
+            BuildingRepository.stop();
             businessEngine.triggerEvent(
                     new PostDropOffItemEvent(millId, new ResourceItem(WHEAT_RESOURCE_TYPE_ID)));
             BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(millId);
             assertNotNull(buildingWithType.getBuilding().getProductionStart());
 
             // Wait for the production to complete.
-            waitForExecutedEventCount(4);
+            waitForExecutedEventCount(3);
 
             // Check that the prerequisite (wheat) is consumed.
             ResourceWithType inputResourceWithType =

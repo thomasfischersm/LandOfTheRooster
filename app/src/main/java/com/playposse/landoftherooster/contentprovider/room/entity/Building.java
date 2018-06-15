@@ -55,6 +55,26 @@ public class Building {
         this.longitude = longitude;
     }
 
+    @Ignore
+    public Building(Building other) {
+        id = other.id;
+        buildingTypeId = other.buildingTypeId;
+        latitude = other.latitude;
+        longitude = other.longitude;
+        lastConquest = copy(other.lastConquest);
+        this.productionStart = copy(other.productionStart);
+        healingStarted = copy(other.healingStarted);
+    }
+
+    @Nullable
+    private static Date copy(@Nullable Date other) {
+        if (other != null) {
+            return new Date(other.getTime());
+        } else {
+            return null;
+        }
+    }
+
     public long getId() {
         return id;
     }

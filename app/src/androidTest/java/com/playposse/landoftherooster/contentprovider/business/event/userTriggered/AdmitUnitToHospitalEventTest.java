@@ -3,6 +3,7 @@ package com.playposse.landoftherooster.contentprovider.business.event.userTrigge
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingRepository;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.UnitInjuredEvent;
 import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
@@ -133,6 +134,7 @@ public class AdmitUnitToHospitalEventTest extends AbstractBusinessTest {
             Unit soldier = createWoundedSoldier(dao);
 
             // Trigger event.
+            BuildingRepository.stop();
             AdmitUnitToHospitalEvent event =
                     new AdmitUnitToHospitalEvent(hospitalId, soldier.getId());
             BusinessEngine.get()

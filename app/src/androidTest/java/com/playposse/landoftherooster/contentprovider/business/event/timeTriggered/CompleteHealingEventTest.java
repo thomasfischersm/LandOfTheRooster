@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.contentprovider.business.AbstractBusinessTest;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingRepository;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.MapMarker;
@@ -30,6 +31,8 @@ import static junit.framework.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class CompleteHealingEventTest extends AbstractBusinessTest {
+
+    private static final String LOG_TAG = CompleteHealingEventTest.class.getSimpleName();
 
     @Test
     public void triggerEvent_singleUnit() {
@@ -74,7 +77,7 @@ public class CompleteHealingEventTest extends AbstractBusinessTest {
     }
 
     @Test
-    public void triggerEvent_twoUnits() {
+    public void triggerEvent_twoUnits() throws InterruptedException {
         // Create hospital.
         long hospitalId = createHospitalAndMarker(dao);
 
@@ -102,9 +105,12 @@ public class CompleteHealingEventTest extends AbstractBusinessTest {
         dao.update(hospital);
 
         // Trigger healing complete event.
+        BuildingRepository.stop();
         CompleteHealingEvent event = new CompleteHealingEvent(hospitalId);
         BusinessEngine.get()
                 .triggerEvent(event);
+        Thread.sleep(1_000);
+        waitForExecutedEventCount(3);
 
         // Assert that the first soldier is healed.
         List<UnitWithType> unitsWithType = dao.getUnitsWithTypeByBuildingId(hospitalId);
@@ -133,6 +139,7 @@ public class CompleteHealingEventTest extends AbstractBusinessTest {
         dao.update(hospital);
 
         // Trigger healing complete event.
+        BuildingRepository.stop();
         event = new CompleteHealingEvent(hospitalId);
         BusinessEngine.get()
                 .triggerEvent(event);

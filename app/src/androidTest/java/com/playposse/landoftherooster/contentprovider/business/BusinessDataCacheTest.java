@@ -9,6 +9,7 @@ import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.RoosterApplication;
 import com.playposse.landoftherooster.TestData;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepository;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingRepository;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDaoUtil;
@@ -66,6 +67,7 @@ public class BusinessDataCacheTest extends TestData {
     @After
     public void tearDown() {
         BuildingDiscoveryRepository.get(dao).reset();
+        BuildingRepository.stop();
     }
 
     @Test

@@ -16,6 +16,8 @@ import com.playposse.landoftherooster.services.GameBackgroundService;
 
 import io.fabric.sdk.android.Fabric;
 
+import static com.playposse.landoftherooster.activity.KingdomActivity.PRODUCT_FLAVOR_DEV_MODE_ON;
+
 /**
  * Implementation of {@link Application}.
  */
@@ -34,7 +36,7 @@ public class RoosterApplication extends Application {
         GameConfig.init(this);
 
         // Start with a fresh database when running for debug.
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG && BuildConfig.FLAVOR.equals(PRODUCT_FLAVOR_DEV_MODE_ON)) {
             getApplicationContext().deleteDatabase(RoosterDatabaseHelper.DB_NAME);
             Log.d(LOG_TAG, "onCreate: Reset RoosterDatabase");
         }

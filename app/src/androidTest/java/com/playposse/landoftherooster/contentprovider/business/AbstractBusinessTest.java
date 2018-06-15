@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.playposse.landoftherooster.RoosterApplication;
 import com.playposse.landoftherooster.TestData;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingDiscoveryRepository;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingRepository;
 import com.playposse.landoftherooster.contentprovider.business.data.BuildingZoneRepository;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
@@ -56,5 +57,6 @@ public abstract class AbstractBusinessTest extends TestData {
     public void tearDown() {
         BusinessEngine.get().stop();
         BuildingDiscoveryRepository.get(dao).reset();
+        BuildingRepository.stop();
     }
 }

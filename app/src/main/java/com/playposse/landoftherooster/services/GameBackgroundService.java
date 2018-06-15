@@ -18,7 +18,10 @@ import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.activity.KingdomActivity;
 import com.playposse.landoftherooster.activity.StopActivity;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingRepository;
 import com.playposse.landoftherooster.contentprovider.business.event.locationTriggered.LocationUpdateEvent;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
+import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.util.ConvenientLocationProvider;
 
 import java.util.concurrent.ExecutionException;
@@ -139,6 +142,10 @@ public class GameBackgroundService extends Service {
     }
 
     private void init() {
+        // Force the repository to initialize.
+        RoosterDao dao = RoosterDatabase.getInstance(this).getDao();
+        BuildingRepository.get(dao);
+
         BusinessEngine.get()
                 .start(this);
 

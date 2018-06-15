@@ -49,7 +49,7 @@ public final class BuildingTypeRepository {
 
     @Nullable
     public BuildingWithType queryBuildingWithType(long buildingId) {
-        Building building = dao.getBuildingById(buildingId);
+        Building building = BuildingRepository.get(dao).getBuildingById(buildingId);
         if (building != null) {
             BuildingType buildingType = idToBuildingTypeMap.get(building.getBuildingTypeId());
             return new BuildingWithType(building, buildingType);

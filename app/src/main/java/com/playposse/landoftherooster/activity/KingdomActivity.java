@@ -69,7 +69,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     private static final String LOG_TAG = KingdomActivity.class.getSimpleName();
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final String PRODUCT_FLAVOR_DEV_MODE_ON = "devModeOn";
+    public static final String PRODUCT_FLAVOR_DEV_MODE_ON = "devModeOn";
 
     @BindView(R.id.resource_recycler_view) RecyclerView resourceRecyclerView;
     @BindView(R.id.unit_recycler_view) RecyclerView unitRecyclerView;
