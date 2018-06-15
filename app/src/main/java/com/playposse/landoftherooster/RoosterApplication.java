@@ -42,7 +42,8 @@ public class RoosterApplication extends Application {
         // Import configuration on the first run.
 //        ConfigurationImport.startImport(this);
 
-        new CreateDebugDataAsyncTask().execute();
+//        new CreateDebugDataAsyncTask().execute();
+        debugDataComplete = true;
 
         startGameBackgroundService(this);
     }
