@@ -1,7 +1,11 @@
 package com.playposse.landoftherooster.contentprovider.business;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Looper;
+import android.support.annotation.UiThread;
 import android.support.annotation.VisibleForTesting;
+import android.support.annotation.WorkerThread;
 import android.util.Log;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -350,10 +354,27 @@ public class BusinessEngine {
         Log.d(LOG_TAG, "stop: Stopped BusinessEngine");
     }
 
+    @UiThread
+    public void triggerEventAsync(final BusinessEvent event) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                triggerEvent(event);
+                return null;
+            }
+        }.execute();
+    }
+
     /**
      * Triggers a {@link BusinessEvent} to be executed immediately.
      */
+    @WorkerThread
     public void triggerEvent(BusinessEvent event) {
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            throw new IllegalStateException("The method triggerEvent was called on the UI " +
+                    "thread. Please, call triggerEventAsync instead!");
+        }
+
         executeEvent(event);
 
         while (eventQueue.size() > 0) {

@@ -3,6 +3,7 @@ package com.playposse.landoftherooster.util;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Looper;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -67,14 +68,16 @@ public class ConvenientLocationProvider {
 
         @Override
         public void onLocationResult(final LocationResult locationResult) {
-            new Thread(new Runnable() {
+            new AsyncTask<Void, Void, Void>() {
                 @Override
-                public void run() {
+                protected Void doInBackground(Void... voids) {
                     Location location = locationResult.getLastLocation();
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     callback.onNewLocation(latLng);
+
+                    return null;
                 }
-            }).start();
+            }.execute();
         }
     }
 
