@@ -15,6 +15,8 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import static com.google.android.gms.common.internal.Preconditions.checkNotNull;
+
 /**
  * A repository that caches inserts and updates to {@link Building}, so that queries can be served
  * from memory. The database access time can be 20-30 ms. The access time to a hash map should be
@@ -33,12 +35,16 @@ public final class BuildingRepository {
     private LocalDaoEventObserver daoEventObserver = new LocalDaoEventObserver();
 
     private BuildingRepository(RoosterDao dao) {
+        checkNotNull(dao);
+
         this.dao = dao;
 
         init();
     }
 
-    public static BuildingRepository get(RoosterDao dao) {
+    public synchronized static BuildingRepository get(RoosterDao dao) {
+        checkNotNull(dao);
+
         if (instance == null) {
             instance = new BuildingRepository(dao);
         }
@@ -57,11 +63,12 @@ public final class BuildingRepository {
                 .registerObserver(daoEventObserver);
     }
 
-    public static void stop() {
+    public synchronized static void stop() {
         if (instance != null) {
-            DaoEventRegistry.get(instance.dao)
-                    .unregisterObserver(instance.daoEventObserver);
-            instance = null;
+            BuildingRepository localInstance = BuildingRepository.instance;
+            BuildingRepository.instance = null;
+            DaoEventRegistry.get(localInstance.dao)
+                    .unregisterObserver(localInstance.daoEventObserver);
         }
     }
 
@@ -69,6 +76,27 @@ public final class BuildingRepository {
     public Building getBuildingById(long buildingId) {
         Building building = idToBuildingMap.get(buildingId);
         return (building != null) ? new Building(building) : null;
+    }
+
+    /**
+     * Finds the building with the highest id.
+     */
+    @Nullable
+    public Building getLastBuilding() {
+        if (idToBuildingMap.size() == 0) {
+            return null;
+        }
+
+        Building lastBuilding = null;
+        for (Building building : idToBuildingMap.values()) {
+            if (lastBuilding == null) {
+                lastBuilding = building;
+            } else if (lastBuilding.getId() < building.getId()) {
+                lastBuilding = building;
+            }
+        }
+
+        return lastBuilding;
     }
 
     /**

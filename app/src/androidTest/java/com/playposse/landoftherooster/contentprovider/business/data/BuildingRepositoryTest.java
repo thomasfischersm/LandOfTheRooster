@@ -44,15 +44,13 @@ public class BuildingRepositoryTest {
         dao.deleteUnits();
 
         // Reset BuildingRepository
-        BuildingRepository.get(dao)
-                .stop();
+        BuildingRepository.stop();
     }
 
     @After
     public void tearUp() {
         // Reset BuildingRepository
-        BuildingRepository.get(dao)
-                .stop();
+        BuildingRepository.stop();
     }
 
     @Test
@@ -124,5 +122,33 @@ public class BuildingRepositoryTest {
         Building building = buildingRepository.getBuildingById(wheatFieldId);
 
         assertNull(building);
+    }
+
+    @Test
+    public void getLastBuilding() {
+        BuildingRepository buildingRepository = BuildingRepository.get(dao);
+        assertNull(buildingRepository.getLastBuilding());
+
+        // Create first building.
+        Building firstBuilding =
+                new Building(TestData.WHEAT_FIELD_BUILDING_TYPE_ID, 0, 0);
+        DaoEventRegistry.get(dao)
+                .insert(firstBuilding);
+
+        Building lastBuilding = buildingRepository.getLastBuilding();
+        assertNotNull(lastBuilding);
+        assertEquals(firstBuilding.getId(), lastBuilding.getId());
+        assertEquals(TestData.WHEAT_FIELD_BUILDING_TYPE_ID, lastBuilding.getBuildingTypeId());
+
+        // Create second building.
+        Building secondBuilding =
+                new Building(TestData.MILL_BUILDING_TYPE_ID, 0, 0);
+        DaoEventRegistry.get(dao)
+                .insert(secondBuilding);
+
+        lastBuilding = buildingRepository.getLastBuilding();
+        assertNotNull(buildingRepository.getLastBuilding());
+        assertEquals(secondBuilding.getId(), buildingRepository.getLastBuilding().getId());
+        assertEquals(TestData.MILL_BUILDING_TYPE_ID, lastBuilding.getBuildingTypeId());
     }
 }

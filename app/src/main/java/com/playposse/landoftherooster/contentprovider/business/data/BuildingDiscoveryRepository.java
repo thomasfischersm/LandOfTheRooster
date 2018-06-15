@@ -47,7 +47,7 @@ public class BuildingDiscoveryRepository {
     }
 
     private void findInitialBuilding() {
-        Building lastBuilding = dao.getLastBuilding();
+        Building lastBuilding = BuildingRepository.get(dao).getLastBuilding();
 
         if (lastBuilding == null) {
             // This is a new game install.
