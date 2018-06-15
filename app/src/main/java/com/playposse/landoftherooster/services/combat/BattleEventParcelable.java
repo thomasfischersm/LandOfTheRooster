@@ -53,7 +53,7 @@ public final class BattleEventParcelable implements Parcelable {
         this.actualDamage = actualDamage;
         this.remainingHealth = remainingHealth;
 
-        Log.i(LOG_TAG, "BattleEventParcelable: " + attackerUnitName + " attacked "
+        Log.d(LOG_TAG, "BattleEventParcelable: " + attackerUnitName + " attacked "
                 + defenderUnitName + " with attack " + attack + " and met defense " + defense
                 + " with damage " + damage + " against armor " + armor
                 + " for an actual damage of " + actualDamage

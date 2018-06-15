@@ -41,14 +41,14 @@ public class DropOffItemPrecondition implements BusinessPrecondition {
         Map<Long, Integer> resourceMapJoiningUser = dataCache.getResourceMapJoiningUser();
         Integer resourceCount = resourceMapJoiningUser.get(resourceTypeId);
         if ((resourceCount == null) || (resourceCount <= 0)) {
-            Log.i(LOG_TAG, "evaluate: Cannot drop of resource type because the user doesn't " +
+            Log.d(LOG_TAG, "evaluate: Cannot drop of resource type because the user doesn't " +
                     "have it: " + resourceTypeId);
             return new PreconditionOutcome(false);
         }
 
         // Check if the building has a production rule for the item.
         if (!dataCache.usesResourceTypeAsInput(resourceTypeId)) {
-            Log.i(LOG_TAG, "evaluate: The building doesn't use the resource type as an " +
+            Log.d(LOG_TAG, "evaluate: The building doesn't use the resource type as an " +
                     "input: " + resourceTypeId);
             return new PreconditionOutcome(false);
         }
@@ -62,14 +62,14 @@ public class DropOffItemPrecondition implements BusinessPrecondition {
         Map<Long, Integer> unitMapJoiningUser = dataCache.getUnitMapJoiningUser();
         Integer unitCount = unitMapJoiningUser.get(unitTypeId);
         if ((unitCount == null) || (unitCount <= 0)) {
-            Log.i(LOG_TAG, "evaluate: Cannot drop of unit type because the user doesn't have " +
+            Log.d(LOG_TAG, "evaluate: Cannot drop of unit type because the user doesn't have " +
                     "it: " + unitTypeId);
             return new PreconditionOutcome(false);
         }
 
         // Check if the building has a production rule for the item.
         if (!dataCache.usesUnitTypeAsInput(unitTypeId)) {
-            Log.i(LOG_TAG, "evaluate: The building doesn't use the unit type as an " +
+            Log.d(LOG_TAG, "evaluate: The building doesn't use the unit type as an " +
                     "input: " + unitTypeId);
             return new PreconditionOutcome(false);
         }

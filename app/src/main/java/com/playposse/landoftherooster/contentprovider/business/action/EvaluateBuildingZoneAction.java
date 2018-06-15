@@ -54,12 +54,12 @@ public class EvaluateBuildingZoneAction implements BusinessAction {
 
         // Maybe trigger building zone events.
         if ((lastBuildingWithType == null) && (currentBuildingWithType != null)) {
-            Log.i(LOG_TAG, "perform: Entered building zone: "
+            Log.d(LOG_TAG, "perform: Entered building zone: "
                     + currentBuildingWithType.getBuilding().getId());
             BusinessEngine.get()
                     .triggerDelayedEvent(new BuildingZoneEnteredEvent(currentBuildingWithType));
         } else if ((lastBuildingWithType != null) && (currentBuildingWithType == null)) {
-            Log.i(LOG_TAG, "perform: Exited building zone: "
+            Log.d(LOG_TAG, "perform: Exited building zone: "
                     + lastBuildingWithType.getBuilding().getId());
             BusinessEngine.get()
                     .triggerDelayedEvent(new BuildingZoneExitedEvent(lastBuildingWithType));

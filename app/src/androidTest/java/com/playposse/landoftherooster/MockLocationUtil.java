@@ -67,7 +67,7 @@ public final class MockLocationUtil {
             location.setElapsedRealtimeNanos(System.nanoTime());
 
             locationManager.setTestProviderLocation(LocationManager.GPS_PROVIDER, location);
-            Log.i(LOG_TAG, "setMockLocation: Set location to: latitude: " + latitude
+            Log.d(LOG_TAG, "setMockLocation: Set location to: latitude: " + latitude
                     + " longitude: " + longitude);
             try {
                 Thread.sleep(1000);
@@ -82,9 +82,9 @@ public final class MockLocationUtil {
         double deltaAngle = (180 / Math.PI) * (distanceInMeters / 6378137.0);
         newLocation.setLatitude(newLocation.getLatitude() + deltaAngle);
 
-        Log.i(LOG_TAG, "moveNorth: Attempted distance: " + distanceInMeters);
-        Log.i(LOG_TAG, "moveNorth: Actual distance: " + startLocation.distanceTo(newLocation));
-        Log.i(LOG_TAG, "moveNorth: new location: latitude: " + newLocation.getLatitude()
+        Log.d(LOG_TAG, "moveNorth: Attempted distance: " + distanceInMeters);
+        Log.d(LOG_TAG, "moveNorth: Actual distance: " + startLocation.distanceTo(newLocation));
+        Log.d(LOG_TAG, "moveNorth: new location: latitude: " + newLocation.getLatitude()
                 + " longitude: " + newLocation.getLongitude());
 
         return newLocation;

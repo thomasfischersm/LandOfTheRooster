@@ -33,7 +33,7 @@ public class CompleteHealingPrecondition implements BusinessPrecondition {
         Building building = buildingWithType.getBuilding();
         long buildingId = building.getId();
         if (!buildingWithType.getBuildingType().isHealsUnits()) {
-            Log.i(LOG_TAG, "evaluate: Cannot heal because the building is not a healing " +
+            Log.d(LOG_TAG, "evaluate: Cannot heal because the building is not a healing " +
                     "building: " + buildingId);
             return new PreconditionOutcome(false);
         }
@@ -41,14 +41,14 @@ public class CompleteHealingPrecondition implements BusinessPrecondition {
         // Find the least sick unit.
         List<UnitWithType> injuredUnitsWithType = dataCache.getInjuredUnitsWithType();
         if (injuredUnitsWithType.size() == 0) {
-            Log.i(LOG_TAG, "evaluate: There is no unit to heal: " + buildingId);
+            Log.d(LOG_TAG, "evaluate: There is no unit to heal: " + buildingId);
             return new PreconditionOutcome(false);
         }
         UnitWithType unitWithType = injuredUnitsWithType.get(0);
 
         // Ensure that healing has started.
         if (building.getHealingStarted() == null) {
-            Log.i(LOG_TAG, "evaluate: Cannot complete healing because healing hasn't started!");
+            Log.d(LOG_TAG, "evaluate: Cannot complete healing because healing hasn't started!");
             BusinessEngine.get()
                     .triggerDelayedEvent(new InitiateHealingEvent(buildingId));
             return new PreconditionOutcome(false);
@@ -56,11 +56,11 @@ public class CompleteHealingPrecondition implements BusinessPrecondition {
 
         // Check if the healing time has been used up.
         long healingTimeMs = System.currentTimeMillis() - building.getHealingStarted().getTime();
-        int peasantCount = dataCache.getPeasantCount();Log.i(LOG_TAG, "evaluate: getPeasantCount");
+        int peasantCount = dataCache.getPeasantCount();Log.d(LOG_TAG, "evaluate: getPeasantCount");
         long neededHealingMs = unitWithType.getHealingTimeMs(peasantCount);
         long extraTimeMs = healingTimeMs - neededHealingMs;
         if (extraTimeMs < 0) {
-            Log.i(LOG_TAG, "evaluate: The healing time hasn't completed yet for building: "
+            Log.d(LOG_TAG, "evaluate: The healing time hasn't completed yet for building: "
                     + buildingId);
             CompleteHealingEvent.schedule(dataCache);
             return new PreconditionOutcome(false);

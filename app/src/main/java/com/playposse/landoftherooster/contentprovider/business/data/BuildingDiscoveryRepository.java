@@ -94,6 +94,7 @@ public class BuildingDiscoveryRepository {
             nextDistance = min + random.nextInt(delta);
         }
     }
+
     @Nullable
     public Float getMinDistanceFromCurrentBuildings(LatLng currentLatLng) {
         Location currentLocation = new Location("");

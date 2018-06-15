@@ -27,7 +27,7 @@ public final class SqliteUtil {
                 }
                 sb.append(cursor.getColumnName(i));
             }
-            Log.i(LOG_TAG, "explain: " + sb.toString());
+            Log.d(LOG_TAG, "explain: " + sb.toString());
 
             while (cursor.moveToNext()) {
                 sb = new StringBuilder();
@@ -37,7 +37,7 @@ public final class SqliteUtil {
                     }
                     sb.append(cursor.getString(i));
                 }
-                Log.i(LOG_TAG, "explain: " + sb.toString());
+                Log.d(LOG_TAG, "explain: " + sb.toString());
             }
         } finally {
             cursor.close();

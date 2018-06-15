@@ -41,7 +41,7 @@ public class RespawnBattleBuildingPrecondition implements BusinessPrecondition {
 
         if (!hasRespawned) {
             // scheduleWithDefaultDelay for later.
-            Log.i(LOG_TAG, "evaluate: ");
+            Log.d(LOG_TAG, "evaluate: ");
             BusinessEngine.get()
                     .scheduleEvent(missingMs, event);
         }

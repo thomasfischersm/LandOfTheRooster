@@ -31,6 +31,6 @@ public class CompleteProductionEvent extends BusinessEvent {
         BusinessEngine.get().scheduleEvent(
                 remainingMs,
                 new CompleteProductionEvent(buildingId));
-        Log.i(LOG_TAG, "scheduleWithDefaultDelay: Scheduled production to finish in " + remainingMs + "ms.");
+        Log.d(LOG_TAG, "scheduleWithDefaultDelay: Scheduled production to finish in " + remainingMs + "ms.");
     }
 }

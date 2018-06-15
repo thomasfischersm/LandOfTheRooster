@@ -27,7 +27,7 @@ public class PickUpUnitFromHospitalPrecondition implements BusinessPrecondition 
         // Check if it is a healing building.
         BuildingType buildingType = dataCache.getBuildingType();
         if (!buildingType.isHealsUnits()) {
-            Log.i(LOG_TAG, "evaluate: Cannot pick up unit because the building does not heal: "
+            Log.d(LOG_TAG, "evaluate: Cannot pick up unit because the building does not heal: "
                     + dataCache.getBuildingId());
             return new PreconditionOutcome(false);
         }
@@ -36,7 +36,7 @@ public class PickUpUnitFromHospitalPrecondition implements BusinessPrecondition 
         PickUpUnitFromHospitalEvent castEvent = (PickUpUnitFromHospitalEvent) event;
         UnitWithType unitWithType = hasUnitRecovered(castEvent, dataCache);
         if (unitWithType == null) {
-            Log.i(LOG_TAG, "evaluate: Cannot pick up unit because there are not recovered " +
+            Log.d(LOG_TAG, "evaluate: Cannot pick up unit because there are not recovered " +
                     castEvent.getUnitId());
             return new PreconditionOutcome(false);
         }
@@ -58,14 +58,14 @@ public class PickUpUnitFromHospitalPrecondition implements BusinessPrecondition 
                 if (!unitWithType.isInjured()) {
                     return unitWithType;
                 } else {
-                    Log.i(LOG_TAG, "hasUnitRecovered: The unit has not yet fully recovered: "
+                    Log.d(LOG_TAG, "hasUnitRecovered: The unit has not yet fully recovered: "
                             + unitId);
                     return null;
                 }
             }
         }
 
-        Log.i(LOG_TAG, "hasUnitRecovered: Couldn't find unit " + unitId + " at the building "
+        Log.d(LOG_TAG, "hasUnitRecovered: Couldn't find unit " + unitId + " at the building "
                 + event.getBuildingId());
         return null;
     }

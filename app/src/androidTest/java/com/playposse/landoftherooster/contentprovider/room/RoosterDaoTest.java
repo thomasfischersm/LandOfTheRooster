@@ -57,7 +57,7 @@ public class RoosterDaoTest {
         // Insert resource.
         Resource resource = new Resource(RESOURCE_TYPE_ID, RESOURCE_AMOUNT, null);
         long resourceId = dao.insert(resource);
-        Log.i(LOG_TAG, "simpleDatabaseAccess: Inserted a resource with id: " + resourceId);
+        Log.d(LOG_TAG, "simpleDatabaseAccess: Inserted a resource with id: " + resourceId);
 
         // Retrieve the resource.
         ResourceWithType resourceWithType = dao.getResourceWithTypeJoiningUser(1);

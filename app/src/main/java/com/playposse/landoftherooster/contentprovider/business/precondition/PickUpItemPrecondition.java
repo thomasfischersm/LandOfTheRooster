@@ -31,7 +31,7 @@ public class PickUpItemPrecondition implements BusinessPrecondition {
             long resourceTypeId = ((ResourceItem) item).getResourceTypeId();
             int resourceAmount = RoosterDaoUtil.getResourceAmount(dao, resourceTypeId, buildingId);
             if (resourceAmount <= 0) {
-                Log.i(LOG_TAG, "evaluate: Cannot pick up resource of type " + resourceTypeId
+                Log.d(LOG_TAG, "evaluate: Cannot pick up resource of type " + resourceTypeId
                         + " because the building " + buildingId + " doesn't have any.");
                 return new PreconditionOutcome(false);
             }
@@ -39,7 +39,7 @@ public class PickUpItemPrecondition implements BusinessPrecondition {
             long unitTypeId = ((UnitItem) item).getUnitTypeId();
             int unitAmount = RoosterDaoUtil.getUnitAmount(dao, unitTypeId, buildingId);
             if (unitAmount <= 0) {
-                Log.i(LOG_TAG, "evaluate: Cannot pick up unit of type " + unitTypeId
+                Log.d(LOG_TAG, "evaluate: Cannot pick up unit of type " + unitTypeId
                         + " because the building " + buildingId + " doesn't have any.");
                 return new PreconditionOutcome(false);
             }
@@ -53,7 +53,7 @@ public class PickUpItemPrecondition implements BusinessPrecondition {
             int carryCapacity = dao.getCarryingCapacity() + 1;
             int carryAmount = dao.getResourceCountJoiningUser();
             if (carryAmount + 1 > carryCapacity) {
-                Log.i(LOG_TAG, "evaluate: Cannot pick up resource because the user doesn't " +
+                Log.d(LOG_TAG, "evaluate: Cannot pick up resource because the user doesn't " +
                         "have enough carry capacity.");
                 return new PreconditionOutcome(false);
             }

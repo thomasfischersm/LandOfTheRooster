@@ -28,14 +28,14 @@ public class InitiateProductionPrecondition implements BusinessPrecondition {
 
         // Skip if already started.
         if (building.getProductionStart() != null) {
-            Log.i(LOG_TAG, "evaluate: Won't start new building production because it is " +
+            Log.d(LOG_TAG, "evaluate: Won't start new building production because it is " +
                     "already started.");
             return new PreconditionOutcome(false);
         }
 
         // Skip if no non-free production rule.
         if (!hasNonFreeProductionRule(dataCache)) {
-            Log.i(LOG_TAG, "evaluate: The building " + dataCache.getBuildingId()
+            Log.d(LOG_TAG, "evaluate: The building " + dataCache.getBuildingId()
                     + " doesn't have a non-free production rule. Won't start production!");
             return new PreconditionOutcome(false);
         }
@@ -43,7 +43,7 @@ public class InitiateProductionPrecondition implements BusinessPrecondition {
         // Check inputs.
         InitiateProductionPreconditionOutcome outcome = computePossibleProductionCount(dataCache);
         if (!outcome.getSuccess()) {
-            Log.i(LOG_TAG, "evaluate: Won't start building production because the " +
+            Log.d(LOG_TAG, "evaluate: Won't start building production because the " +
                     "prerequisites are incomplete.");
         }
 

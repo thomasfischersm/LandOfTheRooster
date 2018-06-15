@@ -36,7 +36,7 @@ public class RoosterApplication extends Application {
         // Start with a fresh database when running for debug.
         if (BuildConfig.DEBUG) {
             getApplicationContext().deleteDatabase(RoosterDatabaseHelper.DB_NAME);
-            Log.i(LOG_TAG, "onCreate: Reset RoosterDatabase");
+            Log.d(LOG_TAG, "onCreate: Reset RoosterDatabase");
         }
 
         // Import configuration on the first run.
@@ -82,7 +82,7 @@ public class RoosterApplication extends Application {
             createUnits(5, 1);
 
             debugDataComplete = true;
-            Log.i(LOG_TAG, "doInBackground: Done creating debug test data.");
+            Log.d(LOG_TAG, "doInBackground: Done creating debug test data.");
             return null;
         }
     }

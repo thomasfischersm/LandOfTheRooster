@@ -14,15 +14,15 @@ public abstract class TimedAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        Log.i(LOG_TAG, "doInBackground: Started");
+        Log.d(LOG_TAG, "doInBackground: Started");
         long start = System.currentTimeMillis();
 
         doInBackground();
 
         long end = System.currentTimeMillis();
         totalDuration += (end - start);
-        Log.i(LOG_TAG, "doInBackground: Ended " + (end - start) + "ms");
-        Log.i(LOG_TAG, "doInBackground: Total processing time: " + (totalDuration / 1_000));
+        Log.d(LOG_TAG, "doInBackground: Ended " + (end - start) + "ms");
+        Log.d(LOG_TAG, "doInBackground: Total processing time: " + (totalDuration / 1_000));
 
         return null;
     }

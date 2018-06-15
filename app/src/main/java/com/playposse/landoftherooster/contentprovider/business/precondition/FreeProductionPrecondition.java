@@ -69,7 +69,7 @@ public class FreeProductionPrecondition implements BusinessPrecondition {
             throw new NullPointerException("Building should not be null!");
         }
         if ((building.getProductionStart() == null)) {
-            Log.i(LOG_TAG, "evaluateAfterActualProduction: Canceling production. The " +
+            Log.d(LOG_TAG, "evaluateAfterActualProduction: Canceling production. The " +
                     "production start hasn't been set!");
             return new PreconditionOutcome(false);
         }
@@ -77,7 +77,7 @@ public class FreeProductionPrecondition implements BusinessPrecondition {
         BuildingWithType buildingWithType = dataCache.getBuildingWithType();
         Long delayMs = ProductionCycleUtil.getRemainingProductionTimeMs(unitMap, buildingWithType);
         if ((delayMs == null) || (delayMs > 0)) {
-            Log.i(LOG_TAG, "evaluateAfterActualProduction: Free production is not ready yet, " +
+            Log.d(LOG_TAG, "evaluateAfterActualProduction: Free production is not ready yet, " +
                     "scheduling it for later: " + delayMs);
             BusinessEngine.get().scheduleEvent(delayMs, event);
             return new PreconditionOutcome(false);

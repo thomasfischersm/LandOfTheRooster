@@ -24,7 +24,7 @@ public class AssignPeasantPrecondition implements BusinessPrecondition {
         Map<Long, Integer> unitMapJoiningUser = dataCache.getUnitMapJoiningUser();
         Integer unitPeasantCount = unitMapJoiningUser.get(GameConfig.PEASANT_ID);
         if ((unitPeasantCount == null) || (unitPeasantCount < 1)) {
-            Log.i(LOG_TAG, "evaluate: Can't assign peasant because the user doesn't have any " +
+            Log.d(LOG_TAG, "evaluate: Can't assign peasant because the user doesn't have any " +
                     "peasants joining him/her.");
             return new PreconditionOutcome(false);
         }
@@ -36,7 +36,7 @@ public class AssignPeasantPrecondition implements BusinessPrecondition {
         int maxPeasantCount = GameConfig.MAX_PEASANT_BUILDING_CAPACITY;
         if ((buildingPeasantCount != null) &&
                 (buildingPeasantCount + impliedPeasantCount >= maxPeasantCount)) {
-            Log.i(LOG_TAG, "evaluate: Can't assign peasant because the building is already " +
+            Log.d(LOG_TAG, "evaluate: Can't assign peasant because the building is already " +
                     "at capacity.");
             return new PreconditionOutcome(false);
         }

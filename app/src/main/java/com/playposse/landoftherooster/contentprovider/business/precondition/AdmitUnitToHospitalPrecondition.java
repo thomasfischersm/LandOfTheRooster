@@ -23,7 +23,7 @@ public class AdmitUnitToHospitalPrecondition implements BusinessPrecondition{
         // Check if the building can heal.
         BuildingType buildingType = dataCache.getBuildingType();
         if (!buildingType.isHealsUnits()) {
-            Log.i(LOG_TAG, "evaluate: Can't admit unit because the building doesn't heal: "
+            Log.d(LOG_TAG, "evaluate: Can't admit unit because the building doesn't heal: "
                     + dataCache.getBuildingId());
             return new PreconditionOutcome(false);
         }
@@ -36,7 +36,7 @@ public class AdmitUnitToHospitalPrecondition implements BusinessPrecondition{
             throw new IllegalArgumentException("Unit doesn't exist: " + unitId);
         }
         if (unitWithType.getUnit().getHealth() >= unitWithType.getType().getHealth()) {
-            Log.i(LOG_TAG, "evaluate: Can't admit unit because it is already healthy: "
+            Log.d(LOG_TAG, "evaluate: Can't admit unit because it is already healthy: "
                     + unitId);
             return new PreconditionOutcome(false);
         }

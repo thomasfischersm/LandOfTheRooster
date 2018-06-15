@@ -38,7 +38,7 @@ public class BuildingWithTypeTest extends TestData {
     public static void setUp() throws InterruptedException {
         Context targetContext = InstrumentationRegistry.getTargetContext();
         dao = RoosterDatabase.getInstance(targetContext).getDao();
-        Log.i(LOG_TAG, "setUp: got dao " + dao);
+        Log.d(LOG_TAG, "setUp: got dao " + dao);
 
         // Wait for debug data to be complete.
         while (!RoosterApplication.isDebugDataComplete()) {
@@ -107,7 +107,7 @@ public class BuildingWithTypeTest extends TestData {
                         try {
                             if (cursor.moveToFirst()) {
                                 long id = cursor.getLong(0);
-                                Log.i(LOG_TAG, "load_: Reading cursor; id = " + id);
+                                Log.d(LOG_TAG, "load_: Reading cursor; id = " + id);
                             }
                         } finally {
                             cursor.close();
@@ -129,7 +129,7 @@ public class BuildingWithTypeTest extends TestData {
 
     @Test
     public void load_BuildingFromRepository() {
-        Log.i(LOG_TAG, "load_BuildingFromRepository: dao is " + dao);
+        Log.d(LOG_TAG, "load_BuildingFromRepository: dao is " + dao);
         final BuildingTypeRepository repository = BuildingTypeRepository.get(dao);
 
         trace(
@@ -165,7 +165,7 @@ public class BuildingWithTypeTest extends TestData {
 
     private long stop(String msg) {
         long end = System.currentTimeMillis();
-        Log.i(LOG_TAG, "stop: " + msg + " " + (end - start) + "ms.");
+        Log.d(LOG_TAG, "stop: " + msg + " " + (end - start) + "ms.");
         return end - start;
     }
 
@@ -176,7 +176,7 @@ public class BuildingWithTypeTest extends TestData {
             action.run();
             total += stop(msg);
         }
-        Log.i(LOG_TAG, "trace: Average for " + msg + " "
+        Log.d(LOG_TAG, "trace: Average for " + msg + " "
                 + (total / REPETITION_COUNT) + " ms.");
     }
 

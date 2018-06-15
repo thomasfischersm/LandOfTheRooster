@@ -32,7 +32,7 @@ public class ProductionPrecondition extends InitiateProductionPrecondition {
         InitiateProductionPreconditionOutcome startOutcome =
                 computePossibleProductionCount(dataCache);
         if (!startOutcome.getSuccess()) {
-            Log.i(LOG_TAG, "evaluate: Won't start building production because the " +
+            Log.d(LOG_TAG, "evaluate: Won't start building production because the " +
                     "prerequisites are incomplete.");
             return new PreconditionOutcome(false);
         }
@@ -40,7 +40,7 @@ public class ProductionPrecondition extends InitiateProductionPrecondition {
         // Check that production has started.
         Building building = dataCache.getBuilding();
         if ((building == null) || (building.getProductionStart() == null)) {
-            Log.i(LOG_TAG, "evaluate: Cannot produce because there is no production start!");
+            Log.d(LOG_TAG, "evaluate: Cannot produce because there is no production start!");
             return new PreconditionOutcome(false);
         }
 
@@ -58,7 +58,7 @@ public class ProductionPrecondition extends InitiateProductionPrecondition {
         long productionEnd = building.getProductionStart().getTime() + duration;
         if (productionEnd > System.currentTimeMillis()) {
             // The production is not yet complete. Let's reschedule it.
-            Log.i(LOG_TAG, "evaluate: Production for building " + dataCache.getBuildingId()
+            Log.d(LOG_TAG, "evaluate: Production for building " + dataCache.getBuildingId()
                     + " should have been complete, but it isn't!");
             CompleteProductionEvent completeEvent =
                     new CompleteProductionEvent(event.getBuildingId());

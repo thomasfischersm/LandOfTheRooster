@@ -134,7 +134,7 @@ public class Battle {
     }
 
     public BattleSummaryParcelable fight() {
-        Log.i(LOG_TAG, "fight: Starting battle");
+        Log.d(LOG_TAG, "fight: Starting battle");
 
         List<UnitWithType> startingAliveFriendUnits = getAliveFriendUnits();
         int startingFriendUnitCount = startingAliveFriendUnits.size();
@@ -178,7 +178,7 @@ public class Battle {
     }
 
     private void fightRound() {
-        Log.i(LOG_TAG, "fightRound: Starting fight round.");
+        Log.d(LOG_TAG, "fightRound: Starting fight round.");
 
         // Re-create battle groups if necessary
         if ((battleGroups.size() == 0) || (hasDeathInAGroup())) {

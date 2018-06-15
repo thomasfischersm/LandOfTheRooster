@@ -45,7 +45,7 @@ public class BasicWalkingUiTest {
 
     @Before
     public void setUp() throws IOException {
-        Log.i(LOG_TAG, "setUp: The BasicWalkingUiTest is getting initialized.");
+        Log.d(LOG_TAG, "setUp: The BasicWalkingUiTest is getting initialized.");
 
         context = InstrumentationRegistry.getContext();
         targetContext = InstrumentationRegistry.getTargetContext();
@@ -63,7 +63,7 @@ public class BasicWalkingUiTest {
                 (LocationManager) targetContext.getSystemService(Context.LOCATION_SERVICE);
         MockLocationUtil.enableMockLocationProvider(locationManager);
 
-        Log.i(LOG_TAG, "setUp: The BasicWalkingUiTest is done initializing.");
+        Log.d(LOG_TAG, "setUp: The BasicWalkingUiTest is done initializing.");
     }
 
     @After

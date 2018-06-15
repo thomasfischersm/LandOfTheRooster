@@ -69,7 +69,7 @@ public final class DatabaseDumper {
         }
 
         // Write table name.
-        Log.i(LOG_TAG, "dumpTable: === " + tableName + " (" + result.size() + " rows ) ===");
+        Log.d(LOG_TAG, "dumpTable: === " + tableName + " (" + result.size() + " rows ) ===");
 
         // Calculate column widths.
         List<Integer> columnWidths = new ArrayList<>();
@@ -87,7 +87,7 @@ public final class DatabaseDumper {
             int spaceLength = columnWidths.get(i) - columnName.length();
             sb.append(new String(new char[spaceLength]).replace('\0', ' '));
         }
-        Log.i(LOG_TAG, "dumpTable: " + sb.toString());
+        Log.d(LOG_TAG, "dumpTable: " + sb.toString());
 
         // Format data.
         for (int i = 0; i < result.size(); i++) {
@@ -105,10 +105,10 @@ public final class DatabaseDumper {
                 int spaceLength = columnWidths.get(j) - value.length();
                 rowBuilder.append(new String(new char[spaceLength]).replace('\0', ' '));
             }
-            Log.i(LOG_TAG, "dumpTable: " + rowBuilder);
+            Log.d(LOG_TAG, "dumpTable: " + rowBuilder);
         }
 
-        Log.i(LOG_TAG, "dumpTable: \n\n\n");
+        Log.d(LOG_TAG, "dumpTable: \n\n\n");
     }
 
     private static int getMaxColumnWidth(

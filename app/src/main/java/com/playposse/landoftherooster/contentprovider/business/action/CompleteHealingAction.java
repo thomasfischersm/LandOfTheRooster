@@ -42,7 +42,7 @@ public class CompleteHealingAction implements BusinessAction {
             unit.setHealth(unitType.getHealth());
             DaoEventRegistry.get(dao)
                     .update(unit);
-            Log.i(LOG_TAG, "perform: Healed unit: " + unit.getId());
+            Log.d(LOG_TAG, "perform: Healed unit: " + unit.getId());
         }
 
         // Clear healingStarted if the last unit has been healed.

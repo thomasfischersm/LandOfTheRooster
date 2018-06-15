@@ -299,7 +299,7 @@ public class BusinessEngine {
         runStartupInitializer(new HealingStartupInitializer());
 
         long end = System.currentTimeMillis();
-        Log.i(LOG_TAG, "runStartupInitializers: Ran all initializers in " + (end - start)
+        Log.d(LOG_TAG, "runStartupInitializers: Ran all initializers in " + (end - start)
                 + "ms.");
     }
 
@@ -316,7 +316,7 @@ public class BusinessEngine {
         }
 
         long end = System.currentTimeMillis();
-        Log.i(LOG_TAG, "runStartupInitializer: Ran " + initializer.getClass().getSimpleName()
+        Log.d(LOG_TAG, "runStartupInitializer: Ran " + initializer.getClass().getSimpleName()
                 + " in " + (end - start) + "ms.");
     }
 
@@ -328,16 +328,16 @@ public class BusinessEngine {
     }
 
     public void start(Context context) {
-        Log.i(LOG_TAG, "start: Starting BusinessEngine.");
+        Log.d(LOG_TAG, "start: Starting BusinessEngine.");
         dao = RoosterDatabase.getInstance(context).getDao();
 
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         runStartupInitializers();
-        Log.i(LOG_TAG, "start: Started BusinessEngine.");
+        Log.d(LOG_TAG, "start: Started BusinessEngine.");
     }
 
     public void stop() {
-        Log.i(LOG_TAG, "stop: Stopping BusinessEngine");
+        Log.d(LOG_TAG, "stop: Stopping BusinessEngine");
 
         if (scheduledExecutorService != null) {
             scheduledExecutorService.shutdownNow();
@@ -347,7 +347,7 @@ public class BusinessEngine {
             instance = null;
         }
 
-        Log.i(LOG_TAG, "stop: Stopped BusinessEngine");
+        Log.d(LOG_TAG, "stop: Stopped BusinessEngine");
     }
 
     /**
@@ -371,7 +371,7 @@ public class BusinessEngine {
     }
 
     private void executeEvent(BusinessEvent event) {
-        Log.i(LOG_TAG, "triggerEvent: Triggered event: [" + event.getClass().getSimpleName()
+        Log.d(LOG_TAG, "triggerEvent: Triggered event: [" + event.getClass().getSimpleName()
                 + "]");
 
         // Trace method duration in analytics.
@@ -388,13 +388,13 @@ public class BusinessEngine {
             PreconditionOutcome preconditionOutcome =
                     actionContainer.getPrecondition().evaluate(event, dataCache);
             long preconditionEnd = System.currentTimeMillis();
-            Log.i(LOG_TAG, "executeEvent: Evaluated precondition ["
+            Log.d(LOG_TAG, "executeEvent: Evaluated precondition ["
                     + actionContainer.getPrecondition().getClass().getSimpleName() + "] in "
                     + (preconditionEnd - preconditionStart) + " ms");
 
             if (!preconditionOutcome.getSuccess()) {
                 trace.incrementMetric(Analytics.PRECONDITION_FAILURE_ATTRIBUTE, 1);
-                Log.i(LOG_TAG, "triggerEvent: Precondition wasn't satisfied: "
+                Log.d(LOG_TAG, "triggerEvent: Precondition wasn't satisfied: "
                         + actionContainer.getPrecondition().getClass().getSimpleName());
                 continue;
             }
@@ -402,13 +402,13 @@ public class BusinessEngine {
             // Execute action.
             trace.incrementMetric(Analytics.PRECONDITION_SUCCESS_ATTRIBUTE, 1);
 
-            Log.i(LOG_TAG, "triggerEvent: Start action ["
+            Log.d(LOG_TAG, "triggerEvent: Start action ["
                     + actionContainer.getAction().getClass().getSimpleName() + "]");
             long actionStart = System.currentTimeMillis();
             actionContainer.getAction().perform(event, preconditionOutcome, dataCache);
             executedEventCounter++;
             long actionEnd = System.currentTimeMillis();
-            Log.i(LOG_TAG, "triggerEvent: Finished action ["
+            Log.d(LOG_TAG, "triggerEvent: Finished action ["
                     + actionContainer.getAction().getClass().getSimpleName() + "] in "
                     + (actionEnd - actionStart) + " ms");
         }
@@ -426,19 +426,19 @@ public class BusinessEngine {
         Analytics.logBusinessEvent(event, eventStart);
 
         long eventEnd = System.currentTimeMillis();
-        Log.i(LOG_TAG, "triggerEvent: Completed event: [" + event.getClass().getSimpleName()
+        Log.d(LOG_TAG, "triggerEvent: Completed event: [" + event.getClass().getSimpleName()
                 + "] in " + (eventEnd - eventStart) + "ms");
     }
 
     public void scheduleEvent(long delayMs, final BusinessEvent event) {
-        Log.i(LOG_TAG, "scheduleEvent: Scheduled event [" + event.getClass().getSimpleName()
+        Log.d(LOG_TAG, "scheduleEvent: Scheduled event [" + event.getClass().getSimpleName()
                 + "] for in " + delayMs + "ms.");
 
         // Cancel any previously scheduled event.
         if (eventToRunnableMap.containsKey(event)) {
             CancelableRunnable earlierRunnable = eventToRunnableMap.get(event);
             earlierRunnable.cancel();
-            Log.i(LOG_TAG, "scheduleEvent: Canceled previously scheduled event.");
+            Log.d(LOG_TAG, "scheduleEvent: Canceled previously scheduled event.");
         }
 
         CancelableRunnable runnable = new CancelableRunnable() {

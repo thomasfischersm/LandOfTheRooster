@@ -47,7 +47,7 @@ public abstract class RoosterDatabase extends RoomDatabase {
     public abstract RoosterDao getDao();
 
     public static synchronized RoosterDatabase getInstance(Context context) {
-        Log.i(LOG_TAG, "getInstance: RoosterDatabase getInstance is called.");
+        Log.d(LOG_TAG, "getInstance: RoosterDatabase getInstance is called.");
         if (instance == null) {
             MutableBoolean isDbInitNeeded = new MutableBoolean(false);
             instance = Room.databaseBuilder(
@@ -61,7 +61,7 @@ public abstract class RoosterDatabase extends RoomDatabase {
             // Force the database to be initialized by making a simple call.
             instance.getDao().getLastBuilding();
 
-            Log.i(LOG_TAG, "getInstance: isDbInitNeeded = " + isDbInitNeeded.isValue());
+            Log.d(LOG_TAG, "getInstance: isDbInitNeeded = " + isDbInitNeeded.isValue());
             if (isDbInitNeeded.isValue()) {
                 try {
                     ConfigurationImport.importAll(context, instance);
@@ -70,7 +70,7 @@ public abstract class RoosterDatabase extends RoomDatabase {
                 }
             }
         }
-        Log.i(LOG_TAG, "getInstance: RoosterDatabase getInstance has completed.");
+        Log.d(LOG_TAG, "getInstance: RoosterDatabase getInstance has completed.");
         return instance;
     }
 
