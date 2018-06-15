@@ -5,6 +5,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,5 +57,17 @@ public final class BuildingTypeRepository {
         } else {
             return null;
         }
+    }
+
+    public List<BuildingWithType> getAllBuildingsWithType() {
+        List<Building> buildings = BuildingRepository.get(dao).getAllBuildings();
+        List<BuildingWithType> buildingsWithType = new ArrayList<>(buildings.size());
+
+        for (Building building : buildings) {
+            BuildingType buildingType = idToBuildingTypeMap.get(building.getBuildingTypeId());
+            buildingsWithType.add(new BuildingWithType(building, buildingType));
+        }
+
+        return buildingsWithType;
     }
 }

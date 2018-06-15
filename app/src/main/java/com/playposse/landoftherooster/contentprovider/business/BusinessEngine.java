@@ -33,6 +33,7 @@ import com.playposse.landoftherooster.contentprovider.business.action.RespawnBat
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateBattleBuildingMarkerAction;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateHospitalBuildingMarkerAction;
 import com.playposse.landoftherooster.contentprovider.business.action.UpdateProductionBuildingMarkerAction;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingTypeRepository;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.BuildingCreatedEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAdmitUnitToHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostBattleEvent;
@@ -311,7 +312,8 @@ public class BusinessEngine {
         long start = System.currentTimeMillis();
 
         // Get new buildings for each initializer in case they were changed.
-        List<BuildingWithType> buildingsWithType = dao.getAllBuildingsWithType();
+        List<BuildingWithType> buildingsWithType =
+                BuildingTypeRepository.get(dao).getAllBuildingsWithType();
 
         if (buildingsWithType != null) {
             for (BuildingWithType buildingWithType : buildingsWithType) {

@@ -49,8 +49,10 @@ public abstract class AbstractBusinessTest extends TestData {
         dao.deleteUnits();
 
         // Start business engine.
+        BuildingRepository.stop();
         businessEngine = BusinessEngine.get();
         businessEngine.start(targetContext);
+        BuildingRepository.stop();
     }
 
     @After

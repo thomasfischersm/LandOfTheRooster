@@ -47,7 +47,8 @@ public class BuildingZoneRepository {
         currentLocation.setLongitude(latLng.longitude);
 
         // Query the database.
-        List<BuildingWithType> buildings = dao.getAllBuildingsWithType();
+        List<BuildingWithType> buildings =
+                BuildingTypeRepository.get(dao).getAllBuildingsWithType();
 
         // Calculate distances.
         for (BuildingWithType buildingWithType : buildings) {
