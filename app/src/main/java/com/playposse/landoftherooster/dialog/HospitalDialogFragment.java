@@ -298,6 +298,7 @@ public class HospitalDialogFragment extends BaseDialogFragment {
     class HospitalizedGridLayoutRowViewHolder extends GridLayoutRowViewHolder<UnitWithType> {
 
         private final MutableLong healingDurationSum;
+
         @BindView(R.id.unit_type_name_text_view) TextView unitTypeNameTextView;
         @BindView(R.id.health_text_view) TextView healthTextView;
         @BindView(R.id.estimated_time_text_view) TextView estimatedTimeTextView;
@@ -353,7 +354,6 @@ public class HospitalDialogFragment extends BaseDialogFragment {
 //                    unitTypeNameTextView =
 //                            recoveredGridLayout.findViewById(R.id.unit_type_name_text_view);
 //                    pickUpButton = recoveredGridLayout.findViewById(R.id.pick_up_button);
-            Log.d(LOG_TAG, "populate: g");
 
             unitTypeNameTextView.setText(unitWithType.getType().getName());
 
@@ -364,7 +364,6 @@ public class HospitalDialogFragment extends BaseDialogFragment {
                     onPickUpRecoveredUnitClicked(unitWithType);
                 }
             });
-            Log.d(LOG_TAG, "populate: h");
         }
     }
 }

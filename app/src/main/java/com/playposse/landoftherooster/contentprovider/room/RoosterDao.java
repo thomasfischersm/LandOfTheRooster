@@ -106,6 +106,9 @@ public interface RoosterDao {
     @Query("select * from resource_type where id in (:resourceTypeIds)")
     List<ResourceType> getResourceTypesById(List<Long> resourceTypeIds);
 
+    @Query("select * from resource_type")
+    List<ResourceType> getAllResourceTypes();
+
     @Query("delete from resource_type")
     void deleteResourceTypes();
 

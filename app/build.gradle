@@ -23,6 +23,7 @@ repositories {
 
 android {
     compileSdkVersion 27
+
     defaultConfig {
         applicationId "com.playposse.landoftherooster"
         minSdkVersion 19
@@ -38,10 +39,23 @@ android {
             }
         }
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "devMode"
+
+    productFlavors {
+        devModeOff {
+            dimension "devMode"
+        }
+
+        devModeOn {
+            dimension "devMode"
         }
     }
 }

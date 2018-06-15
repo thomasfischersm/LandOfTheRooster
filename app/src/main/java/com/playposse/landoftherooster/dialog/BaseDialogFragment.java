@@ -303,6 +303,10 @@ public abstract class BaseDialogFragment extends DialogFragment {
         return isRemote;
     }
 
+    public RoosterDao getDao() {
+        return dao;
+    }
+
     /**
      * An {@link AsyncTask} to power asynchronous loading of data. The actual dialog class has
      * methods that should be overridden by implementing classes.

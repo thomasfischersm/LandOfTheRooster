@@ -11,6 +11,7 @@
     <string name="resource_listing">%1$s: %2$d</string>
     <string name="unit_listing">%1$s (%2$d/%3$d health)</string>
     <string name="recenter_map">Re-center</string>
+    <string name="dev_mode_button_label">Dev</string>
 
     <!-- Battle activity -->
     <string name="battle_victory_msg">Victory!</string>
@@ -74,6 +75,12 @@
     <string name="wounded_health">%1$d / %2$d</string>
     <string name="healing_estimate">%1$d min</string>
     <string name="hospital_assign_hint">(Assign up to 5 peasants to speed up healing.)</string>
+
+    <!-- Dev mode dialog -->
+    <string name="add_button_label">+</string>
+    <string name="remove_button_label">-</string>
+    <string name="resource_heading">Resources</string>
+    <string name="unit_heading">Units</string>
 
     <!-- Common -->
     <string name="dialog_yes_button">Yes</string>

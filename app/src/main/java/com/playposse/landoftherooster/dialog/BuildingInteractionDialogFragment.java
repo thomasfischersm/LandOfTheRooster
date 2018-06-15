@@ -221,7 +221,11 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
     }
 
     private void generateActions() {
-        actions.clear();
+        // Make a local copy before copying back to the instance variable. The code used to
+        // sometimes throw a ConcurrentModificationException because apparently the background
+        // method and the method on the UI thread ran at the same time. By making a local copy,
+        // the time for a chance of a collision is reduced.
+        List<ActionData> actions = new ArrayList<>();
 
         // Generate actions based on production rules.
         for (ProductionRule productionRule : productionRules) {
@@ -272,6 +276,8 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
 
         // Generate action to add peasant.
         actions.add(new PeasantActionData(getActivity(), dao, PEASANT_ID, buildingId));
+
+        this.actions = actions;
     }
 
     private void populateActionGrid() {

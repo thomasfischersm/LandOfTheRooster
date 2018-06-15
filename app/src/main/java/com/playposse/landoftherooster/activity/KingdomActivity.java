@@ -35,6 +35,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.playposse.landoftherooster.BuildConfig;
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.RoosterApplication;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
@@ -51,6 +52,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 import com.playposse.landoftherooster.dialog.BattleAvailableDialogFragment;
 import com.playposse.landoftherooster.dialog.BuildingInteractionDialogFragment;
 import com.playposse.landoftherooster.dialog.BuildingNeedsToRespawnDialogFragment;
+import com.playposse.landoftherooster.dialog.DevModeDialogFragment;
 import com.playposse.landoftherooster.dialog.HospitalDialogFragment;
 import com.playposse.landoftherooster.map.MarkerStateRegistry;
 import com.playposse.landoftherooster.util.RecyclerViewLiveDataAdapter;
@@ -67,10 +69,12 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     private static final String LOG_TAG = KingdomActivity.class.getSimpleName();
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private static final String PRODUCT_FLAVOR_DEV_MODE_ON = "devModeOn";
 
     @BindView(R.id.resource_recycler_view) RecyclerView resourceRecyclerView;
     @BindView(R.id.unit_recycler_view) RecyclerView unitRecyclerView;
     @BindView(R.id.center_button) Button centerButton;
+    @BindView(R.id.dev_mode_button) Button devModeButton;
 
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
@@ -106,6 +110,17 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
         // Try starting the background service in case it's not running.
         RoosterApplication.startGameBackgroundService(this);
+
+        if (BuildConfig.FLAVOR.equals(PRODUCT_FLAVOR_DEV_MODE_ON)) {
+            devModeButton.setVisibility(View.VISIBLE);
+            devModeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DevModeDialogFragment.newInstance()
+                            .show(getFragmentManager(), null);
+                }
+            });
+        }
     }
 
     @Override
