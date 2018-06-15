@@ -9,6 +9,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.event.DaoEventObserver;
 import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +97,18 @@ public final class BuildingRepository {
             }
         }
 
-        return lastBuilding;
+        return (lastBuilding != null) ? new Building(lastBuilding) : null;
+    }
+
+    public List<Building> getAllBuildings() {
+        ArrayList<Building> buildings = new ArrayList<>(idToBuildingMap.values());
+
+        // Make defensive building copies.
+        for (int i = 0; i < buildings.size(); i++) {
+            buildings.set(i, new Building(buildings.get(i)));
+        }
+
+        return buildings;
     }
 
     /**

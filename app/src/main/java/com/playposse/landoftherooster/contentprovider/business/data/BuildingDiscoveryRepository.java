@@ -107,7 +107,7 @@ public class BuildingDiscoveryRepository {
         Float max = null; // Gather for future use.
 
         // Query db.
-        List<Building> buildings = dao.getAllBuildings();
+        List<Building> buildings = BuildingRepository.get(dao).getAllBuildings();
 
         // Iterate over buildings and collect min/max
         for (Building building : buildings) {
