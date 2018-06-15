@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingTypeRepository;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAssignPeasantEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteFreeProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteProductionEvent;
@@ -106,7 +107,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
     @Override
     protected void doInBackground() {
         dao = RoosterDatabase.getInstance(getActivity()).getDao();
-        buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+        buildingWithType = BuildingTypeRepository.get(dao).queryBuildingWithType(buildingId);
 
         buildingType = buildingWithType.getBuildingType();
         long buildingTypeId = buildingType.getId();

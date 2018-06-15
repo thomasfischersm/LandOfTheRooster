@@ -15,6 +15,8 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * A singleton class that keeps track of which building has been discovered.
  */
@@ -33,6 +35,8 @@ public class BuildingDiscoveryRepository {
 
 
     private BuildingDiscoveryRepository(RoosterDao dao) {
+        checkNotNull(dao);
+
         this.dao = dao;
 
         findInitialBuilding();

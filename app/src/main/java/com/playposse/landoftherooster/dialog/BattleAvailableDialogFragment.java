@@ -9,6 +9,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingTypeRepository;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostBattleEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostRespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
@@ -98,7 +99,8 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
     protected void doInBackground() {
         // Load data to display.
         RoosterDao dao = RoosterDatabase.getInstance(getActivity()).getDao();
-        BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+        BuildingWithType buildingWithType =
+                BuildingTypeRepository.get(dao).queryBuildingWithType(buildingId);
         buildingType = buildingWithType.getBuildingType();
         enemyUnitType = dao.getUnitTypeById(buildingType.getEnemyUnitTypeId());
 

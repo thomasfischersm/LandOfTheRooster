@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.playposse.landoftherooster.GameConfig;
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingTypeRepository;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAdmitUnitToHospitalEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAssignPeasantEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteHealingEvent;
@@ -97,7 +98,7 @@ public class HospitalDialogFragment extends BaseDialogFragment {
         Log.d(LOG_TAG, "doInBackground: Start doInBackground");
         RoosterDao dao = RoosterDatabase.getInstance(getActivity()).getDao();
 
-        buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+        buildingWithType = BuildingTypeRepository.get(dao).queryBuildingWithType(buildingId);
         peasantCountInBuilding = GameConfig.IMPLIED_PEASANT_COUNT;
         peasantCountJoiningUser = dao.getUnitCountJoiningUser(GameConfig.PEASANT_ID);
         woundedUnitWithTypes = dao.getWoundedUnitsWithTypeJoiningUser();

@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.playposse.landoftherooster.GameConfig;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingTypeRepository;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
@@ -98,7 +99,8 @@ public class MarkerState {
     private void reapplyToMap(Context context, GoogleMap map) {
         // Read data.
         // TODO: See if this database read can be avoided for performance.
-        BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+        BuildingWithType buildingWithType =
+                BuildingTypeRepository.get(dao).queryBuildingWithType(buildingId);
         Building building = buildingWithType.getBuilding();
         BuildingType buildingType = buildingWithType.getBuildingType();
         LatLng latLng = new LatLng(building.getLatitude(), building.getLongitude());

@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
+import com.playposse.landoftherooster.contentprovider.business.data.BuildingTypeRepository;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostRespawnBattleBuildingEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
@@ -57,7 +58,8 @@ public class BuildingNeedsToRespawnDialogFragment extends BaseDialogFragment {
     @Override
     protected void doInBackground() {
         RoosterDao dao = RoosterDatabase.getInstance(getActivity()).getDao();
-        BuildingWithType buildingWithType = dao.getBuildingWithTypeByBuildingId(buildingId);
+        BuildingWithType buildingWithType =
+                BuildingTypeRepository.get(dao).queryBuildingWithType(buildingId);
         long lastConquestMs = buildingWithType.getBuilding().getLastConquest().getTime();
         remainingMs = lastConquestMs + BATTLE_RESPAWN_DURATION - System.currentTimeMillis();
     }
