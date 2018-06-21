@@ -39,6 +39,8 @@ public class GameBackgroundService extends Service {
     private static final String NOTIFICATION_CHANNEL_ID = "com.playposse.landoftherooster.notificationchannel";
     private static final String NOTIFICATION_CHANNEL_NAME = "Land Of The Rooster";
 
+    private static boolean isLocationOverride = false;
+
     private ConvenientLocationProvider convenientLocationProvider;
 
     @Override
@@ -176,6 +178,19 @@ public class GameBackgroundService extends Service {
         return null;
     }
 
+    public static boolean isLocationOverride() {
+        return isLocationOverride;
+    }
+
+    public static void setLocationOverride(boolean locationOverride) {
+        isLocationOverride = locationOverride;
+    }
+
+    public static void setOverrideLocation(LatLng overrideLocation) {
+        BusinessEngine.get()
+                .triggerEventAsync(new LocationUpdateEvent(overrideLocation));
+    }
+
     /**
      * Callback that gets called when a new GPS location becomes available. This calls all
      * dependent services.
@@ -184,8 +199,10 @@ public class GameBackgroundService extends Service {
 
         @Override
         public void onNewLocation(LatLng latLng) {
-            BusinessEngine.get()
-                    .triggerEvent(new LocationUpdateEvent(latLng));
+            if (!isLocationOverride) {
+                BusinessEngine.get()
+                        .triggerEvent(new LocationUpdateEvent(latLng));
+            }
         }
     }
 }

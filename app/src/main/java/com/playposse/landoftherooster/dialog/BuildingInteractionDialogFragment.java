@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.dialog;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
 import android.view.LayoutInflater;
@@ -105,7 +106,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
     }
 
     @Override
-    protected void doInBackground() {
+    protected void doInBackground(Context appContext) {
         dao = RoosterDatabase.getInstance(getActivity()).getDao();
         buildingWithType = BuildingTypeRepository.get(dao).queryBuildingWithType(buildingId);
 
@@ -114,7 +115,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
         productionRules = dao.getProductionRulesByBuildingTypeId(buildingTypeId);
         peasantCount = dao.getUnitCount(PEASANT_ID, buildingId) + IMPLIED_PEASANT_COUNT;
 
-        productionRulesStr = generateProductionRulesStr();
+        productionRulesStr = generateProductionRulesStr(appContext);
 
         generateActions();
 
@@ -156,7 +157,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
         productionRulesTextView.setText(productionRulesStr);
     }
 
-    private String generateProductionRulesStr() {
+    private String generateProductionRulesStr(Context appContext) {
         StringBuilder productionRulesBuilder = new StringBuilder();
         if (productionRules != null) {
             for (ProductionRule productionRule : productionRules) {
@@ -168,7 +169,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
                 }
 
                 if (productionRule.isFree()) {
-                    String freeTemplate = getActivity().getString(
+                    String freeTemplate = appContext.getString(
                             R.string.free_production_rule_template,
                             outputStr);
                     productionRulesBuilder.append(freeTemplate);

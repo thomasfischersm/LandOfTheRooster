@@ -1,8 +1,10 @@
 package com.playposse.landoftherooster.dialog;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -154,7 +156,12 @@ public abstract class BaseDialogFragment extends DialogFragment {
      */
     protected abstract Long readArguments(Bundle savedInstanceState);
 
-    protected abstract void doInBackground();
+    /**
+     * Let's the fragment execute heavy work on a background thread. The appContext is passed, so
+     * that the implementing code won't throw a NPE when trying to access a disconnected activity.
+     * @param appContext
+     */
+    protected abstract void doInBackground(Context appContext);
 
     protected abstract void onPostExecute();
 
@@ -332,7 +339,10 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
             fragment = fragmentReference.get();
             if (fragment != null) {
-                fragment.doInBackground();
+                Context context = fragment.getActivity();
+                if (context != null) {
+                    fragment.doInBackground(context.getApplicationContext());
+                }
             }
             Log.d(LOG_TAG, "doInBackground: Finished loading dialog");
             return null;
@@ -341,8 +351,10 @@ public abstract class BaseDialogFragment extends DialogFragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.d(LOG_TAG, "onPostExecute: Start populating dialog.");
+
+            // If the fragment or activity are null, the activity has been disconnected.
             BaseDialogFragment fragment = fragmentReference.get();
-            if (fragment != null) {
+            if ((fragment != null) && (fragment.getActivity() != null)) {
                 ButterKnife.bind(fragment, fragment.rootView);
 
                 fragment.onPostExecute();
@@ -401,12 +413,18 @@ public abstract class BaseDialogFragment extends DialogFragment {
             if (!isRemote && newIsRemote) {
                 // Reload the dialog in local mode.
                 isRemote = true;
-                reload(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateRemoteIndications();
-                    }
-                });
+
+                Activity activity = getActivity();
+                if (activity != null) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateRemoteIndications();
+                        }
+                    });
+                }
+
+                reload(null);
             }
         }
     }

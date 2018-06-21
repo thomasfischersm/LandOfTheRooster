@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.dialog;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
@@ -94,7 +95,7 @@ public class HospitalDialogFragment extends BaseDialogFragment {
     }
 
     @Override
-    protected void doInBackground() {
+    protected void doInBackground(Context appContext) {
         Log.d(LOG_TAG, "doInBackground: Start doInBackground");
         RoosterDao dao = RoosterDatabase.getInstance(getActivity()).getDao();
 

@@ -12,6 +12,7 @@
     <string name="unit_listing">%1$s (%2$d/%3$d health)</string>
     <string name="recenter_map">Re-center</string>
     <string name="dev_mode_button_label">Dev</string>
+    <string name="fix_location_button_label">Loc</string>
 
     <!-- Battle activity -->
     <string name="battle_victory_msg">Victory!</string>

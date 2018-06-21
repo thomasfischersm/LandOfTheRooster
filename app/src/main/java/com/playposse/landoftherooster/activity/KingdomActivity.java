@@ -6,9 +6,11 @@ import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.SupportActivity;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
@@ -31,6 +34,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -55,6 +59,7 @@ import com.playposse.landoftherooster.dialog.BuildingNeedsToRespawnDialogFragmen
 import com.playposse.landoftherooster.dialog.DevModeDialogFragment;
 import com.playposse.landoftherooster.dialog.HospitalDialogFragment;
 import com.playposse.landoftherooster.map.MarkerStateRegistry;
+import com.playposse.landoftherooster.services.GameBackgroundService;
 import com.playposse.landoftherooster.util.RecyclerViewLiveDataAdapter;
 
 import java.util.List;
@@ -68,13 +73,18 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
 
     private static final String LOG_TAG = KingdomActivity.class.getSimpleName();
 
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     public static final String PRODUCT_FLAVOR_DEV_MODE_ON = "devModeOn";
+
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     @BindView(R.id.resource_recycler_view) RecyclerView resourceRecyclerView;
     @BindView(R.id.unit_recycler_view) RecyclerView unitRecyclerView;
     @BindView(R.id.center_button) Button centerButton;
     @BindView(R.id.dev_mode_button) Button devModeButton;
+    @BindView(R.id.fix_location_button) ToggleButton fixLocationButton;
+
+    private final DevOnlyLocationSource devOnlyLocationSource = new DevOnlyLocationSource();
+    private final LocationCallback locationCallback = new ThisLocationCallback();
 
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
@@ -82,8 +92,8 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     private ResourceAdapter resourceAdapter;
     private UnitAdapter unitAdapter;
     private boolean isUserCentered = false;
+    private FixLocationOnMapClickListener fixLocationMapListener;
 
-    private LocationCallback locationCallback = new ThisLocationCallback();
     private DialogOpenerBusinessEventListener dialogListener;
     private MarkerStateRegistry markerStateRegistry;
 
@@ -112,6 +122,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         RoosterApplication.startGameBackgroundService(this);
 
         if (BuildConfig.FLAVOR.equals(PRODUCT_FLAVOR_DEV_MODE_ON)) {
+            // button for dev mode console
             devModeButton.setVisibility(View.VISIBLE);
             devModeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -120,6 +131,9 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                             .show(getFragmentManager(), null);
                 }
             });
+
+            // button to manipulate the location.
+            fixLocationButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -277,6 +291,29 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
     }
 
+    @OnClick(R.id.fix_location_button)
+    public void onFixLocationButtonClicked() {
+        if (!GameBackgroundService.isLocationOverride()) {
+            // Enable location override.
+            GameBackgroundService.setLocationOverride(true);
+            fixLocationButton.setChecked(true);
+
+            fixLocationMapListener = new FixLocationOnMapClickListener();
+            map.setOnMapClickListener(fixLocationMapListener);
+            map.setLocationSource(devOnlyLocationSource);
+        } else {
+            // Turn off location override.
+            GameBackgroundService.setLocationOverride(false);
+            fixLocationButton.setChecked(false);
+            map.setLocationSource(null);
+
+            if (fixLocationMapListener != null) {
+                map.setOnMapClickListener(null);
+                fixLocationMapListener = null;
+            }
+        }
+    }
+
     private class ThisLocationCallback extends LocationCallback {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -290,10 +327,6 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                 map.moveCamera(CameraUpdateFactory.zoomTo(17));
             }
         }
-    }
-
-    private static LatLng fromLocation(Location location) {
-        return new LatLng(location.getLatitude(), location.getLongitude());
     }
 
     /**
@@ -462,6 +495,51 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                     false));
             unitAdapter = new UnitAdapter(KingdomActivity.this, unitsWithType);
             unitRecyclerView.setAdapter(unitAdapter);
+        }
+    }
+
+    /**
+     * A {@link GoogleMap.OnMapClickListener} that lets a dev user set the current location by
+     * tapping on the map.
+     */
+    private class FixLocationOnMapClickListener implements GoogleMap.OnMapClickListener {
+
+        @Override
+        public void onMapClick(LatLng latLng) {
+            if (GameBackgroundService.isLocationOverride()) {
+                GameBackgroundService.setOverrideLocation(latLng);
+                devOnlyLocationSource.setLatLng(latLng);
+            }
+        }
+    }
+
+    /**
+     * A {@link LocationSource} for the Google Map API. This is used for developer testing to
+     * set a fake location on the map. That way the developer doesn't have to physically walk
+     * around to test the app.
+     */
+    private class DevOnlyLocationSource implements LocationSource {
+
+        @Nullable
+        private OnLocationChangedListener onLocationChangedListener;
+
+        @Override
+        public void activate(OnLocationChangedListener onLocationChangedListener) {
+            this.onLocationChangedListener = onLocationChangedListener;
+        }
+
+        @Override
+        public void deactivate() {
+            onLocationChangedListener = null;
+        }
+
+        public void setLatLng(LatLng latLng) {
+            if (onLocationChangedListener != null) {
+                Location location = new Location(LocationManager.GPS_PROVIDER);
+                location.setLatitude(latLng.latitude);
+                location.setLongitude(latLng.longitude);
+                onLocationChangedListener.onLocationChanged(location);
+            }
         }
     }
 }

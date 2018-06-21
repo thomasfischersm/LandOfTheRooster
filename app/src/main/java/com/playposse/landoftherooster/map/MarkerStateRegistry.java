@@ -17,6 +17,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.Resource;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.event.DaoEventObserver;
 import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
+import com.playposse.landoftherooster.services.GameBackgroundService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -154,6 +155,13 @@ public class MarkerStateRegistry {
 
             if (markerState != null) {
                 new ShowDialogAsyncTask(markerState).execute();
+
+                if (GameBackgroundService.isLocationOverride()) {
+                    GameBackgroundService.setOverrideLocation(marker.getPosition());
+
+                    // TODO: Update the map in KingdomActivity with the current location.
+                }
+
                 return true;
             } else {
                 return false;

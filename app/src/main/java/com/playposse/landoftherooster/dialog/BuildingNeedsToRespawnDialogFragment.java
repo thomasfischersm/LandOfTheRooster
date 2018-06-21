@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.dialog;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -56,7 +57,7 @@ public class BuildingNeedsToRespawnDialogFragment extends BaseDialogFragment {
     }
 
     @Override
-    protected void doInBackground() {
+    protected void doInBackground(Context appContext) {
         RoosterDao dao = RoosterDatabase.getInstance(getActivity()).getDao();
         BuildingWithType buildingWithType =
                 BuildingTypeRepository.get(dao).queryBuildingWithType(buildingId);

@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.dialog;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -99,7 +100,7 @@ public class BattleDialogFragment extends BaseDialogFragment {
     }
 
     @Override
-    protected void doInBackground() {
+    protected void doInBackground(Context appContext) {
         // Check if the battle has already completed. Avoid redoing the battle for screen rotations.
         if (battleSummary != null) {
             return;

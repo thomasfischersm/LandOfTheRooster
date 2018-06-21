@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.dialog;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -96,7 +97,7 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
     }
 
     @Override
-    protected void doInBackground() {
+    protected void doInBackground(Context appContext) {
         // Load data to display.
         RoosterDao dao = RoosterDatabase.getInstance(getActivity()).getDao();
         BuildingWithType buildingWithType =
