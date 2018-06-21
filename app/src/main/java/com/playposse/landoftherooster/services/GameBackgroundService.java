@@ -201,7 +201,7 @@ public class GameBackgroundService extends Service {
         public void onNewLocation(LatLng latLng) {
             if (!isLocationOverride) {
                 BusinessEngine.get()
-                        .triggerEvent(new LocationUpdateEvent(latLng));
+                        .triggerEventAsync(new LocationUpdateEvent(latLng));
             }
         }
     }
