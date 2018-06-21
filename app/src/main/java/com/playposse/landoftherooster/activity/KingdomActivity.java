@@ -2,8 +2,11 @@ package com.playposse.landoftherooster.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -22,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -80,6 +84,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     @BindView(R.id.resource_recycler_view) RecyclerView resourceRecyclerView;
     @BindView(R.id.unit_recycler_view) RecyclerView unitRecyclerView;
     @BindView(R.id.center_button) Button centerButton;
+    @BindView(R.id.stop_button) ImageButton stopButton;
     @BindView(R.id.dev_mode_button) Button devModeButton;
     @BindView(R.id.fix_location_button) ToggleButton fixLocationButton;
 
@@ -289,6 +294,34 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+    }
+
+    @OnClick(R.id.stop_button)
+    public void onStopButtonClicked() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.stop_game_dialog_title)
+                .setMessage(R.string.stop_game_dialog_msg)
+                .setNegativeButton(
+                        R.string.dialog_cancel_label,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                .setPositiveButton(
+                        R.string.dialog_stopGame_label,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+
+                                startActivity(new Intent(
+                                        KingdomActivity.this,
+                                        StopActivity.class));
+                            }
+                        })
+                .show();
     }
 
     @OnClick(R.id.fix_location_button)

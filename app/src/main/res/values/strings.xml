@@ -11,6 +11,7 @@
     <string name="resource_listing">%1$s: %2$d</string>
     <string name="unit_listing">%1$s (%2$d/%3$d health)</string>
     <string name="recenter_map">Re-center</string>
+    <string name="stop_button_content_description">Stop the game</string>
     <string name="dev_mode_button_label">Dev</string>
     <string name="fix_location_button_label">Loc</string>
 
@@ -77,6 +78,11 @@
     <string name="healing_estimate">%1$d min</string>
     <string name="hospital_assign_hint">(Assign up to 5 peasants to speed up healing.)</string>
 
+    <!-- Stop game dialog -->
+    <string name="stop_game_dialog_title">Stop game</string>
+    <string name="stop_game_dialog_msg">This will stop the game.\nStopping the game when not playing is a good idea to conserve your battery.</string>
+    <string name="dialog_stopGame_label">Stop now!</string>
+
     <!-- Dev mode dialog -->
     <string name="add_button_label">+</string>
     <string name="remove_button_label">-</string>
@@ -87,4 +93,5 @@
     <string name="dialog_yes_button">Yes</string>
     <string name="dialog_no_button">No</string>
     <string name="remote_dialog_message">Too far from building to interact with it!</string>
+    <string name="dialog_cancel_label">Cancel</string>
 </resources>

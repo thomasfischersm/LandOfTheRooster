@@ -39,15 +39,24 @@
         map:layout_constraintBottom_toBottomOf="@+id/map"
         map:layout_constraintStart_toStartOf="@+id/map"/>
 
+    <ImageButton
+        android:id="@+id/stop_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:contentDescription="@string/stop_button_content_description"
+        android:src="@drawable/ic_stop_black_24dp"
+        map:layout_constraintEnd_toEndOf="@+id/map"
+        map:layout_constraintTop_toTopOf="@+id/map"/>
+
     <Button
         android:id="@+id/dev_mode_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:text="@string/dev_mode_button_label"
         android:visibility="gone"
         map:layout_constraintEnd_toEndOf="@+id/map"
-        map:layout_constraintTop_toTopOf="@+id/map"/>
+        map:layout_constraintTop_toBottomOf="@+id/stop_button"/>
 
     <ToggleButton
         android:id="@+id/fix_location_button"
