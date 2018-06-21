@@ -41,8 +41,7 @@
             android:exported="false"/>
 
         <activity
-            android:name=".activity.KingdomActivity"
-            android:label="@string/title_activity_kingdom">
+            android:name=".activity.KingdomActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
