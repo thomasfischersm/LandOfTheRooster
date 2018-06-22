@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.contentprovider.business.action;
 
+import com.playposse.landoftherooster.analytics.Analytics;
 import com.playposse.landoftherooster.contentprovider.business.BusinessAction;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
@@ -45,6 +46,9 @@ public class DropOffItemAction implements BusinessAction {
         // Fire post event
         BusinessEngine.get()
                 .triggerDelayedEvent(new PostDropOffItemEvent(buildingId, item));
+
+        // Report event to analytics.
+        Analytics.reportEvent(Analytics.AppEvent.DROP_OFF_ITEM);
     }
 
     private void transferResource(RoosterDao dao, ResourceItem item, long buildingId) {

@@ -1,6 +1,7 @@
 package com.playposse.landoftherooster.contentprovider.business.action;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.playposse.landoftherooster.analytics.Analytics;
 import com.playposse.landoftherooster.contentprovider.business.BusinessAction;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
@@ -43,6 +44,9 @@ public class CreateBuildingAction implements BusinessAction {
 
         // Trigger BuildingCreatedEvent.
         BusinessEngine.get().triggerDelayedEvent(new BuildingCreatedEvent(building.getId()));
+
+        // Log to analytics.
+        Analytics.reportEvent(Analytics.AppEvent.DISCOVER_BUILDING);
     }
 
     private Building createBuilding(

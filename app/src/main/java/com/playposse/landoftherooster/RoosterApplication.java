@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.playposse.landoftherooster.analytics.Analytics;
 import com.playposse.landoftherooster.contentprovider.RoosterDatabaseHelper;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDatabase;
@@ -34,6 +35,8 @@ public class RoosterApplication extends Application {
         Fabric.with(this, new Crashlytics());
 
         GameConfig.init(this);
+
+        Analytics.init(this);
 
         // Start with a fresh database when running for debug.
         if (BuildConfig.DEBUG && BuildConfig.FLAVOR.equals(PRODUCT_FLAVOR_DEV_MODE_ON)) {

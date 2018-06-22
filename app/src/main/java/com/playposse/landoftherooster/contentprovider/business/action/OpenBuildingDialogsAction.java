@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.contentprovider.business.action;
 
+import com.playposse.landoftherooster.analytics.Analytics;
 import com.playposse.landoftherooster.contentprovider.business.BusinessAction;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
@@ -34,6 +35,9 @@ public class OpenBuildingDialogsAction implements BusinessAction {
                         buildingWithType,
                         null);
                 businessEngine.triggerDelayedEvent(dialogEvent);
+
+                // Report event to analytics.
+                Analytics.reportEvent(Analytics.AppEvent.SHOW_BATTLE_BUILDING_DIALOG);
             } else {
                 // Show battle respawn dialog.
                 ShowDialogEvent dialogEvent = new ShowDialogEvent(
@@ -41,6 +45,9 @@ public class OpenBuildingDialogsAction implements BusinessAction {
                         buildingWithType,
                         null);
                 businessEngine.triggerDelayedEvent(dialogEvent);
+
+                // Report event to analytics.
+                Analytics.reportEvent(Analytics.AppEvent.SHOW_BATTLE_RESPAWN_DIALOG);
             }
         } else if (buildingType.isHealsUnits()) {
             // Show healing building dialog.
@@ -49,6 +56,9 @@ public class OpenBuildingDialogsAction implements BusinessAction {
                     buildingWithType,
                     null);
             businessEngine.triggerDelayedEvent(dialogEvent);
+
+            // Report event to analytics.
+            Analytics.reportEvent(Analytics.AppEvent.SHOW_HEALING_BUILDING_DIALOG);
         } else {
             // Show building production dialog.
             ShowDialogEvent dialogEvent = new ShowDialogEvent(
@@ -56,6 +66,9 @@ public class OpenBuildingDialogsAction implements BusinessAction {
                     buildingWithType,
                     null);
             businessEngine.triggerDelayedEvent(dialogEvent);
+
+            // Report event to analytics.
+            Analytics.reportEvent(Analytics.AppEvent.SHOW_PRODUCTION_BUILDING_DIALOG);
         }
     }
 }

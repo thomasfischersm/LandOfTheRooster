@@ -1,12 +1,13 @@
 package com.playposse.landoftherooster.contentprovider.business.action;
 
+import com.playposse.landoftherooster.analytics.Analytics;
 import com.playposse.landoftherooster.contentprovider.business.BusinessAction;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEvent;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
-import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.InitiateHealingEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostAdmitUnitToHospitalEvent;
+import com.playposse.landoftherooster.contentprovider.business.event.mixedTriggered.InitiateHealingEvent;
 import com.playposse.landoftherooster.contentprovider.business.precondition.AdmitUnitToHospitalPreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
@@ -52,5 +53,8 @@ public class AdmitUnitToHospitalAction implements BusinessAction {
                 new PostAdmitUnitToHospitalEvent(buildingId, !hasInjuredUnit);
         BusinessEngine.get()
                 .triggerDelayedEvent(postEvent);
+
+        // Report event to analytics.
+        Analytics.reportEvent(Analytics.AppEvent.ADMIT_UNIT_TO_HOSPITAL);
     }
 }

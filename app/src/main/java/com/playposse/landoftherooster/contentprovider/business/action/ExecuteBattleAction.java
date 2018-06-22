@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.contentprovider.business.action;
 
+import com.playposse.landoftherooster.analytics.Analytics;
 import com.playposse.landoftherooster.contentprovider.business.BusinessAction;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
@@ -40,5 +41,8 @@ public class ExecuteBattleAction implements BusinessAction {
 
         // Schedule event to respawn the building.
         RespawnBattleBuildingEvent.scheduleWithDefaultDelay(buildingId);
+
+        // Report event to analytics.
+        Analytics.reportEvent(Analytics.AppEvent.EXECUTE_BATTLE);
     }
 }

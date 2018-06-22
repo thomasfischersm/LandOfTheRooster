@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.contentprovider.business.action;
 
+import com.playposse.landoftherooster.analytics.Analytics;
 import com.playposse.landoftherooster.contentprovider.business.BusinessAction;
 import com.playposse.landoftherooster.contentprovider.business.BusinessDataCache;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
@@ -46,5 +47,8 @@ public class PickUpItemAction implements BusinessAction {
         PostPickUpItemEvent postEvent = new PostPickUpItemEvent(event.getBuildingId(), item);
         BusinessEngine.get()
                 .triggerDelayedEvent(postEvent);
+
+        // Report event to analytics.
+        Analytics.reportEvent(Analytics.AppEvent.PICK_UP_ITEM);
     }
 }
