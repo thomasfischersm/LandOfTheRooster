@@ -1,34 +1,55 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.playposse.landoftherooster.activity.KingdomActivity">
+
+    <TextView
+        android:id="@+id/early_access_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#ef5350"
+        android:gravity="center"
+        android:text="@string/early_access_notice"
+        app:layout_constraintBottom_toBottomOf="@+id/info_image_view"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/info_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/info_icon_content_description"
+        android:padding="4dp"
+        android:src="@drawable/ic_info_outline_black_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        map:layout_constraintBottom_toTopOf="@+id/resource_recycler_view"
-        map:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintBottom_toTopOf="@+id/resource_recycler_view"
+        app:layout_constraintTop_toBottomOf="@+id/early_access_text_view"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/resource_recycler_view"
         android:layout_width="0dp"
         android:layout_height="100dp"
-        map:layout_constraintBottom_toBottomOf="parent"
-        map:layout_constraintEnd_toStartOf="@id/unit_recycler_view"
-        map:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/unit_recycler_view"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/unit_recycler_view"
         android:layout_width="0dp"
         android:layout_height="100dp"
-        map:layout_constraintBottom_toBottomOf="parent"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintStart_toEndOf="@+id/resource_recycler_view"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/resource_recycler_view"/>
 
     <Button
         android:id="@+id/center_button"
@@ -36,8 +57,8 @@
         android:layout_height="wrap_content"
         android:text="@string/recenter_map"
         android:visibility="gone"
-        map:layout_constraintBottom_toBottomOf="@+id/map"
-        map:layout_constraintStart_toStartOf="@+id/map"/>
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintStart_toStartOf="@+id/map"/>
 
     <ImageButton
         android:id="@+id/stop_button"
@@ -46,8 +67,8 @@
         android:layout_marginTop="50dp"
         android:contentDescription="@string/stop_button_content_description"
         android:src="@drawable/ic_stop_black_24dp"
-        map:layout_constraintEnd_toEndOf="@+id/map"
-        map:layout_constraintTop_toTopOf="@+id/map"/>
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        app:layout_constraintTop_toTopOf="@+id/map"/>
 
     <Button
         android:id="@+id/dev_mode_button"
@@ -55,8 +76,8 @@
         android:layout_height="wrap_content"
         android:text="@string/dev_mode_button_label"
         android:visibility="gone"
-        map:layout_constraintEnd_toEndOf="@+id/map"
-        map:layout_constraintTop_toBottomOf="@+id/stop_button"/>
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        app:layout_constraintTop_toBottomOf="@+id/stop_button"/>
 
     <ToggleButton
         android:id="@+id/fix_location_button"
@@ -66,7 +87,7 @@
         android:textOff="@string/fix_location_button_label"
         android:textOn="@string/fix_location_button_label"
         android:visibility="gone"
-        map:layout_constraintEnd_toEndOf="@+id/map"
-        map:layout_constraintTop_toBottomOf="@+id/dev_mode_button"/>
+        app:layout_constraintEnd_toEndOf="@+id/map"
+        app:layout_constraintTop_toBottomOf="@+id/dev_mode_button"/>
 </android.support.constraint.ConstraintLayout>
 
