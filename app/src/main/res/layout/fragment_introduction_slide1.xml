@@ -1,0 +1,35 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.playposse.landoftherooster.activity.IntroductionSlide1Fragment">
+
+    <ImageView
+        android:id="@+id/decorative_icon_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/decorative_icon_content_description"
+        android:padding="16dp"/>
+
+    <TextView
+        android:id="@+id/intro_heading_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/intro_slide_1_heading"
+        android:textColor="#000"
+        android:textSize="32sp"/>
+
+    <TextView
+        android:id="@+id/intro_msg_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/intro_slide_1_msg"/>
+</LinearLayout>

@@ -7,6 +7,16 @@
     <string name="service_notification_msg">Rule your kingdom</string>
     <string name="service_notification_stop_action">Stop</string>
 
+    <!-- Introduction activity -->
+    <string name="getting_started_button">Get started</string>
+    <string name="decorative_icon_content_description">Decorative icon</string>
+    <string name="intro_slide_0_heading">Stay safe!</string>
+    <string name="intro_slide_0_msg">This is a location based game. You wil lbe walking in your neighborhood to virtual locations. Always remember street safety is more important than playing the game.\n\nClose the phone when crossing streets.\n\nStay of ot unsafe areas.\n\nOnly engage with the game when you are standing or sitting in a safe spot.</string>
+    <string name="intro_slide_1_heading">You have to get out!</string>
+    <string name="intro_slide_1_msg">This game is played with the GPS of your phone and walking around your local neighborhood.\n\n1. Leave your house.\n\n2. Walk your neighborhood to discover virtual buildings in the app.\n\n3. When you are at a virtual building location, investigate what you can do there.</string>
+    <string name="intro_slide_2_heading">How to play:</string>
+    <string name="intro_slide_2_msg">1. This is a resource game. Buildings produce resources. To start production, you have to carry the ingredients from other buildings.\n\n2. Build an army with the resources. Take the army on quests. Each quest wins a treasure.\n\n3. Collect all the treasures to gain the imperial crown.</string>
+
     <!-- Kingdom activity -->
     <string name="resource_listing">%1$s: %2$d</string>
     <string name="unit_listing">%1$s (%2$d/%3$d health)</string>

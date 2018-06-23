@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -57,6 +56,7 @@ import com.playposse.landoftherooster.contentprovider.room.entity.ResourceWithTy
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
+import com.playposse.landoftherooster.data.AppPreferences;
 import com.playposse.landoftherooster.dialog.BattleAvailableDialogFragment;
 import com.playposse.landoftherooster.dialog.BuildingInteractionDialogFragment;
 import com.playposse.landoftherooster.dialog.BuildingNeedsToRespawnDialogFragment;
@@ -105,6 +105,10 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!AppPreferences.hasSeenIntroDeck(this)) {
+            ActivityNavigator.startIntroductionActivity(this);
+        }
 
         Fabric.with(this, new Crashlytics());
         Fabric.with(this, new Answers());
@@ -316,9 +320,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
 
-                                startActivity(new Intent(
-                                        KingdomActivity.this,
-                                        StopActivity.class));
+                                ActivityNavigator.startStopActivity(KingdomActivity.this);
                             }
                         })
                 .show();

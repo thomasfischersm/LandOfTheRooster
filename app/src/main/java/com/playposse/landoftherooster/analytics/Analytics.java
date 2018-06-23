@@ -1,5 +1,6 @@
 package com.playposse.landoftherooster.analytics;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.crashlytics.android.answers.Answers;
@@ -71,5 +72,10 @@ public final class Analytics {
 
         // Report to Fabric Answer analytics.
         Answers.getInstance().logCustom(new CustomEvent(appEvent.name()));
+    }
+
+    public static void reportFragment(Activity activity, String fragmentName) {
+        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(activity);
+        analytics.setCurrentScreen(activity, fragmentName, fragmentName);
     }
 }
