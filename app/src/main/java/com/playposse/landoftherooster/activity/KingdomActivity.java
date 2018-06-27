@@ -349,6 +349,11 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
+    @OnClick(R.id.info_image_view)
+    public void onInfoClicked() {
+        ActivityNavigator.startAboutActivity(this);
+    }
+
     private class ThisLocationCallback extends LocationCallback {
         @Override
         public void onLocationResult(LocationResult locationResult) {

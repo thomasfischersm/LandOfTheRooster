@@ -6,4 +6,6 @@
 
     <color name="remoteDialogBgColor">#ff5722</color>
     <color name="localDialogBgColor">#ffffff</color>
+
+    <color name="emphasis">#31b6e7</color>
 </resources>

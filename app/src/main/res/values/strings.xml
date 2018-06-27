@@ -95,6 +95,67 @@
     <string name="stop_game_dialog_msg">This will stop the game.\nStopping the game when not playing is a good idea to conserve your battery.</string>
     <string name="dialog_stopGame_label">Stop now!</string>
 
+    <!-- About activity -->
+    <string name="about_early_access_heading">Early Development Access</string>
+    <string name="about_early_access_body">This is an early development access! This is not a finished game. Expect to encounter bugs. Currently the game engine is working. The game is fully functional. Visual design is completely missing.\n
+\n
+To be honestly, this game may never get finished. I was very inspired by the idea of playing a game by physically moving around in the neighborhood. A key fun for me in games is to create a fantasy world. What better experience than to physically walk around in the fantasy - even if it is only visible through the phone.\n
+\n
+I\'ve spent a lot of time on development. Now is the point, where I would have to spend money on designers. The sad reality is that the game probably won\'t make any meaningful money. While top games like Fortnite rake in hundreds of millions of dollars a month, they are the exception. They inspired a huge glut of games to be released, that barely make any money.\n
+\n
+I\'m going to start looking for another full time position with an established company. If you are passionate about this game idea, feel free to contact me. While the game may appear crude, the underlying game engine is very well developed. It can easily be configured to change the game rules or even make different versions of the game (Wild West version, space version, etc.) It would take a game designer to configure a beautiful game out of it. Again that would cost me money.</string>
+    <string name="about_how_to_play_heading">How to play the game</string>
+    <string name="about_how_to_play_body">In the first phase of the game, you\'ll walk in your neighborhood. As you walk, the app will discover virtual buildings on the map. A dialog will explain to you what these buildings do. There are two main categories of buildings: (1) Buildings that build something and (2) Quest buildings where you can fight a battle. There are additional specialty buildings like the hospital to heal your soldiers.\n
+\n
+Tip: The game does NOT randomly pick locations for buildings. That could lead to buildings being in inaccessible locations. Rather the game picks a random distance. Once you are that far away from the nearest building a new building will appear. Thus based on where you walk, you can control where new buildings appear. You can use that for your strategy. Say if you walk in one long line, it\'ll be very far to get from the first to the last building. However if you walk in a circle, you\'ll cluster the buildings closer together.\n
+\n
+The second phase of the game is to produce resources. Some buildings produce resources for free. When you first discover them, you can pick up one resource right away. Once you pick up the resource, production for the next resource starts. You\'ll see a timer on how long that takes. You can drop of that resource at a building that uses it as an ingredient. Say a wheat farm produces free sacks of wheat. You can carry these to the mill to have them milled into flour. The milling also takes time. If you drop of multiple ingredients, the building will work off one ingredient after the next.\n
+\n
+Tip: You can personally carry one resource. If you recruit peasants, you can carry one additional resource for each peasant. The strategic decision is what to do with your peasants. You can also assign a peasant to a building to reduce the production time at that building. You have a choice between getting resources produced faster or having to run less in between buildings. There is a third option. You could train the peasants to become military units. That won\'t help you build up the economy, but it\'ll let you start the third phase of the game.\n
+\n
+The third phase of the game is about building an army and taking it on quests. Each quest that your army wins results in a treasure. Ultimately if you collect all the treasures, you can produce the imperial crown and win the  game.\n
+\n
+Tip: Bring your units to the hospital after each battle to fully heal them up!</string>
+    <string name="about_battle_heading">How battles work</string>
+    <string name="about_battle_body">Every unit has an attack, defense, damage, armor, and health. Each attack is determined by a few rolls of the dice.\n
+\n
+The attacking unit rolls a dice with as many sides as the attack value is. The defending unit rolls a dice that has as many sides as the defense value. If the attack dice has a higher value than the defending dice, the attack has succeeded.\n
+\n
+A second dice roll determines how much damage was inflicted. A dice with as many sides as the damage value is rolled. Divided from that number is the armor. If the resulting value is positive, it\'ll be deducted from the health of the defending unit.\n
+\n
+Tip: Every turn each unit can only defend against one attacker. If one side has more units than the other side, the additional units automatically win their attack. However if they couldn\'t pierce through the armor, they may still not inflict an actual damage.</string>
+    <string name="about_safety_heading">Safety tips</string>
+    <string name="about_safety_body">Look, it\'s dangerous to look into your phone and walk through the world with cars and other dangerous things around. Just as you can\'t text and drive or read a book and walk across the street, put the phone down when you cross the street.\n
+\n
+When you play the game, stay on the sidewalks. When you cross the street, put the game away and carefully check for traffic.\n
+\n
+If for whatever reason a building is stuck in a dangerous or inaccessible place. Don\'t hurt yourself. It\'s not worth it. Go to Android Settings. Find the app. Delete the local data. It\'ll let you start over.</string>
+    <string name="about_credits_heading">Credits</string>
+    <string name="about_credits_body">cock by Iconic from the Noun Project\n
+Wheat by lastspark from the Noun Project\n
+wind mill by Creaticca Creative Agency from the Noun Project\n
+bakery by Adrien Coquet from the Noun Project\n
+Village by Yu luck from the Noun Project\n
+Many Soldiers Saluting by Gan Khoon Lay from the Noun Project\n
+cave by Gerardo Martín Martínez from the Noun Project\n
+Battle by 1516 from the Noun Project\n
+Laurel Wreath by prasong tadoungsorn from the Noun Project\n
+surrender by Luis Prado from the Noun Project\n
+Waiting by myladkings from the Noun Project\n
+Hospital by Viktor Ostrovsky from the Noun Project\n
+Carrots by Symbolon from the Noun Project\n
+Donkey by Luis Prado from the Noun Project\n
+barley by Creative Stall from the Noun Project\n
+Crusader by Anton from the Noun Project\n
+Vampire by Nikita Kozin from the Noun Project\n
+furnace by Viral faisalovers from the Noun Project\n
+Hero by Anton from the Noun Project\n
+dragon by BGBOXXX Design from the Noun Project\n
+bridge by Creative Mania from the Noun Project\n
+Caution by Gregor Cresnar from the Noun Project\n
+Exit by Arthur Shlain from the Noun Project\n
+strategy by Michael Finney from the Noun Project</string>
+
     <!-- Dev mode dialog -->
     <string name="add_button_label">+</string>
     <string name="remove_button_label">-</string>

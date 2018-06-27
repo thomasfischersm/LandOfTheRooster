@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_student_introduction_deck"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     tools:context=".activity.IntroductionActivity">
 
     <LinearLayout
@@ -31,7 +31,7 @@
                 android:layout_marginTop="25dp"
                 app:tabBackground="@drawable/tab_selector"
                 app:tabGravity="center"
-                app:tabIndicatorHeight="0dp" />
+                app:tabIndicatorHeight="0dp"/>
         </android.support.v4.view.ViewPager>
 
         <Button
@@ -43,6 +43,6 @@
             android:layout_marginBottom="4dp"
             android:background="@drawable/capsule_button_bg"
             android:text="@string/getting_started_button"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"/>
     </LinearLayout>
 </FrameLayout>

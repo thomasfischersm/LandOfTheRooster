@@ -15,10 +15,16 @@ public final class ActivityNavigator {
     }
 
     public static void startKingdomActivity(Context context) {
-        context.startActivity(new Intent(context, KingdomActivity.class));
+        Intent intent = new Intent(context, KingdomActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
     public static void startStopActivity(Context context) {
         context.startActivity(new Intent(context, StopActivity.class));
+    }
+
+    public static void startAboutActivity(Context context) {
+        context.startActivity(new Intent(context, AboutActivity.class));
     }
 }
