@@ -44,6 +44,8 @@ public abstract class GridLayoutRowViewHolder<T> {
             rowView.removeView(childView);
             gridLayout.addView(childView);
         }
+
+        gridLayout.invalidate();
     }
 
     protected abstract void populate(T data);
