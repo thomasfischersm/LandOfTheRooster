@@ -225,7 +225,6 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                 this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityNavigator.startPermissionRecoveryActivity(this);
             return;
         }
 
