@@ -27,4 +27,10 @@ public final class ActivityNavigator {
     public static void startAboutActivity(Context context) {
         context.startActivity(new Intent(context, AboutActivity.class));
     }
+
+    public static void startPermissionRecoveryActivity(Context context) {
+        Intent intent = new Intent(context, PermissionRecoveryActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+    }
 }

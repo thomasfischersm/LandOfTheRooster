@@ -197,6 +197,8 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                     if (map != null) {
                         onMapReady(map);
                     }
+                } else {
+                    ActivityNavigator.startPermissionRecoveryActivity(this);
                 }
             }
         }
@@ -223,6 +225,7 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
                 this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
+            ActivityNavigator.startPermissionRecoveryActivity(this);
             return;
         }
 

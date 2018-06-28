@@ -95,6 +95,16 @@
     <string name="stop_game_dialog_msg">This will stop the game.\nStopping the game when not playing is a good idea to conserve your battery.</string>
     <string name="dialog_stopGame_label">Stop now!</string>
 
+    <!-- Permission activity -->
+    <string name="permission_error_title">Hoohoo! Where are you?</string>
+    <string name="permission_error_message">
+        To play the game, you have to allow access to your location. The game is location based. The
+        only way to move your game character is by physicially moving through the world.
+    </string>
+    <string name="location_permission_label">Location permission</string>
+    <string name="storage_permission_label">Storage permission</string>
+    <string name="grant_permission_link">Grant</string>
+
     <!-- About activity -->
     <string name="about_early_access_heading">Early Development Access</string>
     <string name="about_early_access_body">This is an early development access! This is not a finished game. Expect to encounter bugs. Currently the game engine is working. The game is fully functional. Visual design is completely missing.\n

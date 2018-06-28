@@ -51,8 +51,7 @@
         <activity
             android:name=".activity.IntroductionActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.AboutActivity">
-        </activity>
+        <activity android:name=".activity.AboutActivity"/>
+        <activity android:name=".activity.PermissionRecoveryActivity"/>
     </application>
-
 </manifest>

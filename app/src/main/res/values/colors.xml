@@ -8,4 +8,6 @@
     <color name="localDialogBgColor">#ffffff</color>
 
     <color name="emphasis">#31b6e7</color>
+
+    <color name="dividerDark">#9e9e9e</color>
 </resources>
