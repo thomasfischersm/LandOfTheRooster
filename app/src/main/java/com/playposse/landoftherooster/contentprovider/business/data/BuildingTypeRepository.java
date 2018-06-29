@@ -70,4 +70,8 @@ public final class BuildingTypeRepository {
 
         return buildingsWithType;
     }
+
+    public List<BuildingType> getAllBuildingTypes() {
+        return new ArrayList<>(idToBuildingTypeMap.values());
+    }
 }

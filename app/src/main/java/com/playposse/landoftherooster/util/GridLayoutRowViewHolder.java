@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import butterknife.ButterKnife;
 
 /**
@@ -25,6 +27,13 @@ public abstract class GridLayoutRowViewHolder<T> {
     protected GridLayoutRowViewHolder(GridLayout gridLayout, @LayoutRes int layoutResId) {
         this.gridLayout = gridLayout;
         this.layoutResId = layoutResId;
+    }
+
+    public void apply(List<T> dataList) {
+        applyHeading();
+        for (T data : dataList) {
+            apply(data);
+        }
     }
 
     public void apply(T data) {
@@ -49,4 +58,16 @@ public abstract class GridLayoutRowViewHolder<T> {
     }
 
     protected abstract void populate(T data);
+
+    public void applyHeading() {
+        LayoutInflater inflater = LayoutInflater.from(gridLayout.getContext());
+        View rowView = inflater.inflate(layoutResId, null);
+
+        ButterKnife.bind(this, rowView);
+
+        copyChildViews((ViewGroup) rowView, gridLayout);
+        populateHeading();
+    }
+
+    public void populateHeading() {}
 }

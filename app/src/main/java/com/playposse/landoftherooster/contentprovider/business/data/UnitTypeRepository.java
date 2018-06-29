@@ -1,10 +1,12 @@
 package com.playposse.landoftherooster.contentprovider.business.data;
 
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
+import com.playposse.landoftherooster.contentprovider.room.entity.BuildingType;
 import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,5 +58,42 @@ public final class UnitTypeRepository {
         Unit unit = dao.getUnitById(unitId);
         UnitType unitType = idToUnitTypeMap.get(unit.getUnitTypeId());
         return new UnitWithType(unit, unitType);
+    }
+
+    public List<UnitType> getFriendlyUnitTypes() {
+        BuildingTypeRepository buildingTypeRepository = BuildingTypeRepository.get(dao);
+        List<BuildingType> buildingTypes = buildingTypeRepository.getAllBuildingTypes();
+
+        List<UnitType> friendlyUnitTypes = new ArrayList<>();
+        nextUnitType: for (UnitType unitType : idToUnitTypeMap.values()) {
+            for (BuildingType buildingType : buildingTypes) {
+                if ((buildingType.getEnemyUnitTypeId() != null)
+                        && (buildingType.getEnemyUnitTypeId() == unitType.getId())) {
+                    continue nextUnitType;
+                }
+            }
+
+            friendlyUnitTypes.add(unitType);
+        }
+
+        return friendlyUnitTypes;
+    }
+
+    public List<UnitType> getEnemyUnitTypes() {
+        BuildingTypeRepository buildingTypeRepository = BuildingTypeRepository.get(dao);
+        List<BuildingType> buildingTypes = buildingTypeRepository.getAllBuildingTypes();
+
+        List<UnitType> enemyUnitTypes = new ArrayList<>();
+        nextUnitType: for (UnitType unitType : idToUnitTypeMap.values()) {
+            for (BuildingType buildingType : buildingTypes) {
+                if ((buildingType.getEnemyUnitTypeId() != null)
+                        && (buildingType.getEnemyUnitTypeId() == unitType.getId())) {
+                    enemyUnitTypes.add(unitType);
+                    continue nextUnitType;
+                }
+            }
+        }
+
+        return enemyUnitTypes;
     }
 }

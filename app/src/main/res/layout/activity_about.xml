@@ -68,6 +68,43 @@
                 style="@style/sectionHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/about_unit_stats_heading"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/about_friendly_unit_stats_header"/>
+
+            <android.support.v7.widget.GridLayout
+                android:id="@+id/friendly_unit_types_grid_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                app:columnCount="6"
+                app:layout_constraintTop_toBottomOf="@+id/resource_heading_text_view"
+                tools:layout_height="40dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/about_enemy_unit_stats_header"/>
+
+            <android.support.v7.widget.GridLayout
+                android:id="@+id/enemy_unit_types_grid_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                app:columnCount="6"
+                app:layout_constraintTop_toBottomOf="@+id/resource_heading_text_view"
+                tools:layout_height="40dp"/>
+
+            <TextView
+                style="@style/sectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/about_safety_heading"/>
 
             <TextView

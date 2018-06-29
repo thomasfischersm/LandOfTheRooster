@@ -134,6 +134,7 @@ The attacking unit rolls a dice with as many sides as the attack value is. The d
 A second dice roll determines how much damage was inflicted. A dice with as many sides as the damage value is rolled. Divided from that number is the armor. If the resulting value is positive, it\'ll be deducted from the health of the defending unit.\n
 \n
 Tip: Every turn each unit can only defend against one attacker. If one side has more units than the other side, the additional units automatically win their attack. However if they couldn\'t pierce through the armor, they may still not inflict an actual damage.</string>
+    <string name="about_unit_stats_heading">Unit Stats</string>
     <string name="about_safety_heading">Safety tips</string>
     <string name="about_safety_body">Look, it\'s dangerous to look into your phone and walk through the world with cars and other dangerous things around. Just as you can\'t text and drive or read a book and walk across the street, put the phone down when you cross the street.\n
 \n
@@ -167,7 +168,18 @@ Exit by Arthur Shlain from the Noun Project\n
 strategy by Michael Finney from the Noun Project\n
 Rooster by Wahyuntitle from the Noun Project\n
 GPS by Turkkub from the Noun Project\n
+Castle by Blair Adams from the Noun Project\n
+Rooster by Wahyuntitle from the Noun Project\n
+GPS by Turkkub from the Noun Project\n
 Castle by Blair Adams from the Noun Project</string>
+    <string name="about_friendly_unit_stats_header">Friendly units</string>
+    <string name="about_enemy_unit_stats_header">Enemy units</string>
+    <string name="about_unit_name_column">Unit name</string>
+    <string name="about_attack_column">Attack</string>
+    <string name="about_defense_column">Defense</string>
+    <string name="about_damage_column">Damage</string>
+    <string name="about_armor_column">Armor</string>
+    <string name="about_health_column">Health</string>
 
     <!-- Dev mode dialog -->
     <string name="add_button_label">+</string>
