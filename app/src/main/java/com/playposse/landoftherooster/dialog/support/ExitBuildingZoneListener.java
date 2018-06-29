@@ -21,6 +21,6 @@ public class ExitBuildingZoneListener implements BusinessEventListener {
 
     @Override
     public void onEvent(BusinessEvent event, BusinessDataCache cache) {
-        dialogFragment.dismiss();
+        dialogFragment.dismissAllowingStateLoss(); // The dialog may have already save called.
     }
 }
