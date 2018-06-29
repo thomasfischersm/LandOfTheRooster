@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.graphics.ColorUtils;
+import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -226,14 +227,20 @@ public class MarkerState {
 
                 createCircle(markerState);
             } else {
-                markerState.marker.setIcon(buildingIcon);
+                try {
+                    markerState.marker.setIcon(buildingIcon);
 
-                // Re-create circle.
-                if (markerState.buildingZoneCircle != null) {
-                    markerState.buildingZoneCircle.remove();
-                    markerState.buildingZoneCircle = null;
+                    // Re-create circle.
+                    if (markerState.buildingZoneCircle != null) {
+                        markerState.buildingZoneCircle.remove();
+                        markerState.buildingZoneCircle = null;
+                    }
+                    createCircle(markerState);
+                } catch (IllegalArgumentException ex) {
+                    // This seems to sometimes happen when the Google map is gone. The excpetion
+                    // message says, "Unmanaged descriptor."
+                    Log.e(LOG_TAG, "onPostExecute: Couldn't update map marker.", ex);
                 }
-                createCircle(markerState);
             }
         }
 
