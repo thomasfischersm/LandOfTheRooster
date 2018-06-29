@@ -6,6 +6,7 @@ import com.playposse.landoftherooster.contentprovider.business.BusinessPrecondit
 import com.playposse.landoftherooster.contentprovider.business.Item;
 import com.playposse.landoftherooster.contentprovider.business.PreconditionOutcome;
 import com.playposse.landoftherooster.contentprovider.business.data.ProductionRuleRepository;
+import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostBattleEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteFreeProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostCompleteProductionEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.consequenceTriggered.PostPickUpUnitFromHospitalEvent;
@@ -34,6 +35,8 @@ public class UpdateProductionBuildingMarkerPrecondition implements BusinessPreco
             item = ((PostCompleteFreeProductionEvent) event).getProducedItem();
         } else if (event instanceof PostPickUpUnitFromHospitalEvent) {
             item = ((PostPickUpUnitFromHospitalEvent) event).getPickedUpUnitItem();
+        } else if (event instanceof PostBattleEvent) {
+            item = ((PostBattleEvent) event).getConquestPrizeItem();
         } else {
             throw new IllegalArgumentException("The event is of an unexpected type: "
                     + event.getClass().getName());

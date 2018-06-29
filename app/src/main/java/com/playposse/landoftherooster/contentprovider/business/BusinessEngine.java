@@ -205,6 +205,11 @@ public class BusinessEngine {
                 new UpdateBattleBuildingMarkerAction());
 
         registerAction(
+                PostBattleEvent.class,
+                new UpdateProductionBuildingMarkerPrecondition(),
+                new UpdateProductionBuildingMarkerAction());
+
+        registerAction(
                 RespawnBattleBuildingEvent.class,
                 new RespawnBattleBuildingPrecondition(),
                 new RespawnBattleBuildingAction());
