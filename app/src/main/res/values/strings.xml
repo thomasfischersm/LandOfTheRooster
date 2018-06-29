@@ -51,6 +51,7 @@
     <string name="health_value_heading">Health</string>
     <string name="attack_button">Attack</string>
     <string name="withdraw_button">Withdraw</string>
+    <string name="must_raise_army_hint">You cannot enter this quest without an army. Return to the barracks and train soldiers. Come in large numbers if you want to win!</string>
 
     <!-- Building needs to respawn dialog -->
     <string name="building_needs_to_respawn_dialog_title">Nobody is here!</string>

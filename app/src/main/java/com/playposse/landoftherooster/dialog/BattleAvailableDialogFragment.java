@@ -177,6 +177,11 @@ public class BattleAvailableDialogFragment extends BaseDialogFragment {
     }
 
     private String getUnitSummaryText() {
+        // If the player doesn't have any units, instruct the player to raise an army.
+        if (friendlyUnitWithTypes.size() == 0) {
+            return getString(R.string.must_raise_army_hint);
+        }
+
         StringBuilder sb = new StringBuilder();
 
         for (UnitType friendlyUnitType : friendlyUnitTypes.values()) {
