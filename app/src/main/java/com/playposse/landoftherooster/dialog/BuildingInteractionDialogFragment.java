@@ -174,7 +174,7 @@ public class BuildingInteractionDialogFragment extends BaseDialogFragment {
                             outputStr);
                     productionRulesBuilder.append(freeTemplate);
                 } else {
-                    String template = getActivity().getString(
+                    String template = appContext.getString(
                             R.string.production_rule_template,
                             inputStr,
                             outputStr);
