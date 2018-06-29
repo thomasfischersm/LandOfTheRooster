@@ -441,11 +441,22 @@ public class KingdomActivity extends FragmentActivity implements OnMapReadyCallb
             Unit unit = data.getUnit();
             UnitType type = data.getType();
 
-            String str = getString(
-                    R.string.unit_listing,
-                    type.getName(),
-                    unit.getHealth(),
-                    type.getHealth());
+            final String str;
+            if (unit.getVeteranLevel() <= 0) {
+                str = getString(
+                        R.string.unit_listing_without_veteran,
+                        type.getName(),
+                        unit.getHealth(),
+                        type.getHealth());
+            } else {
+                str = getString(
+                        R.string.unit_listing_with_veteran,
+                        type.getName(),
+                        unit.getVeteranLevel(),
+                        unit.getHealth(),
+                        type.getHealth());
+            }
+
             holder.unitTextView.setText(str);
         }
     }

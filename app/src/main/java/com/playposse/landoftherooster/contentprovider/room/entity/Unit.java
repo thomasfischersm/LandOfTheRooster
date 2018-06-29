@@ -33,6 +33,9 @@ public class Unit {
     @Nullable
     private Long locatedAtBuildingId;
 
+    @ColumnInfo(name = "veteran_level")
+    private int veteranLevel;
+
     public Unit() {
     }
 
@@ -74,5 +77,13 @@ public class Unit {
 
     public void setLocatedAtBuildingId(@Nullable Long locatedAtBuildingId) {
         this.locatedAtBuildingId = locatedAtBuildingId;
+    }
+
+    public int getVeteranLevel() {
+        return veteranLevel;
+    }
+
+    public void setVeteranLevel(int veteranLevel) {
+        this.veteranLevel = veteranLevel;
     }
 }

@@ -13,11 +13,11 @@ import com.playposse.landoftherooster.contentprovider.room.entity.Unit;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitType;
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
 import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
+import com.playposse.landoftherooster.util.MinMaxRandom;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import static com.playposse.landoftherooster.GameConfig.DEFAULT_CONQUEST_PRIZE_RESOURCE_AMOUNT;
 
@@ -36,7 +36,7 @@ public class Battle {
     private List<BattleGroup> battleGroups = new ArrayList<>();
     private List<BattleEventParcelable> events = new ArrayList<>();
 
-    private static final Random random = new Random();
+    private static final MinMaxRandom random = new MinMaxRandom();
 
     public Battle(RoosterDao dao, BuildingWithType buildingWithType) {
         this.buildingWithType = buildingWithType;
@@ -198,6 +198,8 @@ public class Battle {
                 // Delete unit.
                 DaoEventRegistry.get(dao).delete(unit);
             } else {
+                unitWithType.incrementVeteranLevel();
+
                 // Save injury.
                 DaoEventRegistry.get(dao).update(unit);
             }
@@ -232,7 +234,7 @@ public class Battle {
         return health;
     }
 
-    public static Random getRandom() {
+    public static MinMaxRandom getRandom() {
         return random;
     }
 }

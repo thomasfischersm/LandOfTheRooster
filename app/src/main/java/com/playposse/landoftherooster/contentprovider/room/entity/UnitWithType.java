@@ -54,4 +54,10 @@ public class UnitWithType {
                 * GameConfig.HEALING_PER_HEALTH_POINT_DURATION_MS
                 / peasantCount;
     }
+
+    public void incrementVeteranLevel() {
+        int maxVeteranLevel =
+                Math.max(Math.max(type.getAttack(), type.getDefense()), type.getDamage());
+        unit.setVeteranLevel(Math.min(unit.getVeteranLevel() + 1, maxVeteranLevel));
+    }
 }

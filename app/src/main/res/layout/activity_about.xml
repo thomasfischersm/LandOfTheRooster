@@ -68,6 +68,17 @@
                 style="@style/sectionHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/about_veteran_level_heading"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/about_veteran_level_body"/>
+
+            <TextView
+                style="@style/sectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/about_unit_stats_heading"/>
 
             <TextView

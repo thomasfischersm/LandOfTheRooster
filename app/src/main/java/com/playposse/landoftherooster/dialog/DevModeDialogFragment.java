@@ -122,12 +122,14 @@ public class DevModeDialogFragment extends BaseDialogFragment {
         for (ResourceWithType resourceWithType : resourceWithTypes) {
             resourceRowViewHolder.apply(resourceWithType);
         }
+        resourceGridLayout.invalidate();
 
         // Create unit grid.
         UnitRowViewHolder unitRowViewHolder = new UnitRowViewHolder();
         for (UnitTypeWithCount unitTypeWithCount : unitTypeWithCounts) {
             unitRowViewHolder.apply(unitTypeWithCount);
         }
+        unitGridLayout.invalidate();
     }
 
     /**

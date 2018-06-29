@@ -1,10 +1,10 @@
 package com.playposse.landoftherooster.services.combat;
 
 import com.playposse.landoftherooster.contentprovider.room.entity.UnitWithType;
+import com.playposse.landoftherooster.util.MinMaxRandom;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * A group of units that fight each other within a battle. For the simulation of a battle, units
@@ -80,13 +80,28 @@ class BattleGroup {
             boolean canDefend,
             boolean isFriendAttack) {
 
-        Random rand = Battle.getRandom();
-        int attack = rand.nextInt(attacker.getType().getAttack() + 1);
-        int defense = rand.nextInt(defender.getType().getDefense() + 1);
+        MinMaxRandom rand = Battle.getRandom();
+
+        int attackerVeteranLevel = Math.min(attacker.getUnit().getVeteranLevel(), attacker.getType().getAttack());
+        int defenderVeteranLevel = defender.getUnit().getVeteranLevel();
+
+        // Decide fight success.
+        int maxAttack = attacker.getType().getAttack() + 1;
+        int minAttack =
+                Math.min(attacker.getUnit().getVeteranLevel(), attacker.getType().getAttack());
+        int attack = rand.nextInt(minAttack, maxAttack);
+        int maxDefense = defender.getType().getDefense() + 1;
+        int minDefense =
+                Math.min(defender.getUnit().getVeteranLevel(), defender.getType().getDefense());
+        int defense = rand.nextInt(minDefense, maxDefense);
 
         if (!canDefend || (attack > defense)) {
             // Attack was succeeded. Calculate damage.
-            int damage = rand.nextInt(attacker.getType().getDamage() + 1);
+            int maxDamage = attacker.getType().getDamage() + 1;
+            int minDamage = Math.min(
+                    attacker.getUnit().getVeteranLevel(),
+                    attacker.getType().getDamage());
+            int damage = rand.nextInt(minDamage, maxDamage);
             int armor = defender.getType().getArmor();
             int actualDamage = Math.max(0, damage - armor);
             int previousHealth = defender.getUnit().getHealth();
