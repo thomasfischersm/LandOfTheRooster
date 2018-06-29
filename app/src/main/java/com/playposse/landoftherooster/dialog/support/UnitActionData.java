@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.playposse.landoftherooster.R;
 import com.playposse.landoftherooster.contentprovider.business.BusinessEngine;
-import com.playposse.landoftherooster.contentprovider.business.ResourceItem;
+import com.playposse.landoftherooster.contentprovider.business.UnitItem;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.DropOffItemEvent;
 import com.playposse.landoftherooster.contentprovider.business.event.userTriggered.PickUpItemEvent;
 import com.playposse.landoftherooster.contentprovider.room.RoosterDao;
@@ -75,13 +75,13 @@ public class UnitActionData extends ActionData {
         switch (actionType) {
             case DROP_OFF:
                 DropOffItemEvent dropOffEvent =
-                        new DropOffItemEvent(buildingId, new ResourceItem(unitTypeId));
+                        new DropOffItemEvent(buildingId, new UnitItem(unitTypeId));
                 BusinessEngine.get()
                         .triggerEvent(dropOffEvent);
                 break;
             case PICKUP:
                 PickUpItemEvent pickUpEvent =
-                        new PickUpItemEvent(buildingId, new ResourceItem(unitTypeId));
+                        new PickUpItemEvent(buildingId, new UnitItem(unitTypeId));
                 BusinessEngine.get()
                         .triggerEvent(pickUpEvent);
                 break;
