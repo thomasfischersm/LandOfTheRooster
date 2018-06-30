@@ -15,6 +15,7 @@ import com.playposse.landoftherooster.contentprovider.room.datahandler.RoosterDa
 import com.playposse.landoftherooster.contentprovider.room.entity.Building;
 import com.playposse.landoftherooster.contentprovider.room.entity.BuildingWithType;
 import com.playposse.landoftherooster.contentprovider.room.entity.ProductionRule;
+import com.playposse.landoftherooster.contentprovider.room.event.DaoEventRegistry;
 
 import java.util.List;
 
@@ -97,7 +98,8 @@ public class ProductionAction implements BusinessAction {
         // Clear production start.
         // TODO: Think if there is a way to avoid clearing it if another production cycle can start.
         building.setProductionStart(null);
-        dao.update(building);
+        DaoEventRegistry.get(dao)
+                .update(building);
 
         if (producedItem == null) {
             throw new IllegalStateException("Failed to produce an item!");
