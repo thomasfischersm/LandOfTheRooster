@@ -23,15 +23,13 @@ repositories {
 
 android {
     compileSdkVersion 27
-
     defaultConfig {
         applicationId "com.playposse.landoftherooster"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 3
-        versionName "3.0"
+        versionCode 5
+        versionName "5.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation":
@@ -39,21 +37,17 @@ android {
             }
         }
     }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     flavorDimensions "devMode"
-
     productFlavors {
         devModeOff {
             dimension "devMode"
         }
-
         devModeOn {
             dimension "devMode"
         }
@@ -61,7 +55,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:support-v4:27.1.1'
@@ -87,15 +81,12 @@ dependencies {
     implementation('com.crashlytics.sdk.android:answers:1.4.1@aar') {
         transitive = true;
     }
-
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.hamcrest:hamcrest-library:1.3'
-
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'android.arch.persistence.room:testing:1.1.1'
-
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
