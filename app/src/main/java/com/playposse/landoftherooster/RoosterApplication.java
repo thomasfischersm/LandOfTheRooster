@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -22,7 +23,7 @@ import static com.playposse.landoftherooster.activity.KingdomActivity.PRODUCT_FL
 /**
  * Implementation of {@link Application}.
  */
-public class RoosterApplication extends Application {
+public class RoosterApplication extends MultiDexApplication {
 
     private static final String LOG_TAG = RoosterApplication.class.getSimpleName();
 
